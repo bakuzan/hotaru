@@ -1,7 +1,15 @@
 <template>
     <div class="header">
-      <router-link to="/"/>
-      <router-link to="/characters"/>
+      <div>
+        <!-- logo placeholder -->
+      </div>
+      <div>
+        <!-- universal search placeholder (?) -->
+      </div>
+      <div class="flex-spacer"></div>
+      <div>
+        <!-- settings button placeholder -->
+      </div>
     </div>
 </template>
 

@@ -57,6 +57,16 @@ main {
 }
 
 // App helpers
+.center-contents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-spacer {
+  display: flex;
+  flex: 1;
+}
+
 .padded {
   padding: $app--standard-padding;
 }

@@ -1,10 +1,23 @@
 <template>
-    <nav class="sidebar"><!-- sidebar here --></nav>
+    <nav class="sidebar">
+      <!-- toggle button? -->
+      <NavLink to="/">
+        H
+      </NavLink>
+      <NavLink to="/characters">
+        C
+      </NavLink>
+    </nav>
 </template>
 
 <script>
+import NavLink from '@/components/NavLink';
+
 export default {
   name: 'Sidebar',
+  components: {
+    NavLink
+  },
   props: {}
 };
 </script>
@@ -15,7 +28,10 @@ export default {
 
 .sidebar {
   position: fixed;
+  top: $header--height;
+  display: flex;
+  flex-direction: column;
   width: $sidebar--width;
-  height: 100vh;
+  height: calc(100vh - #{$header--height});
 }
 </style>
