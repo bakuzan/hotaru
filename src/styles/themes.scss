@@ -1,0 +1,18 @@
+@import './_variables';
+
+@each $theme, $values in $theme-maps {
+  $base-background: map-get($values, base-background);
+  $base-colour: map-get($values, base-colour);
+  $primary-background: map-get($values, primary-background);
+  $primary-colour: map-get($values, primary-colour);
+
+  .theme--#{theme} {
+    background-color: $base-background;
+    color: $base-colour;
+
+    .themed-background {
+      background-color: $primary-background;
+      color: $primary-colour;
+    }
+  }
+}

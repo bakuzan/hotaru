@@ -1,31 +1,63 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Header />
+    <Sidebar/>
+    <main>
+      <div class="padded">
+        <router-view />
+      </div>
+    </main>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+<script>
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Sidebar
+  },
+  data: function() {
+    return {
+      theme: 'theme--one'
+    };
+  },
+  created() {
+    document.body.classList.add(this.theme);
+  }
+};
+</script>
+
+
+<style lang="scss">
+@import './styles/_variables.scss';
+
+html,
+body {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Courier New', Courier, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+main {
+  padding: {
+    top: $header--height;
+    left: $sidebar--width;
+  }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+// App helpers
+.padded {
+  padding: $app--standard-padding;
 }
 </style>
