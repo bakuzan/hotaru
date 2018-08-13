@@ -1,0 +1,8 @@
+"""
+something complains if I don't have this file
+
+need to look into it.
+"""
+type Example {
+  text: String
+}

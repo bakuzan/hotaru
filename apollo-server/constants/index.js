@@ -1,6 +1,6 @@
 module.exports = {
   appName: 'hotaru',
-  whitelist: /^http\:\/\/localhost:/,
+  whitelist: /^.*localhost:\d{4}/,
   environment: {
     production: 'production'
   }

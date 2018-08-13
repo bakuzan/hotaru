@@ -1,4 +1,4 @@
-const example = require('./example.graphql');
-const query = require('./query.graphql');
+const example = require('./example');
+const query = require('./query');
 
 module.exports = [example, query];
