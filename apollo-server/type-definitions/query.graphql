@@ -1,0 +1,5 @@
+# import exmaple.graphql
+
+type Query {
+  examples: [Example]
+}
