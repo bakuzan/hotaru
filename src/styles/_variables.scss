@@ -1,3 +1,5 @@
+@import './_colours';
+
 // Screen Variables
 
 $screen-xs: 480px;
@@ -13,6 +15,7 @@ $screen-md-max: ($screen-lg - 1);
 // App Variables
 
 $app--font-size: 16px;
+$app--placeholder-border: 1px solid transparent;
 $app--standard-padding: 0.33em;
 
 $button--darken-percentage: 5%;
@@ -24,9 +27,9 @@ $sidebar--width: 50px;
 // Themes
 $theme-maps: (
   one: (
-    base-background: #fff,
-    base-colour: #000,
-    primary-background: purple,
-    primary-colour: white
+    base-background: $hotaru--shirt,
+    base-colour: $hotaru--skirt,
+    primary-background: $hotaru--hair,
+    primary-colour: $hotaru--shirt
   )
 );
