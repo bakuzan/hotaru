@@ -45,7 +45,7 @@ body {
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Roboto mono', 'Lucida Console', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -54,7 +54,7 @@ main {
   padding: {
     top: $header--height;
     left: $sidebar--width;
-  }
+  };
 }
 
 // App helpers
