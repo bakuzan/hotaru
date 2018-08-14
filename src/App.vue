@@ -34,6 +34,7 @@ export default {
 
 <style lang="scss">
 @import './styles/_variables.scss';
+@import './styles/themes.scss';
 
 html,
 body {
