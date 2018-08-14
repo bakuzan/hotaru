@@ -26,6 +26,16 @@ $nav-link--height: 50px;
 
 $sidebar--width: 50px;
 
+//z-index
+$z-index: (
+  wafer: 1,
+  above-siblings: 10,
+  header: 50,
+  popover: 100,
+  menu: 250,
+  alert: 1000
+);
+
 // Themes
 $theme-maps: (
   one: (

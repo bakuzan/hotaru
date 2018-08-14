@@ -8,7 +8,7 @@
       </div>
       <div class="flex-spacer"></div>
       <div>
-        <!-- settings button placeholder -->
+        <AppSettings />
       </div>
     </div>
 </template>
@@ -17,13 +17,15 @@
 import classNames from 'classnames';
 
 import Logo from '@/components/Logo';
+import AppSettings from '@/components/AppSettings';
 import appPrefix from '@/constants/selectors';
 import { createListeners, getWindowScrollPosition } from '@/utils';
 
 export default {
   name: 'Header',
   components: {
-    Logo
+    Logo,
+    AppSettings
   },
   data: function() {
     return {
@@ -63,6 +65,7 @@ export default {
   position: fixed;
   width: 100%;
   height: $header--height;
+  padding-right: #{$app--standard-padding * 2};
 
   &--page-scrolled {
     box-shadow: 0px 2px 5px 1px #000;

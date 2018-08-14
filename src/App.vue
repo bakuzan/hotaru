@@ -7,12 +7,16 @@
         <router-view />
       </div>
     </main>
+    <portal-target :name="portalName">
+    </portal-target>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
+
+import Strings from '@/constants/strings';
 
 export default {
   name: 'App',
@@ -22,7 +26,8 @@ export default {
   },
   data: function() {
     return {
-      theme: 'theme--one'
+      theme: 'theme--one',
+      portalName: Strings.portalName
     };
   },
   created() {
@@ -34,7 +39,7 @@ export default {
 
 <style lang="scss">
 @import './styles/_variables.scss';
-@import './styles/themes.scss';
+@import './styles/_themes.scss';
 
 html,
 body {
