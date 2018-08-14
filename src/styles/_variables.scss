@@ -1,7 +1,6 @@
 @import './_colours';
 
 // Screen Variables
-
 $screen-xs: 480px;
 $screen-sm: 768px;
 $screen-md: 992px;
@@ -13,10 +12,15 @@ $screen-sm-max: ($screen-md - 1);
 $screen-md-max: ($screen-lg - 1);
 
 // App Variables
-
+$app--darken-amount: 5%;
 $app--font-size: 16px;
 $app--placeholder-border: 1px solid transparent;
 $app--standard-padding: 0.33em;
+// App variables
+$accent--colour: $hotaru--ribbon;
+
+$anchor--colour: $mostly-blue;
+$anchor--colour-hover: lighten($mostly-blue, $app--darken-amount * 3);
 
 $button--darken-percentage: 5%;
 

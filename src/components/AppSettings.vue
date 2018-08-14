@@ -4,6 +4,7 @@
         :portal-target="target"
         :align="alignment"
         :title="title"
+        :icon="icon"
     >
         <li>
             Placeholder item
@@ -15,6 +16,7 @@
 import DropdownMenu from '@/components/DropdownMenu';
 
 import Strings from '@/constants/strings';
+import Icons from '@/constants/icons';
 
 export default {
   name: 'AppSettings',
@@ -26,7 +28,8 @@ export default {
       id: 'app-settings',
       target: Strings.portalName,
       alignment: Strings.right,
-      title: 'App Settings'
+      title: 'App Settings',
+      icon: Icons.settings
     };
   }
 };

@@ -1,4 +1,5 @@
 @import './_variables';
+@import './_ripple';
 
 @each $theme, $values in $theme-maps {
   $base-background: map-get($values, base-background);

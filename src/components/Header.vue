@@ -1,13 +1,13 @@
 <template>
     <div :class="headerClass">
-      <div>
+      <div :class="headerInnerClass">
         <Logo :id="logoId" />
       </div>
-      <div>
+      <div :class="headerInnerClass">
         <!-- universal search placeholder (?) -->
       </div>
       <div class="flex-spacer"></div>
-      <div>
+      <div :class="headerInnerClass">
         <AppSettings />
       </div>
     </div>
@@ -39,6 +39,9 @@ export default {
       return classNames('header', {
         'header--page-scrolled': !!this.windowScrollPosition
       });
+    },
+    headerInnerClass: function() {
+      return 'header__inner';
     }
   },
   mounted() {
@@ -65,10 +68,14 @@ export default {
   position: fixed;
   width: 100%;
   height: $header--height;
-  padding-right: #{$app--standard-padding * 2};
 
   &--page-scrolled {
     box-shadow: 0px 2px 5px 1px #000;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

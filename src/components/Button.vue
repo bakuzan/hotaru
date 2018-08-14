@@ -1,7 +1,8 @@
 <template>
     <button
         :class="buttonClasses"
-        :type="buttonType"
+        :type="type"
+        :icon="icon"
         @click="onClick"
     >
         <slot></slot>
@@ -16,24 +17,41 @@ export default {
   props: {
     id: String,
     className: String,
-    type: String,
+    type: {
+      type: String,
+      default: 'button'
+    },
     icon: String,
-    theme: ['primary', 'secondary']
+    theme: {
+      type: String,
+      default: 'default',
+      validator: function(value) {
+        return ['default', 'primary', 'secondary'].includes(value);
+      }
+    },
+    size: {
+      type: String,
+      default: null,
+      validator: function(value) {
+        return ['small'].includes(value);
+      }
+    },
+    rounded: Boolean,
+    depress: Boolean
   },
   computed: {
     buttonClasses: function() {
-      const theme = this.theme || 'default';
       return classNames(
         'button',
-        `button--theme_${theme}`,
+        `button--theme_${this.theme}`,
         {
-          'button--icon': !!this.icon
+          'button--icon': !!this.icon,
+          [`button--size_${this.size}`]: !!this.size,
+          'button--rounded': this.rounded,
+          'button--depress': this.depress
         },
         this.className
       );
-    },
-    buttonType: function() {
-      return this.type || 'button';
     }
   },
   methods: {
@@ -47,4 +65,68 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/_variables';
+
+.button {
+  appearance: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  color: inherit;
+  padding: 5px;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+  min-width: 100px;
+  min-height: 25px;
+  text-decoration: none;
+
+  &--rounded {
+    border-radius: 5px;
+  }
+  &--depress {
+    box-shadow: 0 0 5px $onyx;
+    &:active {
+      box-shadow: inset 0px 0px 5px $onyx;
+    }
+  }
+  &:disabled {
+    background-color: $grey80 !important;
+    color: $grey40 !important;
+    cursor: default;
+  }
+}
+
+.button--link {
+  color: $anchor--colour;
+  text-decoration: underline;
+
+  &:focus,
+  &:active {
+    color: $anchor--colour;
+  }
+  &:hover {
+    color: $anchor--colour-hover;
+  }
+}
+
+.button--icon {
+  flex: 0 1 0%;
+  padding: 3px 6px;
+  margin: 2px 5px;
+  text-decoration: none;
+
+  &:before {
+    content: attr(icon);
+    font-size: 1.5rem;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
+  &.button--small:before {
+    font-size: 0.8rem;
+  }
+}
 </style>

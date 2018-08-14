@@ -2,7 +2,7 @@
     <div :id="id" class="dropdown">
         <Button
             :id="togglerId"
-            className="dropdown__toggler"
+            className="dropdown__toggler ripple"
             :icon="icon"
             :title="title"
             @click="toggleDropdown"
@@ -156,5 +156,9 @@ export default {
   &--align_right .dropdown__arrow {
     right: 0;
   }
+}
+
+.dropdown__toggler {
+  min-width: 25px;
 }
 </style>
