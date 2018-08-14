@@ -54,7 +54,7 @@ main {
   padding: {
     top: $header--height;
     left: $sidebar--width;
-  };
+  }
 }
 
 // App helpers

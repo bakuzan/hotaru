@@ -1,7 +1,7 @@
 <template>
     <div class="header">
       <div>
-        <!-- logo placeholder -->
+        <Logo :id="logoId" />
       </div>
       <div>
         <!-- universal search placeholder (?) -->
@@ -14,9 +14,19 @@
 </template>
 
 <script>
+import Logo from '@/components/Logo';
+import appPrefix from '@/constants/selectors';
+
 export default {
   name: 'Header',
-  props: {}
+  components: {
+    Logo
+  },
+  data: function() {
+    return {
+      logoId: `${appPrefix}-logo`
+    };
+  }
 };
 </script>
 
