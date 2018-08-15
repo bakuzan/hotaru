@@ -1,0 +1,53 @@
+<template>
+    <div :class="classes">
+        <figure class="character-card__figure">
+            <HTRImage :src="image" />
+            <figcaption class="character-card__caption">
+                {{name}}
+            </figcaption>
+        </figure>
+    </div>
+</template>
+
+<script>
+import classNames from 'classnames';
+
+import HTRImage from '@/components/HTRImage';
+
+export default {
+  name: 'CharacterCard',
+  components: {
+    HTRImage
+  },
+  props: {
+    id: Number,
+    name: String,
+    image: String
+  },
+  computed: {
+    classes: function() {
+      return classNames('character-card');
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+@import '../styles/_variables.scss';
+@import '../styles/_extensions.scss';
+
+.character-card {
+  @extend %standard-border;
+
+  &__figure {
+    display: flex;
+    flex-direction: column;
+  }
+  &__caption {
+    width: 100%;
+    padding: $app--standard-padding;
+    text-align: center;
+  }
+}
+</style>

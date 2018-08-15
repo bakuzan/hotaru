@@ -11,7 +11,7 @@
       :items="characters"
     >
       <template slot-scope="slotProps">
-      {{ slotProps.item.name }}
+        <CharacterCard v-bind="slotProps.item" />
       </template>
     </List>
   </div>
@@ -20,12 +20,14 @@
 <script>
 import List from '@/components/List';
 import InputBox from '@/components/InputBox';
+import CharacterCard from '@/components/CharacterCard';
 
 export default {
   name: 'CharactersList',
   components: {
     List,
-    InputBox
+    InputBox,
+    CharacterCard
   },
   data: function() {
     return {
