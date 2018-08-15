@@ -1,4 +1,4 @@
-const example = require('./example');
+const character = require('./character');
 const query = require('./query');
 
-module.exports = [example, query];
+module.exports = [query, character];

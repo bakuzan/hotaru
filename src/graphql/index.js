@@ -1,13 +1,9 @@
 import gql from 'graphql-tag';
 
+import characters from './characters';
+
 export const Query = {
-  example: gql`
-    query Example {
-      examples {
-        text
-      }
-    }
-  `
+  ...characters.query
 };
 
 export const Mutate = {};

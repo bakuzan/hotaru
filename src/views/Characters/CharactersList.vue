@@ -34,28 +34,30 @@ export default {
   data: function() {
     return {
       searchTimer: null,
-      examples: null,
       filters: {
         search: ''
       },
-      characters: [
-        { id: 1, name: 'test' },
-        { id: 2, name: 'second' },
-        { id: 3, name: 'and another with a long name' }
-      ]
+      characters: []
     };
   },
   apollo: {
-    examples: Query.example
+    characters: {
+      query: Query.getCharacters,
+      variables() {
+        const TIMEOUT_VALUE = this.characters.length ? 1000 : 100;
+
+        clearTimeout(this.searchTimer);
+        this.searchTimer = setTimeout(() => {
+          return {
+            ...this.filters
+          };
+        }, TIMEOUT_VALUE);
+      }
+    }
   },
   methods: {
     onInput: function(value, name) {
       this.filters[name] = value;
-
-      clearTimeout(this.searchTimer);
-      this.searchTimer = setTimeout(() => {
-        console.log('search!');
-      }, 1500);
     }
   }
 };
