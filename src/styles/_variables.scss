@@ -46,6 +46,16 @@ $theme-maps: (
     base-background: $hotaru--shirt,
     base-colour: $hotaru--skirt,
     primary-background: $hotaru--hair,
-    primary-colour: $hotaru--shirt
+    primary-colour: $hotaru--shirt,
+    active-background: $hotaru--eyes,
+    active-colour: $hotaru--ribbon
+  ),
+  two: (
+    base-background: $hotaru--dress,
+    base-colour: $hotaru--shirt,
+    primary-background: $hotaru--dress-trim,
+    primary-colour: $hotaru--hair,
+    active-background: $hotaru--ribbon-alt,
+    active-colour: $hotaru--eyes
   )
 );

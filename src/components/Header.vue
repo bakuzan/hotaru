@@ -7,6 +7,8 @@
         <!-- universal search placeholder (?) -->
       </div>
       <div class="flex-spacer"></div>
+      <h1 :class="titleClass">Hotaru</h1>
+      <div class="flex-spacer"></div>
       <div :class="headerInnerClass">
         <AppSettings />
       </div>
@@ -36,12 +38,15 @@ export default {
   },
   computed: {
     headerClass: function() {
-      return classNames('header', {
+      return classNames('header', 'themed-background', {
         'header--page-scrolled': !!this.windowScrollPosition
       });
     },
     headerInnerClass: function() {
       return 'header__inner';
+    },
+    titleClass: function() {
+      return classNames(this.headerInnerClass, 'header__title');
     }
   },
   mounted() {
@@ -76,6 +81,10 @@ export default {
   &__inner {
     display: flex;
     align-items: center;
+  }
+
+  &__title {
+    font-size: 1.625em;
   }
 }
 </style>

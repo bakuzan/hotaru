@@ -129,7 +129,8 @@ export default {
   position: fixed;
   width: 200px;
   min-height: 100px;
-  background-color: $white;
+  background-color: inherit;
+  color: inherit;
   border-radius: 4px;
   top: 0;
   right: 0;

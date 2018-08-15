@@ -1,6 +1,8 @@
 <template>
     <router-link 
-        class="nav-link center-contents"
+        :class="classes"
+        active-class="nav-link--active"
+        exact-active-class="nav-link--active_exact"
         :to="to"
     >
         <slot></slot>
@@ -8,10 +10,17 @@
 </template>
 
 <script>
+import classNames from 'classnames';
+
 export default {
   name: 'NavLink',
   props: {
     to: String
+  },
+  computed: {
+    classes: function() {
+      return classNames('nav-link', 'center-contents');
+    }
   }
 };
 </script>
@@ -28,10 +37,5 @@ export default {
   box-sizing: border-box;
   font-size: 1.25em;
   text-decoration: none;
-
-  &:hover,
-  &.router-link-exact-active {
-    border-right-color: #000;
-  }
 }
 </style>

@@ -1,19 +1,52 @@
 @import './_variables';
-@import './_ripple';
 
 @each $theme, $values in $theme-maps {
   $base-background: map-get($values, base-background);
   $base-colour: map-get($values, base-colour);
   $primary-background: map-get($values, primary-background);
   $primary-colour: map-get($values, primary-colour);
+  $active-background: map-get($values, active-background);
+  $active-colour: map-get($values, active-colour);
 
-  .theme--#{theme} {
+  .theme--#{$theme} {
     background-color: $base-background;
     color: $base-colour;
 
+    // Inherit base background
+    .select-box__input {
+      background-color: $base-background;
+    }
+    .dropdown__arrow {
+      border-bottom-color: $base-background;
+    }
+
+    // Primary
     .themed-background {
       background-color: $primary-background;
       color: $primary-colour;
+    }
+    svg.themed-background text {
+      fill: $primary-colour;
+    }
+    .has-float-label input,
+    .has-float-label select {
+      border-color: $primary-colour;
+    }
+
+    // Navigation
+    .nav-link {
+      color: $base-colour;
+
+      &:hover,
+      &--active_exact {
+        color: $active-colour;
+      }
+    }
+
+    .sidebar__link:hover,
+    .sidebar__link.nav-link--active_exact {
+      background-color: $active-background;
+      color: $active-colour;
     }
   }
 }

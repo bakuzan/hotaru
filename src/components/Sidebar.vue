@@ -1,10 +1,10 @@
 <template>
-    <nav class="sidebar">
+    <nav class="sidebar themed-background">
       <!-- toggle button? -->
-      <NavLink to="/">
+      <NavLink to="/" :class="sideNavLinkClass" title="Home">
         H
       </NavLink>
-      <NavLink to="/characters">
+      <NavLink to="/characters" :class="sideNavLinkClass" title="Characters">
         C
       </NavLink>
     </nav>
@@ -18,7 +18,11 @@ export default {
   components: {
     NavLink
   },
-  props: {}
+  computed: {
+    sideNavLinkClass: function() {
+      return 'sidebar__link';
+    }
+  }
 };
 </script>
 

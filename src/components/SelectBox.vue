@@ -1,0 +1,71 @@
+<template>
+  <div :class="selectClasses">
+    <select :value="value" @change="handleChange" class="select-box__input" :id="id" :name="name">
+        <option v-for="item in options" :key="item.value" :value="item.value" class="select-box__option">
+            {{item.text}}
+        </option>
+    </select>
+    <label :for="id">{{text}}</label>
+  </div>
+</template>
+
+<script>
+import classNames from 'classnames';
+
+export default {
+  name: 'SelectBox',
+  props: {
+    id: String,
+    name: String,
+    text: String,
+    value: {},
+    options: {
+      type: Array,
+      default: () => []
+    }
+  },
+  computed: {
+    selectClasses: function() {
+      return classNames('select-box', 'has-float-label');
+    }
+  },
+  methods: {
+    handleChange: function(event) {
+      this.$emit('on-select', event.target.value, this.name);
+    }
+  }
+};
+</script>
+
+
+<style lang="scss" scoped>
+@import '../styles/_variables';
+
+.select-box {
+  flex: 1;
+  padding: 5px;
+  min-height: 35px;
+  box-sizing: content-box;
+
+  &::after {
+    content: '\2335';
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    font-weight: bold;
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    background-color: inherit;
+    color: inherit;
+  }
+
+  &__option {
+    background-color: inherit;
+    color: inherit;
+  }
+}
+</style>

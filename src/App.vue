@@ -26,12 +26,8 @@ export default {
   },
   data: function() {
     return {
-      theme: 'theme--one',
       portalName: Strings.portalName
     };
-  },
-  created() {
-    document.body.classList.add(this.theme);
   }
 };
 </script>
@@ -39,7 +35,8 @@ export default {
 
 <style lang="scss">
 @import './styles/_variables.scss';
-@import './styles/_themes.scss';
+@import './styles/_ripple.scss';
+@import './styles/_float-label.scss';
 
 html,
 body {
@@ -77,3 +74,4 @@ main {
   padding: $app--standard-padding;
 }
 </style>
+<style lang="scss" src="./styles/_themes.scss" />

@@ -1,6 +1,6 @@
 <template>
     <div :id="id" class="logo center-contents">
-        <svg class="logo__svg" xmlns="http://www.w3.org/2000/svg">
+        <svg class="logo__svg themed-background" xmlns="http://www.w3.org/2000/svg">
             <text 
                 v-for="(item, i) in letters"
                 :key="i"
