@@ -22,6 +22,8 @@ import List from '@/components/List';
 import InputBox from '@/components/InputBox';
 import CharacterCard from '@/components/CharacterCard';
 
+import { Query } from '@/graphql';
+
 export default {
   name: 'CharactersList',
   components: {
@@ -32,6 +34,7 @@ export default {
   data: function() {
     return {
       searchTimer: null,
+      examples: null,
       filters: {
         search: ''
       },
@@ -41,6 +44,9 @@ export default {
         { id: 3, name: 'and another with a long name' }
       ]
     };
+  },
+  apollo: {
+    examples: Query.example
   },
   methods: {
     onInput: function(value, name) {
