@@ -60,6 +60,7 @@ main {
 }
 
 // App helpers
+
 .center-contents {
   display: flex;
   justify-content: center;
@@ -71,7 +72,7 @@ main {
 }
 
 .padded {
-  padding: $app--standard-padding;
+  padding: $app--standard-padding * 2;
 }
 </style>
 <style lang="scss" src="./styles/_themes.scss" />

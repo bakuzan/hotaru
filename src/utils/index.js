@@ -1,3 +1,5 @@
+import Strings from '@/constants/strings';
+
 export const getWindowScrollPosition = () =>
   window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
@@ -28,3 +30,15 @@ export function getElementCoordinates(elem) {
     bottom: Math.round(clientHeight - (top + box.height))
   };
 }
+
+export const parseIfInt = (val) => {
+  const maybeInt = parseInt(val, 10);
+  return maybeInt === 0 || !!maybeInt ? maybeInt : val;
+};
+
+export const getEventValue = ({ type, checked, value }) =>
+  type === Strings.checkbox
+    ? checked
+    : type === Strings.date || type === Strings.text
+      ? value
+      : parseIfInt(value);

@@ -3,5 +3,9 @@ export default Object.freeze({
   right: 'right',
   center: 'center',
   portalName: 'htr-backdrop-portal',
-  localStorageKey: 'htr-settings'
+  localStorageKey: 'htr-settings',
+  // input types
+  text: 'text',
+  checkbox: 'checkbox',
+  date: 'date'
 });

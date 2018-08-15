@@ -81,6 +81,11 @@ export default {
   min-height: 25px;
   text-decoration: none;
 
+  &--size_small {
+    min-width: 30px;
+    max-width: 50px;
+  }
+
   &--rounded {
     border-radius: 5px;
   }
@@ -125,7 +130,7 @@ export default {
     }
   }
 
-  &.button--small:before {
+  &.button--size_small:before {
     font-size: 0.8rem;
   }
 }
