@@ -3,7 +3,9 @@
         <figure class="character-card__figure">
             <HTRImage :src="displayImage" class="character-card__image" />
             <figcaption class="character-card__caption">
+                <NavLink :to="characterUrl">
                 {{name}}
+                </NavLink>
             </figcaption>
         </figure>
     </div>
@@ -13,11 +15,14 @@
 import classNames from 'classnames';
 
 import HTRImage from '@/components/HTRImage';
+import NavLink from '@/components/NavLink';
+import Urls from '@/constants/urls';
 
 export default {
   name: 'CharacterCard',
   components: {
-    HTRImage
+    HTRImage,
+    NavLink
   },
   props: {
     id: Number,
@@ -27,6 +32,9 @@ export default {
   computed: {
     classes: function() {
       return classNames('character-card');
+    },
+    characterUrl: function() {
+      return Urls.build(Urls.characterView, { id: this.id });
     }
   }
 };

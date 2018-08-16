@@ -1,10 +1,10 @@
 <template>
     <nav class="sidebar themed-background">
       <!-- toggle button? -->
-      <NavLink to="/" :class="sideNavLinkClass" title="Home">
+      <NavLink :to="base" :class="sideNavLinkClass" title="Home">
         H
       </NavLink>
-      <NavLink to="/characters" :class="sideNavLinkClass" title="Characters">
+      <NavLink :to="characterList" :class="sideNavLinkClass" title="Characters">
         C
       </NavLink>
     </nav>
@@ -12,6 +12,8 @@
 
 <script>
 import NavLink from '@/components/NavLink';
+
+import Urls from '@/constants/urls';
 
 export default {
   name: 'Sidebar',
@@ -21,6 +23,12 @@ export default {
   computed: {
     sideNavLinkClass: function() {
       return 'sidebar__link';
+    },
+    base: function() {
+      return Urls.base;
+    },
+    characterList: function() {
+      return Urls.characterList;
     }
   }
 };

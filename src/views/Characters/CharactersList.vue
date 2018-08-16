@@ -43,11 +43,9 @@ export default {
   apollo: {
     characters: {
       query: Query.getCharacters,
+      debounce: 1000,
       variables() {
-        // const TIMEOUT_VALUE = this.characters.length ? 1000 : 100;
-        return this.filters;
-        // clearTimeout(this.searchTimer);
-        // this.searchTimer = setTimeout(() => this.filters, TIMEOUT_VALUE);
+        return { ...this.filters };
       }
     }
   },
