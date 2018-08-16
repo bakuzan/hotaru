@@ -1,5 +1,8 @@
 import Strings from '@/constants/strings';
 
+export const compose = (...fns) =>
+  fns.reduce((f, g) => (...args) => f(g(...args)));
+
 export const getWindowScrollPosition = () =>
   window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
@@ -42,3 +45,27 @@ export const getEventValue = ({ type, checked, value }) =>
     : type === Strings.date || type === Strings.text
       ? value
       : parseIfInt(value);
+
+export const capitalise = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const capitaliseEachWord = (str) =>
+  str
+    .split(' ')
+    .map(capitalise)
+    .join(' ');
+
+export const fromCamelCase = (str, separator = ' ') =>
+  str
+    .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
+    .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
+    .toLowerCase();
+
+export const separateAndCapitalise = compose(
+  capitalise,
+  fromCamelCase
+);
+
+export const separateAndCapitaliseAll = compose(
+  capitaliseEachWord,
+  fromCamelCase
+);

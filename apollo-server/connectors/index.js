@@ -12,15 +12,17 @@ const db = new Sequelize(Constants.appName, null, null, {
 });
 
 const CharacterModel = db.import('./character');
+const SeriesModel = db.import('./series');
 
 // Create relationships
-// SeriesModel.hasMany(CharacterModel);
-// CharacterModel.belongsTo(SeriesModel);
+SeriesModel.hasMany(CharacterModel);
+CharacterModel.belongsTo(SeriesModel);
 
 // Sync to create db if not exist
 // then run migration scripts
-db.sync().then(() => migrate(db));
+db.sync({ force: true }).then(() => migrate(db));
 
 const Character = db.models.character;
+const Series = db.models.series;
 
-module.exports = { db, Character };
+module.exports = { db, Character, Series };

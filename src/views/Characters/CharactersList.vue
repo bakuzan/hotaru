@@ -47,11 +47,7 @@ export default {
         const TIMEOUT_VALUE = this.characters.length ? 1000 : 100;
 
         clearTimeout(this.searchTimer);
-        this.searchTimer = setTimeout(() => {
-          return {
-            ...this.filters
-          };
-        }, TIMEOUT_VALUE);
+        this.searchTimer = setTimeout(() => this.filters, TIMEOUT_VALUE);
       }
     }
   },

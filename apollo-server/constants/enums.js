@@ -1,4 +1,4 @@
-const GenderType = Object.freeze(['male', 'female', 'none', 'other']);
+const GenderType = Object.freeze(['Male', 'Female', 'None', 'Other']);
 
 module.exports = {
   GenderType

@@ -1,10 +1,9 @@
 const gql = require('graphql-tag');
 
 module.exports = gql`
-  type Character {
+  type Series {
     id: Int!
     name: String
-    displayImage: String
-    gender: GenderType
+    characters(gender: GenderType): [Character]
   }
 `;
