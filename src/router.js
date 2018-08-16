@@ -12,7 +12,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: Urls.base
+      redirect: { name: 'home' }
     },
     {
       path: Urls.base,

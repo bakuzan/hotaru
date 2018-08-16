@@ -8,5 +8,8 @@ export default Object.freeze({
   // input types
   text: 'text',
   checkbox: 'checkbox',
-  date: 'date'
+  date: 'date',
+  missing: {
+    series: 'No series linked.'
+  }
 });
