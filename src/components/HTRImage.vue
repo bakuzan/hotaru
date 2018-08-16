@@ -2,7 +2,7 @@
     <img 
         :class="classes" 
         :src="src" 
-        :onerror="onError" 
+        @error="onError"
     />
 </template>
 

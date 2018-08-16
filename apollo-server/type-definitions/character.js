@@ -6,5 +6,6 @@ module.exports = gql`
     name: String
     displayImage: String
     gender: GenderType
+    series: Series
   }
 `;

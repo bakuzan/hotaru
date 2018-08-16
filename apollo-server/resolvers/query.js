@@ -18,7 +18,7 @@ module.exports = {
     const { id } = args;
     return Character.findById(id);
   },
-  series(_, { search, ...args }) {
+  series(_, { search = '', ...args }) {
     return Series.findAll({
       where: {
         ...args,

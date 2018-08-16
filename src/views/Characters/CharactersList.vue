@@ -44,10 +44,10 @@ export default {
     characters: {
       query: Query.getCharacters,
       variables() {
-        const TIMEOUT_VALUE = this.characters.length ? 1000 : 100;
-
-        clearTimeout(this.searchTimer);
-        this.searchTimer = setTimeout(() => this.filters, TIMEOUT_VALUE);
+        // const TIMEOUT_VALUE = this.characters.length ? 1000 : 100;
+        return this.filters;
+        // clearTimeout(this.searchTimer);
+        // this.searchTimer = setTimeout(() => this.filters, TIMEOUT_VALUE);
       }
     }
   },

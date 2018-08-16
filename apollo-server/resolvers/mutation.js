@@ -3,23 +3,26 @@ const Op = require('sequelize').Op;
 const { Character, Series } = require('../connectors');
 
 module.exports = {
-  characterCreate(_, { seriesId, ...args }) {
+  characterCreate(_, { seriesId = null, ...args }) {
     return Character.create({
-      ...args,
-      Series: {
-        id: seriesId
-      }
-    }).then((character) => character);
+      ...args
+    }).then((character) => {
+      character.setSeries(seriesId);
+      return character.reload({ includes: [{ model: Series }] });
+    });
   },
   characterUpdate(_, { id, seriesId, ...args }) {
     return Character.update({ ...args }, { where: { id } }).then(() =>
-      Project.findById(id)
+      Character.findById(id).then((character) => {
+        character.setSeries(seriesId);
+        return character.reload({ includes: [{ model: Series }] });
+      })
     );
   },
-  seriesCreate(_, { technologies, ...args }) {
+  seriesCreate(_, args) {
     return Series.create({ ...args }).then((series) => series);
   },
-  seriesUpdate(_, { id, technologies, ...args }) {
+  seriesUpdate(_, { id, ...args }) {
     return Series.update({ ...args }, { where: { id } }).then(() =>
       Series.findById(id)
     );

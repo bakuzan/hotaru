@@ -1,7 +1,7 @@
 <template>
     <div :class="classes">
         <figure class="character-card__figure">
-            <HTRImage :src="image" />
+            <HTRImage :src="displayImage" class="character-card__image" />
             <figcaption class="character-card__caption">
                 {{name}}
             </figcaption>
@@ -22,7 +22,7 @@ export default {
   props: {
     id: Number,
     name: String,
-    image: String
+    displayImage: String
   },
   computed: {
     classes: function() {
@@ -46,8 +46,12 @@ export default {
   }
   &__caption {
     width: 100%;
-    padding: $app--standard-padding;
+    padding: $app--standard-padding 0;
     text-align: center;
+  }
+  &__image {
+    width: 100px;
+    height: 150px;
   }
 }
 </style>
