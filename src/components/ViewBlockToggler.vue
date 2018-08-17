@@ -6,7 +6,9 @@
             :value="value"
             :noDataText="noDataText"
             @toggle="onToggle"
-        />
+        >
+          <slot :name="childSlotName"></slot>
+        </ViewBlock>
         <slot v-if="!readOnly"></slot>
     </div>
 </template>
@@ -15,6 +17,7 @@
 import classNames from 'classnames';
 
 import ViewBlock from '@/components/ViewBlock';
+import Strings from '@/constants/strings';
 
 export default {
   name: 'ViewBlockToggler',
@@ -35,7 +38,7 @@ export default {
       required: true
     },
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     },
     lockEdit: {
@@ -49,6 +52,7 @@ export default {
   },
   data: function() {
     return {
+      childSlotName: Strings.slot.viewBlock,
       isEditing: false
     };
   },

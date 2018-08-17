@@ -1,0 +1,70 @@
+<template>
+    <li
+        :class="classes"
+    >
+      <Button
+        className="suggestion__button"
+        :title="itemText"
+        @click="$emit('on-select', item.id)"
+      >
+        <span class="suggestion__text">
+          {{textPart.pre}}
+          <span class="highlight">
+          {{textPart.highlight}}
+          </span>
+          {{textPart.post}}
+        </span>
+      </Button>
+    </li>
+</template>
+
+<script>
+import classNames from 'classnames';
+
+export default {
+  name: 'InputBoxAutocompleteSuggestion',
+  components: {},
+  props: {
+    activeSuggestion: {
+      type: Number,
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
+    },
+    attr: {
+      type: String,
+      required: true
+    },
+    item: {
+      type: Object,
+      required: true
+    },
+    highlightMatch: {
+      type: Function,
+      required: true
+    }
+  },
+  data: function() {
+    return {};
+  },
+  computed: {
+    classes: function() {
+      return classNames('suggestion', {
+        'suggestion--active': this.isActiveSuggestion
+      });
+    },
+    isActiveSuggestion: function() {
+      return this.activeSuggestion === this.index;
+    },
+    itemText: function() {
+      return this.item[this.attr];
+    },
+    textPart: function() {
+      return this.highlightMatch(this.itemText);
+    }
+  },
+  methods: {}
+};
+</script>

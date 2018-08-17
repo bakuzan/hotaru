@@ -38,15 +38,18 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-            <SelectBox
-                id="tags"
-                name="tagIds"
-                text="Tags"
-                :options="mappedTags"
-                :value="editCharacter.tagIds"
-                @on-select="onChange"
-                allowNulls
-            />
+            <template :slot="tagSlotReadOnly" slot-scope="slotProps">
+              <span v-for="t in slotProps" :key="t.id">{{t.name}}</span>
+            </template>
+              <InputBoxChipList
+                  id="tags"
+                  name="tagIds"
+                  text="Tags"
+                  :options="mappedTags"
+                  :values="editCharacterTags"
+                  @on-select="onChange"
+                  allowNulls
+              />
           </ViewBlockToggler>
           <div class="view-block view-block--read-only">
             - gallery?
@@ -73,6 +76,7 @@ import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
 import Button from '@/components/Button';
+import InputBoxChipList from '@/components/InputBoxChipList';
 
 import Strings from '@/constants/strings';
 import { Query, Mutation } from '@/graphql';
@@ -90,10 +94,12 @@ export default {
     HTRImage,
     ViewBlockToggler,
     SelectBox,
-    Button
+    Button,
+    InputBoxChipList
   },
   data: function() {
     return {
+      tagSlotReadOnly: Strings.slot.viewBlock,
       readOnly: false,
       editCharacter: {},
       character: {},
@@ -142,8 +148,12 @@ export default {
     characterTags: function() {
       const tagIds = this.character.tagIds || [];
       const tags = this.tags.filter((x) => tagIds.includes(x.id));
-      console.log(tags);
-      return 0; //return tags; TODO make multiselector
+      return tags;
+    },
+    editCharacterTags: function() {
+      const tagIds = this.editCharacter.tagIds || [];
+      const tags = this.tags.filter((x) => tagIds.includes(x.id));
+      return tags;
     },
     noSeries: function() {
       return Strings.missing.series;

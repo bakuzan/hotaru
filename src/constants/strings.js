@@ -24,5 +24,8 @@ export default Object.freeze({
     base: 'home',
     characterList: 'characters',
     characterView: 'character view'
+  },
+  slot: {
+    viewBlock: 'view-block__read-only'
   }
 });

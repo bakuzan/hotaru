@@ -12,7 +12,9 @@
           className="view-block__button"
           @click="$emit('toggle')"
       >
-        {{value}}
+        <slot v-bind="value">
+          {{value}}
+        </slot>
       </Button>
     </div>
 </template>
@@ -34,7 +36,7 @@ export default {
       required: true
     },
     value: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     }
   },
