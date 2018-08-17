@@ -7,6 +7,8 @@ const Query = gql`
 
     series(search: String): [Series]
     seriesById(id: Int!): Series
+
+    tags(search: String): [Tag]
   }
 `;
 
@@ -17,6 +19,8 @@ const Mutation = gql`
 
     seriesCreate(series: SeriesInput): Series
     seriesUpdate(series: SeriesInput): Series
+
+    tagCreate(tag: TagInput): Tag
   }
 `;
 

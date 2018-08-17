@@ -1,6 +1,9 @@
 <template>
   <div :class="selectClasses">
     <select :value="value" @change="handleChange" class="select-box__input" :id="id" :name="name">
+        <option v-if="allowNulls" :value="null" class="select-box__option">
+          None
+        </option>
         <option v-for="item in options" :key="item.value" :value="item.value" class="select-box__option">
             {{item.text}}
         </option>
@@ -22,6 +25,10 @@ export default {
     options: {
       type: Array,
       default: () => []
+    },
+    allowNulls: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

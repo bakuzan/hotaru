@@ -8,6 +8,8 @@ module.exports = gql`
     gender: GenderType
     series: Series
     seriesId: Int
+    tags: [Tag]
+    tagIds: [Int]
   }
   input CharacterInput {
     id: Int
@@ -15,5 +17,6 @@ module.exports = gql`
     displayImage: String
     gender: GenderType
     seriesId: Int
+    tagIds: [Int]
   }
 `;

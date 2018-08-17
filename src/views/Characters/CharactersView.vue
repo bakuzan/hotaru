@@ -27,10 +27,28 @@
                 :options="mappedSeries"
                 :value="editCharacter.seriesId"
                 @on-select="onChange"
+                allowNulls
+            />
+          </ViewBlockToggler>
+          <ViewBlockToggler
+            id="tags"
+            label="Tags"
+            :value="characterTags"
+            :noDataText="noTags"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+            <SelectBox
+                id="tags"
+                name="tagIds"
+                text="Tags"
+                :options="mappedTags"
+                :value="editCharacter.tagIds"
+                @on-select="onChange"
+                allowNulls
             />
           </ViewBlockToggler>
           <div class="view-block view-block--read-only">
-            - tags?
             - gallery?
             - ranking info?
           </div>
@@ -79,7 +97,8 @@ export default {
       readOnly: false,
       editCharacter: {},
       character: {},
-      series: []
+      series: [],
+      tags: []
     };
   },
   apollo: {
@@ -99,6 +118,9 @@ export default {
     },
     series: {
       query: Query.allSeries
+    },
+    tags: {
+      query: Query.allTags
     }
   },
   computed: {
@@ -109,13 +131,25 @@ export default {
     mappedSeries: function() {
       return mapToSelectBoxOptions(this.series);
     },
+    mappedTags: function() {
+      return mapToSelectBoxOptions(this.tags);
+    },
     characterSeries: function() {
       const { seriesId } = this.character;
       const series = this.series.find((x) => x.id === seriesId) || {};
       return series.name;
     },
+    characterTags: function() {
+      const tagIds = this.character.tagIds || [];
+      const tags = this.tags.filter((x) => tagIds.includes(x.id));
+      console.log(tags);
+      return 0; //return tags; TODO make multiselector
+    },
     noSeries: function() {
       return Strings.missing.series;
+    },
+    noTags: function() {
+      return Strings.missing.tags;
     },
     hasEdits: function() {
       return !objectsAreEqual(this.character, this.editCharacter);

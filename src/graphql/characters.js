@@ -18,6 +18,7 @@ const getCharacterById = gql`
       displayImage
       gender
       seriesId
+      tagIds
     }
   }
 `;
@@ -30,6 +31,7 @@ const updateCharacter = gql`
       displayImage
       gender
       seriesId
+      tagIds
     }
   }
 `;

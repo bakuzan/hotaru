@@ -41,7 +41,6 @@ export default {
 
 html,
 body {
-  font-size: $app--font-size;
   width: 100vw;
   min-height: 100vh;
   padding: 0;
@@ -55,6 +54,7 @@ body {
 body,
 button {
   @extend %app-font-family;
+  font-size: $app--font-size;
 }
 
 main {

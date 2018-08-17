@@ -1,16 +1,25 @@
 <template>
-    <div class="view-block">
-        <label class="view-block__label">{{ value ? label : noDataText }}</label>
-        <Button
-            className="view-block__button"
-            @click="$emit('toggle')"
-        >
-            {{value}}
-        </Button>
+    <div :class="classes">
+      <label 
+        class="view-block__label"
+        @click="onNoData"
+        role="button"
+      >
+      {{ value ? label : noDataText }}
+      </label>
+      <Button
+          v-show="value"
+          className="view-block__button"
+          @click="$emit('toggle')"
+      >
+        {{value}}
+      </Button>
     </div>
 </template>
 
 <script>
+import classNames from 'classnames';
+
 import Button from '@/components/Button';
 
 export default {
@@ -27,6 +36,17 @@ export default {
     value: {
       type: [String, Number],
       default: null
+    }
+  },
+  computed: {
+    classes: function() {
+      return classNames('view-block', { 'view-block--no-data': !this.value });
+    }
+  },
+  methods: {
+    onNoData: function() {
+      if (this.value) return;
+      this.$emit('toggle');
     }
   }
 };
@@ -48,6 +68,17 @@ export default {
     @extend %standard-border;
     min-width: 0;
     text-align: left;
+
+    &:hover {
+      border-color: darken($white, 33%);
+    }
+  }
+}
+.view-block--no-data {
+  .view-block__label {
+    @extend %standard-border;
+    padding: $app--standard-padding;
+    cursor: pointer;
 
     &:hover {
       border-color: darken($white, 33%);

@@ -17,7 +17,8 @@ export default Object.freeze({
   string: 'string',
   number: 'number',
   missing: {
-    series: 'No series linked.'
+    series: 'No series linked.',
+    tags: 'No tags linked'
   },
   route: {
     base: 'home',

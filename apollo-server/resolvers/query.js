@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Character, Series } = require('../connectors');
+const { Character, Series, Tag } = require('../connectors');
 
 module.exports = {
   characters(_, { search = '', ...args }) {
@@ -32,5 +32,16 @@ module.exports = {
   seriesById(_, args) {
     const { id } = args;
     return Series.findById(id);
+  },
+  tags(_, { search = '', ...args }) {
+    return Tag.findAll({
+      where: {
+        ...args,
+        name: {
+          [Op.like]: `%${search}%`
+        }
+      },
+      order: [['name', 'ASC']]
+    });
   }
 };
