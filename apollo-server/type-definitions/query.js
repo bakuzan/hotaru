@@ -12,23 +12,11 @@ const Query = gql`
 
 const Mutation = gql`
   type Mutation {
-    characterCreate(
-      name: String
-      displayImage: String
-      gender: GenderType
-      seriesId: Int
-    ): Character
+    characterCreate(character: CharacterInput): Character
+    characterUpdate(character: CharacterInput): Character
 
-    characterUpdate(
-      id: Int!
-      name: String
-      displayImage: String
-      gender: GenderType
-      seriesId: Int
-    ): Character
-
-    seriesCreate(name: String): Series
-    seriesUpdate(id: Int!, name: String): Series
+    seriesCreate(series: SeriesInput): Series
+    seriesUpdate(series: SeriesInput): Series
   }
 `;
 

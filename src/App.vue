@@ -26,7 +26,7 @@ export default {
   },
   data: function() {
     return {
-      portalName: Strings.portalName
+      portalName: Strings.portal.modal
     };
   }
 };
@@ -35,11 +35,13 @@ export default {
 
 <style lang="scss">
 @import './styles/_variables.scss';
+@import './styles/_extensions.scss';
 @import './styles/_ripple.scss';
 @import './styles/_float-label.scss';
 
 html,
 body {
+  font-size: $app--font-size;
   width: 100vw;
   min-height: 100vh;
   padding: 0;
@@ -47,9 +49,12 @@ body {
 }
 
 body {
-  font-family: 'Roboto mono', 'Lucida Console', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+body,
+button {
+  @extend %app-font-family;
 }
 
 main {

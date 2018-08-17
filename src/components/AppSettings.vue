@@ -38,7 +38,7 @@ export default {
   data: function() {
     return {
       id: 'app-settings',
-      target: Strings.portalName,
+      target: Strings.portal.modal,
       alignment: Strings.right,
       title: 'App Settings',
       icon: Icons.settings,

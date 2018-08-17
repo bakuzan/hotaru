@@ -6,4 +6,8 @@ module.exports = gql`
     name: String
     characters(gender: GenderType): [Character]
   }
+  input SeriesInput {
+    id: Int
+    name: String
+  }
 `;

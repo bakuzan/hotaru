@@ -3,13 +3,25 @@ export default Object.freeze({
   left: 'left',
   right: 'right',
   center: 'center',
-  portalName: 'htr-backdrop-portal',
+  portal: {
+    modal: 'htr-backdrop-portal',
+    actions: 'htr-action-portal'
+  },
   localStorageKey: 'htr-settings',
   // input types
   text: 'text',
   checkbox: 'checkbox',
   date: 'date',
+  // data types
+  object: 'object',
+  string: 'string',
+  number: 'number',
   missing: {
     series: 'No series linked.'
+  },
+  route: {
+    base: 'home',
+    characterList: 'characters',
+    characterView: 'character view'
   }
 });

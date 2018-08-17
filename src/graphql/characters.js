@@ -10,17 +10,26 @@ const getCharacters = gql`
   }
 `;
 
-const getCharacter = gql`
-  query getCharacter($id: Int!) {
+const getCharacterById = gql`
+  query getCharacterById($id: Int!) {
     characterById(id: $id) {
       id
       name
       displayImage
       gender
-      series {
-        id
-        name
-      }
+      seriesId
+    }
+  }
+`;
+
+const updateCharacter = gql`
+  mutation updateCharacter($character: CharacterInput) {
+    characterUpdate(character: $character) {
+      id
+      name
+      displayImage
+      gender
+      seriesId
     }
   }
 `;
@@ -28,6 +37,9 @@ const getCharacter = gql`
 export default {
   query: {
     getCharacters,
-    getCharacter
+    getCharacterById
+  },
+  mutation: {
+    updateCharacter
   }
 };

@@ -1,9 +1,11 @@
-import gql from 'graphql-tag';
-
 import characters from './characters';
+import series from './series';
 
 export const Query = {
-  ...characters.query
+  ...characters.query,
+  ...series.query
 };
 
-export const Mutate = {};
+export const Mutation = {
+  ...characters.mutation
+};

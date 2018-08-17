@@ -43,13 +43,15 @@ export default {
     buttonClasses: function() {
       return classNames(
         'button',
-        `button--theme_${this.theme}`,
         {
+          'themed-background': this.theme !== 'default',
+          'themed-background--reversed': this.theme === 'secondary',
           'button--icon': !!this.icon,
           [`button--size_${this.size}`]: !!this.size,
           'button--rounded': this.rounded,
           'button--depress': this.depress
         },
+        'ripple',
         this.className
       );
     }

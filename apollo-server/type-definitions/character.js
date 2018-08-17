@@ -7,5 +7,13 @@ module.exports = gql`
     displayImage: String
     gender: GenderType
     series: Series
+    seriesId: Int
+  }
+  input CharacterInput {
+    id: Int
+    name: String
+    displayImage: String
+    gender: GenderType
+    seriesId: Int
   }
 `;

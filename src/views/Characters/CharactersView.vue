@@ -7,15 +7,28 @@
         />
       </div>
       <section class="character-view__content character-info">
-        <header class="character-info__header">
-          <h4>{{character.name}}</h4>
+        <header class="character-info__header header">
+          <h4 class="header__title">{{character.name}}</h4>
           <span>{{character.gender}}</span>
         </header>
         <div class="character-info__content">
-          <div class="view-block view-block--read-only">
-              <label class="view-block__label">{{ characterSeries ? "Series" : noSeries }}</label>
-              <div>{{characterSeries}}</div>
-          </div>
+          <ViewBlockToggler
+            id="series"
+            label="Series"
+            :value="characterSeries"
+            :noDataText="noSeries"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+            <SelectBox
+                id="series"
+                name="seriesId"
+                text="Series"
+                :options="mappedSeries"
+                :value="editCharacter.seriesId"
+                @on-select="onChange"
+            />
+          </ViewBlockToggler>
           <div class="view-block view-block--read-only">
             - tags?
             - gallery?
@@ -24,45 +37,124 @@
           
         </div>
       </section>
+      <template v-if="hasEdits">
+        <portal :to="portalTarget">
+          <Button
+            theme="secondary"
+            @click="submit"
+          >
+            Save
+          </Button>
+        </portal>
+      </template>
   </div>
 </template>
 
 <script>
 import HTRImage from '@/components/HTRImage';
+import ViewBlockToggler from '@/components/ViewBlockToggler';
+import SelectBox from '@/components/SelectBox';
+import Button from '@/components/Button';
 
 import Strings from '@/constants/strings';
-import { Query } from '@/graphql';
+import { Query, Mutation } from '@/graphql';
+import { objectsAreEqual } from '@/utils';
+import {
+  mapToSelectBoxOptions,
+  mapCharacterToPost,
+  mapCharacterToOptimisticUpdate
+} from '@/utils/mappers';
 import * as Routing from '@/utils/routing';
 
 export default {
   name: 'CharactersView',
   components: {
-    HTRImage
+    HTRImage,
+    ViewBlockToggler,
+    SelectBox,
+    Button
   },
   data: function() {
     return {
-      character: {}
+      readOnly: false,
+      editCharacter: {},
+      character: {},
+      series: []
     };
   },
   apollo: {
     character: {
-      query: Query.getCharacter,
+      query: Query.getCharacterById,
       variables() {
         const id = Number(Routing.getParam(this.$router, 'id'));
         return { id };
       },
       update(data) {
-        return data.characterById;
+        const character = data.characterById || {};
+        this.editCharacter = {
+          ...character
+        };
+        return character;
       }
+    },
+    series: {
+      query: Query.allSeries
     }
   },
   computed: {
+    isCreate: function() {
+      const routeName = Routing.getRouteName(this.$router);
+      return routeName === Strings.route.characterCreate;
+    },
+    mappedSeries: function() {
+      return mapToSelectBoxOptions(this.series);
+    },
     characterSeries: function() {
-      const { series = {} } = this.character;
-      return series ? series.name : '';
+      const { seriesId } = this.character;
+      const series = this.series.find((x) => x.id === seriesId) || {};
+      return series.name;
     },
     noSeries: function() {
       return Strings.missing.series;
+    },
+    hasEdits: function() {
+      return !objectsAreEqual(this.character, this.editCharacter);
+    },
+    portalTarget: function() {
+      return Strings.portal.actions;
+    }
+  },
+  methods: {
+    onChange: function(value, name) {
+      this.editCharacter[name] = value;
+    },
+    submit: function() {
+      this.readOnly = true; // set back to read only.
+
+      const postCharacter = mapCharacterToPost(this.editCharacter);
+      this.$apollo
+        .mutate({
+          mutation: Mutation.updateCharacter,
+          variables: { character: postCharacter },
+          update: (store, { data: { characterUpdate } }) => {
+            const oldData = store.readQuery({
+              query: Query.getCharacterById,
+              variables: { id: postCharacter.id }
+            });
+
+            const data = { ...oldData, ...characterUpdate };
+
+            store.writeQuery({
+              query: Query.getCharacterById,
+              variables: { id: postCharacter.id },
+              data
+            });
+          },
+          optimisticResponse: mapCharacterToOptimisticUpdate(postCharacter)
+        })
+        .then(() => {
+          this.readOnly = false; // allow edits again
+        });
     }
   }
 };
@@ -92,11 +184,11 @@ export default {
   }
 }
 
-.view-block {
-  padding: $app--standard-padding 0;
+.header {
+  margin: $app--standard-margin 0;
 
-  &__label {
-    font-weight: bold;
+  &__title {
+    margin: $app--standard-margin 0;
   }
 }
 </style>

@@ -10,6 +10,10 @@
       <h1 :class="titleClass">Hotaru</h1>
       <div class="flex-spacer"></div>
       <div :class="headerInnerClass">
+        <portal-target :name="portalName">
+        </portal-target>
+      </div>
+      <div :class="headerInnerClass">
         <AppSettings />
       </div>
     </div>
@@ -20,6 +24,7 @@ import classNames from 'classnames';
 
 import Logo from '@/components/Logo';
 import AppSettings from '@/components/AppSettings';
+import Strings from '@/constants/strings';
 import appPrefix from '@/constants/selectors';
 import { createListeners, getWindowScrollPosition } from '@/utils';
 
@@ -47,6 +52,9 @@ export default {
     },
     titleClass: function() {
       return classNames(this.headerInnerClass, 'header__title');
+    },
+    portalName: function() {
+      return Strings.portal.actions;
     }
   },
   mounted() {

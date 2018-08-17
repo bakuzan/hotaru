@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 
 import Urls from '@/constants/urls';
+import Strings from '@/constants/strings';
 
 Vue.use(Router);
 
@@ -12,22 +13,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'home' }
+      redirect: { name: Strings.route.base }
     },
     {
       path: Urls.base,
-      name: 'home',
+      name: Strings.route.base,
       component: Home
     },
     {
       path: Urls.characterList,
-      name: 'characters',
+      name: Strings.route.characterList,
       component: () =>
         import(/* webpackChunkName: "characters-list" */ './views/Characters/CharactersList.vue')
     },
     {
       path: Urls.characterView,
-      name: 'character view',
+      name: Strings.route.characterView,
       component: () =>
         import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue')
     }

@@ -3,6 +3,12 @@ import Strings from '@/constants/strings';
 export const compose = (...fns) =>
   fns.reduce((f, g) => (...args) => f(g(...args)));
 
+const isTypeOf = (t) => (v) => typeof v === t;
+export const isObject = isTypeOf(Strings.object);
+export const isString = isTypeOf(Strings.string);
+export const isNumber = isTypeOf(Strings.number);
+export const isArray = (v) => v instanceof Array;
+
 export const getWindowScrollPosition = () =>
   window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
@@ -69,3 +75,16 @@ export const separateAndCapitaliseAll = compose(
   capitaliseEachWord,
   fromCamelCase
 );
+
+export const objectsAreEqual = (o1, o2) => {
+  if (!isObject(o1) || !isObject(o2)) return o1 === o2;
+  return Object.keys(o1).every((k) => {
+    const one = o1[k];
+    const two = o2[k];
+    return isArray(one)
+      ? one
+          .map((t, i) => objectsAreEqual(one[i], two[i]))
+          .every((b) => b === true)
+      : one === two;
+  });
+};

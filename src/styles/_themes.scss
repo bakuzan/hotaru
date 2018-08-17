@@ -24,6 +24,10 @@
     .themed-background {
       background-color: $primary-background;
       color: $primary-colour;
+      &--reversed {
+        color: $primary-background;
+        background-color: $primary-colour;
+      }
     }
     svg.themed-background text {
       fill: $primary-colour;
@@ -43,10 +47,14 @@
       }
     }
 
-    .sidebar__link:hover,
-    .sidebar__link.nav-link--active_exact {
-      background-color: $active-background;
-      color: $active-colour;
+    .sidebar__link {
+      color: $primary-colour;
+
+      &:hover,
+      &.nav-link--active_exact {
+        background-color: $active-background;
+        color: $active-colour;
+      }
     }
   }
 }
