@@ -1,4 +1,4 @@
-import { mapEnumArrayToObject } from 'utils/enums';
+import { mapEnumArrayToObject } from '@/utils/mappers';
 
 const GenderType = Object.freeze(['Male', 'Female', 'None', 'Other']);
 export default GenderType;

@@ -1,5 +1,11 @@
 import { isString, parseIfInt } from './index';
 
+export const mapEnumArrayToObject = (arr) =>
+  arr.reduce((o, k) => ({ ...o, [k.toLowerCase()]: k }), {});
+
+export const mapEnumToSelectBoxOptions = (arr) =>
+  arr.reduce((a, k) => [...a, { value: k, text: k }], []);
+
 export const mapToSelectBoxOptions = (arr) =>
   arr.map((x) => ({ value: x.id, text: x.name }));
 

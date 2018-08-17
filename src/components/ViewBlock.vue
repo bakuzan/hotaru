@@ -12,7 +12,7 @@
           className="view-block__button"
           @click="$emit('toggle')"
       >
-        <slot v-bind="value">
+        <slot v-bind:value="value">
           {{value}}
         </slot>
       </Button>

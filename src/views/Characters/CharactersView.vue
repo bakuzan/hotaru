@@ -8,10 +8,40 @@
       </div>
       <section class="character-view__content character-info">
         <header class="character-info__header header">
-          <h4 class="header__title">{{character.name}}</h4>
-          <span>{{character.gender}}</span>
+          <ViewBlockToggler
+            id="name"
+            label="Name"
+            :value="character.name"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+              <h4 :slot="viewBlockReadOnlySlot" slot-scope="slotProps" class="header__title">{{slotProps.value}}</h4>
+              <InputBox
+                id="name"
+                name="name"
+                text="Name"
+                :value="editCharacter.name"
+                @input="onChange"
+              />
+          </ViewBlockToggler>
         </header>
         <div class="character-info__content">
+          <ViewBlockToggler
+            id="gender"
+            label="Gender"
+            :value="character.gender"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+            <SelectBox
+                id="gender"
+                name="gender"
+                text="Gender"
+                :options="mappedGenders"
+                :value="editCharacter.gender"
+                @on-select="onChange"
+            />
+          </ViewBlockToggler>
           <ViewBlockToggler
             id="series"
             label="Series"
@@ -38,8 +68,9 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-            <template :slot="tagSlotReadOnly" slot-scope="slotProps">
-              <span v-for="t in slotProps" :key="t.id">{{t.name}}</span>
+            <template :slot="viewBlockReadOnlySlot" slot-scope="slotProps">
+              <!-- TODO replace span with chiplisttag compoenent -->
+              <span v-for="t in slotProps.value" :key="t.id">{{t.name}}</span>
             </template>
               <InputBoxChipList
                   id="tags"
@@ -51,11 +82,6 @@
                   allowNulls
               />
           </ViewBlockToggler>
-          <div class="view-block view-block--read-only">
-            - gallery?
-            - ranking info?
-          </div>
-          
         </div>
       </section>
       <template v-if="hasEdits">
@@ -76,12 +102,15 @@ import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
 import Button from '@/components/Button';
+import InputBox from '@/components/InputBox';
 import InputBoxChipList from '@/components/InputBoxChipList';
 
 import Strings from '@/constants/strings';
+import GenderType from '@/constants/gender-type';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual } from '@/utils';
 import {
+  mapEnumToSelectBoxOptions,
   mapToSelectBoxOptions,
   mapCharacterToPost,
   mapCharacterToOptimisticUpdate
@@ -95,11 +124,12 @@ export default {
     ViewBlockToggler,
     SelectBox,
     Button,
+    InputBox,
     InputBoxChipList
   },
   data: function() {
     return {
-      tagSlotReadOnly: Strings.slot.viewBlock,
+      viewBlockReadOnlySlot: Strings.slot.viewBlock,
       readOnly: false,
       editCharacter: {},
       character: {},
@@ -139,6 +169,9 @@ export default {
     },
     mappedTags: function() {
       return mapToSelectBoxOptions(this.tags);
+    },
+    mappedGenders: function() {
+      return mapEnumToSelectBoxOptions(GenderType);
     },
     characterSeries: function() {
       const { seriesId } = this.character;

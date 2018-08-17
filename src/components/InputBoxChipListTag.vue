@@ -1,70 +1,130 @@
 <template>
-    <li
-        :class="classes"
+    <span
+      :class="classes"
+      v-bind="tagAccessiblityIfClickable"
+      @click="onClick"
     >
-      <Button
-        className="suggestion__button"
-        :title="itemText"
-        @click="$emit('on-select', item.id)"
-      >
-        <span class="suggestion__text">
-          {{textPart.pre}}
-          <span class="highlight">
-          {{textPart.highlight}}
-          </span>
-          {{textPart.post}}
-        </span>
-      </Button>
-    </li>
+        <span class="chip-tag__text">{{data.name}}</span>
+        <Button
+            v-if="hasRemove"
+            className="chip-tag__delete"
+            btnSize="small"
+            title="remove"
+            :icon="removeIcon"
+            @click="onRemove"
+        />
+    </span>
 </template>
 
 <script>
 import classNames from 'classnames';
 
+import Icons from '@/constants/icons';
+
 export default {
-  name: 'InputBoxAutocompleteSuggestion',
+  name: 'InputBoxChipListTag',
   components: {},
   props: {
-    activeSuggestion: {
-      type: Number,
-      required: true
+    isActive: {
+      type: Boolean,
+      default: false
     },
-    index: {
-      type: Number,
-      required: true
-    },
-    attr: {
-      type: String,
-      required: true
-    },
-    item: {
+    data: {
       type: Object,
       required: true
     },
-    highlightMatch: {
-      type: Function,
-      required: true
+    hasClick: {
+      type: Boolean,
+      default: false
+    },
+    hasRemove: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
-    return {};
+    return { removeIcon: Icons.cross };
   },
   computed: {
     classes: function() {
-      return classNames('suggestion', {
-        'suggestion--active': this.isActiveSuggestion
+      return classNames('chip-tag', this.class, {
+        'chip-tag--clickable': this.hasClick,
+        'chip-tag--deletable': this.hasRemove,
+        'chip-tag--active': this.isActive
       });
     },
-    isActiveSuggestion: function() {
-      return this.activeSuggestion === this.index;
-    },
-    itemText: function() {
-      return this.item[this.attr];
-    },
-    textPart: function() {
-      return this.highlightMatch(this.itemText);
+    tagAccessiblityIfClickable: function() {
+      if (!this.hasClick) return {};
+      return {
+        role: 'button',
+        tabIndex: '0'
+      };
     }
   },
-  methods: {}
+  methods: {
+    onClick: function() {
+      this.$emit('click', this.data);
+    },
+    onRemove: function() {
+      this.$emit('remove', this.data);
+    }
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../styles/_variables';
+
+.chip-tag {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 16px;
+  background-color: $chip-tag--background;
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.87);
+  margin: 1px 0;
+  font-size: 0;
+  white-space: nowrap;
+
+  &--deletable {
+    padding-right: 4px;
+  }
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--active,
+  &--active .chip-tag__delete {
+    background-color: darken($chip-tag--background, $app--darken-amount);
+    color: $white;
+  }
+
+  &__delete {
+    display: inline-block !important;
+    vertical-align: middle;
+    overflow: hidden;
+    text-align: center;
+    height: 24px;
+    width: 24px;
+    background: 0 0;
+    opacity: 0.54;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 0 0 4px;
+    font-size: 13px;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+    border: none;
+    outline: none;
+  }
+
+  &__text {
+    font-size: 13px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
+</style>
