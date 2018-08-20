@@ -9,6 +9,9 @@
         autoComplete="off"
         :maxLength="maxLength"
         @input="handleChange" 
+        @focus="onFocus"
+        @blur="onBlur"
+        @keydown="onKeyDown"
     />
     <label :for="id">{{label}}</label>
     <Button
@@ -110,6 +113,15 @@ export default {
       const { name } = event.target;
       const value = getEventValue(event.target);
       this.$emit('input', value, name);
+    },
+    onFocus: function(event) {
+      this.$emit('focus', event);
+    },
+    onBlur: function(event) {
+      this.$emit('blur', event);
+    },
+    onKeyDown: function(event) {
+      this.$emit('keydown', event);
     }
   }
 };

@@ -1,23 +1,25 @@
 <template>
   <div :class="classes">
-      <InputBoxAutocomplete 
-        v-bind="$props" 
-        :filter="filter"
-        :input-props="clearableInputProps"
-        @input="onInput"
-        @on-select="onSelect"
-      />
-      <div v-show="hasChips" class="chip-list__selected-outer">
-        <div class="chip-list__selected-inner">
-            <InputBoxChipListTag
-                v-for="(tag, index) in values"
-                :key="tag.id"
-                :isActive="isActiveTag(index)"
-                :data="tag"
-                @remove="removeInputItem"
-            />
-        </div>
+    <InputBoxAutocomplete 
+      v-bind="$props" 
+      :filter="filter"
+      :input-props="clearableInputProps"
+      @input="onInput"
+      @on-select="onSelect"
+      @keydown="onKeyDown"
+    />
+    <div v-show="hasChips" class="chip-list__selected-outer">
+      <div class="chip-list__selected-inner">
+        <InputBoxChipListTag
+          v-for="(tag, index) in values"
+          :key="tag.id"
+          :is-active="isActiveTag(index)"
+          :data="tag"
+          has-remove
+          @remove="removeInputItem"
+        />
       </div>
+    </div>
   </div>
 </template>
 
@@ -26,6 +28,8 @@ import classNames from 'classnames';
 
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
+
+import KeyCodes from '@/constants/key-codes';
 
 export default {
   name: 'InputBoxChipList',
@@ -40,7 +44,7 @@ export default {
     },
     attr: {
       type: String,
-      default: 'name'
+      default: 'text'
     },
     name: {
       type: String,
@@ -96,16 +100,13 @@ export default {
       this.updateList(item);
       this.filter = '';
     },
-    handleKeyDown: function() {
-      //   const { keyCode } = event;
-      // //   if (
-      // //     keyCode === Enums.keyCodes.backspace &&
-      // //     !this.state[this.props.attr]
-      // //   ) {
-      // //     event.preventDefault();
-      // //     if (!this.readyRemoval) return this.setStateRemoval(true);
-      // //     if (this.readyRemoval) return this.removeLastInputItem();
-      // //   }
+    onKeyDown: function(event) {
+      const { keyCode } = event;
+      if (keyCode === KeyCodes.backspace && !this.filter) {
+        event.preventDefault();
+        if (!this.readyRemoval) return this.setStateRemoval(true);
+        if (this.readyRemoval) return this.removeLastInputItem();
+      }
     },
     persistListState: function(list) {
       this.$emit('update', list, this.name);
@@ -142,14 +143,12 @@ export default {
   padding-top: 1em !important;
 
   &__clearable-input {
-    padding: {
-      left: 0;
-      bottom: 0;
-    }
+    padding-left: 0;
   }
 
   &__selected-outer {
-    margin-bottom: 2px;
+    padding: $app--padding-standard 0;
+    margin-bottom: 1px;
   }
 
   &__selected-inner {
@@ -157,7 +156,7 @@ export default {
     flex-wrap: wrap;
     min-height: 36px;
     max-width: 400px;
-    padding: 0 2px;
+    padding: 0 $app--padding-small;
     border: 0;
     border-radius: 0;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);

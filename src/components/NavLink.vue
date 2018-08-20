@@ -32,7 +32,7 @@ export default {
 .nav-link {
   width: 100%;
   height: $nav-link--height;
-  padding: $app--standard-padding;
+  padding: $app--padding-standard;
   border: 3px solid transparent;
   box-sizing: border-box;
   font-size: 1.25em;

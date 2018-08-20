@@ -1,32 +1,37 @@
 <template>
   <div :class="classes">
-      <InputBox 
-        v-bind="$props"
-        class="inputProps.class"
-        @input="onInput"
-        @focus="onFocus"
-        @blur="onBlur"
-        @keydown="onKeyDown"
+    <InputBox 
+      v-bind="$props"
+      :class="inputProps.class"
+      @input="onInput"
+      @focus="onFocus"
+      @blur="onBlur"
+      @keydown="onKeyDown"
+    />
+    <ul
+      v-show="hasSuggestions"
+      :class="menuClasses"
+    >
+      <InputBoxAutocompleteSuggestion
+        v-for="(item, index) in suggestions"
+        :key="item.id"
+        :active-suggestion="activeSuggestion"
+        :index="index"
+        :attr="attr"
+        :item="item"
+        @on-select="onSelectAutocompleteSuggestion"
+        :highlight-match="highlightMatchingText"
       />
-      <ul
-        :class="menuClasses"
+    </ul>
+    <ul
+      v-show="showNoSuggestionsText"
+      :class="menuClasses"
+    >
+      <li
+        class="suggestion suggestion--active"
       >
-        <InputBoxAutocompleteSuggestion
-            v-for="(item, index) in suggestions"
-            :key="item.id"
-            :activeSuggestion="activeSuggestion"
-            :index="index"
-            :attr="attr"
-            :item="item"
-            @on-select="onSelectAutocompleteSuggestion"
-            :highlightMatch="highlightMatchingText"
-        />
-        <li
-            v-show="showNoSuggestionsText"
-            class="suggestion suggestion--active"
-        >
-            <div>No suggestions available</div>
-        </li>
+        <div>No suggestions available</div>
+      </li>
     </ul>
   </div>
 </template>
@@ -36,6 +41,8 @@ import classNames from 'classnames';
 
 import InputBox from '@/components/InputBox';
 import InputBoxAutocompleteSuggestion from '@/components/InputBoxAutocompleteSuggestion';
+
+import KeyCodes from '@/constants/key-codes';
 
 export default {
   name: 'InputBoxAutocomplete',
@@ -87,12 +94,18 @@ export default {
     menuClasses: function() {
       return classNames('autocomplete__menu', 'list column one');
     },
+    showMenu: function() {
+      console.log(this.isUse, this.filter);
+      return this.isUse && !!this.filter;
+    },
     hasOptions: function() {
       return !!this.options.length;
     },
     showNoSuggestionsText: function() {
       return (
-        !this.hasSuggestions && (this.hasOptions || this.disableLocalFilter)
+        this.showMenu &&
+        !this.hasSuggestions &&
+        (this.hasOptions || this.disableLocalFilter)
       );
     },
     suggestions: function() {
@@ -107,7 +120,7 @@ export default {
       );
     },
     hasSuggestions: function() {
-      return !!this.suggestions.length;
+      return !!this.suggestions.length && this.showMenu;
     }
   },
   methods: {
@@ -116,22 +129,22 @@ export default {
       this.activeSuggestion = 0;
     },
     onKeyDown: function(event) {
-      console.log(event, this);
-      //   const { keyCode } = event;
-      //   if (keyCode === Enums.keyCodes.enter && this.props.filter) {
-      //     event.preventDefault();
-      //     this.selectActiveSuggestion();
-      //   } else if (keyCode === Enums.keyCodes.down) {
-      //     this.updateActiveSuggestion(1);
-      //   } else if (keyCode === Enums.keyCodes.up) {
-      //     this.updateActiveSuggestion(-1);
-      //   } else if (this.props.onKeyDown) {
-      //     this.$emit('keydown', event);
-      //   }
+      const { keyCode } = event;
+      if (keyCode === KeyCodes.enter && this.filter) {
+        event.preventDefault();
+        this.selectActiveSuggestion();
+      } else if (keyCode === KeyCodes.down) {
+        this.updateActiveSuggestion(1);
+      } else if (keyCode === KeyCodes.up) {
+        this.updateActiveSuggestion(-1);
+      } else {
+        this.$emit('keydown', event);
+      }
     },
     onFocus: function() {
       clearTimeout(this.timer);
       this.inUse = true;
+      console.log('focus!', this);
     },
     onBlur: function() {
       clearTimeout(this.timer);
@@ -200,7 +213,8 @@ export default {
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.5);
   transform: translateY(100%);
 }
-
+</style>
+<style lang="scss">
 .suggestion {
   &__button {
     width: 100%;

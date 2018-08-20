@@ -7,8 +7,8 @@
         <span class="chip-tag__text">{{data.name}}</span>
         <Button
             v-if="hasRemove"
-            className="chip-tag__delete"
-            btnSize="small"
+            class-name="chip-tag__delete"
+            size="small"
             title="remove"
             :icon="removeIcon"
             @click="onRemove"
@@ -19,11 +19,15 @@
 <script>
 import classNames from 'classnames';
 
+import Button from '@/components/Button';
+
 import Icons from '@/constants/icons';
 
 export default {
   name: 'InputBoxChipListTag',
-  components: {},
+  components: {
+    Button
+  },
   props: {
     isActive: {
       type: Boolean,

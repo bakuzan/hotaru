@@ -10,14 +10,15 @@ export const mapToSelectBoxOptions = (arr) =>
   arr.map((x) => ({ value: x.id, text: x.name }));
 
 export const mapCharacterToPost = (character) => {
-  const { id, name, gender, displayImage, seriesId } = character;
+  const { id, name, gender, displayImage, seriesId, tagIds = [] } = character;
   const seriesIdInt = parseIfInt(seriesId);
   return {
     id,
     name,
     gender,
     displayImage,
-    seriesId: isString(seriesIdInt) ? null : seriesIdInt
+    seriesId: isString(seriesIdInt) ? null : seriesIdInt,
+    tagIds
   };
 };
 

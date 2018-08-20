@@ -15,7 +15,9 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-              <h4 :slot="viewBlockReadOnlySlot" slot-scope="slotProps" class="header__title">{{slotProps.value}}</h4>
+              <h4 :slot="viewBlockReadOnlySlot" slot-scope="{ value }" class="header__title">
+                {{value}}
+              </h4>
               <InputBox
                 id="name"
                 name="name"
@@ -68,9 +70,9 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-            <template :slot="viewBlockReadOnlySlot" slot-scope="slotProps">
+            <template :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
               <!-- TODO replace span with chiplisttag compoenent -->
-              <span v-for="t in slotProps.value" :key="t.id">{{t.name}}</span>
+              <span v-for="t in value" :key="t.id">{{t.name}}</span>
             </template>
               <InputBoxChipList
                   id="tags"
@@ -78,7 +80,7 @@
                   text="Tags"
                   :options="mappedTags"
                   :values="editCharacterTags"
-                  @on-select="onChange"
+                  @update="onChange"
                   allowNulls
               />
           </ViewBlockToggler>
@@ -252,7 +254,7 @@ export default {
   &__left-column {
     display: flex;
     flex-basis: 20%;
-    padding: $app--standard-padding;
+    padding: $app--padding-standard;
   }
   &__content {
     display: flex;
@@ -262,10 +264,10 @@ export default {
 }
 
 .header {
-  margin: $app--standard-margin 0;
+  margin: $app--margin-standard 0;
 
   &__title {
-    margin: $app--standard-margin 0;
+    margin: $app--margin-standard 0;
   }
 }
 </style>

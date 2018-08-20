@@ -77,7 +77,7 @@ main {
 }
 
 .padded {
-  padding: $app--standard-padding * 2;
+  padding: $app--padding-standard * 2;
 }
 </style>
 <style lang="scss" src="./styles/_themes.scss" />

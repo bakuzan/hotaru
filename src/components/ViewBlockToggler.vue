@@ -86,6 +86,6 @@ export default {
 @import '../styles/_variables';
 
 .view-block-toggler {
-  margin: $app--standard-margin 0;
+  margin: $app--margin-standard 0;
 }
 </style>

@@ -83,7 +83,7 @@ $columns: (
   }
 }
 .list__item {
-  padding: $app--standard-padding;
+  padding: $app--padding-standard;
   @extend %standard-border;
 }
 </style>

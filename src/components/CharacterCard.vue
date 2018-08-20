@@ -54,7 +54,7 @@ export default {
   }
   &__caption {
     width: 100%;
-    padding: $app--standard-padding 0;
+    padding: $app--padding-standard 0;
     text-align: center;
   }
   &__image {

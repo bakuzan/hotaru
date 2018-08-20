@@ -60,7 +60,7 @@ export default {
 @import '../styles/_extensions';
 
 .view-block {
-  padding: $app--standard-padding 0;
+  padding: $app--padding-standard 0;
 
   &__label {
     font-weight: bold;
@@ -79,7 +79,7 @@ export default {
 .view-block--no-data {
   .view-block__label {
     @extend %standard-border;
-    padding: $app--standard-padding;
+    padding: $app--padding-standard;
     cursor: pointer;
 
     &:hover {
