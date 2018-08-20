@@ -20,7 +20,7 @@
 <script>
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
-import CharacterCard from '@/components/Cards/CharacterCard';
+import { CharacterCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
 import { Query } from '@/graphql';

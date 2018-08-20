@@ -19,7 +19,7 @@
 <script>
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
-import SeriesCard from '@/components/Cards/SeriesCard';
+import { SeriesCard } from '@/components/Cards';
 
 import { Query } from '@/graphql';
 
