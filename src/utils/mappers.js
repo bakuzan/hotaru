@@ -34,3 +34,12 @@ export const mapCharacterToOptimisticUpdate = (character) =>
       ...character
     }
   });
+
+export const mapCharacterToOptimisticCreate = (character) =>
+  mutationWrapper({
+    characterCreate: {
+      __typename: 'Character',
+      id: -1,
+      ...character
+    }
+  });

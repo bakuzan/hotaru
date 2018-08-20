@@ -129,13 +129,15 @@ import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 import HTRTabs from '@/components/Tabs';
 
 import Strings from '@/constants/strings';
+import Urls from '@/constants/urls';
 import GenderType from '@/constants/gender-type';
 import { Query, Mutation } from '@/graphql';
-import { objectsAreEqual } from '@/utils';
+import { objectsAreEqual, getItemFromData } from '@/utils';
 import {
   mapEnumToSelectBoxOptions,
   mapToSelectBoxOptions,
   mapCharacterToPost,
+  mapCharacterToOptimisticCreate,
   mapCharacterToOptimisticUpdate
 } from '@/utils/mappers';
 import * as Routing from '@/utils/routing';
@@ -160,7 +162,13 @@ export default {
       noTags: Strings.missing.tags,
       portalTarget: Strings.portal.actions,
       readOnly: false,
-      editCharacter: {},
+      editCharacter: {
+        name: '',
+        displayImage: null,
+        gender: null,
+        seriesId: null,
+        tagsIds: []
+      },
       character: {},
       series: [],
       tags: []
@@ -228,6 +236,10 @@ export default {
     }
   },
   methods: {
+    updateData: function(data) {
+      this.character = {...data};
+      this.editCharacter = {...data};
+    },
     onChange: function(value, name) {
       this.editCharacter[name] = value;
     },
@@ -248,7 +260,35 @@ export default {
         this.handleUpdate();
       }
     },
-    handleCreate: function() {},
+    handleCreate: function() {
+      const postCharacter = mapCharacterToPost(this.editCharacter);
+      this.$apollo
+        .mutate({
+          mutation: Mutation.createCharacter,
+          variables: { character: postCharacter },
+          update: (store, { data: { characterUpdate } }) => {
+            const oldData = store.readQuery({
+              query: Query.getCharacterById,
+              variables: { id: postCharacter.id }
+            });
+
+            const data = { ...oldData, ...characterUpdate };
+
+            store.writeQuery({
+              query: Query.getCharacterById,
+              variables: { id: postCharacter.id },
+              data
+            });
+          },
+          optimisticResponse: mapCharacterToOptimisticCreate(postCharacter)
+        })
+        .then(({ data }) => {
+          const item = getItemFromData(data);
+          const redirectToUrl = Urls.build(Urls.characterView, { id: item.id });
+          this.$router.push(redirectToUrl);
+          this.updateData(item);
+        });
+    },
     handleUpdate: function() {
       this.readOnly = true; // set back to read only.
 

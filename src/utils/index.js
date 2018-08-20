@@ -89,3 +89,8 @@ export const objectsAreEqual = (a, b) => {
   if (keys.length !== Object.keys(b).length) return false;
   return keys.every((k) => objectsAreEqual(a[k], b[k]));
 };
+
+export const getItemFromData = (data) => {
+  const key = Object.keys(data).pop();
+  return data[key];
+};

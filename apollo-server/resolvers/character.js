@@ -10,5 +10,8 @@ module.exports = {
   },
   tagIds(character) {
     return character.getTags().then((tags) => tags.map((x) => x.id));
+  },
+  images(character) {
+    return character.getImages();
   }
 };

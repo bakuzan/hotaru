@@ -10,6 +10,7 @@ module.exports = gql`
     seriesId: Int
     tags: [Tag]
     tagIds: [Int]
+    images: [Image]
   }
   input CharacterInput {
     id: Int

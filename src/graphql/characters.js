@@ -36,12 +36,26 @@ const updateCharacter = gql`
   }
 `;
 
+const createCharacter = gql`
+  mutation createCharacter($character: CharacterInput) {
+    characterCreate(character: $character) {
+      id
+      name
+      displayImage
+      gender
+      seriesId
+      tagIds
+    }
+  }
+`;
+
 export default {
   query: {
     getCharacters,
     getCharacterById
   },
   mutation: {
-    updateCharacter
+    updateCharacter,
+    createCharacter
   }
 };
