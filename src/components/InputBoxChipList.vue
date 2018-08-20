@@ -44,7 +44,7 @@ export default {
     },
     attr: {
       type: String,
-      default: 'text'
+      default: 'name'
     },
     name: {
       type: String,
@@ -97,8 +97,8 @@ export default {
       const alreadyExists = this.values.find((x) => x.id === item.id);
       if (alreadyExists) return;
 
-      this.updateList(item);
       this.filter = '';
+      this.$nextTick(() => this.updateList(item));
     },
     onKeyDown: function(event) {
       const { keyCode } = event;

@@ -33,7 +33,8 @@
       fill: $primary-colour;
     }
     .has-float-label input,
-    .has-float-label select {
+    .has-float-label select,
+    .suggestion--active {
       border-color: $primary-background;
     }
 

@@ -71,8 +71,12 @@
             :forceReadOnly="readOnly"
           >
             <template :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
-              <!-- TODO replace span with chiplisttag compoenent -->
-              <span v-for="t in value" :key="t.id">{{t.name}}</span>
+              <InputBoxChipListTag
+                v-for="tag in value"
+                :key="tag.id"
+                :data="tag"
+                is-active="false"
+              />
             </template>
               <InputBoxChipList
                   id="tags"
@@ -80,7 +84,7 @@
                   text="Tags"
                   :options="mappedTags"
                   :values="editCharacterTags"
-                  @update="onChange"
+                  @update="onUpdate"
                   allowNulls
               />
           </ViewBlockToggler>
@@ -88,12 +92,19 @@
       </section>
       <template v-if="hasEdits">
         <portal :to="portalTarget">
-          <Button
-            theme="secondary"
-            @click="submit"
-          >
-            Save
-          </Button>
+          <div class="button-group">
+            <Button
+              @click="cancel"
+            >
+              Cancel
+            </Button>
+            <Button
+              theme="secondary"
+              @click="submit"
+            >
+              Save
+            </Button>
+          </div>
         </portal>
       </template>
   </div>
@@ -106,6 +117,7 @@ import SelectBox from '@/components/SelectBox';
 import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import InputBoxChipList from '@/components/InputBoxChipList';
+import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 
 import Strings from '@/constants/strings';
 import GenderType from '@/constants/gender-type';
@@ -127,7 +139,8 @@ export default {
     SelectBox,
     Button,
     InputBox,
-    InputBoxChipList
+    InputBoxChipList,
+    InputBoxChipListTag
   },
   data: function() {
     return {
@@ -170,7 +183,7 @@ export default {
       return mapToSelectBoxOptions(this.series);
     },
     mappedTags: function() {
-      return mapToSelectBoxOptions(this.tags);
+      return this.tags;
     },
     mappedGenders: function() {
       return mapEnumToSelectBoxOptions(GenderType);
@@ -206,6 +219,12 @@ export default {
   methods: {
     onChange: function(value, name) {
       this.editCharacter[name] = value;
+    },
+    onUpdate: function(value, name) {
+      this.editCharacter[name] = value.map((x) => x.id);
+    },
+    cancel: function() {
+      this.editCharacter = { ...this.character };
     },
     submit: function() {
       this.readOnly = true; // set back to read only.

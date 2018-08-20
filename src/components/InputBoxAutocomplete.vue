@@ -80,7 +80,7 @@ export default {
     }
   },
   data: function() {
-    return { isUse: false, activeSuggestion: 0, timer: null };
+    return { isFocussed: false, activeSuggestion: 0, timer: null };
   },
   beforeDestroy() {
     clearTimeout(this.timer);
@@ -95,8 +95,8 @@ export default {
       return classNames('autocomplete__menu', 'list column one');
     },
     showMenu: function() {
-      console.log(this.isUse, this.filter);
-      return this.isUse && !!this.filter;
+      const focussedWithFilter = this.isFocussed && this.filter;
+      return focussedWithFilter;
     },
     hasOptions: function() {
       return !!this.options.length;
@@ -143,14 +143,13 @@ export default {
     },
     onFocus: function() {
       clearTimeout(this.timer);
-      this.inUse = true;
-      console.log('focus!', this);
+      this.isFocussed = true;
     },
     onBlur: function() {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         if (!this.timer) return;
-        this.inUse = false;
+        this.isFocussed = false;
       }, 1000);
     },
     onSelectAutocompleteSuggestion: function(id) {
@@ -215,12 +214,17 @@ export default {
 }
 </style>
 <style lang="scss">
+@import '../styles/_extensions';
+
 .suggestion {
+  @extend %standard-border;
+
   &__button {
     width: 100%;
   }
   &__text {
-    white-space: pre-line;
+    display: flex;
+    white-space: normal;
   }
 }
 

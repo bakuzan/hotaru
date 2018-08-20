@@ -5,7 +5,7 @@
       <Button
         className="suggestion__button"
         :title="itemText"
-        @click="$emit('on-select', item.id)"
+        @click="onClick"
       >
         <span class="suggestion__text">
           {{textPart.pre}}
@@ -21,9 +21,13 @@
 <script>
 import classNames from 'classnames';
 
+import Button from '@/components/Button';
+
 export default {
   name: 'InputBoxAutocompleteSuggestion',
-  components: {},
+  components: {
+    Button
+  },
   props: {
     activeSuggestion: {
       type: Number,
@@ -65,6 +69,10 @@ export default {
       return this.highlightMatch(this.itemText);
     }
   },
-  methods: {}
+  methods: {
+    onClick: function() {
+      this.$emit('on-select', this.item.id);
+    }
+  }
 };
 </script>

@@ -79,5 +79,9 @@ main {
 .padded {
   padding: $app--padding-standard * 2;
 }
+
+.button-group {
+  display: flex;
+}
 </style>
 <style lang="scss" src="./styles/_themes.scss" />
