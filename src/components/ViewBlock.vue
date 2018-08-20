@@ -2,18 +2,16 @@
     <div :class="classes">
       <label 
         class="view-block__label"
-        @click="onNoData"
-        role="button"
       >
-      {{ value ? label : noDataText }}
+      {{ label }}
       </label>
       <Button
-          v-show="value"
           className="view-block__button"
           @click="$emit('toggle')"
       >
-        <slot v-bind:value="value">
-          {{value}}
+        <slot>
+          <!-- placeholder -->
+          {{value || noDataText}}
         </slot>
       </Button>
     </div>
@@ -76,15 +74,15 @@ export default {
     }
   }
 }
-.view-block--no-data {
-  .view-block__label {
-    @extend %standard-border;
-    padding: $app--padding-standard;
-    cursor: pointer;
+// .view-block--no-data {
+//   .view-block__label {
+//     @extend %standard-border;
+//     padding: $app--padding-standard;
+//     cursor: pointer;
 
-    &:hover {
-      border-color: darken($white, 33%);
-    }
-  }
-}
+//     &:hover {
+//       border-color: darken($white, 33%);
+//     }
+//   }
+// }
 </style>

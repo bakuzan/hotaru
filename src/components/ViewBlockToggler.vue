@@ -7,7 +7,7 @@
             :noDataText="noDataText"
             @toggle="onToggle"
         >
-          <slot :name="childSlotName"></slot>
+          <slot :name="childSlotName" :value="value"></slot>
         </ViewBlock>
         <slot v-if="!readOnly"></slot>
     </div>

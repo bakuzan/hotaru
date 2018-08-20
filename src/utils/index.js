@@ -76,15 +76,16 @@ export const separateAndCapitaliseAll = compose(
   fromCamelCase
 );
 
-export const objectsAreEqual = (o1, o2) => {
-  if (!isObject(o1) || !isObject(o2)) return o1 === o2;
-  return Object.keys(o1).every((k) => {
-    const one = o1[k];
-    const two = o2[k];
-    return isArray(one)
-      ? one
-          .map((t, i) => objectsAreEqual(one[i], two[i]))
-          .every((b) => b === true)
-      : one === two;
-  });
+export const objectsAreEqual = (a, b) => {
+  if (a === b) return true;
+  if (a instanceof Date && b instanceof Date)
+    return a.getTime() === b.getTime();
+  if (!a || !b || (typeof a !== 'object' && typeof b !== 'object'))
+    return a === b;
+  if (a === null || a === undefined || b === null || b === undefined)
+    return false;
+  if (a.prototype !== b.prototype) return false;
+  let keys = Object.keys(a);
+  if (keys.length !== Object.keys(b).length) return false;
+  return keys.every((k) => objectsAreEqual(a[k], b[k]));
 };

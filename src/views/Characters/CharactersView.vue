@@ -1,97 +1,103 @@
 <template>
-  <div class="page character-view">
-    <form novalidate>
+  <form novalidate>
+    <div class="page character-view">  
       <div class="character-view__left-column">
         <HTRImage 
           :src="character.displayImage" 
           class="character-view__image" 
         />
       </div>
-      <section class="character-view__content character-info">
-        <header class="character-info__header header">
-          <ViewBlockToggler
-            id="name"
-            label="Name"
-            :value="character.name"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
-          >
-              <h4 :slot="viewBlockReadOnlySlot" slot-scope="{ value }" class="header__title">
-                {{value}}
-              </h4>
-              <InputBox
+
+      <Tabs>
+        <Tab name="Detail">
+          <div class="character-view__content character-info">
+            <header class="character-info__header header">
+              <ViewBlockToggler
                 id="name"
-                name="name"
                 label="Name"
-                :value="editCharacter.name"
-                @input="onChange"
-              />
-          </ViewBlockToggler>
-        </header>
-        <div class="character-info__content">
-          <ViewBlockToggler
-            id="gender"
-            label="Gender"
-            :value="character.gender"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
-          >
-            <SelectBox
+                :value="character.name"
+                :lockEdit="isCreate"
+                :forceReadOnly="readOnly"
+              >
+                <InputBox
+                  id="name"
+                  name="name"
+                  label="Name"
+                  :value="editCharacter.name"
+                  @input="onChange"
+                />
+              </ViewBlockToggler>
+            </header>
+            <div class="character-info__content">
+              <ViewBlockToggler
                 id="gender"
-                name="gender"
-                text="Gender"
-                :options="mappedGenders"
-                :value="editCharacter.gender"
-                @on-select="onChange"
-            />
-          </ViewBlockToggler>
-          <ViewBlockToggler
-            id="series"
-            label="Series"
-            :value="characterSeries"
-            :noDataText="noSeries"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
-          >
-            <SelectBox
+                label="Gender"
+                :value="character.gender"
+                :lockEdit="isCreate"
+                :forceReadOnly="readOnly"
+              >
+                <SelectBox
+                  id="gender"
+                  name="gender"
+                  text="Gender"
+                  :options="mappedGenders"
+                  :value="editCharacter.gender"
+                  @on-select="onChange"
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
                 id="series"
-                name="seriesId"
-                text="Series"
-                :options="mappedSeries"
-                :value="editCharacter.seriesId"
-                @on-select="onChange"
-                allowNulls
-            />
-          </ViewBlockToggler>
-          <ViewBlockToggler
-            id="tags"
-            label="Tags"
-            :value="characterTags"
-            :noDataText="noTags"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
-          >
-            <template :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
-              <InputBoxChipListTag
-                v-for="tag in value"
-                :key="tag.id"
-                :data="tag"
-                is-active="false"
-              />
-            </template>
-              <InputBoxChipList
-                  id="tags"
-                  name="tagIds"
-                  text="Tags"
-                  :options="mappedTags"
-                  :values="editCharacterTags"
-                  @update="onUpdate"
+                label="Series"
+                :value="characterSeries"
+                :noDataText="noSeries"
+                :lockEdit="isCreate"
+                :forceReadOnly="readOnly"
+              >
+                <SelectBox
+                  id="series"
+                  name="seriesId"
+                  text="Series"
+                  :options="mappedSeries"
+                  :value="editCharacter.seriesId"
+                  @on-select="onChange"
                   allowNulls
-              />
-          </ViewBlockToggler>
-        </div>
-      </section>
-      <template v-if="hasEdits">
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
+                id="tags"
+                label="Tags"
+                :value="characterTags"
+                :noDataText="noTags"
+                :lockEdit="isCreate"
+                :forceReadOnly="readOnly"
+              >
+                <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
+                  <InputBoxChipListTag
+                    v-for="tag in value"
+                    :key="tag.id"
+                    :data="tag"
+                    :is-active="false"
+                  />
+                </div>
+                <InputBoxChipList
+                    id="tags"
+                    name="tagIds"
+                    text="Tags"
+                    :options="mappedTags"
+                    :values="editCharacterTags"
+                    @update="onUpdate"
+                    allowNulls
+                />
+              </ViewBlockToggler>
+            </div>
+          </div>
+        </Tab>
+        <Tab name="Gallery">
+          Placeholder
+        </Tab>
+      </Tabs>
+
+      <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
             <Button
@@ -108,8 +114,8 @@
           </div>
         </portal>
       </template>
-    </form>
-  </div>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -120,6 +126,7 @@ import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import InputBoxChipList from '@/components/InputBoxChipList';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
+import HTRTabs from '@/components/Tabs';
 
 import Strings from '@/constants/strings';
 import GenderType from '@/constants/gender-type';
@@ -142,11 +149,16 @@ export default {
     Button,
     InputBox,
     InputBoxChipList,
-    InputBoxChipListTag
+    InputBoxChipListTag,
+    Tabs: HTRTabs.Tabs,
+    Tab: HTRTabs.Tab
   },
   data: function() {
     return {
       viewBlockReadOnlySlot: Strings.slot.viewBlock,
+      noSeries: Strings.missing.series,
+      noTags: Strings.missing.tags,
+      portalTarget: Strings.portal.actions,
       readOnly: false,
       editCharacter: {},
       character: {},
@@ -208,17 +220,11 @@ export default {
       const tags = this.tags.filter((x) => tagIds.includes(x.id));
       return tags;
     },
-    noSeries: function() {
-      return Strings.missing.series;
-    },
-    noTags: function() {
-      return Strings.missing.tags;
-    },
     hasEdits: function() {
       return !objectsAreEqual(this.character, this.editCharacter);
     },
-    portalTarget: function() {
-      return Strings.portal.actions;
+    showButtons: function() {
+      return (!this.isCreate && this.hasEdits) || this.isCreate;
     }
   },
   methods: {
@@ -229,7 +235,11 @@ export default {
       this.editCharacter[name] = value.map((x) => x.id);
     },
     cancel: function() {
+      this.readOnly = true;
       this.editCharacter = { ...this.character };
+      this.$nextTick(function() {
+        this.readOnly = false;
+      });
     },
     submit: function() {
       if (this.isCreate) {
@@ -280,7 +290,10 @@ export default {
 
   &__image {
     max-height: 300px;
-    margin-left: 0;
+    margin: {
+      left: 0;
+      top: 0;
+    }
   }
 
   &__left-column {

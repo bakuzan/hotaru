@@ -57,5 +57,16 @@
         color: $active-colour;
       }
     }
+
+    // Tabs
+    .tabs__container {
+      border-color: $primary-background;
+    }
+    .tab--active {
+      border: {
+        color: $primary-background;
+        bottom-color: $base-background;
+      }
+    }
   }
 }

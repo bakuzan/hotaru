@@ -142,10 +142,6 @@ export default {
   align-items: flex-end;
   padding-top: 1em !important;
 
-  &__clearable-input {
-    padding-left: 0;
-  }
-
   &__selected-outer {
     padding: $app--padding-standard 0;
     margin-bottom: 1px;
@@ -161,5 +157,10 @@ export default {
     border-radius: 0;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   }
+}
+</style>
+<style lang="scss">
+.chip-list__clearable-input {
+  padding-left: 0;
 }
 </style>
