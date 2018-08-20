@@ -1,7 +1,7 @@
 const gql = require('graphql-tag');
 
 const { mapArrToGraphqlString } = require('../utils');
-const { GenderType } = require('../constants/enums');
+const { GenderType, SourceType } = require('../constants/enums');
 
 const GenderTypeGQL = gql`
   enum GenderType {
@@ -9,4 +9,10 @@ const GenderTypeGQL = gql`
   }
 `;
 
-module.exports = [GenderTypeGQL];
+const SourceTypeGQL = gql`
+  enum SourceType {
+    ${mapArrToGraphqlString(SourceType)}
+  }
+`;
+
+module.exports = [GenderTypeGQL, SourceTypeGQL];
