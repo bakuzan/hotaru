@@ -1,11 +1,14 @@
 <template>
     <nav class="sidebar themed-background">
       <!-- toggle button? -->
-      <NavLink :to="base" :class="sideNavLinkClass" title="Home">
-        H
-      </NavLink>
-      <NavLink :to="characterList" :class="sideNavLinkClass" title="Characters">
-        C
+      <NavLink 
+        v-for="link in links"
+        :key="link.id"
+        :to="link.to" 
+        :class="sideNavLinkClass" 
+        :title="link.title"
+      >
+        {{link.text}}
       </NavLink>
     </nav>
 </template>
@@ -20,15 +23,18 @@ export default {
   components: {
     NavLink
   },
+  data: function() {
+    return {
+      links: [
+        { id: 1, to: Urls.base, title: 'Home', text: 'H' },
+        { id: 2, to: Urls.characterList, title: 'Characters', text: 'C' },
+        { id: 3, to: Urls.seriesList, title: 'Series', text: 'S' }
+      ]
+    };
+  },
   computed: {
     sideNavLinkClass: function() {
       return 'sidebar__link';
-    },
-    base: function() {
-      return Urls.base;
-    },
-    characterList: function() {
-      return Urls.characterList;
     }
   }
 };
