@@ -16,6 +16,12 @@ const Urls = {
   },
   get characterView() {
     return `${this.characterList}/view/:id`;
+  },
+  get characterCreate() {
+    return `${this.characterList}/create`;
+  },
+  get seriesList() {
+    return `${this.base}/series`;
   }
 };
 

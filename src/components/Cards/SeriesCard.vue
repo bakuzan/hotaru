@@ -19,7 +19,7 @@ import NavLink from '@/components/NavLink';
 import Urls from '@/constants/urls';
 
 export default {
-  name: 'CharacterCard',
+  name: 'SeriesCard',
   components: {
     HTRImage,
     NavLink
@@ -42,8 +42,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import '../styles/_variables.scss';
-@import '../styles/_extensions.scss';
+@import '../../styles/_variables.scss';
+@import '../../styles/_extensions.scss';
 
 .character-card {
   @extend %standard-border;

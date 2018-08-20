@@ -2,16 +2,15 @@
   <div class="page">
     <ListFilterBar 
       v-bind="filters"
-      @input="onInput"
-      @add="onAdd"
+      @input="onInput" 
     />
     <List 
-      className="characters"
-      itemClassName="characters__item"
-      :items="characters"
+      className="series"
+      itemClassName="series__item"
+      :items="series"
     >
       <template slot-scope="slotProps">
-        <CharacterCard v-bind="slotProps.item" />
+        <SeriesCard v-bind="slotProps.item" />
       </template>
     </List>
   </div>
@@ -20,17 +19,16 @@
 <script>
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
-import CharacterCard from '@/components/Cards/CharacterCard';
+import SeriesCard from '@/components/Cards/SeriesCard';
 
-import Urls from '@/constants/urls';
 import { Query } from '@/graphql';
 
 export default {
-  name: 'CharactersList',
+  name: 'SeriesList',
   components: {
     List,
     ListFilterBar,
-    CharacterCard
+    SeriesCard
   },
   data: function() {
     return {
@@ -38,12 +36,12 @@ export default {
       filters: {
         search: ''
       },
-      characters: []
+      series: []
     };
   },
   apollo: {
     characters: {
-      query: Query.getCharacters,
+      query: Query.getSeries,
       debounce: 1000,
       variables() {
         return { ...this.filters };
@@ -53,9 +51,6 @@ export default {
   methods: {
     onInput: function(value, name) {
       this.filters[name] = value;
-    },
-    onAdd: function() {
-      this.$router.push(Urls.characterCreate);
     }
   }
 };

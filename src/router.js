@@ -31,6 +31,18 @@ export default new Router({
       name: Strings.route.characterView,
       component: () =>
         import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue')
+    },
+    {
+      path: Urls.characterCreate,
+      name: Strings.route.characterCreate,
+      component: () =>
+        import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue')
+    },
+    {
+      path: Urls.seriesList,
+      name: Strings.route.seriesList,
+      component: () =>
+        import(/* webpackChunkName: "series-list" */ './views/Series/SeriesList.vue')
     }
   ]
 });

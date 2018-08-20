@@ -23,9 +23,12 @@ export default Object.freeze({
   route: {
     base: 'home',
     characterList: 'characters',
-    characterView: 'character view'
+    characterView: 'character view',
+    characterCreate: 'character create',
+    seriesList: 'series list'
   },
   slot: {
-    viewBlock: 'view-block__read-only'
+    viewBlock: 'view-block__read-only',
+    listFilterType: 'list-filter__type'
   }
 });

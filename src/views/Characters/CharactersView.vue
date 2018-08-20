@@ -1,5 +1,6 @@
 <template>
   <div class="page character-view">
+    <form novalidate>
       <div class="character-view__left-column">
         <HTRImage 
           :src="character.displayImage" 
@@ -21,7 +22,7 @@
               <InputBox
                 id="name"
                 name="name"
-                text="Name"
+                label="Name"
                 :value="editCharacter.name"
                 @input="onChange"
               />
@@ -107,6 +108,7 @@
           </div>
         </portal>
       </template>
+    </form>
   </div>
 </template>
 
@@ -155,6 +157,9 @@ export default {
   apollo: {
     character: {
       query: Query.getCharacterById,
+      skip() {
+        return this.isCreate;
+      },
       variables() {
         const id = Number(Routing.getParam(this.$router, 'id'));
         return { id };
@@ -227,6 +232,14 @@ export default {
       this.editCharacter = { ...this.character };
     },
     submit: function() {
+      if (this.isCreate) {
+        this.handleCreate();
+      } else {
+        this.handleUpdate();
+      }
+    },
+    handleCreate: function() {},
+    handleUpdate: function() {
       this.readOnly = true; // set back to read only.
 
       const postCharacter = mapCharacterToPost(this.editCharacter);
