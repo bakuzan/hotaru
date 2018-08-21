@@ -30,6 +30,7 @@ import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 
 import KeyCodes from '@/constants/key-codes';
+import { generateUniqueId } from '@/utils';
 
 export default {
   name: 'InputBoxChipList',
@@ -92,7 +93,13 @@ export default {
     },
     onSelect: function(id) {
       const item = this.options.find((x) => x.id === id);
-      if (!item) return this.$emit('create-new', item);
+
+      if (!item) {
+        const newItem = { id: generateUniqueId(), name: this.filter };
+        this.$emit('create', newItem);
+        this.filter = '';
+        return;
+      }
 
       const alreadyExists = this.values.find((x) => x.id === item.id);
       if (alreadyExists) return;

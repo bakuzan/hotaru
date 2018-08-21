@@ -30,8 +30,14 @@ const updateCharacter = gql`
       name
       displayImage
       gender
-      seriesId
-      tagIds
+      series {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
     }
   }
 `;
@@ -43,8 +49,14 @@ const createCharacter = gql`
       name
       displayImage
       gender
-      seriesId
-      tagIds
+      series {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
     }
   }
 `;

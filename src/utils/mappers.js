@@ -9,16 +9,31 @@ export const mapEnumToSelectBoxOptions = (arr) =>
 export const mapToSelectBoxOptions = (arr) =>
   arr.map((x) => ({ value: x.id, text: x.name }));
 
-export const mapCharacterToPost = (character) => {
+export const mapCharacterToPost = (character, allSeries, allTags) => {
   const { id, name, gender, displayImage, seriesId, tagIds = [] } = character;
   const seriesIdInt = parseIfInt(seriesId);
+  const removeSeries = isString(seriesIdInt);
+
   return {
     id,
     name,
     gender,
     displayImage,
-    seriesId: isString(seriesIdInt) ? null : seriesIdInt,
-    tagIds: [...tagIds]
+    series: removeSeries ? null : allSeries.find((x) => x.id === seriesIdInt),
+    tags: [
+      ...allTags
+        .filter((x) => tagIds.includes(x.id))
+        .map((x) => (isString(x.id) ? { name: x.name } : { ...x }))
+    ]
+  };
+};
+
+export const mapCharacterToStore = (character) => {
+  const { series = {}, tags = [], ...pass } = character;
+  return {
+    ...pass,
+    seriesId: series ? series.id : null,
+    tagIds: tags.map((x) => x.id)
   };
 };
 

@@ -4,6 +4,7 @@ const Query = gql`
   type Query {
     characters(search: String): [Character]
     characterById(id: Int!): Character
+    characterImages(characterId: Int!): [Image]
 
     series(search: String): [Series]
     seriesById(id: Int!): Series

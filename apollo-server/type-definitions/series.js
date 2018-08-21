@@ -11,5 +11,7 @@ module.exports = gql`
     id: Int
     name: String
     source: SourceType
+    characters: [CharacterInput]
+    characterIds: [Int]
   }
 `;

@@ -18,6 +18,11 @@ module.exports = {
     const { id } = args;
     return Character.findById(id);
   },
+  characterImages(_, { characterId, ...args }) {
+    return Character.findById(characterId).then((character) =>
+      character.getImages({ where: args })
+    );
+  },
   series(_, { search = '', ...args }) {
     return Series.findAll({
       where: {

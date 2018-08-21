@@ -83,9 +83,10 @@
                     id="tags"
                     name="tagIds"
                     text="Tags"
-                    :options="mappedTags"
+                    :options="combinedTags"
                     :values="editCharacterTags"
                     @update="onUpdate"
+                    @create="onCreate"
                     allowNulls
                 />
               </ViewBlockToggler>
@@ -137,9 +138,11 @@ import {
   mapEnumToSelectBoxOptions,
   mapToSelectBoxOptions,
   mapCharacterToPost,
+  mapCharacterToStore,
   mapCharacterToOptimisticCreate,
   mapCharacterToOptimisticUpdate
 } from '@/utils/mappers';
+import { refreshAllTags } from '@/utils/cache';
 import { defaultCharacterModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 
@@ -172,7 +175,8 @@ export default {
       editCharacter: defaultCharacterModel(),
       character: {},
       series: [],
-      tags: []
+      tags: [],
+      newTags: []
     };
   },
   apollo: {
@@ -205,8 +209,8 @@ export default {
     mappedSeries: function() {
       return mapToSelectBoxOptions(this.series);
     },
-    mappedTags: function() {
-      return this.tags;
+    combinedTags: function() {
+      return [...this.tags, ...this.newTags];
     },
     mappedGenders: function() {
       return mapEnumToSelectBoxOptions(GenderType);
@@ -223,7 +227,7 @@ export default {
     },
     editCharacterTags: function() {
       const tagIds = this.editCharacter.tagIds || [];
-      const tags = this.tags.filter((x) => tagIds.includes(x.id));
+      const tags = this.combinedTags.filter((x) => tagIds.includes(x.id));
       return tags;
     },
     hasEdits: function() {
@@ -243,11 +247,18 @@ export default {
     onChange: function(value, name) {
       this.editCharacter[name] = value;
     },
+    onCreate: function(newTag) {
+      this.newTags.push(newTag);
+
+      const oldTags = [...this.editCharacter.tagIds];
+      this.editCharacter.tagIds = [...oldTags, newTag.id];
+    },
     onUpdate: function(value, name) {
       this.editCharacter[name] = value.map((x) => x.id);
     },
     cancel: function() {
       this.readOnly = true;
+      this.newTags = [];
       this.editCharacter = { ...this.character };
       this.$nextTick(function() {
         this.readOnly = false;
@@ -263,17 +274,25 @@ export default {
       }
     },
     handleCreate: function() {
-      const postCharacter = mapCharacterToPost(this.editCharacter);
+      const postCharacter = mapCharacterToPost(
+        this.editCharacter,
+        this.series,
+        this.combinedTags
+      );
+
       this.$apollo
         .mutate({
           mutation: Mutation.createCharacter,
           variables: { character: postCharacter },
           update: (store, { data: { characterCreate } }) => {
-            const data = { ...characterCreate };
+            const character = { ...characterCreate };
+
+            refreshAllTags(store, character);
+
             store.writeQuery({
               query: Query.getCharacterById,
-              variables: { id: data.id },
-              data
+              variables: { id: character.id },
+              data: mapCharacterToStore(character)
             });
           },
           optimisticResponse: mapCharacterToOptimisticCreate(postCharacter)
@@ -287,7 +306,12 @@ export default {
         });
     },
     handleUpdate: function() {
-      const postCharacter = mapCharacterToPost(this.editCharacter);
+      const postCharacter = mapCharacterToPost(
+        this.editCharacter,
+        this.series,
+        this.combinedTags
+      );
+
       this.$apollo
         .mutate({
           mutation: Mutation.updateCharacter,
@@ -299,6 +323,8 @@ export default {
             });
 
             const data = { ...oldData, ...characterUpdate };
+
+            refreshAllTags(store, data);
 
             store.writeQuery({
               query: Query.getCharacterById,
