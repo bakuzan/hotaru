@@ -1,5 +1,5 @@
 const Op = require('sequelize').Op;
-const { Character, Series, Tag, Image } = require('../connectors');
+const { db: context, Character, Series, Tag, Image } = require('../connectors');
 
 const Utils = require('../utils');
 
@@ -39,32 +39,39 @@ module.exports = {
     } = Utils.separateArrIntoNewAndExisting(images);
 
     return Character.findById(id).then(async (character) => {
-      await character.setSeries(seriesId);
-      await character.setTags(existingTagIds);
-      await character.setImages(existingImageIds);
+      return context
+        .transaction(async (transaction) => {
+          await character.setSeries(seriesId, { transaction });
+          await character.setTags(existingTagIds, { transaction });
+          await character.setImages(existingImageIds, { transaction });
 
-      if (newTags.length) {
-        await Tag.bulkCreate(newTags);
-        const createdTags = await Tag.findAll({
-          where: { createdAt: { [Op.gte]: createdAt } }
-        });
-        await character.addTags(createdTags);
-      }
+          if (newTags.length) {
+            await Tag.bulkCreate(newTags, { transaction });
+            const createdTags = await Tag.findAll({
+              where: { createdAt: { [Op.gte]: createdAt } },
+              transaction
+            });
+            await character.addTags(createdTags, { transaction });
+          }
 
-      if (newImages.length) {
-        await Image.bulkCreate(newImages);
-        const createdImages = await Image.findAll({
-          where: { createdAt: { [Op.gte]: createdAt } }
-        });
-        await character.addImages(createdImages);
-      }
+          if (newImages.length) {
+            await Image.bulkCreate(newImages, { transaction });
+            const createdImages = await Image.findAll({
+              where: { createdAt: { [Op.gte]: createdAt } },
+              transaction
+            });
+            await character.addImages(createdImages, { transaction });
+          }
 
-      return Character.update(
-        { ...args },
-        {
-          where: { id }
-        }
-      ).then(() => character.reload());
+          return Character.update(
+            { ...args },
+            {
+              where: { id },
+              transaction
+            }
+          );
+        })
+        .then(() => character.reload());
     });
   },
   seriesCreate(_, { series }) {
