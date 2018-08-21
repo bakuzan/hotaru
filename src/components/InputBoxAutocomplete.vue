@@ -3,6 +3,7 @@
     <InputBox 
       v-bind="$props"
       :class="inputProps.class"
+      :value="filter"
       @input="onInput"
       @focus="onFocus"
       @blur="onBlur"

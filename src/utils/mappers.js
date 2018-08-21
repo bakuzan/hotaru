@@ -18,7 +18,7 @@ export const mapCharacterToPost = (character) => {
     gender,
     displayImage,
     seriesId: isString(seriesIdInt) ? null : seriesIdInt,
-    tagIds
+    tagIds: [...tagIds]
   };
 };
 

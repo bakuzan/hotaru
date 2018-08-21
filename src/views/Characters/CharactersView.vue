@@ -109,7 +109,7 @@
               theme="secondary"
               @click="submit"
             >
-              Save
+              {{ isCreate ? "Create" : "Save" }}
             </Button>
           </div>
         </portal>
@@ -140,6 +140,7 @@ import {
   mapCharacterToOptimisticCreate,
   mapCharacterToOptimisticUpdate
 } from '@/utils/mappers';
+import { defaultCharacterModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 
 export default {
@@ -155,6 +156,12 @@ export default {
     Tabs: HTRTabs.Tabs,
     Tab: HTRTabs.Tab
   },
+  props: {
+    isCreate: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: function() {
     return {
       viewBlockReadOnlySlot: Strings.slot.viewBlock,
@@ -162,13 +169,7 @@ export default {
       noTags: Strings.missing.tags,
       portalTarget: Strings.portal.actions,
       readOnly: false,
-      editCharacter: {
-        name: '',
-        displayImage: null,
-        gender: null,
-        seriesId: null,
-        tagsIds: []
-      },
+      editCharacter: defaultCharacterModel(),
       character: {},
       series: [],
       tags: []
@@ -185,9 +186,10 @@ export default {
         return { id };
       },
       update(data) {
-        const character = data.characterById || {};
+        const character = data.characterById || defaultCharacterModel();
         this.editCharacter = {
-          ...character
+          ...character,
+          tagIds: [...character.tagIds]
         };
         return character;
       }
@@ -200,10 +202,6 @@ export default {
     }
   },
   computed: {
-    isCreate: function() {
-      const routeName = Routing.getRouteName(this.$router);
-      return routeName === Strings.route.characterCreate;
-    },
     mappedSeries: function() {
       return mapToSelectBoxOptions(this.series);
     },
@@ -229,7 +227,9 @@ export default {
       return tags;
     },
     hasEdits: function() {
-      return !objectsAreEqual(this.character, this.editCharacter);
+      const notEqual = !objectsAreEqual(this.character, this.editCharacter);
+      console.log(this.character, this.editCharacter, notEqual);
+      return notEqual;
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
@@ -237,8 +237,8 @@ export default {
   },
   methods: {
     updateData: function(data) {
-      this.character = {...data};
-      this.editCharacter = {...data};
+      this.character = { ...data };
+      this.editCharacter = { ...data };
     },
     onChange: function(value, name) {
       this.editCharacter[name] = value;
@@ -254,6 +254,8 @@ export default {
       });
     },
     submit: function() {
+      this.readOnly = true; // set back to read only.
+
       if (this.isCreate) {
         this.handleCreate();
       } else {
@@ -266,17 +268,11 @@ export default {
         .mutate({
           mutation: Mutation.createCharacter,
           variables: { character: postCharacter },
-          update: (store, { data: { characterUpdate } }) => {
-            const oldData = store.readQuery({
-              query: Query.getCharacterById,
-              variables: { id: postCharacter.id }
-            });
-
-            const data = { ...oldData, ...characterUpdate };
-
+          update: (store, { data: { characterCreate } }) => {
+            const data = { ...characterCreate };
             store.writeQuery({
               query: Query.getCharacterById,
-              variables: { id: postCharacter.id },
+              variables: { id: data.id },
               data
             });
           },
@@ -284,14 +280,13 @@ export default {
         })
         .then(({ data }) => {
           const item = getItemFromData(data);
+          this.updateData(item);
+
           const redirectToUrl = Urls.build(Urls.characterView, { id: item.id });
           this.$router.push(redirectToUrl);
-          this.updateData(item);
         });
     },
     handleUpdate: function() {
-      this.readOnly = true; // set back to read only.
-
       const postCharacter = mapCharacterToPost(this.editCharacter);
       this.$apollo
         .mutate({

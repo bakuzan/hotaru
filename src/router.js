@@ -30,13 +30,15 @@ export default new Router({
       path: Urls.characterView,
       name: Strings.route.characterView,
       component: () =>
-        import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue')
+        import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue'),
+      props: { isCreate: false }
     },
     {
       path: Urls.characterCreate,
       name: Strings.route.characterCreate,
       component: () =>
-        import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue')
+        import(/* webpackChunkName: "characters-view" */ './views/Characters/CharactersView.vue'),
+      props: { isCreate: true }
     },
     {
       path: Urls.seriesList,
