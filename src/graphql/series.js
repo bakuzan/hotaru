@@ -23,10 +23,31 @@ const getSeriesById = gql`
     seriesById(id: $id) {
       id
       name
+      source
       characters {
         id
         name
       }
+    }
+  }
+`;
+
+const updateSeries = gql`
+  mutation updateSeries($series: SeriesInput) {
+    seriesUpdate(series: $series) {
+      id
+      name
+      source
+    }
+  }
+`;
+
+const createSeries = gql`
+  mutation createSeries($series: SeriesInput) {
+    seriesCreate(series: $series) {
+      id
+      name
+      source
     }
   }
 `;
@@ -37,5 +58,8 @@ export default {
     getSeries,
     getSeriesById
   },
-  mutation: {}
+  mutation: {
+    updateSeries,
+    createSeries
+  }
 };

@@ -9,5 +9,6 @@ export const Query = {
 };
 
 export const Mutation = {
-  ...characters.mutation
+  ...characters.mutation,
+  ...series.mutation
 };
