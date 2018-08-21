@@ -8,4 +8,8 @@ module.exports = gql`
   input ImageInput {
     url: String
   }
+  type ImageUploadResponse {
+    success: Boolean
+    url: String
+  }
 `;

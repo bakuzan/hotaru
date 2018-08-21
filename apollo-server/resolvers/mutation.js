@@ -1,6 +1,7 @@
 const Op = require('sequelize').Op;
 const { db: context, Character, Series, Tag, Image } = require('../connectors');
 
+const Gallery = require('../image-store')
 const Utils = require('../utils');
 
 module.exports = {
@@ -95,5 +96,11 @@ module.exports = {
   },
   tagCreate(_, { tag }) {
     return Tag.create({ ...tag }).then((tag) => tag);
-  }
+  },
+  uploadImageBase64(_, { payload }) {
+    return Gallery.uploadBase64(payload);
+  },
+  uploadImageUrl(_, { payload }) {
+    return Gallery.uploadUrl(payload);
+  },
 };

@@ -22,6 +22,9 @@ const Mutation = gql`
     seriesUpdate(series: SeriesInput): Series
 
     tagCreate(tag: TagInput): Tag
+
+    uploadImageBase64(payload: String!): ImageUploadResponse
+    uploadImageUrl(payload: String!): ImageUploadResponse
   }
 `;
 

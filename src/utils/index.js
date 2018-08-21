@@ -102,3 +102,9 @@ export const generateUniqueId = () =>
       (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
   );
+
+export const convertToBase64 = (file, callback) => {
+  const reader = new FileReader();
+  reader.onloadend = callback;
+  reader.readAsDataURL(file);
+};

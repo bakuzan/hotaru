@@ -6,6 +6,8 @@
           :src="character.displayImage" 
           class="character-view__image" 
         />
+        <ImageUploader
+        />
       </div>
 
       <Tabs>
@@ -128,6 +130,7 @@ import InputBox from '@/components/InputBox';
 import InputBoxChipList from '@/components/InputBoxChipList';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 import HTRTabs from '@/components/Tabs';
+import ImageUploader from '@/components/ImageUploader';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -157,7 +160,8 @@ export default {
     InputBoxChipList,
     InputBoxChipListTag,
     Tabs: HTRTabs.Tabs,
-    Tab: HTRTabs.Tab
+    Tab: HTRTabs.Tab,
+    ImageUploader
   },
   props: {
     isCreate: {
@@ -357,6 +361,7 @@ export default {
 
   &__left-column {
     display: flex;
+    flex-direction: column;
     flex-basis: 20%;
     padding: $app--padding-standard;
   }
