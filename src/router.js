@@ -45,6 +45,20 @@ export default new Router({
       name: Strings.route.seriesList,
       component: () =>
         import(/* webpackChunkName: "series-list" */ './views/Series/SeriesList.vue')
+    },
+    {
+      path: Urls.seriesView,
+      name: Strings.route.seriesView,
+      component: () =>
+        import(/* webpackChunkName: "series-view" */ './views/Series/SeriesView.vue'),
+      props: { isCreate: false }
+    },
+    {
+      path: Urls.seriesCreate,
+      name: Strings.route.seriesCreate,
+      component: () =>
+        import(/* webpackChunkName: "series-view" */ './views/Series/SeriesView.vue'),
+      props: { isCreate: true }
     }
   ]
 });

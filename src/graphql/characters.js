@@ -30,10 +30,7 @@ const updateCharacter = gql`
       name
       displayImage
       gender
-      series {
-        id
-        name
-      }
+      seriesId
       tags {
         id
         name
@@ -49,10 +46,7 @@ const createCharacter = gql`
       name
       displayImage
       gender
-      series {
-        id
-        name
-      }
+      seriesId
       tags {
         id
         name

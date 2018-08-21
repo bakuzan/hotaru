@@ -1,16 +1,20 @@
 import { Query } from '@/graphql';
 
-export const refreshAllTags = (store, character) => {
+export const refreshAllTags = (store, rawCharacter) => {
+  const character = { tags: [], ...rawCharacter };
+
   const oldData = store.readQuery({
     query: Query.allTags
   });
-  const newTags = character.tags.filter(
-    (x) => !oldData.allTags.some((y) => y.id === x.id)
-  );
-  const tagData = oldData.allTags.concat([...newTags]);
+
+  const newTags = character.tags
+    .filter((x) => !oldData.tags.some((y) => y.id === x.id))
+    .map((x) => ({ id: -1, ...x, __typename: 'Tag' }));
+
+  const tags = oldData.tags.concat([...newTags]);
 
   store.writeQuery({
     query: Query.allTags,
-    data: tagData
+    data: { tags }
   });
 };

@@ -9,7 +9,7 @@ export const mapEnumToSelectBoxOptions = (arr) =>
 export const mapToSelectBoxOptions = (arr) =>
   arr.map((x) => ({ value: x.id, text: x.name }));
 
-export const mapCharacterToPost = (character, allSeries, allTags) => {
+export const mapCharacterToPost = (character, allTags) => {
   const { id, name, gender, displayImage, seriesId, tagIds = [] } = character;
   const seriesIdInt = parseIfInt(seriesId);
   const removeSeries = isString(seriesIdInt);
@@ -19,20 +19,20 @@ export const mapCharacterToPost = (character, allSeries, allTags) => {
     name,
     gender,
     displayImage,
-    series: removeSeries ? null : allSeries.find((x) => x.id === seriesIdInt),
+    seriesId: removeSeries ? null : seriesIdInt,
     tags: [
       ...allTags
         .filter((x) => tagIds.includes(x.id))
-        .map((x) => (isString(x.id) ? { name: x.name } : { ...x }))
+        .map((x) => (isString(x.id) ? { name: x.name } : mapToCharacterTag(x)))
     ]
   };
 };
 
 export const mapCharacterToStore = (character) => {
-  const { series = {}, tags = [], ...pass } = character;
+  const { tags = [], ...pass } = character;
   return {
+    __typename: 'Character',
     ...pass,
-    seriesId: series ? series.id : null,
     tagIds: tags.map((x) => x.id)
   };
 };
@@ -58,3 +58,8 @@ export const mapCharacterToOptimisticCreate = (character) =>
       ...character
     }
   });
+
+export const mapToCharacterTag = (tag) => ({
+  id: tag.id,
+  name: tag.name
+});

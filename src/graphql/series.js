@@ -36,5 +36,6 @@ export default {
     allSeries,
     getSeries,
     getSeriesById
-  }
+  },
+  mutation: {}
 };

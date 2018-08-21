@@ -2,7 +2,8 @@
   <div class="page">
     <ListFilterBar 
       v-bind="filters"
-      @input="onInput" 
+      @input="onInput"
+      @add="onAdd"
     />
     <List 
       className="series"
@@ -21,6 +22,7 @@ import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
 import { SeriesCard } from '@/components/Cards';
 
+import Urls from '@/constants/urls';
 import { Query } from '@/graphql';
 
 export default {
@@ -51,6 +53,9 @@ export default {
   methods: {
     onInput: function(value, name) {
       this.filters[name] = value;
+    },
+    onAdd: function() {
+      this.$router.push(Urls.seriesCreate);
     }
   }
 };

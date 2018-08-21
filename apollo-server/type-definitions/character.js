@@ -17,7 +17,6 @@ module.exports = gql`
     name: String
     displayImage: String
     gender: GenderType
-    series: SeriesInput
     seriesId: Int
     tags: [TagInput]
     tagIds: [Int]

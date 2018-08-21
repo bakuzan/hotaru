@@ -250,8 +250,8 @@ export default {
     onCreate: function(newTag) {
       this.newTags.push(newTag);
 
-      const oldTags = [...this.editCharacter.tagIds];
-      this.editCharacter.tagIds = [...oldTags, newTag.id];
+      const oldTagIds = [...this.editCharacter.tagIds];
+      this.editCharacter.tagIds = [...oldTagIds, newTag.id];
     },
     onUpdate: function(value, name) {
       this.editCharacter[name] = value.map((x) => x.id);
@@ -276,7 +276,6 @@ export default {
     handleCreate: function() {
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
-        this.series,
         this.combinedTags
       );
 
@@ -292,10 +291,10 @@ export default {
             store.writeQuery({
               query: Query.getCharacterById,
               variables: { id: character.id },
-              data: mapCharacterToStore(character)
+              data: { characterById: mapCharacterToStore(character) }
             });
           },
-          optimisticResponse: mapCharacterToOptimisticCreate(postCharacter)
+          optimisticResponse: mapCharacterToOptimisticCreate(this.editCharacter)
         })
         .then(({ data }) => {
           const item = getItemFromData(data);
@@ -308,7 +307,6 @@ export default {
     handleUpdate: function() {
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
-        this.series,
         this.combinedTags
       );
 
@@ -329,10 +327,10 @@ export default {
             store.writeQuery({
               query: Query.getCharacterById,
               variables: { id: postCharacter.id },
-              data
+              data: { characterById: mapCharacterToStore(data) }
             });
           },
-          optimisticResponse: mapCharacterToOptimisticUpdate(postCharacter)
+          optimisticResponse: mapCharacterToOptimisticUpdate(this.editCharacter)
         })
         .then(() => {
           this.readOnly = false; // allow edits again

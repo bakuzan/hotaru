@@ -71,7 +71,7 @@ export default {
       type: Boolean,
       default: false
     },
-    noSuggestionsItem: {
+    allowCreate: {
       type: Boolean,
       default: false
     },
@@ -154,7 +154,7 @@ export default {
       }, 1000);
     },
     onSelectAutocompleteSuggestion: function(id) {
-      if (!id && id !== 0 && !this.noSuggestionsItem) return;
+      if (!id && id !== 0 && !this.allowCreate) return;
       this.$emit('on-select', id);
     },
     selectActiveSuggestion: function() {

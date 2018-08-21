@@ -22,6 +22,12 @@ const Urls = {
   },
   get seriesList() {
     return `${this.base}/series`;
+  },
+  get seriesView() {
+    return `${this.seriesList}/view/:id`;
+  },
+  get seriesCreate() {
+    return `${this.seriesList}/create`;
   }
 };
 

@@ -4,6 +4,7 @@
       v-bind="$props" 
       :filter="filter"
       :input-props="clearableInputProps"
+      allow-create
       @input="onInput"
       @on-select="onSelect"
       @keydown="onKeyDown"

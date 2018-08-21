@@ -25,7 +25,9 @@ export default Object.freeze({
     characterList: 'characters',
     characterView: 'character view',
     characterCreate: 'character create',
-    seriesList: 'series list'
+    seriesList: 'series list',
+    seriesView: 'series view',
+    seriesCreate: 'series create'
   },
   slot: {
     viewBlock: 'view-block__read-only',
