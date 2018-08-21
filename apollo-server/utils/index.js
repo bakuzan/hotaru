@@ -5,8 +5,9 @@ const mapArrToGraphqlString = (arr) => arr.join(' ');
 
 const separateArrIntoNewAndExisting = (arr) => {
   const newItems = arr.filter((x) => !x.id);
-  const existingItems = arr.filter((x) => x.id);
-  return { newItems, existingItems };
+  const existingItemIds = arr.filter((x) => x.id).map((x) => x.id);
+
+  return { newItems, existingItemIds };
 };
 
 module.exports = {
