@@ -1,10 +1,10 @@
 <template>
   <form novalidate>
-    <div class="page character-view">  
-      <div class="character-view__left-column">
+    <div class="page page-view">  
+      <div class="page-view__left-column">
         <HTRImage 
           :src="character.displayImage" 
-          class="character-view__image" 
+          class="page-view__image" 
         />
         <ImageUploader
         />
@@ -12,8 +12,8 @@
 
       <Tabs>
         <Tab name="Detail">
-          <div class="character-view__content character-info">
-            <header class="character-info__header header">
+          <div class="page-view__content view-info">
+            <header class="view-info__header">
               <ViewBlockToggler
                 id="name"
                 label="Name"
@@ -30,7 +30,7 @@
                 />
               </ViewBlockToggler>
             </header>
-            <div class="character-info__content">
+            <div class="view-info__content">
               <ViewBlockToggler
                 id="gender"
                 label="Gender"
@@ -344,39 +344,4 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-@import '../../styles/_variables';
-
-.character-view {
-  display: flex;
-
-  &__image {
-    max-height: 300px;
-    margin: {
-      left: 0;
-      top: 0;
-    }
-  }
-
-  &__left-column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 20%;
-    padding: $app--padding-standard;
-  }
-  &__content {
-    display: flex;
-    flex-basis: 80%;
-    flex-direction: column;
-  }
-}
-
-.header {
-  margin: $app--margin-standard 0;
-
-  &__title {
-    margin: $app--margin-standard 0;
-  }
-}
-</style>
+<style lang="scss" src="../../styles/_page-view.scss" />

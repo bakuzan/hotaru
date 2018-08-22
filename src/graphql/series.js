@@ -14,6 +14,7 @@ const getSeries = gql`
     series(search: $search) {
       id
       name
+      displayImage
     }
   }
 `;

@@ -11,7 +11,10 @@
       :items="characters"
     >
       <template slot-scope="slotProps">
-        <CharacterCard v-bind="slotProps.item" />
+        <ListFigureCard 
+          v-bind="slotProps.item" 
+          :url-source="cardUrl" 
+        />
       </template>
     </List>
   </div>
@@ -20,7 +23,7 @@
 <script>
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
-import { CharacterCard } from '@/components/Cards';
+import { ListFigureCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
 import { Query } from '@/graphql';
@@ -30,10 +33,11 @@ export default {
   components: {
     List,
     ListFilterBar,
-    CharacterCard
+    ListFigureCard
   },
   data: function() {
     return {
+      cardUrl: Urls.characterView,
       searchTimer: null,
       filters: {
         search: ''

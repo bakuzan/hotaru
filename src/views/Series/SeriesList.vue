@@ -11,7 +11,10 @@
       :items="series"
     >
       <template slot-scope="slotProps">
-        <SeriesCard v-bind="slotProps.item" />
+        <ListFigureCard 
+          v-bind="slotProps.item" 
+          :url-source="cardUrl" 
+        />
       </template>
     </List>
   </div>
@@ -20,7 +23,7 @@
 <script>
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
-import { SeriesCard } from '@/components/Cards';
+import { ListFigureCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
 import { Query } from '@/graphql';
@@ -30,10 +33,11 @@ export default {
   components: {
     List,
     ListFilterBar,
-    SeriesCard
+    ListFigureCard
   },
   data: function() {
     return {
+      cardUrl: Urls.seriesView,
       searchTimer: null,
       filters: {
         search: ''
@@ -47,6 +51,10 @@ export default {
       debounce: 1000,
       variables() {
         return { ...this.filters };
+      },
+      update(data) {
+        /* Using update prevents vue-apollo console error: "Missing 'attribute' from result" */
+        return data.series;
       }
     }
   },

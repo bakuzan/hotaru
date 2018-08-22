@@ -6,6 +6,9 @@ module.exports = (db, Types) => {
     source: {
       type: Types.ENUM,
       values: [...SourceType]
+    },
+    displayImage: {
+      type: Types.STRING
     }
   });
 };

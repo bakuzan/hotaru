@@ -1,0 +1,30 @@
+@import './_variables';
+
+.page-view {
+  display: flex;
+
+  &__image {
+    max-height: 300px;
+    margin: {
+      left: 0;
+      top: 0;
+    }
+  }
+
+  &__left-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 20%;
+    padding: $app--padding-standard;
+  }
+
+  &__content {
+    display: flex;
+    flex-basis: 80%;
+    flex-direction: column;
+  }
+}
+
+.view-info__header {
+  margin: $app--margin-standard 0;
+}

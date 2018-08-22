@@ -23,7 +23,8 @@ export default {
   data: function() {
     return {
       isActive: false,
-      isVisible: true
+      isVisible: true,
+      isLocked: false
     };
   },
   computed: {
@@ -34,7 +35,7 @@ export default {
       return this.name;
     },
     tabHash() {
-      if (this.isDisabled) return '#';
+      if (this.isDisabled || this.isLocked) return '#';
 
       return this.id
         ? `#${this.id}`

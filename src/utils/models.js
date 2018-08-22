@@ -5,3 +5,9 @@ export const defaultCharacterModel = () => ({
   seriesId: null,
   tagIds: []
 });
+
+export const defaultSeriesModel = () => ({
+  name: '',
+  displayImage: null,
+  gender: null
+});

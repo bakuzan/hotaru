@@ -27,12 +27,9 @@
 </template>
 
 <script>
-import classNames from 'classnames';
-
 import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 
-import Strings from '@/constants/strings';
 import { generateUniqueId, convertToBase64 } from '@/utils';
 
 export default {
@@ -41,9 +38,7 @@ export default {
     Button,
     InputBox
   },
-  props: {
-
-  },
+  props: {},
   data: function() {
     return {
       fileInputId: generateUniqueId(),
@@ -54,11 +49,11 @@ export default {
   computed: {
     imageFileName: function() {
       const filename = this.imageFile && this.imageFile.name;
-      return filename || "No image selected";
+      return filename || 'No image selected';
     }
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function(value) {
       this.imageUrl = value;
     },
     onClick: function() {
@@ -68,7 +63,7 @@ export default {
     onFileChange: function(event) {
       const { files } = event.target;
       const hasFiles = !!files && files.length;
-      
+
       if (hasFiles) {
         this.imageFile = hasFiles ? files[0] : null;
         convertToBase64(this.imageFile, this.uploadBase64);
@@ -79,7 +74,7 @@ export default {
     },
     uploadBase64() {
       const base64 = this.result;
-      console.log(this, base64)
+      console.log(this, base64);
       // call mutation here for base64
     }
   }

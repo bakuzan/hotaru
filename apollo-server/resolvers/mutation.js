@@ -1,7 +1,7 @@
 const Op = require('sequelize').Op;
 const { db: context, Character, Series, Tag, Image } = require('../connectors');
 
-const Gallery = require('../image-store')
+const Gallery = require('../image-store');
 const Utils = require('../utils');
 
 module.exports = {
@@ -76,22 +76,24 @@ module.exports = {
     });
   },
   seriesCreate(_, { series }) {
-    const { characters = [], ...args } = series;
+    const { charactersIds = [], ...args } = series;
 
-    return Series.create({ ...args }).then((series) => {
-      series.addCharacters(characters);
+    return Series.create({ ...args }).then(async (series) => {
+      await series.addCharacters(charactersIds);
       return series.reload();
     });
   },
   seriesUpdate(_, { series }) {
-    const { id, characters = [], ...args } = series;
+    const { id, charactersIds = [], ...args } = series;
 
-    return Series.findById(id).then((series) => {
-      series.setCharacters(characters);
+    return Series.findById(id).then(async (series) => {
+      return context
+        .transaction(async (transaction) => {
+          await series.setCharacters(charactersIds, { transaction });
 
-      return Series.update({ ...args }, { where: { id } }).then(() =>
-        series.reload()
-      );
+          return Series.update({ ...args }, { where: { id }, transaction });
+        })
+        .then(() => series.reload());
     });
   },
   tagCreate(_, { tag }) {
@@ -102,5 +104,5 @@ module.exports = {
   },
   uploadImageUrl(_, { payload }) {
     return Gallery.uploadUrl(payload);
-  },
+  }
 };

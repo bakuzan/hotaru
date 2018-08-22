@@ -1,5 +1,5 @@
 <template>
-    <div class="tabs">
+    <div :class="tabsClasses">
         <ul class="tabs__controls" role="tablist">
             <li
                 v-for="(tab, i) in tabs"
@@ -32,7 +32,10 @@ import classNames from 'classnames';
 export default {
   name: 'Tabs',
   props: {
-    src: String
+    isLocked: {
+      type: Boolean,
+      default: false
+    }
   },
   data: function() {
     return {
@@ -43,6 +46,11 @@ export default {
   computed: {
     hasTabOptions: function() {
       return !!this.tabs.length;
+    },
+    tabsClasses: function() {
+      return classNames('tabs', {
+        'tabs--is-locked': this.isLocked
+      });
     }
   },
   created() {
@@ -81,6 +89,7 @@ export default {
 
       this.tabs.forEach((t) => {
         t.isActive = t.tabHash === tab.tabHash;
+        t.isLocked = this.isLocked;
       });
 
       this.$emit('updated', tab);
