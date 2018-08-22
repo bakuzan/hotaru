@@ -1,5 +1,14 @@
 import { isString, parseIfInt } from './index';
 
+const mutationWrapper = (__typename, key, defaultObj = {}) => (obj) => ({
+  __typename: 'Mutation',
+  [key]: {
+    __typename,
+    ...defaultObj,
+    ...obj
+  }
+});
+
 export const mapEnumArrayToObject = (arr) =>
   arr.reduce((o, k) => ({ ...o, [k.toLowerCase()]: k }), {});
 
@@ -37,29 +46,46 @@ export const mapCharacterToStore = (character) => {
   };
 };
 
-const mutationWrapper = (obj) => ({
-  __typename: 'Mutation',
-  ...obj
-});
+export const mapCharacterToOptimisticUpdate = mutationWrapper(
+  'Character',
+  'characterUpdate'
+);
 
-export const mapCharacterToOptimisticUpdate = (character) =>
-  mutationWrapper({
-    characterUpdate: {
-      __typename: 'Character',
-      ...character
-    }
-  });
-
-export const mapCharacterToOptimisticCreate = (character) =>
-  mutationWrapper({
-    characterCreate: {
-      __typename: 'Character',
-      id: -1,
-      ...character
-    }
-  });
+export const mapCharacterToOptimisticCreate = mutationWrapper(
+  'Character',
+  'characterCreate',
+  { id: -1 }
+);
 
 export const mapToCharacterTag = (tag) => ({
   id: tag.id,
   name: tag.name
 });
+
+export const mapSeriesToPost = (series) => {
+  const { id, name, source, displayImage, characterIds = [] } = series;
+
+  return {
+    id,
+    name,
+    source,
+    displayImage,
+    characterIds
+  };
+};
+
+export const mapSeriesToStore = (series) => ({
+  __typename: 'Series',
+  ...series
+});
+
+export const mapSeriesToOptimisticUpdate = mutationWrapper(
+  'Series',
+  'seriesUpdate'
+);
+
+export const mapSeriesToOptimisticCreate = mutationWrapper(
+  'Series',
+  'seriesCreate',
+  { id: -1 }
+);

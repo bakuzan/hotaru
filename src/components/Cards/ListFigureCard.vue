@@ -6,6 +6,7 @@
                 <NavLink 
                   v-if="itemUrl"
                   :to="itemUrl"
+                  :target="linkTarget"
                 >
                 {{name}}
                 </NavLink>
@@ -48,6 +49,10 @@ export default {
             .includes(value)
         );
       }
+    },
+    openNewTab: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -57,6 +62,9 @@ export default {
     itemUrl: function() {
       if (!this.urlSource) return null;
       return Urls.build(this.urlSource, { id: this.id });
+    },
+    linkTarget: function() {
+      return this.openNewTab ? '_blank' : '';
     }
   }
 };

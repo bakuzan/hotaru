@@ -4,6 +4,7 @@
         active-class="nav-link--active"
         exact-active-class="nav-link--active_exact"
         :to="to"
+        rel="noopener noreferrer"
     >
         <slot></slot>
     </router-link>

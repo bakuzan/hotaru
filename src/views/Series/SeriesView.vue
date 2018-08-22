@@ -50,10 +50,22 @@
 
               <!--
                 TODO
-
                 Specialised read-only toggler for the character list.
-                Using Autocomplete to query characters and a list to display them.
+                Using Autocomplete to query characters
               -->
+                  <List 
+                    className="characters"
+                    itemClassName="characters__item"
+                    :items="characters"
+                  >
+                    <template slot-scope="slotProps">
+                      <ListFigureCard 
+                        v-bind="slotProps.item" 
+                        :url-source="characterCardUrl"
+                        open-new-tab
+                      />
+                    </template>
+                  </List>
             </div>
           </div>
         </Tab>
@@ -88,12 +100,21 @@ import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
+import List from '@/components/List';
+import { ListFigureCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
+import Urls from '@/constants/urls';
 import SourceType from '@/constants/source-type';
-import { Query } from '@/graphql';
-import { objectsAreEqual } from '@/utils';
-import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import { Query, Mutation } from '@/graphql';
+import { objectsAreEqual, getItemFromData } from '@/utils';
+import {
+  mapEnumToSelectBoxOptions,
+  mapSeriesToPost,
+  mapSeriesToStore,
+  mapSeriesToOptimisticCreate
+} from '@/utils/mappers';
+import { refreshCharacterSeriesFragment } from '@/utils/cache';
 import { defaultSeriesModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 
@@ -107,7 +128,9 @@ export default {
     InputBox,
     Tabs: HTRTabs.Tabs,
     Tab: HTRTabs.Tab,
-    ImageUploader
+    ImageUploader,
+    List,
+    ListFigureCard
   },
   props: {
     isCreate: {
@@ -187,10 +210,38 @@ export default {
       this.readOnly = true; // set back to read only.
 
       if (this.isCreate) {
-        console.log('create');
+        this.handleCreate();
       } else {
         console.log('update');
       }
+    },
+    handleCreate: function() {
+      const postSeries = mapSeriesToPost(this.editSeries);
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.createSeries,
+          variables: { series: postSeries },
+          update: (store, { data: { seriesCreate } }) => {
+            const series = { ...seriesCreate };
+
+            refreshCharacterSeriesFragment(store, series);
+
+            store.writeQuery({
+              query: Query.getSeriesById,
+              variables: { id: series.id },
+              data: { seriesById: mapSeriesToStore(series) }
+            });
+          },
+          optimisticResponse: mapSeriesToOptimisticCreate(this.editSeries)
+        })
+        .then(({ data }) => {
+          const item = getItemFromData(data);
+          this.updateData(item);
+
+          const redirectToUrl = Urls.build(Urls.seriesView, { id: item.id });
+          this.$router.push(redirectToUrl);
+        });
     }
   }
 };

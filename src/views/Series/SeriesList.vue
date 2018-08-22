@@ -46,15 +46,11 @@ export default {
     };
   },
   apollo: {
-    characters: {
+    series: {
       query: Query.getSeries,
       debounce: 1000,
       variables() {
         return { ...this.filters };
-      },
-      update(data) {
-        /* Using update prevents vue-apollo console error: "Missing 'attribute' from result" */
-        return data.series;
       }
     }
   },
