@@ -16,7 +16,7 @@
     <label :for="id">{{label}}</label>
     <Button
         v-show="showClearButton"
-        className="input-box__clear"
+        :className="clearClasses"
         size="small"
         :icon="icon"
         @click="clearAndFocusInput"
@@ -65,6 +65,10 @@ export default {
     max: {
       type: Number,
       default: null
+    },
+    clearButtonClass: {
+      type: String,
+      default: ''
     }
   },
   data: function() {
@@ -89,6 +93,9 @@ export default {
         },
         this.class
       );
+    },
+    clearClasses: function() {
+      return classNames('input-box__clear', this.clearButtonClass);
     },
     hasMaxNumber: function() {
       return this.type === 'number' && !isNaN(this.max);
