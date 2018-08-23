@@ -6,8 +6,16 @@
           :src="series.displayImage" 
           class="page-view__image" 
         />
-        <ImageUploader
-        />
+        <ViewBlockToggler
+          id="displayImage"
+          value="Change image"
+          :lockEdit="isCreate"
+          :forceReadOnly="readOnly"
+        >
+          <ImageUploader
+            @on-upload="handleUserChanges"
+          />
+        </ViewBlockToggler>
       </div>
 
       <Tabs is-locked>
@@ -26,7 +34,7 @@
                   name="name"
                   label="Name"
                   :value="editSeries.name"
-                  @input="onChange"
+                  @input="handleUserChanges"
                 />
               </ViewBlockToggler>
             </header>
@@ -44,7 +52,7 @@
                   text="Source"
                   :options="mappedSources"
                   :value="editSeries.source"
-                  @on-select="onChange"
+                  @on-select="handleUserChanges"
                 />
               </ViewBlockToggler>
 
@@ -117,6 +125,7 @@ import {
 import { refreshCharacterSeriesFragment } from '@/utils/cache';
 import { defaultSeriesModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
+import { SeriesValidator } from '@/utils/validators';
 
 export default {
   name: 'SeriesView',
@@ -194,7 +203,7 @@ export default {
       this.series = { ...data };
       this.editSeries = { ...data };
     },
-    onChange: function(value, name) {
+    handleUserChanges: function(value, name) {
       this.editSeries[name] = value;
     },
     cancel: function() {
@@ -209,9 +218,9 @@ export default {
     submit: function() {
       this.readOnly = true; // set back to read only.
 
-      if (this.isCreate) {
+      if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
         this.handleCreate();
-      } else {
+      } else if (SeriesValidator.isValidExisting(this.editSeries)) {
         console.log('update');
       }
     },

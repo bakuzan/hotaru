@@ -1,6 +1,7 @@
 <template>
     <div :class="classes">
       <label 
+        v-if="label"
         class="view-block__label"
       >
       {{ label }}

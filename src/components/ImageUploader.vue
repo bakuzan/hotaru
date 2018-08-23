@@ -3,8 +3,8 @@
     <InputBox 
       class="image-selector__input-box"
       clearButtonClass="image-selector__clear"
-      id="imageUrl"
-      name="imageUrl"
+      :id="inputBoxId"
+      :name="inputBoxId"
       label="Image Url"
       :value="imageUrl"
       @input="onInput"
@@ -32,6 +32,7 @@
         accept="image/*" 
         class="image-selector__file-input" 
         :id="fileInputId"
+        :name="fileInputId"
         @change="onFileChange"
       />
     </div>
@@ -51,11 +52,16 @@ export default {
     Button,
     InputBox
   },
-  props: {},
+  props: {
+    name: {
+      type: String,
+      default: 'displayImage'
+    }
+  },
   data: function() {
     return {
+      baseId: generateUniqueId(),
       uploadIcon: UploadSvg,
-      fileInputId: generateUniqueId(),
       imageUrl: '',
       imageFile: null
     };
@@ -64,6 +70,12 @@ export default {
     imageFileName: function() {
       const filename = this.imageFile && this.imageFile.name;
       return filename || 'No file selected';
+    },
+    fileInputId: function() {
+      return `file-input-${this.baseId}`;
+    },
+    inputBoxId: function() {
+      return `input-box-${this.baseId}`;
     }
   },
   methods: {
@@ -87,13 +99,15 @@ export default {
       }
     },
     uploadUrl: function() {
+      console.log('upload url', this.imageUrl);
       // call mutation here for url
-      console.log('upload url');
+      // this.$emit('on-upload', uploadResult, this.name);
     },
     uploadBase64: function(event) {
       const base64 = event.target.result;
       console.log(this, base64);
       // call mutation here for base64
+      // this.$emit('on-upload', uploadResult, this.name);
     }
   }
 };

@@ -6,8 +6,16 @@
           :src="character.displayImage" 
           class="page-view__image" 
         />
-        <ImageUploader
-        />
+        <ViewBlockToggler
+          id="displayImage"
+          value="Change image"
+          :lockEdit="isCreate"
+          :forceReadOnly="readOnly"
+        >
+          <ImageUploader
+            @on-upload="handleUserChanges"
+          />
+        </ViewBlockToggler>
       </div>
 
       <Tabs>
@@ -26,7 +34,7 @@
                   name="name"
                   label="Name"
                   :value="editCharacter.name"
-                  @input="onChange"
+                  @input="handleUserChanges"
                 />
               </ViewBlockToggler>
             </header>
@@ -44,7 +52,7 @@
                   text="Gender"
                   :options="mappedGenders"
                   :value="editCharacter.gender"
-                  @on-select="onChange"
+                  @on-select="handleUserChanges"
                 />
               </ViewBlockToggler>
               <ViewBlockToggler
@@ -61,7 +69,7 @@
                   text="Series"
                   :options="mappedSeries"
                   :value="editCharacter.seriesId"
-                  @on-select="onChange"
+                  @on-select="handleUserChanges"
                   allowNulls
                 />
               </ViewBlockToggler>
@@ -148,6 +156,7 @@ import {
 import { refreshAllTags } from '@/utils/cache';
 import { defaultCharacterModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
+import { CharacterValidator } from '@/utils/validators';
 
 export default {
   name: 'CharactersView',
@@ -248,7 +257,7 @@ export default {
       this.character = { ...data };
       this.editCharacter = { ...data };
     },
-    onChange: function(value, name) {
+    handleUserChanges: function(value, name) {
       this.editCharacter[name] = value;
     },
     onCreate: function(newTag) {
@@ -271,9 +280,9 @@ export default {
     submit: function() {
       this.readOnly = true; // set back to read only.
 
-      if (this.isCreate) {
+      if (this.isCreate && CharacterValidator.isValidNew(this.editCharacter)) {
         this.handleCreate();
-      } else {
+      } else if (CharacterValidator.isValidExisting(this.editCharacter)) {
         this.handleUpdate();
       }
     },
