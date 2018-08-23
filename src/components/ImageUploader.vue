@@ -44,6 +44,7 @@ import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import UploadSvg from '@/assets/upload.svg';
 
+import { Mutation } from '@/graphql';
 import { generateUniqueId, convertToBase64 } from '@/utils';
 
 export default {
@@ -100,14 +101,32 @@ export default {
     },
     uploadUrl: function() {
       console.log('upload url', this.imageUrl);
-      // call mutation here for url
-      // this.$emit('on-upload', uploadResult, this.name);
+      this.$apollo
+        .mutate({
+          mutation: Mutation.uploadImageUrl,
+          variables: { payload: this.imageUrl }
+        })
+        .then(({ data }) => {
+          const result = data.uploadImageUrl;
+          if (result.success) {
+            this.$emit('on-upload', result.url, this.name);
+          }
+        });
     },
     uploadBase64: function(event) {
       const base64 = event.target.result;
       console.log(this, base64);
-      // call mutation here for base64
-      // this.$emit('on-upload', uploadResult, this.name);
+      this.$apollo
+        .mutate({
+          mutation: Mutation.uploadImageBase64,
+          variables: { payload: base64 }
+        })
+        .then(({ data }) => {
+          const result = data.uploadImageBase64;
+          if (result.success) {
+            this.$emit('on-upload', result.url, this.name);
+          }
+        });
     }
   }
 };
@@ -133,6 +152,7 @@ export default {
   }
 
   &__label {
+    width: calc(100% - 40px);
     padding: #{$app--padding-standard * 2};
   }
   &__file-selector {

@@ -14,6 +14,7 @@
             :forceReadOnly="readOnly"
           >
             <ImageUploader
+              name="displayImage"
               @on-upload="handleUserChanges"
             />
           </ViewBlockToggler>

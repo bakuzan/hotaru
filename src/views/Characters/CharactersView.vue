@@ -4,7 +4,7 @@
       <div class="page-view__left-column left-column">
         <div class="left-column__inner">
           <HTRImage 
-            :src="character.displayImage" 
+            :src="editCharacter.displayImage" 
             class="page-view__image" 
           />
           <ViewBlockToggler
@@ -14,6 +14,7 @@
             :forceReadOnly="readOnly"
           >
             <ImageUploader
+              name="displayImage"
               @on-upload="handleUserChanges"
             />
           </ViewBlockToggler>

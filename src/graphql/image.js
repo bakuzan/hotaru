@@ -4,16 +4,16 @@ const uploadImageUrl = gql`
   mutation uploadImageUrl($payload: String!) {
     uploadImageUrl(payload: $payload) {
       success
-      data
+      url
     }
   }
 `;
 
 const uploadImageBase64 = gql`
   mutation uploadImageBase64($payload: String!) {
-    uploadImageBase64(series: $payload) {
+    uploadImageBase64(payload: $payload) {
       success
-      data
+      url
     }
   }
 `;

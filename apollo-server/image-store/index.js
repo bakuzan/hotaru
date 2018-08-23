@@ -2,15 +2,15 @@ const imgur = require('imgur');
 imgur.setCredentials(process.env.IMGUR_USERNAME, process.env.IMGUR_PASSWORD);
 
 function uploadUrl(payload) {
-  imgur
+  return imgur
     .uploadUrl(payload, process.env.IMGUR_ALBUM)
-    .then(returnImgurUrl(res))
-    .catch(returnImgurError(res));
+    .then(returnImgurUrl)
+    .catch(returnImgurError);
 }
 
 function uploadBase64(payload) {
   const [_, base64] = payload.split(',');
-  imgur
+  return imgur
     .uploadBase64(base64, process.env.IMGUR_ALBUM)
     .then(returnImgurUrl)
     .catch(returnImgurError);

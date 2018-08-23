@@ -6,6 +6,7 @@ module.exports = gql`
     url: String
   }
   input ImageInput {
+    id: Int
     url: String
   }
   type ImageUploadResponse {
