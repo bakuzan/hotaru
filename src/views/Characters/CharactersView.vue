@@ -1,23 +1,24 @@
 <template>
-  <form novalidate>
+  <form novalidate @submit.prevent="submit">
     <div class="page page-view">  
-      <div class="page-view__left-column">
-        <HTRImage 
-          :src="character.displayImage" 
-          class="page-view__image" 
-        />
-        <ViewBlockToggler
-          id="displayImage"
-          value="Change image"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <ImageUploader
-            @on-upload="handleUserChanges"
+      <div class="page-view__left-column left-column">
+        <div class="left-column__inner">
+          <HTRImage 
+            :src="character.displayImage" 
+            class="page-view__image" 
           />
-        </ViewBlockToggler>
+          <ViewBlockToggler
+            id="displayImage"
+            value="Change image"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+            <ImageUploader
+              @on-upload="handleUserChanges"
+            />
+          </ViewBlockToggler>
+        </div>
       </div>
-
       <Tabs>
         <Tab name="Detail">
           <div class="page-view__content view-info">
@@ -279,7 +280,7 @@ export default {
     },
     submit: function() {
       this.readOnly = true; // set back to read only.
-
+      console.log('submitted character!');
       if (this.isCreate && CharacterValidator.isValidNew(this.editCharacter)) {
         this.handleCreate();
       } else if (CharacterValidator.isValidExisting(this.editCharacter)) {

@@ -1,4 +1,4 @@
-import { invalidInstance } from './common';
+import { invalidInstance, validInstance } from './common';
 
 class SeriesValidator {
   __requiredState(series) {
@@ -7,6 +7,8 @@ class SeriesValidator {
       return invalidInstance('Name is required');
     }
     if (!series.source) return invalidInstance('Source is required');
+
+    return validInstance();
   }
 
   isValidNew(series) {

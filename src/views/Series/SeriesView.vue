@@ -1,23 +1,24 @@
 <template>
-  <form novalidate>
+  <form novalidate @submit.prevent="submit">
     <div class="page page-view">
-   <div class="page-view__left-column">
-        <HTRImage 
-          :src="series.displayImage" 
-          class="page-view__image" 
-        />
-        <ViewBlockToggler
-          id="displayImage"
-          value="Change image"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <ImageUploader
-            @on-upload="handleUserChanges"
+      <div class="page-view__left-column left-column">
+        <div class="left-column__inner">
+          <HTRImage 
+            :src="series.displayImage" 
+            class="page-view__image" 
           />
-        </ViewBlockToggler>
+          <ViewBlockToggler
+            id="displayImage"
+            value="Change image"
+            :lockEdit="isCreate"
+            :forceReadOnly="readOnly"
+          >
+            <ImageUploader
+              @on-upload="handleUserChanges"
+            />
+          </ViewBlockToggler>
+        </div>
       </div>
-
       <Tabs is-locked>
         <Tab name="Detail">
           <div class="page-view__content view-info">
@@ -67,7 +68,7 @@
                 name="characterFilter"
                 text="Characters"
                 attr="name"
-                :options="characters"
+                :options="characterSearchResults"
                 :filter="characterFilter"
                 @input="onSearchCharacters"
                 @on-select="onSelectCharacter"
@@ -77,11 +78,12 @@
               <List 
                 className="characters"
                 itemClassName="characters__item"
-                :items="characters"
+                :items="editSeries.characters"
               >
                 <template slot-scope="slotProps">
                   <ListFigureCard 
                     v-bind="slotProps.item" 
+                    :remove="onRemoveCharacter"
                     :url-source="characterCardUrl"
                     open-new-tab
                   />
@@ -166,6 +168,7 @@ export default {
     return {
       viewBlockReadOnlySlot: Strings.slot.viewBlock,
       portalTarget: Strings.portal.actions,
+      characterCardUrl: Urls.characterView,
       readOnly: false,
       series: {},
       editSeries: defaultSeriesModel(),
@@ -206,6 +209,11 @@ export default {
     mappedSources: function() {
       return mapEnumToSelectBoxOptions(SourceType);
     },
+    characterSearchResults: function() {
+      return this.characters.filter(
+        (x) => !this.editSeries.characters.some((y) => y.id === x.id)
+      );
+    },
     hasEdits: function() {
       return !objectsAreEqual(this.series, this.editSeries);
     },
@@ -226,8 +234,12 @@ export default {
     },
     onSelectCharacter: function(characterId) {
       const character = this.characters.find((x) => x.id === characterId);
-      this.editSeries.characters = [...this.editSeries.characterIds, character];
-      console.log('selected character > ', characterId, character);
+      this.editSeries.characters = [...this.editSeries.characters, character];
+    },
+    onRemoveCharacter: function(characterId) {
+      this.editSeries.characters = [
+        ...this.editSeries.characters.filter((x) => x.id !== characterId)
+      ];
     },
     cancel: function() {
       this.readOnly = true;
@@ -240,7 +252,7 @@ export default {
     },
     submit: function() {
       this.readOnly = true; // set back to read only.
-
+      console.log('submitted series!');
       if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
         this.handleCreate();
       } else if (SeriesValidator.isValidExisting(this.editSeries)) {

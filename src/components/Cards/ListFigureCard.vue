@@ -1,5 +1,13 @@
 <template>
     <div :class="classes">
+        <Button
+          v-if="remove"
+          className="list-figure-card__remove"
+          size="small"
+          theme="secondary"
+          :icon="removeIcon"
+          @click="handleRemove"
+        />
         <figure class="list-figure-card__figure">
             <HTRImage :src="displayImage" class="list-figure-card__image" />
             <figcaption class="list-figure-card__caption">
@@ -25,6 +33,9 @@ import classNames from 'classnames';
 
 import HTRImage from '@/components/HTRImage';
 import NavLink from '@/components/NavLink';
+import Button from '@/components/Button';
+
+import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
 import { isString } from '@/utils';
 
@@ -32,7 +43,8 @@ export default {
   name: 'ListFigureCard',
   components: {
     HTRImage,
-    NavLink
+    NavLink,
+    Button
   },
   props: {
     id: Number,
@@ -46,6 +58,7 @@ export default {
           value === null ||
           Object.keys(Urls)
             .filter((k) => isString(Urls[k]))
+            .map((k) => Urls[k])
             .includes(value)
         );
       }
@@ -53,7 +66,14 @@ export default {
     openNewTab: {
       type: Boolean,
       default: false
+    },
+    remove: {
+      type: Function,
+      default: null
     }
+  },
+  data: function() {
+    return { removeIcon: Icons.cross };
   },
   computed: {
     classes: function() {
@@ -66,6 +86,11 @@ export default {
     linkTarget: function() {
       return this.openNewTab ? '_blank' : '';
     }
+  },
+  methods: {
+    handleRemove: function() {
+      this.remove(this.id);
+    }
   }
 };
 </script>
@@ -76,20 +101,38 @@ export default {
 @import '../../styles/_extensions.scss';
 
 .list-figure-card {
+  position: relative;
   @extend %standard-border;
+
+  &__remove {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1px;
+    margin: 1px;
+  }
 
   &__figure {
     display: flex;
     flex-direction: column;
   }
+
   &__caption {
     width: 100%;
     padding: $app--padding-standard 0;
     text-align: center;
   }
+
   &__image {
     width: 100px;
     height: 150px;
+  }
+}
+
+.list-figure-card:hover {
+  .list-figure-card__remove {
+    display: block;
   }
 }
 </style>

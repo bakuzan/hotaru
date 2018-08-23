@@ -28,3 +28,9 @@
 .view-info__header {
   margin: $app--margin-standard 0;
 }
+
+.left-column__inner {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

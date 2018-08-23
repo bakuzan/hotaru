@@ -1,4 +1,4 @@
-import { invalidInstance } from './common';
+import { validInstance, invalidInstance } from './common';
 
 class CharacterValidator {
   __requiredState(character) {
@@ -11,9 +11,11 @@ class CharacterValidator {
     if (!character.gender) {
       return invalidInstance('Gender is required');
     }
-    if (!character.displayImage) {
-      return invalidInstance('Display Image is required');
-    }
+    // if (!character.displayImage) {
+    //   return invalidInstance('Display Image is required');
+    // }
+
+    return validInstance();
   }
 
   isValidNew(character) {
