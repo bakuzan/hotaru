@@ -24,10 +24,12 @@ const getSeriesById = gql`
     seriesById(id: $id) {
       id
       name
+      displayImage
       source
       characters {
         id
         name
+        displayImage
       }
     }
   }
@@ -39,6 +41,12 @@ const updateSeries = gql`
       id
       name
       source
+      displayImage
+      characters {
+        id
+        name
+        displayImage
+      }
     }
   }
 `;
@@ -49,6 +57,12 @@ const createSeries = gql`
       id
       name
       source
+      displayImage
+      characters {
+        id
+        name
+        displayImage
+      }
     }
   }
 `;

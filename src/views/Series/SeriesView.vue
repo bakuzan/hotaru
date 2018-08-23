@@ -56,24 +56,37 @@
                 />
               </ViewBlockToggler>
 
-              <!--
-                TODO
-                Specialised read-only toggler for the character list.
-                Using Autocomplete to query characters
-              -->
-                  <List 
-                    className="characters"
-                    itemClassName="characters__item"
-                    :items="characters"
-                  >
-                    <template slot-scope="slotProps">
-                      <ListFigureCard 
-                        v-bind="slotProps.item" 
-                        :url-source="characterCardUrl"
-                        open-new-tab
-                      />
-                    </template>
-                  </List>
+              <ViewBlockToggler
+                id="characters"
+                value="Characters"
+                :lockEdit="isCreate"
+                :forceReadOnly="readOnly"
+              >
+              <InputBoxAutocomplete
+                id="characterFilter"
+                name="characterFilter"
+                text="Characters"
+                attr="name"
+                :options="characters"
+                :filter="characterFilter"
+                @input="onSearchCharacters"
+                @on-select="onSelectCharacter"
+                disable-local-filter
+              />
+              </ViewBlockToggler>
+              <List 
+                className="characters"
+                itemClassName="characters__item"
+                :items="characters"
+              >
+                <template slot-scope="slotProps">
+                  <ListFigureCard 
+                    v-bind="slotProps.item" 
+                    :url-source="characterCardUrl"
+                    open-new-tab
+                  />
+                </template>
+              </List>
             </div>
           </div>
         </Tab>
@@ -110,6 +123,7 @@ import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
 import List from '@/components/List';
 import { ListFigureCard } from '@/components/Cards';
+import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -139,7 +153,8 @@ export default {
     Tab: HTRTabs.Tab,
     ImageUploader,
     List,
-    ListFigureCard
+    ListFigureCard,
+    InputBoxAutocomplete
   },
   props: {
     isCreate: {
@@ -205,6 +220,14 @@ export default {
     },
     handleUserChanges: function(value, name) {
       this.editSeries[name] = value;
+    },
+    onSearchCharacters: function(value) {
+      this.characterFilter = value;
+    },
+    onSelectCharacter: function(characterId) {
+      const character = this.characters.find((x) => x.id === characterId);
+      this.editSeries.characters = [...this.editSeries.characterIds, character];
+      console.log('selected character > ', characterId, character);
     },
     cancel: function() {
       this.readOnly = true;
