@@ -35,8 +35,7 @@ TagModel.Character = TagModel.belongsToMany(CharacterModel, {
 
 const isDevelopment = process.env.NODE_ENV !== Constants.environment.production;
 db.sync({
-  force: isDevelopment,
-  logging: isDevelopment
+  force: isDevelopment
 }).then(() => migrate(db));
 
 const Character = db.models.character;

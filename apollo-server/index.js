@@ -1,12 +1,12 @@
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const favicon = require('serve-favicon');
-const path = require('path');
-const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
+const { ApolloServer } = require('apollo-server-express');
 
 const Constants = require('./constants/index');
 const typeDefs = require('./type-definitions');
