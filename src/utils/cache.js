@@ -1,6 +1,13 @@
 import { Query } from '@/graphql';
 import { mapMutationToListStore } from '@/utils/mappers';
 
+export const isLoading = (apollo, only = []) => {
+  const { queries } = apollo;
+  const keys = Object.keys(queries);
+  const watching = only.length ? keys.filter((x) => only.includes(x)) : keys;
+  return watching.some((k) => queries[k].loading);
+};
+
 export const refreshGetCharacters = (store, rawCharacter) => {
   const character = mapMutationToListStore(rawCharacter);
 

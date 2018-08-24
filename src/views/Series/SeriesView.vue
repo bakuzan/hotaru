@@ -1,6 +1,7 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
+      <LoadingBouncer v-show="isLoading" />
       <div class="page-view__left-column left-column">
         <div class="left-column__inner">
           <HTRImage 
@@ -127,6 +128,7 @@ import ImageUploader from '@/components/ImageUploader';
 import List from '@/components/List';
 import { ListFigureCard } from '@/components/Cards';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
+import LoadingBouncer from '@/components/LoadingBouncer';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -158,7 +160,8 @@ export default {
     ImageUploader,
     List,
     ListFigureCard,
-    InputBoxAutocomplete
+    InputBoxAutocomplete,
+    LoadingBouncer
   },
   props: {
     isCreate: {
@@ -171,6 +174,7 @@ export default {
       viewBlockReadOnlySlot: Strings.slot.viewBlock,
       portalTarget: Strings.portal.actions,
       characterCardUrl: Urls.characterView,
+      mutationLoading: false,
       readOnly: false,
       series: {},
       editSeries: defaultSeriesModel(),
@@ -221,6 +225,10 @@ export default {
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
+    },
+    isLoading: function() {
+      console.log(this.$apollo);
+      return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     }
   },
   methods: {
@@ -262,6 +270,7 @@ export default {
       }
     },
     handleCreate: function() {
+      this.mutationLoading = true;
       const postSeries = mapSeriesToPost(this.editSeries);
 
       this.$apollo
@@ -285,12 +294,14 @@ export default {
         .then(({ data }) => {
           const item = getItemFromData(data);
           this.updateData(item);
+          this.mutationLoading = false;
 
           const redirectToUrl = Urls.build(Urls.seriesView, { id: item.id });
           this.$router.push(redirectToUrl);
         });
     },
     handleUpdate: function() {
+      this.mutationLoading = true;
       const postSeries = mapSeriesToPost(this.editSeries);
 
       this.$apollo
@@ -313,6 +324,7 @@ export default {
         })
         .then(() => {
           this.readOnly = false; // allow edits again
+          this.mutationLoading = false;
         });
     }
   }

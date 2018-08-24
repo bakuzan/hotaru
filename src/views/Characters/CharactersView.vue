@@ -1,6 +1,7 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">  
+      <LoadingBouncer v-show="isLoading" />
       <div class="page-view__left-column left-column">
         <div class="left-column__inner">
           <HTRImage 
@@ -141,6 +142,7 @@ import InputBoxChipList from '@/components/InputBoxChipList';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
+import LoadingBouncer from '@/components/LoadingBouncer';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -172,7 +174,8 @@ export default {
     InputBoxChipListTag,
     Tabs: HTRTabs.Tabs,
     Tab: HTRTabs.Tab,
-    ImageUploader
+    ImageUploader,
+    LoadingBouncer
   },
   props: {
     isCreate: {
@@ -186,6 +189,7 @@ export default {
       noSeries: Strings.missing.series,
       noTags: Strings.missing.tags,
       portalTarget: Strings.portal.actions,
+      mutationLoading: false,
       readOnly: false,
       editCharacter: defaultCharacterModel(),
       character: {},
@@ -252,6 +256,10 @@ export default {
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
+    },
+    isLoading: function() {
+      console.log(this.$apollo);
+      return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     }
   },
   methods: {
@@ -289,6 +297,7 @@ export default {
       }
     },
     handleCreate: function() {
+      this.mutationLoading = true;
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
         this.combinedTags
@@ -315,12 +324,14 @@ export default {
         .then(({ data }) => {
           const item = getItemFromData(data);
           this.updateData(item);
+          this.mutationLoading = false;
 
           const redirectToUrl = Urls.build(Urls.characterView, { id: item.id });
           this.$router.push(redirectToUrl);
         });
     },
     handleUpdate: function() {
+      this.mutationLoading = true;
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
         this.combinedTags
@@ -346,6 +357,7 @@ export default {
         })
         .then(() => {
           this.readOnly = false; // allow edits again
+          this.mutationLoading = false;
         });
     }
   }
