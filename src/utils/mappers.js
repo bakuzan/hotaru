@@ -63,14 +63,14 @@ export const mapToCharacterTag = (tag) => ({
 });
 
 export const mapSeriesToPost = (series) => {
-  const { id, name, source, displayImage, characterIds = [] } = series;
+  const { id, name, source, displayImage, characters = [] } = series;
 
   return {
     id,
     name,
     source,
     displayImage,
-    characterIds
+    characterIds: [...characters.map((x) => x.id)]
   };
 };
 
@@ -89,3 +89,8 @@ export const mapSeriesToOptimisticCreate = mutationWrapper(
   'seriesCreate',
   { id: -1 }
 );
+
+export const mapMutationToListStore = (item) => {
+  const { id, name, displayImage, __typename } = item;
+  return { id, name, displayImage, __typename };
+};

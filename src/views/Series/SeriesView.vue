@@ -137,9 +137,10 @@ import {
   mapEnumToSelectBoxOptions,
   mapSeriesToPost,
   mapSeriesToStore,
-  mapSeriesToOptimisticCreate
+  mapSeriesToOptimisticCreate,
+  mapSeriesToOptimisticUpdate
 } from '@/utils/mappers';
-import { refreshCharacterSeriesFragment } from '@/utils/cache';
+import * as CacheUpdate from '@/utils/cache';
 import { defaultSeriesModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { SeriesValidator } from '@/utils/validators';
@@ -257,7 +258,7 @@ export default {
       if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
         this.handleCreate();
       } else if (SeriesValidator.isValidExisting(this.editSeries)) {
-        console.log('update');
+        this.handleUpdate();
       }
     },
     handleCreate: function() {
@@ -270,13 +271,14 @@ export default {
           update: (store, { data: { seriesCreate } }) => {
             const series = { ...seriesCreate };
 
-            refreshCharacterSeriesFragment(store, series);
-
             store.writeQuery({
               query: Query.getSeriesById,
               variables: { id: series.id },
               data: { seriesById: mapSeriesToStore(series) }
             });
+
+            CacheUpdate.refreshGetSeries(store, series);
+            CacheUpdate.refreshCharacterSeriesFragment(store, series);
           },
           optimisticResponse: mapSeriesToOptimisticCreate(this.editSeries)
         })
@@ -286,6 +288,31 @@ export default {
 
           const redirectToUrl = Urls.build(Urls.seriesView, { id: item.id });
           this.$router.push(redirectToUrl);
+        });
+    },
+    handleUpdate: function() {
+      const postSeries = mapSeriesToPost(this.editSeries);
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.updateSeries,
+          variables: { series: postSeries },
+          update: (store, { data: { seriesUpdate } }) => {
+            const series = { ...seriesUpdate };
+
+            store.writeQuery({
+              query: Query.getSeriesById,
+              variables: { id: series.id },
+              data: { seriesById: mapSeriesToStore(series) }
+            });
+
+            CacheUpdate.refreshGetSeries(store, series);
+            CacheUpdate.refreshCharacterSeriesFragment(store, series);
+          },
+          optimisticResponse: mapSeriesToOptimisticUpdate(this.editSeries)
+        })
+        .then(() => {
+          this.readOnly = false; // allow edits again
         });
     }
   }

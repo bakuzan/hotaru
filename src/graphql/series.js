@@ -30,6 +30,7 @@ const getSeriesById = gql`
         id
         name
         displayImage
+        seriesId
       }
     }
   }

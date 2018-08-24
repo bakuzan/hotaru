@@ -9,5 +9,6 @@ export const defaultCharacterModel = () => ({
 export const defaultSeriesModel = () => ({
   name: '',
   displayImage: null,
-  source: null
+  source: null,
+  characters: []
 });

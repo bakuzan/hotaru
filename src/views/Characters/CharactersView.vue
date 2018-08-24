@@ -155,7 +155,7 @@ import {
   mapCharacterToOptimisticCreate,
   mapCharacterToOptimisticUpdate
 } from '@/utils/mappers';
-import { refreshAllTags } from '@/utils/cache';
+import * as CacheUpdate from '@/utils/cache';
 import { defaultCharacterModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { CharacterValidator } from '@/utils/validators';
@@ -301,13 +301,14 @@ export default {
           update: (store, { data: { characterCreate } }) => {
             const character = { ...characterCreate };
 
-            refreshAllTags(store, character);
-
             store.writeQuery({
               query: Query.getCharacterById,
               variables: { id: character.id },
               data: { characterById: mapCharacterToStore(character) }
             });
+
+            CacheUpdate.refreshGetCharacters(store, character);
+            CacheUpdate.refreshAllTags(store, character);
           },
           optimisticResponse: mapCharacterToOptimisticCreate(this.editCharacter)
         })
@@ -330,20 +331,16 @@ export default {
           mutation: Mutation.updateCharacter,
           variables: { character: postCharacter },
           update: (store, { data: { characterUpdate } }) => {
-            const oldData = store.readQuery({
-              query: Query.getCharacterById,
-              variables: { id: postCharacter.id }
-            });
-
-            const data = { ...oldData, ...characterUpdate };
-
-            refreshAllTags(store, data);
+            const data = { ...characterUpdate };
 
             store.writeQuery({
               query: Query.getCharacterById,
               variables: { id: postCharacter.id },
               data: { characterById: mapCharacterToStore(data) }
             });
+
+            CacheUpdate.refreshGetCharacters(store, data);
+            CacheUpdate.refreshAllTags(store, data);
           },
           optimisticResponse: mapCharacterToOptimisticUpdate(this.editCharacter)
         })
