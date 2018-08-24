@@ -4,7 +4,17 @@
       v-bind="filters"
       @input="onInput"
       @add="onAdd"
-    />
+    >
+      <MultiSelect 
+        :slot="typeSlotName"
+        id="source"
+        name="sources"
+        label="sources"
+        :values="filters.sources"
+        :options="mappedSources"
+        @update="onInput"
+      />
+    </ListFilterBar>
     <List 
       className="series"
       itemClassName="series__item"
@@ -24,23 +34,30 @@
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
 import { ListFigureCard } from '@/components/Cards';
+import MultiSelect from '@/components/MultiSelect';
 
+import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
+import SourceType from '@/constants/source-type';
 import { Query } from '@/graphql';
+import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
 
 export default {
   name: 'SeriesList',
   components: {
     List,
     ListFilterBar,
-    ListFigureCard
+    ListFigureCard,
+    MultiSelect
   },
   data: function() {
     return {
+      typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.seriesView,
       searchTimer: null,
       filters: {
-        search: ''
+        search: '',
+        sources: []
       },
       series: []
     };
@@ -52,6 +69,11 @@ export default {
       variables() {
         return { ...this.filters };
       }
+    }
+  },
+  computed: {
+    mappedSources: function() {
+      return mapEnumToSelectBoxOptions(SourceType);
     }
   },
   methods: {

@@ -32,5 +32,8 @@ export default Object.freeze({
   slot: {
     viewBlock: 'view-block__read-only',
     listFilterType: 'list-filter__type'
+  },
+  events: {
+    click: 'click'
   }
 });
