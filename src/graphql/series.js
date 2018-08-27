@@ -10,8 +10,8 @@ const allSeries = gql`
 `;
 
 const getSeries = gql`
-  query getSeries($search: String) {
-    series(search: $search) {
+  query getSeries($search: String, $sources: [SourceType]) {
+    series(search: $search, sources: $sources) {
       id
       name
       displayImage

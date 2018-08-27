@@ -3,13 +3,21 @@ const Op = require('sequelize').Op;
 const { Character, Series, Tag } = require('../connectors');
 
 module.exports = {
-  characters(_, { search = '', ...args }) {
+  characters(_, { search = '', genders }) {
+    const resolvedArgs = genders
+      ? {
+          gender: {
+            [Op.in]: genders
+          }
+        }
+      : {};
+
     return Character.findAll({
       where: {
-        ...args,
         name: {
           [Op.like]: `%${search}%`
-        }
+        },
+        ...resolvedArgs
       },
       order: [['name', 'ASC']]
     });
@@ -23,13 +31,21 @@ module.exports = {
       character.getImages({ where: args })
     );
   },
-  series(_, { search = '', ...args }) {
+  series(_, { search = '', sources }) {
+    const resolvedArgs = sources
+      ? {
+          source: {
+            [Op.in]: sources
+          }
+        }
+      : {};
+
     return Series.findAll({
       where: {
-        ...args,
         name: {
           [Op.like]: `%${search}%`
-        }
+        },
+        ...resolvedArgs
       },
       order: [['name', 'ASC']]
     });

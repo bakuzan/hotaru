@@ -2,11 +2,11 @@ const gql = require('graphql-tag');
 
 const Query = gql`
   type Query {
-    characters(search: String): [Character]
+    characters(search: String, genders: [GenderType]): [Character]
     characterById(id: Int!): Character
     characterImages(characterId: Int!): [Image]
 
-    series(search: String): [Series]
+    series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series
 
     tags(search: String): [Tag]

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const getCharacters = gql`
-  query getCharacters($search: String) {
-    characters(search: $search) {
+  query getCharacters($search: String, $genders: [GenderType]) {
+    characters(search: $search, genders: $genders) {
       id
       name
       displayImage

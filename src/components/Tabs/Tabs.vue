@@ -117,14 +117,14 @@ $tab-controls-height: 35px;
     height: calc(100% - #{$tab-controls-height});
     min-width: 400px;
     // border-top: 1px solid $primary-colour;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
   }
 
   &__controls {
     display: flex;
     height: $tab-controls-height;
     padding: 0;
-    margin: 0;
+    margin: -1px;
     white-space: nowrap;
     list-style-type: none;
   }

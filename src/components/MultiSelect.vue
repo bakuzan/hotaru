@@ -185,6 +185,7 @@ $full-size-minus-padding: calc(100% - 10px);
     padding: $app--padding-standard;
     margin: $app--margin-standard 0;
     width: 100%;
+    z-index: map-get($z-index, above-siblings);
     list-style-type: none;
   }
 
@@ -199,7 +200,6 @@ $full-size-minus-padding: calc(100% - 10px);
     top: $full-size-minus-padding;
     display: none;
     width: $full-size-minus-padding;
-    z-index: map-get($z-index, popover);
     @extend %standard-shadow;
 
     &--is-open {

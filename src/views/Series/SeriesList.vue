@@ -57,7 +57,7 @@ export default {
       searchTimer: null,
       filters: {
         search: '',
-        sources: []
+        sources: [...SourceType]
       },
       series: []
     };

@@ -52,7 +52,8 @@ $theme-maps: (
     primary-background: $hotaru--hair,
     primary-colour: $hotaru--shirt,
     active-background: $hotaru--eyes,
-    active-colour: $hotaru--ribbon
+    active-colour: $hotaru--ribbon,
+    faded-out: $grey80
   ),
   two: (
     base-background: $hotaru--dress,
@@ -60,6 +61,7 @@ $theme-maps: (
     primary-background: $hotaru--dress-trim,
     primary-colour: $hotaru--hair,
     active-background: $hotaru--ribbon-alt,
-    active-colour: $hotaru--eyes
+    active-colour: $hotaru--eyes,
+    faded-out: $grey80
   )
 );

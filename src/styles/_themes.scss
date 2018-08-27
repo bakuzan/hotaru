@@ -7,6 +7,7 @@
   $primary-colour: map-get($values, primary-colour);
   $active-background: map-get($values, active-background);
   $active-colour: map-get($values, active-colour);
+  $faded-out: map-get($values, faded-out);
 
   .theme--#{$theme} {
     background-color: $base-background;
@@ -61,7 +62,12 @@
 
     // Tabs
     .tabs__container {
-      border-color: $primary-background;
+      border: 1px solid $primary-background;
+    }
+    .tab:not(.tab--active) {
+      color: $faded-out;
+      border-color: $faded-out;
+      border-bottom: none;
     }
     .tab--active {
       border: {

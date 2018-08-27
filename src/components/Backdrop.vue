@@ -40,6 +40,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: map-get($z-index, above-siblings);
+  z-index: map-get($z-index, wafer);
 }
 </style>
