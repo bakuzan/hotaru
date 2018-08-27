@@ -107,7 +107,10 @@
           </div>
         </Tab>
         <Tab name="Gallery">
-          Placeholder
+          <ImageUploader
+            name="galleryImage"
+            @on-upload="onGalleryImageUpload"
+          />
         </Tab>
       </Tabs>
 
@@ -269,6 +272,12 @@ export default {
     },
     handleUserChanges: function(value, name) {
       this.editCharacter[name] = value;
+    },
+    onGalleryImageUpload: function(value) {
+      if (!this.editCharacter.images) {
+        this.editCharacter.images = [];
+      }
+      this.editCharacter.images.push(value);
     },
     onCreate: function(newTag) {
       this.newTags.push(newTag);
