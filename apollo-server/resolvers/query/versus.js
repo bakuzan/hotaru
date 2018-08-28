@@ -36,9 +36,13 @@ module.exports = {
           },
           { transaction }
         ).then((randomCharacters) => {
-          const rawVersus = Utils.chunk(randomCharacters, 2).map(
-            (characters) => ({ type: 'Daily', characters })
-          );
+          const rawVersus = Utils.chunk(randomCharacters, 2)
+            .filter((x) => x.length === 2)
+            .map((characters) => ({ type: 'Daily', characters }));
+
+          if (!rawVersus.length) {
+            throw Error('Unable to create any character pairs.');
+          }
 
           return Versus.bulkCreate(rawVersus, {
             transaction,
