@@ -9,7 +9,10 @@ const SourceType = Object.freeze([
   'Other'
 ]);
 
+const VersusType = Object.freeze(['Daily', 'List', 'Bracket']);
+
 module.exports = {
   GenderType,
-  SourceType
+  SourceType,
+  VersusType
 };
