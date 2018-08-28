@@ -20,5 +20,6 @@ module.exports = gql`
     seriesId: Int
     tags: [TagInput]
     tagIds: [Int]
+    images: [ImageInput]
   }
 `;

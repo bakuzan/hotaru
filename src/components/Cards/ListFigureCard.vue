@@ -10,7 +10,7 @@
         />
         <figure class="list-figure-card__figure">
             <HTRImage :src="displayImage" class="list-figure-card__image" />
-            <figcaption class="list-figure-card__caption">
+            <figcaption v-if="!hideCaption" class="list-figure-card__caption">
                 <NavLink 
                   v-if="itemUrl"
                   :to="itemUrl"
@@ -70,6 +70,10 @@ export default {
     remove: {
       type: Function,
       default: null
+    },
+    hideCaption: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {

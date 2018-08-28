@@ -3,7 +3,8 @@ export const defaultCharacterModel = () => ({
   displayImage: null,
   gender: null,
   seriesId: null,
-  tagIds: []
+  tagIds: [],
+  images: []
 });
 
 export const defaultSeriesModel = () => ({

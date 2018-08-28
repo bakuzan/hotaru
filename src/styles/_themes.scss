@@ -63,7 +63,7 @@
 
     // Tabs
     .tabs__container {
-      border: 1px solid $primary-background;
+      border-top: 1px solid $primary-background;
     }
     .tab:not(.tab--active) {
       color: $faded-out;

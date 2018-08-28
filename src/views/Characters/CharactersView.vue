@@ -107,10 +107,25 @@
           </div>
         </Tab>
         <Tab name="Gallery">
-          <ImageUploader
-            name="galleryImage"
-            @on-upload="onGalleryImageUpload"
-          />
+          <div class="page-view__content view-info">
+            <ImageUploader
+              name="galleryImage"
+              @on-upload="onGalleryImageUpload"
+            />
+            <List 
+              className="gallery"
+              itemClassName="gallery__item"
+              :items="editCharacter.images"
+            >
+              <template slot-scope="slotProps">
+                <ImageCard 
+                  v-bind="slotProps.item"
+                  :remove="onRemoveImage"
+                  hide-caption
+                />
+              </template>
+            </List>
+          </div>
         </Tab>
       </Tabs>
 
@@ -146,12 +161,14 @@ import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import List from '@/components/List';
+import { ImageCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/gender-type';
 import { Query, Mutation } from '@/graphql';
-import { objectsAreEqual, getItemFromData } from '@/utils';
+import { objectsAreEqual, getItemFromData, generateUniqueId } from '@/utils';
 import {
   mapEnumToSelectBoxOptions,
   mapToSelectBoxOptions,
@@ -178,7 +195,9 @@ export default {
     Tabs: HTRTabs.Tabs,
     Tab: HTRTabs.Tab,
     ImageUploader,
-    LoadingBouncer
+    LoadingBouncer,
+    List,
+    ImageCard
   },
   props: {
     isCreate: {
@@ -274,10 +293,12 @@ export default {
       this.editCharacter[name] = value;
     },
     onGalleryImageUpload: function(value) {
-      if (!this.editCharacter.images) {
-        this.editCharacter.images = [];
-      }
-      this.editCharacter.images.push(value);
+      this.editCharacter.images.push({ id: generateUniqueId(), url: value });
+    },
+    onRemoveImage: function(imageId) {
+      this.editCharacter.images = [
+        ...this.editCharacter.images.filter((x) => x.id !== imageId)
+      ];
     },
     onCreate: function(newTag) {
       this.newTags.push(newTag);

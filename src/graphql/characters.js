@@ -19,6 +19,10 @@ const getCharacterById = gql`
       gender
       seriesId
       tagIds
+      images {
+        id
+        url
+      }
     }
   }
 `;
@@ -35,6 +39,10 @@ const updateCharacter = gql`
         id
         name
       }
+      images {
+        id
+        url
+      }
     }
   }
 `;
@@ -50,6 +58,10 @@ const createCharacter = gql`
       tags {
         id
         name
+      }
+      images {
+        id
+        url
       }
     }
   }

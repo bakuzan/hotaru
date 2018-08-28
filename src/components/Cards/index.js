@@ -1,7 +1,5 @@
 import _listFigureCard from './ListFigureCard.vue';
-import _characterCard from './CharacterCard.vue';
-import _seriesCard from './SeriesCard.vue';
+import _imageCard from './ImageCard.vue';
 
-export const CharacterCard = _characterCard;
-export const SeriesCard = _seriesCard;
 export const ListFigureCard = _listFigureCard;
+export const ImageCard = _imageCard;
