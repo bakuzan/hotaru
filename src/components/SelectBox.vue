@@ -4,6 +4,9 @@
         <option v-if="allowNulls" :value="null" class="select-box__option">
           None
         </option>
+        <option v-if="isRequiredWithNoValue" :value="null" class="select-box__option">
+          Please select a {{text}}
+        </option>
         <option v-for="item in options" :key="item.value" :value="item.value" class="select-box__option">
             {{item.text}}
         </option>
@@ -29,11 +32,18 @@ export default {
     allowNulls: {
       type: Boolean,
       default: false
+    },
+    required: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     selectClasses: function() {
       return classNames('select-box', 'has-float-label');
+    },
+    isRequiredWithNoValue: function() {
+      return this.required && !this.value;
     }
   },
   methods: {

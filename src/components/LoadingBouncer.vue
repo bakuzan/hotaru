@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-bouncer loading-bouncer--fixed">
+  <div :class="classes">
     <div 
         v-for="i in range" 
         :key="i" 
@@ -9,10 +9,26 @@
 </template>
 
 <script>
+import classNames from 'classnames';
+
 export default {
   name: 'LoadingBouncer',
+  props: {
+    local: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function() {
     return { range: [1, 2, 3] };
+  },
+  computed: {
+    classes: function() {
+      return classNames('loading-bouncer', {
+        'loading-bouncer--local': this.local,
+        'loading-bouncer--fixed': !this.local
+      });
+    }
   }
 };
 </script>
@@ -40,6 +56,16 @@ export default {
     position: fixed;
     top: 50px;
     right: 0;
+  }
+
+  &--local {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
   }
 
   &__circle {

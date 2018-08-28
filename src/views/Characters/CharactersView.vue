@@ -56,6 +56,7 @@
                   :options="mappedGenders"
                   :value="editCharacter.gender"
                   @on-select="handleUserChanges"
+                  required
                 />
               </ViewBlockToggler>
               <ViewBlockToggler

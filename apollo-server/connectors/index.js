@@ -38,7 +38,7 @@ CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
   through: 'VersusCharacter'
 });
 
-VersusModel.Winner = VersusModel.hasOne(Character, { as: 'Winner' });
+VersusModel.Winner = VersusModel.hasOne(CharacterModel, { as: 'Winner' });
 
 // Sync to create db if not exist
 // then run migration scripts

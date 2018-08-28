@@ -36,7 +36,9 @@ export const mapCharacterToPost = (character, allTags) => {
     name,
     gender,
     displayImage,
-    images,
+    images: images.map(
+      (x) => (isString(x.id) ? { url: x.url } : { id: x.id, url: x.url })
+    ),
     seriesId: removeSeries ? null : seriesIdInt,
     tags: [
       ...allTags

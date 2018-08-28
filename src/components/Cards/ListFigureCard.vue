@@ -47,7 +47,9 @@ export default {
     Button
   },
   props: {
-    id: Number,
+    id: {
+      type: [String, Number]
+    },
     name: String,
     displayImage: String,
     urlSource: {

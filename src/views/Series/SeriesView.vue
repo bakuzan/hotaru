@@ -56,6 +56,7 @@
                   :options="mappedSources"
                   :value="editSeries.source"
                   @on-select="handleUserChanges"
+                  required
                 />
               </ViewBlockToggler>
 

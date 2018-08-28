@@ -1,5 +1,6 @@
 <template>
   <div class="image-selector">
+    <LoadingBouncer v-show="isLoading" local />
     <InputBox 
       class="image-selector__input-box"
       clearButtonClass="image-selector__clear"
@@ -43,6 +44,7 @@
 import Button from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import UploadSvg from '@/assets/upload.svg';
+import LoadingBouncer from '@/components/LoadingBouncer';
 
 import { Mutation } from '@/graphql';
 import { generateUniqueId, convertToBase64 } from '@/utils';
@@ -51,7 +53,8 @@ export default {
   name: 'ImageUploader',
   components: {
     Button,
-    InputBox
+    InputBox,
+    LoadingBouncer
   },
   props: {
     name: {
@@ -64,7 +67,8 @@ export default {
       baseId: generateUniqueId(),
       uploadIcon: UploadSvg,
       imageUrl: '',
-      imageFile: null
+      imageFile: null,
+      mutationUploading: false
     };
   },
   computed: {
@@ -77,6 +81,9 @@ export default {
     },
     inputBoxId: function() {
       return `input-box-${this.baseId}`;
+    },
+    isLoading: function() {
+      return this.mutationUploading;
     }
   },
   methods: {
@@ -101,6 +108,7 @@ export default {
     },
     uploadUrl: function() {
       console.log('upload url', this.imageUrl);
+      this.mutationUploading = true;
       this.$apollo
         .mutate({
           mutation: Mutation.uploadImageUrl,
@@ -108,6 +116,7 @@ export default {
         })
         .then(({ data }) => {
           const result = data.uploadImageUrl;
+          this.mutationUploading = false;
           if (result.success) {
             this.$emit('on-upload', result.url, this.name);
           }
@@ -116,6 +125,7 @@ export default {
     uploadBase64: function(event) {
       const base64 = event.target.result;
       console.log(this, base64);
+      this.mutationUploading = true;
       this.$apollo
         .mutate({
           mutation: Mutation.uploadImageBase64,
@@ -123,6 +133,7 @@ export default {
         })
         .then(({ data }) => {
           const result = data.uploadImageBase64;
+          this.mutationUploading = false;
           if (result.success) {
             this.$emit('on-upload', result.url, this.name);
           }

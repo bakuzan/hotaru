@@ -10,6 +10,8 @@ const Query = gql`
     seriesById(id: Int!): Series
 
     tags(search: String): [Tag]
+
+    activeDailyVersus: [Versus]
   }
 `;
 

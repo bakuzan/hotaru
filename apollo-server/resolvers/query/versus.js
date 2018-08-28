@@ -7,7 +7,7 @@ const Utils = require('../../utils');
 module.exports = {
   activeDailyVersus() {
     const todayMidnight = new Date();
-    d.setHours(0, 0, 0, 0);
+    todayMidnight.setHours(0, 0, 0, 0);
 
     return Versus.findAll({
       where: {

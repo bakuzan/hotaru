@@ -10,12 +10,14 @@
 import ListFigureCard from './ListFigureCard';
 
 export default {
-  name: 'FigureCard',
+  name: 'ImageCard',
   components: {
     ListFigureCard
   },
   props: {
-    id: Number,
+    id: {
+      type: [String, Number]
+    },
     url: String,
     remove: {
       type: Function,
