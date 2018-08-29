@@ -11,7 +11,7 @@ const Query = gql`
 
     tags(search: String): [Tag]
 
-    activeDailyVersus: [Versus]
+    versusDailyActive: [Versus]
   }
 `;
 

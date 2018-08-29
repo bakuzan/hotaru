@@ -5,7 +5,7 @@ const Constants = require('../../constants');
 const Utils = require('../../utils');
 
 module.exports = {
-  activeDailyVersus() {
+  versusDailyActive() {
     const todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
 
