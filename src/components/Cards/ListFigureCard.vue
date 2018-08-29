@@ -8,8 +8,8 @@
           :icon="removeIcon"
           @click="handleRemove"
         />
-        <figure class="list-figure-card__figure">
-            <HTRImage :src="displayImage" class="list-figure-card__image" />
+        <figure :class="figureClasses">
+            <HTRImage :src="displayImage" :class="imageClasses" />
             <figcaption v-if="!hideCaption" class="list-figure-card__caption">
                 <NavLink 
                   v-if="itemUrl"
@@ -76,6 +76,13 @@ export default {
     hideCaption: {
       type: Boolean,
       default: false
+    },
+    figureSize: {
+      type: String,
+      default: null,
+      validator: function(value) {
+        return value === null || ['small'].includes(value);
+      }
     }
   },
   data: function() {
@@ -84,6 +91,14 @@ export default {
   computed: {
     classes: function() {
       return classNames('list-figure-card');
+    },
+    figureClasses: function() {
+      return classNames('list-figure-card__figure', {
+        [`list-figure-card__figure--size_${this.figureSize}`]: this.figureSize
+      });
+    },
+    imageClasses: function() {
+      return classNames('list-figure-card__image');
     },
     itemUrl: function() {
       if (!this.urlSource) return null;
@@ -139,6 +154,15 @@ export default {
 .list-figure-card:hover {
   .list-figure-card__remove {
     display: block;
+  }
+}
+
+.list-figure-card__figure--size_small {
+  margin: $app--margin-standard;
+
+  & .list-figure-card__image {
+    width: 50px;
+    height: 75px;
   }
 }
 </style>

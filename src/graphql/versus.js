@@ -28,11 +28,26 @@ const createDailyVersus = gql`
   }
 `;
 
+const castVote = gql`
+  mutation voteForCharacter($versusId: Int!, $winnerId: Int!) {
+    versusVote(versusId: $versusId, winnerId: $winnerId) {
+      id
+      characters {
+        id
+        name
+        displayImage
+      }
+      winnerId
+    }
+  }
+`;
+
 export default {
   query: {
     getActiveDailyVersus
   },
   mutation: {
-    createDailyVersus
+    createDailyVersus,
+    castVote
   }
 };

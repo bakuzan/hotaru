@@ -29,6 +29,7 @@ const Mutation = gql`
     uploadImageUrl(payload: String!): ImageUploadResponse
 
     versusCreateDaily: [Versus]
+    versusVote(versusId: Int!, winnerId: Int!): [Versus]
   }
 `;
 

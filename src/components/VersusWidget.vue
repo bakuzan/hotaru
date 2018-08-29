@@ -34,9 +34,7 @@ export default {
   },
   methods: {
     handleVote: function(characterId) {
-      console.log(
-        `For versus ${this.id}, make character ${characterId} the winner`
-      );
+      this.$emit('vote', this.id, characterId);
     }
   }
 };
@@ -45,4 +43,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/_variables';
+
+.versus {
+  display: flex;
+}
 </style>

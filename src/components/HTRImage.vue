@@ -42,8 +42,8 @@ export default {
 @import '../styles/_extensions.scss';
 
 .image {
-  min-height: 100px;
-  min-width: 100px;
+  min-height: 50px;
+  min-width: 50px;
   width: auto;
   max-width: 100%;
   margin: auto;

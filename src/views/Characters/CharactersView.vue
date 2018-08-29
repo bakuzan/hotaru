@@ -2,8 +2,8 @@
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">  
       <LoadingBouncer v-show="isLoading" />
-      <div class="page-view__left-column left-column">
-        <div class="left-column__inner">
+      <div class="page-view__left-column htr-column">
+        <div class="htr-column__inner">
           <HTRImage 
             :src="editCharacter.displayImage" 
             class="page-view__image" 

@@ -105,3 +105,5 @@ export const mapMutationToListStore = (item) => {
   const { id, name, displayImage, __typename } = item;
   return { id, name, displayImage, __typename };
 };
+
+export const mapVersusToVotedVersus = mutationWrapper('Versus', 'versusVote');

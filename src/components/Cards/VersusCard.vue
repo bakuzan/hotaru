@@ -3,10 +3,12 @@
         <ListFigureCard
             v-bind="item" 
             :url-source="characterCardUrl"
+            figure-size="small"
             open-new-tab
         />
         <Button
             :className="buttonClasses"
+            theme="primary"
             :icon="maybeWinningIcon"
             :disabled="winnerId"
             @click="handleVote"
@@ -20,6 +22,7 @@
 import classNames from 'classnames';
 
 import ListFigureCard from './ListFigureCard';
+import Button from '@/components/Button';
 
 import Urls from '@/constants/urls';
 import Icons from '@/constants/icons';
@@ -27,7 +30,8 @@ import Icons from '@/constants/icons';
 export default {
   name: 'VersusCard',
   components: {
-    ListFigureCard
+    ListFigureCard,
+    Button
   },
   props: {
     item: {
@@ -71,7 +75,14 @@ export default {
 @import '../../styles/_variables.scss';
 @import '../../styles/_extensions.scss';
 
-.versus-card__vote-button--has-winner .versus-card__vote-text {
-  visibility: hidden;
+.versus-card {
+  padding: $app--padding-small;
+
+  &__vote-button {
+    margin: auto;
+    &--has-winner .versus-card__vote-text {
+      visibility: hidden;
+    }
+  }
 }
 </style>
