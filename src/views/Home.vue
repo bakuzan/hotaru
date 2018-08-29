@@ -1,7 +1,11 @@
 <template>
   <div class="page page-view">
     <div class="page-view__left-column htr-column">
-      TOP TEN RANKS PLACEHOLDER
+      <section class="top-ten htr-section">
+        <header class="htr-section__header">
+          <h4>Top Ten</h4>
+        </header>
+      </section>
     </div>
     <div class="page-view__left-column htr-column">
       <section class="daily-versus htr-section">
@@ -116,7 +120,8 @@ export default {
 <style lang="scss" scoped>
 .htr-section__header {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

@@ -347,7 +347,7 @@ export default {
               data: { characterById: mapCharacterToStore(character) }
             });
 
-            CacheUpdate.refreshGetCharacters(store, character);
+            // CacheUpdate.refreshGetCharacters(store, character);
             CacheUpdate.refreshAllTags(store, character);
           },
           optimisticResponse: mapCharacterToOptimisticCreate(this.editCharacter)
@@ -381,7 +381,7 @@ export default {
               data: { characterById: mapCharacterToStore(data) }
             });
 
-            CacheUpdate.refreshGetCharacters(store, data);
+            // CacheUpdate.refreshGetCharacters(store, data);
             CacheUpdate.refreshAllTags(store, data);
           },
           optimisticResponse: mapCharacterToOptimisticUpdate(this.editCharacter)

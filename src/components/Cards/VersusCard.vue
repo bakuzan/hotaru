@@ -1,21 +1,21 @@
 <template>
-    <div class="versus-card">
-        <ListFigureCard
-            v-bind="item" 
-            :url-source="characterCardUrl"
-            figure-size="small"
-            open-new-tab
-        />
-        <Button
-            :className="buttonClasses"
-            theme="primary"
-            :icon="maybeWinningIcon"
-            :disabled="winnerId"
-            @click="handleVote"
-        >
-            <span class="versus-card__vote-text">Vote {{item.name}}</span>
-        </Button>
-    </div>
+  <div class="versus-card">
+    <ListFigureCard
+      v-bind="item" 
+      :url-source="characterCardUrl"
+      figure-size="small"
+      open-new-tab
+    />
+    <Button
+      :className="buttonClasses"
+      theme="primary"
+      :icon="maybeWinningIcon"
+      :disabled="winnerId"
+      @click="handleVote"
+    >
+      <span class="versus-card__vote-text">Vote {{item.name}}</span>
+    </Button>
+  </div>
 </template>
 
 <script>
@@ -82,6 +82,15 @@ export default {
     margin: auto;
     &--has-winner .versus-card__vote-text {
       visibility: hidden;
+    }
+
+    &--is-winner::before {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: $success--background-colour;
+      color: $success--colour;
+      font-size: 1em;
     }
   }
 }

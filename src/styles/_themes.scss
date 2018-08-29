@@ -40,6 +40,10 @@
     .suggestion--active {
       border-color: $primary-background;
     }
+    .versus::after {
+      background-color: $primary-background;
+      color: $primary-colour;
+    }
 
     // Navigation
     .nav-link {

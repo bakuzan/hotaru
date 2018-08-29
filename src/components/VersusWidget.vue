@@ -45,6 +45,18 @@ export default {
 @import '../styles/_variables';
 
 .versus {
+  position: relative;
   display: flex;
+
+  &::after {
+    content: 'VS';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    transform: translateY(-50%) translateX(-50%);
+    border-radius: 50px;
+    text-align: center;
+  }
 }
 </style>

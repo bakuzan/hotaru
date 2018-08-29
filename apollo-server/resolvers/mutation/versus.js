@@ -49,7 +49,7 @@ module.exports = {
   },
   versusVote(_, { versusId, winnerId }) {
     return Versus.update({ winnerId }, { where: { id: versusId } }).then(() =>
-      Versus.findById(id)
+      Versus.findById(versusId)
     );
   }
 };
