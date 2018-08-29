@@ -116,8 +116,6 @@ $tab-controls-height: 35px;
     position: relative;
     height: calc(100% - #{$tab-controls-height});
     min-width: 400px;
-    // border-top: 1px solid $primary-colour;
-    // border: 1px solid transparent;
   }
 
   &__controls {
@@ -136,8 +134,6 @@ $tab-controls-height: 35px;
     border: {
       width: 1px;
       style: solid;
-      // color: $grey80;
-      // bottom-color: $white;
     }
     z-index: map-get($z-index, above-siblings);
   }
@@ -147,14 +143,6 @@ $tab-controls-height: 35px;
   display: flex;
   align-items: center;
   padding: $app--padding-standard;
-
-  &--active {
-    // border: {
-    //   color: $primary-colour;
-    //   bottom-color: $white;
-    // }
-    // margin-bottom: -1px;
-  }
 
   &__option {
     color: inherit;

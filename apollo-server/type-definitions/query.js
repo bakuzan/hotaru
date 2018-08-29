@@ -27,6 +27,8 @@ const Mutation = gql`
 
     uploadImageBase64(payload: String!): ImageUploadResponse
     uploadImageUrl(payload: String!): ImageUploadResponse
+
+    versusCreateDaily: [Versus]
   }
 `;
 

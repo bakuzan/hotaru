@@ -1,40 +1,44 @@
 <template>
   <div class="versus">
-    <ListFigureCard 
+    <VersusCard 
       v-for="item in characters"
-      v-bind="item" 
       :key="item.id"
-      :url-source="characterCardUrl"
-      open-new-tab
+      :item="item"
+      :winner-id="winnerId"
+      @vote="handleVote"
     />
-    <div class="versus__actions">
-      VOTE BUTTONS HERE
-    </div>
   </div>
 </template>
 
 <script>
-import { ListFigureCard } from '@/components/Cards';
-
-import Urls from '@/constants/urls';
+import { VersusCard } from '@/components/Cards';
 
 export default {
   name: 'VersusWidget',
   components: {
-    ListFigureCard
+    VersusCard
   },
   props: {
+    id: {
+      type: Number,
+      required: true
+    },
     characters: {
       type: Array,
       default: () => []
+    },
+    winnerId: {
+      type: Number,
+      default: null
     }
   },
-  data: function() {
-    return {
-      characterCardUrl: Urls.characterView
-    };
-  },
-  computed: {}
+  methods: {
+    handleVote: function(characterId) {
+      console.log(
+        `For versus ${this.id}, make character ${characterId} the winner`
+      );
+    }
+  }
 };
 </script>
 

@@ -14,5 +14,6 @@ export const Query = {
 export const Mutation = {
   ...characters.mutation,
   ...series.mutation,
-  ...image.mutation
+  ...image.mutation,
+  ...versus.mutation
 };
