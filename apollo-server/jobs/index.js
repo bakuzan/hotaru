@@ -20,9 +20,10 @@ order by t2.wins desc, t1.matches asc
 `;
 
 const rewriteAsAView = `
-drop view ranking;
+drop view if exists ranking;
+drop table if exists ranking_temp;
 
-create view ranking as
+create temporary table ranking_temp as
 with 
 m_cte as (
 	select c.id, c.name, count(vc.characterId) as total
@@ -37,13 +38,22 @@ w_cte as (
 	group by c.id
 )
 select
-  m_cte.id,
+  m_cte.id as characterId,
   m_cte.name,
   m_cte.total,
-  w_cte.wins,
-  (select count(*) from w_cte as w where w.wins >= w_cte.wins) as rank
+  w_cte.wins
 from m_cte
 left join w_cte
 on m_cte.id = w_cte.id
-order by w_cte.wins desc, m_cte.total asc
+order by w_cte.wins desc, m_cte.total asc;
+
+create view ranking as
+select
+	r.rowid as rank,
+	r.characterId,
+	r.name,
+	r.total,
+	r.wins
+from ranking_temp as r
+order by rank
 `;

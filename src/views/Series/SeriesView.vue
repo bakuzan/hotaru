@@ -186,6 +186,7 @@ export default {
   apollo: {
     series: {
       query: Query.getSeriesById,
+      fetchPolicy: 'network-only',
       skip() {
         return this.isCreate;
       },
@@ -321,7 +322,7 @@ export default {
               data: { seriesById: mapSeriesToStore(series) }
             });
 
-            CacheUpdate.refreshGetSeries(store, series);
+            // CacheUpdate.refreshGetSeries(store, series);
             CacheUpdate.refreshCharacterSeriesFragment(store, series);
           },
           optimisticResponse: mapSeriesToOptimisticUpdate(this.editSeries)

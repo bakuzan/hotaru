@@ -3,12 +3,14 @@ import series from './series';
 import tags from './tags';
 import image from './image';
 import versus from './versus';
+import ranking from './ranking';
 
 export const Query = {
   ...characters.query,
   ...series.query,
   ...tags.query,
-  ...versus.query
+  ...versus.query,
+  ...ranking.query
 };
 
 export const Mutation = {

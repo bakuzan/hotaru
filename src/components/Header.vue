@@ -81,6 +81,7 @@ export default {
   position: fixed;
   width: 100%;
   height: $header--height;
+  z-index: map-get($z-index, header);
 
   &--page-scrolled {
     box-shadow: 0px 2px 5px 1px #000;

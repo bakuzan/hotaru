@@ -13,6 +13,7 @@ const Query = gql`
     tags(search: String): [Tag]
 
     versusDailyActive: [Versus]
+    rankingsTopTen: [Ranking]
   }
 `;
 

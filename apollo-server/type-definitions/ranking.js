@@ -8,5 +8,6 @@ module.exports = gql`
     rank: Int
     ratio: Int
     score: Int
+    character: Character
   }
 `;

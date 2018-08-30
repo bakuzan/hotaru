@@ -20,5 +20,9 @@ module.exports = {
       },
       order: [['name', 'ASC']]
     });
+  },
+  rankingsTopTen() {
+    // TODO
+    // Query rankings topten
   }
 };

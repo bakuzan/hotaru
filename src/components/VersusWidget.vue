@@ -47,6 +47,7 @@ export default {
 .versus {
   position: relative;
   display: flex;
+  justify-content: center;
 
   &::after {
     content: 'VS';

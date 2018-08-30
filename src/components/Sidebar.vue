@@ -51,5 +51,6 @@ export default {
   flex-direction: column;
   width: $sidebar--width;
   height: calc(100vh - #{$header--height});
+  z-index: map-get($z-index, sidebar);
 }
 </style>

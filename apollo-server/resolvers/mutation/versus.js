@@ -9,12 +9,14 @@ module.exports = {
     const createdAt = Date.now() - 1000;
 
     return context.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll(
-        {
-          order: context.random(),
-          limit: Constants.dailyVersusCharacterCount
-        },
-        { transaction }
+      const randomCharacters = await context.query(
+        `SELECT id FROM characters 
+         WHERE id IN (
+          SELECT id FROM characters 
+          ORDER BY RANDOM() 
+          LIMIT ${Constants.dailyVersusCharacterCount}
+        )`,
+        { type: context.QueryTypes.SELECT, transaction }
       );
 
       const versusCharacters = Utils.chunk(randomCharacters, 2).filter(
@@ -37,11 +39,10 @@ module.exports = {
           }).then((createdVersus) => {
             const promises = [];
 
-            createdVersus.forEach(async (v, i) =>
-              promises.push(
-                v.setCharacters(versusCharacters[i], { transaction })
-              )
-            );
+            createdVersus.forEach(async (v, i) => {
+              const characterIds = versusCharacters[i];
+              promises.push(v.setCharacters(characterIds, { transaction }));
+            });
 
             return Promise.all(promises).then(() =>
               createdVersus.map((created) => created.reload())
