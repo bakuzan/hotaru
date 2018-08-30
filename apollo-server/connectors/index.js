@@ -33,10 +33,12 @@ TagModel.Character = TagModel.belongsToMany(CharacterModel, {
 });
 
 VersusModel.Character = VersusModel.belongsToMany(CharacterModel, {
-  through: 'VersusCharacter'
+  through: 'VersusCharacter',
+  foreignKey: 'versusId'
 });
 CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
-  through: 'VersusCharacter'
+  through: 'VersusCharacter',
+  foreignKey: 'characterId'
 });
 
 VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
