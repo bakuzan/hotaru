@@ -11,16 +11,18 @@ export const isLoading = (apollo, only = []) => {
 export const refreshGetCharacters = (store, rawCharacter) => {
   const character = mapMutationToListStore(rawCharacter);
 
-  const oldData = store.readQuery({
+  const oldData = store.readQuerySafeHTR({
     query: Query.getCharacters,
     variables: { search: '' }
   });
 
-  const alreadyExists = oldData.characters.some((x) => x.id === character.id);
+  const alreadyExists =
+    oldData.characters && oldData.characters.some((x) => x.id === character.id);
 
-  const characters = !alreadyExists
-    ? oldData.characters.concat([character])
-    : oldData.characters.map((x) => (x.id !== character.id ? x : character));
+  let characters = oldData.characters || [];
+  characters = !alreadyExists
+    ? characters.concat([character])
+    : characters.map((x) => (x.id !== character.id ? x : character));
 
   store.writeQuery({
     query: Query.getCharacters,
@@ -38,7 +40,7 @@ export const refreshAllTags = (store, rawCharacter) => {
 
   const newTags = character.tags
     .filter((x) => !oldData.tags.some((y) => y.id === x.id))
-    .map((x) => ({ id: -1, ...x, __typename: 'Tag' }));
+    .map((x) => ({ ...x, __typename: 'Tag' }));
 
   const tags = oldData.tags.concat([...newTags]);
 
@@ -51,16 +53,18 @@ export const refreshAllTags = (store, rawCharacter) => {
 export const refreshGetSeries = (store, rawSeries) => {
   const item = mapMutationToListStore(rawSeries);
 
-  const oldData = store.readQuery({
+  const oldData = store.readQuerySafeHTR({
     query: Query.getSeries,
     variables: { search: '' }
   });
 
-  const alreadyExists = oldData.series.some((x) => x.id === item.id);
+  const alreadyExists =
+    oldData.series && oldData.series.some((x) => x.id === item.id);
 
-  const series = !alreadyExists
-    ? oldData.series.concat([item])
-    : oldData.series.map((x) => (x.id !== item.id ? x : item));
+  let series = oldData.series || [];
+  series = !alreadyExists
+    ? series.concat([item])
+    : series.map((x) => (x.id !== item.id ? x : item));
 
   store.writeQuery({
     query: Query.getSeries,

@@ -340,6 +340,7 @@ export default {
           variables: { character: postCharacter },
           update: (store, { data: { characterCreate } }) => {
             const character = { ...characterCreate };
+            store.deleteQueryHTR('characters');
 
             store.writeQuery({
               query: Query.getCharacterById,
@@ -347,10 +348,12 @@ export default {
               data: { characterById: mapCharacterToStore(character) }
             });
 
-            // CacheUpdate.refreshGetCharacters(store, character);
             CacheUpdate.refreshAllTags(store, character);
           },
-          optimisticResponse: mapCharacterToOptimisticCreate(this.editCharacter)
+          optimisticResponse: mapCharacterToOptimisticCreate(
+            this.editCharacter,
+            this.combinedTags
+          )
         })
         .then(({ data }) => {
           const item = getItemFromData(data);
@@ -381,10 +384,13 @@ export default {
               data: { characterById: mapCharacterToStore(data) }
             });
 
-            // CacheUpdate.refreshGetCharacters(store, data);
+            CacheUpdate.refreshGetCharacters(store, data);
             CacheUpdate.refreshAllTags(store, data);
           },
-          optimisticResponse: mapCharacterToOptimisticUpdate(this.editCharacter)
+          optimisticResponse: mapCharacterToOptimisticUpdate(
+            this.editCharacter,
+            this.combinedTags
+          )
         })
         .then(() => {
           this.readOnly = false; // allow edits again

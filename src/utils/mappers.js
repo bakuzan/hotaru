@@ -57,16 +57,30 @@ export const mapCharacterToStore = (character) => {
   };
 };
 
-export const mapCharacterToOptimisticUpdate = mutationWrapper(
-  'Character',
-  'characterUpdate'
-);
+const optimisticCharacterModel = (obj, allTags) => {
+  const { images = [], seriesId, tagIds = [], ...other } = obj;
+  const seriesIdInt = parseIfInt(seriesId);
+  const removeSeries = isString(seriesIdInt);
 
-export const mapCharacterToOptimisticCreate = mutationWrapper(
-  'Character',
-  'characterCreate',
-  { id: -1 }
-);
+  return {
+    ...other,
+    images,
+    seriesId: removeSeries ? null : seriesIdInt,
+    tags: [
+      ...allTags
+        .filter((x) => tagIds.includes(x.id))
+        .map((x) => ({ ...x, __typename: 'Tag' }))
+    ]
+  };
+};
+export const mapCharacterToOptimisticUpdate = (obj, allTags) => {
+  const mappedObj = optimisticCharacterModel(obj, allTags);
+  return mutationWrapper('Character', 'characterUpdate')(mappedObj);
+};
+export const mapCharacterToOptimisticCreate = (obj, allTags) => {
+  const mappedObj = optimisticCharacterModel(obj, allTags);
+  return mutationWrapper('Character', 'characterCreate', { id: -1 })(mappedObj);
+};
 
 export const mapToCharacterTag = (tag) => ({
   id: tag.id,
@@ -90,16 +104,18 @@ export const mapSeriesToStore = (series) => ({
   ...series
 });
 
-export const mapSeriesToOptimisticUpdate = mutationWrapper(
-  'Series',
-  'seriesUpdate'
-);
-
-export const mapSeriesToOptimisticCreate = mutationWrapper(
-  'Series',
-  'seriesCreate',
-  { id: -1 }
-);
+const optimisticSeriesModel = ({ characters = [], ...series }) => ({
+  ...series,
+  characters: [...characters.map((x) => ({ ...x, seriesId: series.id }))]
+});
+export const mapSeriesToOptimisticUpdate = (obj) => {
+  const mappedObj = optimisticSeriesModel(obj);
+  return mutationWrapper('Series', 'seriesUpdate')(mappedObj);
+};
+export const mapSeriesToOptimisticCreate = (obj) => {
+  const mappedObj = optimisticSeriesModel(obj);
+  return mutationWrapper('Series', 'seriesCreate', { id: -1 })(mappedObj);
+};
 
 export const mapMutationToListStore = (item) => {
   const { id, name, displayImage, __typename } = item;

@@ -53,22 +53,30 @@ export default {
   },
   data: function() {
     return {
-      allowCreateCall: false,
+      blockCreateVersus: true,
       versusDailyActive: []
     };
   },
   apollo: {
     versusDailyActive: {
       query: Query.getActiveDailyVersus,
-      result({ data }) {
-        this.allowCreateCall =
-          !data || !data.versusDailyActive || !data.versusDailyActive.length;
+      result() {
+        this.blockCreateVersus = false;
       }
+    }
+  },
+  computed: {
+    allowCreateCall: function() {
+      return (
+        !this.blockCreateVersus &&
+        (!this.versusDailyActive.length ||
+          this.versusDailyActive.every((x) => x.winnerId))
+      );
     }
   },
   methods: {
     handleCreateDaily: function() {
-      this.allowCreateCall = false;
+      this.blockCreateVersus = true;
       this.$apollo
         .mutate({
           mutation: Mutation.createDailyVersus,
@@ -80,6 +88,7 @@ export default {
         })
         .then((data) => {
           console.log(data);
+          this.blockCreateVersus = false;
         })
         .catch((error) => {
           console.log('failed to create', error);

@@ -202,13 +202,16 @@ export default {
       }
     },
     characters: {
-      query: Query.getCharacters,
+      query: Query.getCharactersWithoutSeries,
       skip() {
         return !this.characterFilter;
       },
       debounce: 1000,
       variables() {
         return { search: this.characterFilter };
+      },
+      update(data) {
+        return data.charactersWithoutSeries;
       }
     }
   },
@@ -280,6 +283,7 @@ export default {
           variables: { series: postSeries },
           update: (store, { data: { seriesCreate } }) => {
             const series = { ...seriesCreate };
+            store.deleteQueryHTR('series');
 
             store.writeQuery({
               query: Query.getSeriesById,
@@ -287,7 +291,6 @@ export default {
               data: { seriesById: mapSeriesToStore(series) }
             });
 
-            CacheUpdate.refreshGetSeries(store, series);
             CacheUpdate.refreshCharacterSeriesFragment(store, series);
           },
           optimisticResponse: mapSeriesToOptimisticCreate(this.editSeries)

@@ -3,6 +3,7 @@ const gql = require('graphql-tag');
 const Query = gql`
   type Query {
     characters(search: String, genders: [GenderType]): [Character]
+    charactersWithoutSeries(search: String): [Character]
     characterById(id: Int!): Character
     characterImages(characterId: Int!): [Image]
 

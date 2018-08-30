@@ -10,6 +10,16 @@ const getCharacters = gql`
   }
 `;
 
+const getCharactersWithoutSeries = gql`
+  query getCharactersWithoutSeries($search: String) {
+    charactersWithoutSeries(search: $search) {
+      id
+      name
+      displayImage
+    }
+  }
+`;
+
 const getCharacterById = gql`
   query getCharacterById($id: Int!) {
     characterById(id: $id) {
@@ -70,6 +80,7 @@ const createCharacter = gql`
 export default {
   query: {
     getCharacters,
+    getCharactersWithoutSeries,
     getCharacterById
   },
   mutation: {

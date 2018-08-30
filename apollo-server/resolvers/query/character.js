@@ -22,6 +22,19 @@ module.exports = {
       order: [['name', 'ASC']]
     });
   },
+  charactersWithoutSeries(_, { search = '' }) {
+    return Character.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${search}%`
+        },
+        seriesId: {
+          [Op.eq]: null
+        }
+      },
+      order: [['name', 'ASC']]
+    });
+  },
   characterById(_, args) {
     const { id } = args;
     return Character.findById(id);
