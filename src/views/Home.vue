@@ -22,7 +22,8 @@
         <List 
           className="daily-versus-list"
           itemClassName="daily-versus-list__item"
-          :items="versusDailyActive"
+          columns="one"
+          :items="dailyVersus"
         >
           <template slot-scope="slotProps">
             <VersusWidget
@@ -72,6 +73,12 @@ export default {
         (!this.versusDailyActive.length ||
           this.versusDailyActive.every((x) => x.winnerId))
       );
+    },
+    dailyVersus: function() {
+      return [
+        ...this.versusDailyActive.filter((x) => !x.winnerId),
+        ...this.versusDailyActive.filter((x) => x.winnerId)
+      ];
     }
   },
   methods: {

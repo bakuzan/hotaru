@@ -27,24 +27,27 @@ module.exports = {
       }
 
       const versusShells = versusCharacters.map(() => ({ type: 'Daily' }));
-      await Versus.bulkCreate(versusShells, {
+      return await Versus.bulkCreate(versusShells, {
         transaction
-      });
+      }).then(
+        async () =>
+          await Versus.findAll({
+            where: { createdAt: { [Op.gte]: createdAt } },
+            transaction
+          }).then((createdVersus) => {
+            const promises = [];
 
-      return await Versus.findAll({
-        where: { createdAt: { [Op.gte]: createdAt } },
-        transaction
-      }).then((createdVersus) => {
-        const promises = [];
+            createdVersus.forEach(async (v, i) =>
+              promises.push(
+                v.setCharacters(versusCharacters[i], { transaction })
+              )
+            );
 
-        createdVersus.forEach(async (v, i) =>
-          promises.push(v.setCharacters(versusCharacters[i], { transaction }))
-        );
-
-        return Promise.all(promises).then(() =>
-          createdVersus.map((created) => created.reload())
-        );
-      });
+            return Promise.all(promises).then(() =>
+              createdVersus.map((created) => created.reload())
+            );
+          })
+      );
     });
   },
   versusVote(_, { versusId, winnerId }) {

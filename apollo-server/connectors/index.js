@@ -42,10 +42,8 @@ VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
 
 // Sync to create db if not exist
 // then run migration scripts
-
-const isDevelopment = process.env.NODE_ENV !== Constants.environment.production;
 db.sync({
-  force: isDevelopment
+  force: false
 }).then(() => migrate(db));
 
 const Character = db.models.character;
