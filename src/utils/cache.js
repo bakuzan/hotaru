@@ -1,4 +1,7 @@
 import { Query } from '@/graphql';
+
+import GenderType from '@/constants/gender-type';
+import SourceType from '@/constants/source-type';
 import { mapMutationToListStore } from '@/utils/mappers';
 
 export const isLoading = (apollo, only = []) => {
@@ -13,7 +16,7 @@ export const refreshGetCharacters = (store, rawCharacter) => {
 
   const oldData = store.readQuerySafeHTR({
     query: Query.getCharacters,
-    variables: { search: '' }
+    variables: { search: '', genders: [...GenderType] }
   });
 
   const alreadyExists =
@@ -26,7 +29,7 @@ export const refreshGetCharacters = (store, rawCharacter) => {
 
   store.writeQuery({
     query: Query.getCharacters,
-    variables: { search: '' },
+    variables: { search: '', genders: [...GenderType] },
     data: { characters }
   });
 };
@@ -55,7 +58,10 @@ export const refreshGetSeries = (store, rawSeries) => {
 
   const oldData = store.readQuerySafeHTR({
     query: Query.getSeries,
-    variables: { search: '' }
+    variables: {
+      search: '',
+      sources: [...SourceType]
+    }
   });
 
   const alreadyExists =
@@ -68,7 +74,10 @@ export const refreshGetSeries = (store, rawSeries) => {
 
   store.writeQuery({
     query: Query.getSeries,
-    variables: { search: '' },
+    variables: {
+      search: '',
+      sources: [...SourceType]
+    },
     data: { series }
   });
 };

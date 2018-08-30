@@ -16,6 +16,7 @@ const SeriesModel = db.import('./series');
 const TagModel = db.import('./tag');
 const ImageModel = db.import('./image');
 const VersusModel = db.import('./versus');
+const RankingModel = db.import('./ranking');
 
 // Create relationships
 SeriesModel.Character = SeriesModel.hasMany(CharacterModel);
@@ -40,6 +41,8 @@ CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
 
 VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
 
+RankingModel.Character = RankingModel.belongsTo(CharacterModel);
+
 // Sync to create db if not exist
 // then run migration scripts
 db.sync({
@@ -51,6 +54,7 @@ const Series = db.models.series;
 const Tag = db.models.tag;
 const Image = db.models.image;
 const Versus = db.models.versus;
+const Ranking = db.models.ranking;
 
 module.exports = {
   db,
@@ -58,5 +62,6 @@ module.exports = {
   Series,
   Tag,
   Image,
-  Versus
+  Versus,
+  Ranking
 };

@@ -10,5 +10,8 @@ module.exports = {
   },
   images(character) {
     return character.getImages();
+  },
+  ranking(character) {
+    return character.getRanking();
   }
 };

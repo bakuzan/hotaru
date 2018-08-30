@@ -11,6 +11,7 @@ module.exports = gql`
     tags: [Tag]
     tagIds: [Int]
     images: [Image]
+    ranking: Ranking
   }
   input CharacterInput {
     id: Int
