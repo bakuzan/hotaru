@@ -55,7 +55,7 @@
   "homepage": "http://localhost:9006/hotaru/",
   "proxy": "http://localhost:9006/",
   "lint-staged": {
-    "{,src,server}/**/*.{js,jsx,json,scss}": [
+    "{,src,apollo-server}/**/*.{js,jsx,json,scss}": [
       "echo 'Precommit tasks starting...'",
       "prettier --single-quote --write",
       "git add"
