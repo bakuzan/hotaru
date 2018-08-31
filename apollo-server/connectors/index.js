@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const Constants = require('../constants/index');
 const migrate = require('../config');
+const TestData = require('../config/test-data');
 
 const db = new Sequelize(Constants.appName, null, null, {
   dialect: 'sqlite',
@@ -47,9 +48,17 @@ RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 
 // Sync to create db if not exist
 // then run migration scripts
-db.sync({
-  force: false
-}).then(() => migrate(db));
+const FORCE_DB_REBUILD = process.env.FORCE_DB_REBUILD || false;
+db.sync({ force: FORCE_DB_REBUILD })
+  .then(() => migrate(db))
+  .then(async () => {
+    if (FORCE_DB_REBUILD) {
+      const { series, character, tag } = db.models;
+      await series.bulkCreate(TestData.series);
+      await character.bulkCreate(TestData.characters);
+      await tag.bulkCreate(TestData.tags);
+    }
+  });
 
 const Character = db.models.character;
 const Series = db.models.series;

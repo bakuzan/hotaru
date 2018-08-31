@@ -26,13 +26,18 @@ export default {
         return ['', 'one', 'two', 'three', 'four', 'five'].includes(value);
       }
     },
-    items: Array
+    items: Array,
+    wrap: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     listClasses: function() {
       return classNames(
         'list',
         {
+          'list--wrap': this.wrap,
           'list--column': this.columns,
           [`list--column_${this.columns}`]: this.columns
         },
@@ -77,13 +82,19 @@ $columns: (
     }
     @each $number, $percentage in $columns {
       &_#{$number} .list__item {
-        flex-basis: $percentage;
+        flex: 1 1 $percentage;
       }
     }
   }
+  &--wrap {
+    flex-wrap: wrap;
+  }
 }
 .list__item {
+  display: flex;
+  justify-content: center;
   padding: $app--padding-standard;
   @extend %standard-border;
+  box-sizing: border-box;
 }
 </style>

@@ -137,6 +137,7 @@ export default {
   &__figure {
     display: flex;
     flex-direction: column;
+    margin: $app--margin-standard;
   }
 
   &__caption {
@@ -158,8 +159,6 @@ export default {
 }
 
 .list-figure-card__figure--size_small {
-  margin: $app--margin-standard;
-
   & .list-figure-card__image {
     width: 50px;
     height: 75px;

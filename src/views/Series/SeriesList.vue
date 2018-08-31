@@ -16,6 +16,8 @@
       />
     </ListFilterBar>
     <List 
+      wrap
+      columns="four"
       className="series"
       itemClassName="series__item"
       :items="series"
