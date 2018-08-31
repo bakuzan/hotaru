@@ -42,10 +42,10 @@ module.exports = {
 
         return Promise.all(promises).then(() => {
           const versusIds = createdVersus.map((x) => x.id);
-          return Versus.findAll(
-            { where: { id: { [Op.in]: versusIds } } },
-            { transaction }
-          );
+          return Versus.findAll({
+            where: { id: { [Op.in]: versusIds } },
+            transaction
+          });
         });
       });
     });

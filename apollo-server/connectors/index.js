@@ -60,8 +60,8 @@ db.sync({ force: FORCE_DB_REBUILD })
       await character.bulkCreate(TestData.characters);
       await tag.bulkCreate(TestData.tags);
     }
-  })
-  .then(() => db.query(SQL.populateRankings));
+  });
+// .then(() => db.query(SQL.populateRankings));
 
 const Character = db.models.character;
 const Series = db.models.series;
