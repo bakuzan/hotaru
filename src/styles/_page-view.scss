@@ -16,6 +16,10 @@
     flex-direction: column;
     flex-basis: 20%;
     padding: $app--padding-standard;
+
+    &--grow {
+      flex: 1;
+    }
   }
 
   &__content {

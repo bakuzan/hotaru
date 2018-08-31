@@ -18,7 +18,16 @@ export default {
     id: {
       type: [String, Number]
     },
-    url: String,
+    url: {
+      type: String
+    },
+    figureSize: {
+      type: String,
+      default: null,
+      validator: function(value) {
+        return value === null || ['small'].includes(value);
+      }
+    },
     remove: {
       type: Function,
       default: null

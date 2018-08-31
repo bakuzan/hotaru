@@ -80,5 +80,11 @@
         bottom-color: $base-background;
       }
     }
+
+    // Ranking
+    .rank__bubble {
+      background-color: $active-background;
+      color: $active-colour;
+    }
   }
 }

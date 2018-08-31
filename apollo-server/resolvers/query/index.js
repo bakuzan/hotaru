@@ -29,8 +29,13 @@ module.exports = {
     });
   },
   populateRankings() {
+    console.log(SQL);
     return context
-      .query(SQL.populateRankings)
+      .query(SQL['delete_from_rankings'])
+      .then(() => context.query(SQL['drop_ranking_temp']))
+      .then(() => context.query(SQL['generate_rankings']))
+      .then(() => context.query(SQL['populate_rankings']))
+      .then(() => context.query(SQL['drop_ranking_temp']))
       .then(() => ({ success: true, message: '' }))
       .catch((error) => ({ success: false, message: error.message }));
   }

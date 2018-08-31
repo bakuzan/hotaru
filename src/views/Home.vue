@@ -1,12 +1,12 @@
 <template>
   <div class="page page-view">
-    <div class="page-view__left-column htr-column">
+    <div :class="columnClasses">
       <section class="top-ten htr-section">
         <header class="htr-section__header">
           <h4>Top Ten</h4>
         </header>
         <List 
-          className="top-ten"
+          className="top-ten-list"
           itemClassName="top-ten__item"
           columns="one"
           :items="rankingsTopTen"
@@ -19,7 +19,7 @@
         </List>
       </section>
     </div>
-    <div class="page-view__left-column htr-column">
+    <div :class="columnClasses">
       <section class="daily-versus htr-section">
         <header class="htr-section__header">
           <h4>Daily Versus</h4>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import classNames from 'classnames';
 import List from '@/components/List';
 import VersusWidget from '@/components/VersusWidget';
 import { RankingCard } from '@/components/Cards';
@@ -68,6 +69,9 @@ export default {
   },
   data: function() {
     return {
+      columnClasses: classNames(
+        'page-view__left-column page-view__left-column--grow htr-column'
+      ),
       blockCreateVersus: true,
       versusDailyActive: [],
       rankingsTopTen: []
@@ -156,6 +160,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+// use while dashboard is sparse
+.top-ten-list {
+  margin-left: 30%;
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />
