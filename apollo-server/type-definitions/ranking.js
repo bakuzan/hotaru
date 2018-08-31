@@ -10,4 +10,8 @@ module.exports = gql`
     score: Int
     character: Character
   }
+  type RankingPopulateResponse {
+    success: Boolean
+    message: String
+  }
 `;

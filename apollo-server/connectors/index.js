@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const Constants = require('../constants/index');
 const migrate = require('../config');
 const TestData = require('../config/test-data');
+const SQL = require('../db-scripts');
 
 const db = new Sequelize(Constants.appName, null, null, {
   dialect: 'sqlite',
@@ -46,8 +47,9 @@ VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
 
 RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 
-// Sync to create db if not exist
-// then run migration scripts
+// Sync and Migrate db
+// Only add test data if sync is forced
+// Populate rankings
 const FORCE_DB_REBUILD = process.env.FORCE_DB_REBUILD || false;
 db.sync({ force: FORCE_DB_REBUILD })
   .then(() => migrate(db))
@@ -58,7 +60,8 @@ db.sync({ force: FORCE_DB_REBUILD })
       await character.bulkCreate(TestData.characters);
       await tag.bulkCreate(TestData.tags);
     }
-  });
+  })
+  .then(() => db.query(SQL.populateRankings));
 
 const Character = db.models.character;
 const Series = db.models.series;

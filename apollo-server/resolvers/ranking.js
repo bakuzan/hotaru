@@ -1,12 +1,15 @@
 const Utils = require('../utils');
 
 module.exports = {
-  ratio(versus) {
-    const ratio = versus.wins / versus.total;
+  ratio(ranking) {
+    const ratio = ranking.wins / ranking.total;
     return Utils.roundFloat(ratio, 2);
   },
-  score(versus) {
-    const score = (versus.wins / versus.total) * versus.wins;
+  score(ranking) {
+    const score = (ranking.wins / ranking.total) * ranking.wins;
     return Utils.roundFloat(score, 2);
+  },
+  character(ranking) {
+    return ranking.getCharacter();
   }
 };

@@ -14,6 +14,7 @@ const Query = gql`
 
     versusDailyActive: [Versus]
     rankingsTopTen: [Ranking]
+    populateRankings: RankingPopulateResponse
   }
 `;
 

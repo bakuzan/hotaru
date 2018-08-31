@@ -5,6 +5,18 @@
         <header class="htr-section__header">
           <h4>Top Ten</h4>
         </header>
+        <List 
+          className="top-ten"
+          itemClassName="top-ten__item"
+          columns="one"
+          :items="rankingsTopTen"
+        >
+          <template slot-scope="slotProps">
+            <RankingCard
+              v-bind="slotProps.item"
+            />
+          </template>
+        </List>
       </section>
     </div>
     <div class="page-view__left-column htr-column">
@@ -40,6 +52,7 @@
 <script>
 import List from '@/components/List';
 import VersusWidget from '@/components/VersusWidget';
+import { RankingCard } from '@/components/Cards';
 import Button from '@/components/Button';
 
 import { Query, Mutation } from '@/graphql';
@@ -50,12 +63,14 @@ export default {
   components: {
     List,
     VersusWidget,
+    RankingCard,
     Button
   },
   data: function() {
     return {
       blockCreateVersus: true,
-      versusDailyActive: []
+      versusDailyActive: [],
+      rankingsTopTen: []
     };
   },
   apollo: {
@@ -64,6 +79,9 @@ export default {
       result() {
         this.blockCreateVersus = false;
       }
+    },
+    rankingsTopTen: {
+      query: Query.getTopTen
     }
   },
   computed: {

@@ -1,4 +1,6 @@
-drop view if exists ranking;
+begin;
+
+drop table if exists rankings;
 drop table if exists ranking_temp;
 
 create temporary table ranking_temp as
@@ -25,12 +27,29 @@ left join w_cte
 on m_cte.id = w_cte.id
 order by w_cte.wins desc, m_cte.total asc;
 
-create view ranking as
+create table rankings (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT, 
+	`total` INTEGER, 
+	`wins` INTEGER, 
+	`rank` INTEGER, 
+	`createdAt` DATETIME NOT NULL, 
+	`updatedAt` DATETIME NOT NULL, 
+	`characterId` INTEGER REFERENCES `characters` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+insert into rankings
 select
-	r.rowid as rank,
-	r.characterId,
-	r.name,
+	null as id,
 	r.total,
-	r.wins
+	r.wins,
+	r.rowid as rank,
+	current_timestamp as createdAt,
+	current_timestamp as updatedAt,
+	r.characterId
 from ranking_temp as r
-order by rank
+order by rank;
+
+pragma index_list('rankings');
+drop table if exists ranking_temp;
+
+end;
