@@ -1,5 +1,5 @@
 <template>
-  <div class="versus-card">
+  <div :class="cardClasses">
     <ListFigureCard
       v-bind="item" 
       :url-source="characterCardUrl"
@@ -40,6 +40,10 @@ export default {
     winnerId: {
       type: Number,
       default: null
+    },
+    grow: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -48,6 +52,9 @@ export default {
     };
   },
   computed: {
+    cardClasses: function() {
+      return classNames('versus-card', { 'versus-card--grow': this.grow });
+    },
     buttonClasses: function() {
       return classNames('versus-card__vote-button', {
         'versus-card__vote-button--has-winner': this.winnerId,
@@ -78,8 +85,14 @@ export default {
 .versus-card {
   padding: $app--padding-small;
 
+  &--grow {
+    width: 50%;
+  }
+
   &__vote-button {
+    width: 100%;
     margin: auto;
+
     &--has-winner .versus-card__vote-text {
       visibility: hidden;
     }

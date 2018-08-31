@@ -5,6 +5,7 @@
       :key="item.id"
       :item="item"
       :winner-id="winnerId"
+      grow
       @vote="handleVote"
     />
   </div>
