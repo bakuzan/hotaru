@@ -9,10 +9,13 @@ module.exports = {
     const createdAt = Date.now() - 1000;
 
     return context.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll({
-        order: context.literal('RANDOM()'),
-        limit: Constants.dailyVersusCharacterCount
-      });
+      const randomCharacters = await Character.findAll(
+        {
+          order: context.literal('RANDOM()'),
+          limit: Constants.dailyVersusCharacterCount
+        },
+        { transaction }
+      );
 
       const versusCharacters = Utils.chunk(randomCharacters, 2).filter(
         (x) => x.length === 2
@@ -33,13 +36,13 @@ module.exports = {
           }).then((createdVersus) => {
             const promises = [];
 
-            createdVersus.forEach(async (v, i) => {
+            createdVersus.forEach((v, i) => {
               const characters = versusCharacters[i];
               promises.push(v.setCharacters(characters, { transaction }));
             });
 
             return Promise.all(promises).then(() =>
-              createdVersus.map((created) => created.reload())
+              createdVersus.map((created) => created.reload({ transaction }))
             );
           })
       );
