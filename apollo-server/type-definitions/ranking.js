@@ -6,8 +6,8 @@ module.exports = gql`
     total: Int
     wins: Int
     rank: Int
-    ratio: Int
-    score: Int
+    ratio: Float
+    score: Float
     character: Character
   }
   type RankingPopulateResponse {
