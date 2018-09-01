@@ -39,41 +39,43 @@ module.exports = {
     } = Utils.separateArrIntoNewAndExisting(images);
 
     return Character.findById(id).then(async (character) => {
-      return context.transaction(async (transaction) => {
-        await character.setSeries(seriesId, { transaction });
-        await character.setTags(existingTagIds, { transaction });
-        await character.setImages(existingImageIds, { transaction });
+      return context
+        .transaction(async (transaction) => {
+          await character.setSeries(seriesId, { transaction });
+          await character.setTags(existingTagIds, { transaction });
+          await character.setImages(existingImageIds, { transaction });
 
-        if (newTags.length) {
-          await Tag.bulkCreate(newTags, { transaction }).then(() =>
-            Tag.findAll({
-              where: { createdAt: { [Op.gte]: createdAt } },
-              transaction
-            }).then((createdTags) =>
-              character.addTags(createdTags, { transaction })
-            )
-          );
-        }
-
-        if (newImages.length) {
-          await Image.bulkCreate(newImages, { transaction }).then(() =>
-            Image.findAll({
-              where: { createdAt: { [Op.gte]: createdAt } },
-              transaction
-            }).then((createdImages) =>
-              character.addImages(createdImages, { transaction })
-            )
-          );
-        }
-
-        return Character.update(
-          { ...args },
-          {
-            where: { id },
-            transaction
+          if (newTags.length) {
+            await Tag.bulkCreate(newTags, { transaction }).then(() =>
+              Tag.findAll({
+                where: { createdAt: { [Op.gte]: createdAt } },
+                transaction
+              }).then((createdTags) =>
+                character.addTags(createdTags, { transaction })
+              )
+            );
           }
-        ).then(() => character.reload());
-      });
+
+          if (newImages.length) {
+            await Image.bulkCreate(newImages, { transaction }).then(() =>
+              Image.findAll({
+                where: { createdAt: { [Op.gte]: createdAt } },
+                transaction
+              }).then((createdImages) =>
+                character.addImages(createdImages, { transaction })
+              )
+            );
+          }
+
+          return Character.update(
+            { ...args },
+            {
+              where: { id },
+              transaction
+            }
+          );
+        })
+        .then(() => character.reload());
     });
   }
 };

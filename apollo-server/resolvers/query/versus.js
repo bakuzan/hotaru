@@ -1,8 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Versus, Character } = require('../../connectors');
-const Constants = require('../../constants');
-const Utils = require('../../utils');
+const { Versus } = require('../../connectors');
 
 module.exports = {
   versusDailyActive() {
@@ -27,5 +25,8 @@ module.exports = {
       },
       order: [['createdAt', 'DESC']]
     });
+  },
+  versusCharacterHistory(_, { characterIds }) {
+    console.log('character history not implemented', characterIds);
   }
 };

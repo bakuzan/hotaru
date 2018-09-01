@@ -68,6 +68,13 @@ const createSeries = gql`
   }
 `;
 
+const seriesCore = gql`
+  fragment seriesCore on Series {
+    name
+    displayImage
+  }
+`;
+
 export default {
   query: {
     allSeries,
@@ -77,5 +84,8 @@ export default {
   mutation: {
     updateSeries,
     createSeries
+  },
+  fragment: {
+    seriesCore
   }
 };

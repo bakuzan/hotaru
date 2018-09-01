@@ -2,94 +2,94 @@ const series = [
   {
     name: 'Dagashi Kashi',
     source: 'Manga',
-    displayImage: 'https://imgur.com/31pFAEr'
+    displayImage: 'https://i.imgur.com/31pFAEr.jpg'
   },
   {
     name: 'Witchcraft Works',
     source: 'Manga',
-    displayImage: 'https://imgur.com/4z68zvZ'
+    displayImage: 'https://i.imgur.com/4z68zvZ.jpg'
   },
   {
     name: 'Prison School',
     source: 'Manga',
-    displayImage: 'https://imgur.com/Jc634zq'
+    displayImage: 'https://i.imgur.com/Jc634zq.jpg'
   },
   {
     name: 'Kill La Kill',
     source: 'Anime',
-    displayImage: 'https://imgur.com/THrUQKx'
+    displayImage: 'https://i.imgur.com/THrUQKx.jpg'
   },
   {
     name: 'Berserk',
     source: 'Manga',
-    displayImage: 'https://imgur.com/2jAkUoE'
+    displayImage: 'https://i.imgur.com/2jAkUoE.jpg'
   },
   {
     name: 'Noragami',
     source: 'Manga',
-    displayImage: 'https://imgur.com/6d9G2Ar'
+    displayImage: 'https://i.imgur.com/6d9G2Ar.jpg'
   },
   {
     name: 'Star Wars',
     source: 'Movie',
-    displayImage: 'https://imgur.com/SeDH9Qm'
+    displayImage: 'https://i.imgur.com/SeDH9Qm.jpg'
   }
 ];
 const characters = [
   {
     name: 'Shidare Hotaru',
     gender: 'Female',
-    displayImage: 'https://imgur.com/jLwdACg'
+    displayImage: 'https://i.imgur.com/jLwdACg.jpg'
   },
   {
     name: 'Kagari Ayaka',
     gender: 'Female',
-    displayImage: 'https://imgur.com/3xdrczj'
+    displayImage: 'https://i.imgur.com/3xdrczj.jpg'
   },
   {
     name: 'Shiraki Meiko',
     gender: 'Female',
-    displayImage: 'https://imgur.com/5hLv07N'
+    displayImage: 'https://i.imgur.com/5hLv07N.jpg'
   },
   {
     name: 'Kurihara Mari',
     gender: 'Female',
-    displayImage: 'https://imgur.com/3BeLYsy'
+    displayImage: 'https://i.imgur.com/3BeLYsy.jpg'
   },
   {
     name: 'Kiruin Satsuki',
     gender: 'Female',
-    displayImage: 'https://imgur.com/hwpbszY'
+    displayImage: 'https://i.imgur.com/hwpbszY.jpg'
   },
   {
     name: 'Kiruin Ragyo',
     gender: 'Female',
-    displayImage: 'https://imgur.com/xRWCpHW'
+    displayImage: 'https://i.imgur.com/xRWCpHW.jpg'
   },
   {
     name: 'Matoi Ryuuko',
     gender: 'Female',
-    displayImage: 'https://imgur.com/Gq8ulAp'
+    displayImage: 'https://i.imgur.com/Gq8ulAp.jpg'
   },
   {
     name: 'Guts',
     gender: 'Male',
-    displayImage: 'https://imgur.com/0c3p5VT'
+    displayImage: 'https://i.imgur.com/0c3p5VT.jpg'
   },
   {
     name: 'Joseph Joestar',
     gender: 'Male',
-    displayImage: 'https://imgur.com/0jtjOQD'
+    displayImage: 'https://i.imgur.com/0jtjOQD.jpg'
   },
   {
     name: 'Darth Vader',
     gender: 'Male',
-    displayImage: 'https://imgur.com/EHFqL3C'
+    displayImage: 'https://i.imgur.com/EHFqL3C.jpg'
   },
   {
     name: 'Bishamonten',
     gender: 'Female',
-    displayImage: 'https://imgur.com/NTkNb9T'
+    displayImage: 'https://i.imgur.com/NTkNb9T.jpg'
   }
 ];
 const tags = [

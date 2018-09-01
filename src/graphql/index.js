@@ -17,5 +17,11 @@ export const Mutation = {
   ...characters.mutation,
   ...series.mutation,
   ...image.mutation,
-  ...versus.mutation
+  ...versus.mutation,
+  ...ranking.mutation
+};
+
+export const Fragment = {
+  ...characters.fragment,
+  ...series.fragment
 };

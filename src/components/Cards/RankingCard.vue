@@ -5,7 +5,7 @@
         </div>
         <ImageCard
           v-bind="$props"
-          :display-image="character.displayImage"
+          :url="character.displayImage"
           figure-size="small"
           hide-caption
         />

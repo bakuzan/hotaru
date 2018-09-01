@@ -13,8 +13,9 @@ const Query = gql`
     tags(search: String): [Tag]
 
     versusDailyActive: [Versus]
+    versusCharacterHistory(characterIds: [Int]): [Versus]
+
     rankingsTopTen: [Ranking]
-    populateRankings: RankingPopulateResponse
   }
 `;
 
@@ -33,6 +34,8 @@ const Mutation = gql`
 
     versusCreateDaily: [Versus]
     versusVote(versusId: Int!, winnerId: Int!): Versus
+
+    populateRankings: RankingPopulateResponse
   }
 `;
 

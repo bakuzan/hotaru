@@ -77,6 +77,13 @@ const createCharacter = gql`
   }
 `;
 
+const characterCore = gql`
+  fragment characterCore on Character {
+    name
+    displayImage
+  }
+`;
+
 export default {
   query: {
     getCharacters,
@@ -86,5 +93,8 @@ export default {
   mutation: {
     updateCharacter,
     createCharacter
+  },
+  fragment: {
+    characterCore
   }
 };

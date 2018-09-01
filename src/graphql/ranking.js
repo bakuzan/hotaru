@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const populateRankings = gql`
-  query populateRankings {
+  mutation populateRankings {
     populateRankings {
       success
       message
@@ -27,7 +27,9 @@ const getTopTen = gql`
 
 export default {
   query: {
-    populateRankings,
     getTopTen
+  },
+  mutation: {
+    populateRankings
   }
 };

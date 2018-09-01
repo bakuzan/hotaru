@@ -1,7 +1,5 @@
-import { Query } from '@/graphql';
+import { Query, Fragment } from '@/graphql';
 
-import GenderType from '@/constants/gender-type';
-import SourceType from '@/constants/source-type';
 import { mapMutationToListStore } from '@/utils/mappers';
 
 export const isLoading = (apollo, only = []) => {
@@ -11,28 +9,19 @@ export const isLoading = (apollo, only = []) => {
   return watching.some((k) => queries[k].loading);
 };
 
-export const refreshGetCharacters = (store, rawCharacter) => {
-  const character = mapMutationToListStore(rawCharacter);
+const updateFragment = (fragment) => (store, rawItem) => {
+  const { id, name, displayImage, __typename } = mapMutationToListStore(
+    rawItem
+  );
 
-  const oldData = store.readQuerySafeHTR({
-    query: Query.getCharacters,
-    variables: { search: '', genders: [...GenderType] }
-  });
-
-  const alreadyExists =
-    oldData.characters && oldData.characters.some((x) => x.id === character.id);
-
-  let characters = oldData.characters || [];
-  characters = !alreadyExists
-    ? characters.concat([character])
-    : characters.map((x) => (x.id !== character.id ? x : character));
-
-  store.writeQuery({
-    query: Query.getCharacters,
-    variables: { search: '', genders: [...GenderType] },
-    data: { characters }
+  store.writeFragment({
+    id,
+    fragment,
+    data: { name, displayImage, __typename }
   });
 };
+export const refreshCharacter = updateFragment(Fragment.characterCore);
+export const refreshSeries = updateFragment(Fragment.seriesCore);
 
 export const refreshAllTags = (store, rawCharacter) => {
   const character = { tags: [], ...rawCharacter };
@@ -50,35 +39,6 @@ export const refreshAllTags = (store, rawCharacter) => {
   store.writeQuery({
     query: Query.allTags,
     data: { tags }
-  });
-};
-
-export const refreshGetSeries = (store, rawSeries) => {
-  const item = mapMutationToListStore(rawSeries);
-
-  const oldData = store.readQuerySafeHTR({
-    query: Query.getSeries,
-    variables: {
-      search: '',
-      sources: [...SourceType]
-    }
-  });
-
-  const alreadyExists =
-    oldData.series && oldData.series.some((x) => x.id === item.id);
-
-  let series = oldData.series || [];
-  series = !alreadyExists
-    ? series.concat([item])
-    : series.map((x) => (x.id !== item.id ? x : item));
-
-  store.writeQuery({
-    query: Query.getSeries,
-    variables: {
-      search: '',
-      sources: [...SourceType]
-    },
-    data: { series }
   });
 };
 

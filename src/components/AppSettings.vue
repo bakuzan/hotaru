@@ -6,7 +6,7 @@
         :title="title"
         :icon="icon"
     >
-        <li>
+        <li class="app-settings__item">
             <SelectBox
                 id="appTheme"
                 name="appTheme"
@@ -16,13 +16,23 @@
                 @on-select="onChange"
             />
         </li>
+        <li class="app-settings__item">
+          <Button
+            theme="primary"
+            @click="updateRankings"
+          >
+            Update Rankings
+          </Button>
+        </li>
     </DropdownMenu>
 </template>
 
 <script>
 import DropdownMenu from '@/components/DropdownMenu';
 import SelectBox from '@/components/SelectBox';
+import Button from '@/components/Button';
 
+import { Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
 import appThemes from '@/constants/app-themes';
@@ -33,7 +43,8 @@ export default {
   name: 'AppSettings',
   components: {
     DropdownMenu,
-    SelectBox
+    SelectBox,
+    Button
   },
   data: function() {
     return {
@@ -61,6 +72,13 @@ export default {
       document.body.classList.remove(this.themeName);
       this.themeName = htrLocal.saveTheme(value);
       document.body.classList.add(this.themeName);
+    },
+    updateRankings: function() {
+      // TODO display result via toaster
+      this.$apollo
+        .mutate({ mutation: Mutation.populateRankings })
+        .then(() => console.log('populated'))
+        .catch((err) => console.log(err));
     }
   },
   created() {
@@ -73,4 +91,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/_variables';
+
+.app-settings__item {
+  display: flex;
+  justify-content: center;
+  margin: $app--margin-small 0;
+}
 </style>

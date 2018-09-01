@@ -13,13 +13,13 @@ module.exports = {
     const { id, characterIds = [], ...args } = series;
 
     return Series.findById(id).then(async (series) => {
-      return context.transaction(async (transaction) => {
-        await series.setCharacters(characterIds, { transaction });
+      return context
+        .transaction(async (transaction) => {
+          await series.setCharacters(characterIds, { transaction });
 
-        return Series.update({ ...args }, { where: { id }, transaction }).then(
-          () => series.reload()
-        );
-      });
+          return Series.update({ ...args }, { where: { id }, transaction });
+        })
+        .then(() => series.reload());
     });
   }
 };

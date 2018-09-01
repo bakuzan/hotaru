@@ -1,7 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Tag, Ranking } = require('../../connectors');
-const SQL = require('../../db-scripts');
+const { Tag, Ranking } = require('../../connectors');
 
 const character = require('./character');
 const series = require('./series');
@@ -27,16 +26,5 @@ module.exports = {
       order: [['rank', 'asc']],
       limit: 10
     });
-  },
-  populateRankings() {
-    console.log(SQL);
-    return context
-      .query(SQL['delete_from_rankings'])
-      .then(() => context.query(SQL['drop_ranking_temp']))
-      .then(() => context.query(SQL['generate_rankings']))
-      .then(() => context.query(SQL['populate_rankings']))
-      .then(() => context.query(SQL['drop_ranking_temp']))
-      .then(() => ({ success: true, message: '' }))
-      .catch((error) => ({ success: false, message: error.message }));
   }
 };

@@ -30,6 +30,7 @@
           >
             Create versus
           </Button>
+          <LoadingBouncer v-show="blockCreateVersus" />
         </header>
         <List 
           className="daily-versus-list"
@@ -55,6 +56,7 @@ import List from '@/components/List';
 import VersusWidget from '@/components/VersusWidget';
 import { RankingCard } from '@/components/Cards';
 import Button from '@/components/Button';
+import LoadingBouncer from '@/components/LoadingBouncer';
 
 import { Query, Mutation } from '@/graphql';
 import { mapVersusToVotedVersus } from '@/utils/mappers';
@@ -65,7 +67,8 @@ export default {
     List,
     VersusWidget,
     RankingCard,
-    Button
+    Button,
+    LoadingBouncer
   },
   data: function() {
     return {

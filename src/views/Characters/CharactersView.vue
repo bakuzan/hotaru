@@ -385,19 +385,7 @@ export default {
               data: { characterById: mapCharacterToStore(data) }
             });
 
-            // store.writeFragment({
-            //   id: dataIdForObject(data),
-            //   fragment: Fragment.characterUpdate,
-            //   data
-            // });
-            // const { status, __typename } = taskUpdate;
-            // cache.writeFragment({
-            //   id: Common.dataIdForObject(taskUpdate),
-            //   fragment: Fragment.taskStatus,
-            //   data: { status, __typename }
-            // });
-
-            // CacheUpdate.refreshGetCharacters(store, data);
+            CacheUpdate.refreshCharacter(store, data);
             CacheUpdate.refreshAllTags(store, data);
           },
           optimisticResponse: mapCharacterToOptimisticUpdate(

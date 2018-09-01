@@ -1,11 +1,15 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-function readQuerySafe(options) {
+function makeSafe(query, options) {
   try {
-    return this.readQuery(options);
+    return query(options);
   } catch (e) {
     return {};
   }
+}
+
+function readQuerySafe(options) {
+  return makeSafe(this.readQuery, options);
 }
 
 function deleteQuery(name) {
