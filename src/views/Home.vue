@@ -3,7 +3,7 @@
     <div :class="columnClasses">
       <section class="top-ten htr-section">
         <header class="htr-section__header">
-          <h4>Top Ten</h4>
+          <h4 class="htr-section__title">Top Ten</h4>
         </header>
         <List 
           className="top-ten-list"
@@ -22,15 +22,17 @@
     <div :class="columnClasses">
       <section class="daily-versus htr-section">
         <header class="htr-section__header">
-          <h4>Daily Versus</h4>
-          <Button 
-            v-if="allowCreateCall"
-            theme="primary"
-            @click="handleCreateDaily"
-          >
-            Create versus
-          </Button>
-          <LoadingBouncer v-show="blockCreateVersus" />
+          <h4 class="htr-section__title">Daily Versus</h4>
+          <div class="daily-verus__create">
+            <Button 
+              v-show="allowCreateCall"
+              theme="primary"
+              @click="handleCreateDaily"
+            >
+              Create versus
+            </Button>
+            <LoadingBouncer v-show="blockCreateVersus" local />
+          </div>
         </header>
         <List 
           className="daily-versus-list"
@@ -108,7 +110,9 @@ export default {
   },
   methods: {
     handleCreateDaily: function() {
+      if (!this.allowCreateCall) return;
       this.blockCreateVersus = true;
+
       this.$apollo
         .mutate({
           mutation: Mutation.createDailyVersus,
@@ -159,15 +163,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.htr-section__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+@import '../styles/_variables';
+
+.htr-section {
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__title {
+    margin: $app--margin-standard;
+  }
 }
 
 // use while dashboard is sparse
 .top-ten-list {
   margin-left: 30%;
+}
+
+.daily-verus__create {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 26px;
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

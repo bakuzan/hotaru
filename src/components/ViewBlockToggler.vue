@@ -2,6 +2,7 @@
     <div :class="classes">
         <ViewBlock
             v-if="readOnly"
+            :class="blockClass"
             :label="label"
             :value="value"
             :noDataText="noDataText"
@@ -49,6 +50,10 @@ export default {
     forceReadOnly: {
       type: Boolean,
       default: false
+    },
+    blockClass: {
+      type: String,
+      default: ''
     }
   },
   data: function() {

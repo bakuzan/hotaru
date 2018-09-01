@@ -63,6 +63,7 @@
               <ViewBlockToggler
                 id="characters"
                 value="Characters"
+                blockClass="characters-view-block"
                 :lockEdit="isCreate"
                 :forceReadOnly="readOnly"
               >
@@ -335,5 +336,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+// try not to do this, but I'll give this case a pass
+.characters-view-block > .button {
+  font-weight: bold;
+  margin-left: -5px;
+}
+</style>
 
 <style lang="scss" src="../../styles/_page-view.scss" />
