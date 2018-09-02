@@ -19,6 +19,11 @@ $app--margin-standard: 0.5em;
 $app--placeholder-border: 1px solid transparent;
 $app--padding-small: 0.1em;
 $app--padding-standard: 0.33em;
+
+$app--failure-background-colour: $red;
+$app--failure-colour: $white;
+$app--success-background-colour: $green;
+$app--success-colour: $white;
 // App variables
 $accent--colour: $hotaru--ribbon;
 
@@ -34,9 +39,6 @@ $header--height: 50px;
 $nav-link--height: 50px;
 
 $sidebar--width: 50px;
-
-$success--background-colour: $green;
-$success--colour: $white;
 
 //z-index
 $z-index: (

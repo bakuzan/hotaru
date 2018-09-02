@@ -3,7 +3,7 @@
     <div 
         v-for="i in range" 
         :key="i" 
-        class="loading-bouncer__circle themed-background" 
+        :class="bouncerClasses" 
     />
   </div>
 </template>
@@ -17,6 +17,9 @@ export default {
     local: {
       type: Boolean,
       default: false
+    },
+    cirlceClass: {
+      type: String
     }
   },
   data: function() {
@@ -28,6 +31,13 @@ export default {
         'loading-bouncer--local': this.local,
         'loading-bouncer--fixed': !this.local
       });
+    },
+    bouncerClasses: function() {
+      return classNames(
+        'loading-bouncer__circle',
+        'themed-background',
+        this.cirlceClass
+      );
     }
   }
 };

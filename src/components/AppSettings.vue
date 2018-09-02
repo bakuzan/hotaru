@@ -17,12 +17,13 @@
             />
         </li>
         <li class="app-settings__item">
-          <Button
+          <ButtonWithFeedback
             theme="primary"
+            :update-state="getFeedbackUpdater"
             @click="updateRankings"
           >
             Update Rankings
-          </Button>
+          </ButtonWithFeedback>
         </li>
     </DropdownMenu>
 </template>
@@ -30,9 +31,9 @@
 <script>
 import DropdownMenu from '@/components/DropdownMenu';
 import SelectBox from '@/components/SelectBox';
-import Button from '@/components/Button';
+import ButtonWithFeedback from '@/components/ButtonWithFeedback';
 
-import { Mutation } from '@/graphql';
+import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
 import appThemes from '@/constants/app-themes';
@@ -44,7 +45,7 @@ export default {
   components: {
     DropdownMenu,
     SelectBox,
-    Button
+    ButtonWithFeedback
   },
   data: function() {
     return {
@@ -54,7 +55,8 @@ export default {
       title: 'App Settings',
       icon: Icons.settings,
       appThemes,
-      theme: ''
+      theme: '',
+      setFeedbackButtonState: null
     };
   },
   computed: {
@@ -74,11 +76,17 @@ export default {
       document.body.classList.add(this.themeName);
     },
     updateRankings: function() {
-      // TODO display result via toaster
+      this.setFeedbackButtonState({ isLoading: true });
       this.$apollo
-        .mutate({ mutation: Mutation.populateRankings })
-        .then(() => console.log('populated'))
-        .catch((err) => console.log(err));
+        .mutate({
+          mutation: Mutation.populateRankings,
+          refetchQueries: [{ query: Query.getTopTen }]
+        })
+        .then(() => this.setFeedbackButtonState({ isSuccess: true }))
+        .catch(() => this.setFeedbackButtonState({ isFailure: true }));
+    },
+    getFeedbackUpdater: function(fn) {
+      this.setFeedbackButtonState = fn;
     }
   },
   created() {

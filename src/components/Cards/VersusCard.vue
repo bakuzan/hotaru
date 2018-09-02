@@ -101,8 +101,8 @@ export default {
       position: absolute;
       width: 100%;
       height: 100%;
-      background-color: $success--background-colour;
-      color: $success--colour;
+      background-color: $app--success-background-colour;
+      color: $app--success-colour;
       font-size: 1em;
     }
   }
