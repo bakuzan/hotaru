@@ -10,6 +10,19 @@ const getCharacters = gql`
   }
 `;
 
+const getCharactersForVersusCompare = gql`
+  query getCharactersForVersusCompare($search: String) {
+    characters(search: $search) {
+      id
+      name
+      displayImage
+      ranking {
+        rank
+      }
+    }
+  }
+`;
+
 const getCharactersWithoutSeries = gql`
   query getCharactersWithoutSeries($search: String) {
     charactersWithoutSeries(search: $search) {
@@ -87,6 +100,7 @@ const characterCore = gql`
 export default {
   query: {
     getCharacters,
+    getCharactersForVersusCompare,
     getCharactersWithoutSeries,
     getCharacterById
   },

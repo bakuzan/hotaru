@@ -45,12 +45,15 @@ CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
 
 VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
 
+CharacterModel.Ranking = CharacterModel.hasOne(RankingModel);
 RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 
 // Sync and Migrate db
 // Only add test data if sync is forced
 // Populate rankings
-const FORCE_DB_REBUILD = !!(process.env.FORCE_DB_REBUILD || false);
+const FORCE_DB_REBUILD =
+  process.env.FORCE_DB_REBUILD === true.toString() || false;
+
 db.sync({ force: FORCE_DB_REBUILD })
   .then(() => migrate(db))
   .then(async () => {

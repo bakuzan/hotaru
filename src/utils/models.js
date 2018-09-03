@@ -1,3 +1,6 @@
+import Urls from '@/constants/urls';
+import { generateUniqueId } from '@/utils';
+
 export const defaultCharacterModel = () => ({
   name: '',
   displayImage: null,
@@ -13,3 +16,11 @@ export const defaultSeriesModel = () => ({
   source: null,
   characters: []
 });
+
+export const createDummyCharacterCompare = () => {
+  return {
+    id: generateUniqueId(),
+    displayImage: Urls.images.characterPlaceholder,
+    ranking: {}
+  };
+};

@@ -59,6 +59,12 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "series-view" */ './views/Series/SeriesView.vue'),
       props: { isCreate: true }
+    },
+    {
+      path: Urls.versusComparison,
+      name: Strings.route.versusComparison,
+      component: () =>
+        import(/* webpackChunkName: "versus-comparison" */ './views/Versus/VersusComparison.vue')
     }
   ]
 });

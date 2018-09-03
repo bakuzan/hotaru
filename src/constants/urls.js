@@ -8,7 +8,8 @@ const Urls = {
     return path;
   },
   images: {
-    deadImage: 'https://i.imgur.com/gKr1YhF.png'
+    deadImage: 'https://i.imgur.com/gKr1YhF.png',
+    characterPlaceholder: 'https://i.imgur.com/bW0heWj.jpg'
   },
   base: '/hotaru',
   get characterList() {
@@ -28,6 +29,9 @@ const Urls = {
   },
   get seriesCreate() {
     return `${this.seriesList}/create`;
+  },
+  get versusComparison() {
+    return `${this.base}/versus/compare`;
   }
 };
 

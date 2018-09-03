@@ -27,7 +27,8 @@ export default Object.freeze({
     characterCreate: 'character create',
     seriesList: 'series list',
     seriesView: 'series view',
-    seriesCreate: 'series create'
+    seriesCreate: 'series create',
+    versusComparison: 'versus comparison'
   },
   slot: {
     viewBlock: 'view-block__read-only',

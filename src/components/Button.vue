@@ -3,6 +3,7 @@
         :class="buttonClasses"
         :type="type"
         :icon="icon"
+        :disabled="disabled"
         @click="onClick"
     >
         <slot></slot>
@@ -37,7 +38,11 @@ export default {
       }
     },
     rounded: Boolean,
-    depress: Boolean
+    depress: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     buttonClasses: function() {

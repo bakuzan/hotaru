@@ -28,7 +28,8 @@ export default {
       links: [
         { id: 1, to: Urls.base, title: 'Home', text: 'H' },
         { id: 2, to: Urls.characterList, title: 'Characters', text: 'C' },
-        { id: 3, to: Urls.seriesList, title: 'Series', text: 'S' }
+        { id: 3, to: Urls.seriesList, title: 'Series', text: 'S' },
+        { id: 4, to: Urls.versusComparison, title: 'Versus', text: 'V' }
       ]
     };
   },
