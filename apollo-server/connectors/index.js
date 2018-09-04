@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 
 const Constants = require('../constants/index');
+const Utils = require('../utils');
 const migrate = require('../config');
 const TestData = require('../config/test-data');
 const SQL = require('../db-scripts');
@@ -51,8 +52,7 @@ RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 // Sync and Migrate db
 // Only add test data if sync is forced
 // Populate rankings
-const FORCE_DB_REBUILD =
-  process.env.FORCE_DB_REBUILD === true.toString() || false;
+const FORCE_DB_REBUILD = Utils.castStringToBool(process.env.FORCE_DB_REBUILD);
 
 db.sync({ force: FORCE_DB_REBUILD })
   .then(() => migrate(db))
@@ -65,11 +65,14 @@ db.sync({ force: FORCE_DB_REBUILD })
     }
   })
   .then(() => {
-    db.query(SQL['delete_from_rankings'])
-      .then(() => db.query(SQL['drop_ranking_temp']))
-      .then(() => db.query(SQL['generate_rankings']))
-      .then(() => db.query(SQL['populate_rankings']))
-      .then(() => db.query(SQL['drop_ranking_temp']));
+    db.transaction((transaction) =>
+      db
+        .query(SQL['delete_from_rankings'], { transaction })
+        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
+        .then(() => db.query(SQL['generate_rankings'], { transaction }))
+        .then(() => db.query(SQL['populate_rankings'], { transaction }))
+        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
+    );
   });
 
 const Character = db.models.character;

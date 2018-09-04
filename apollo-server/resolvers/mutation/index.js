@@ -15,13 +15,15 @@ module.exports = {
     return Tag.create({ ...tag }).then((tag) => tag);
   },
   populateRankings() {
-    return context
-      .query(SQL['delete_from_rankings'])
-      .then(() => context.query(SQL['drop_ranking_temp']))
-      .then(() => context.query(SQL['generate_rankings']))
-      .then(() => context.query(SQL['populate_rankings']))
-      .then(() => context.query(SQL['drop_ranking_temp']))
-      .then(() => ({ success: true, message: '' }))
-      .catch((error) => ({ success: false, message: error.message }));
+    return context.transaction((transaction) =>
+      context
+        .query(SQL['delete_from_rankings'], { transaction })
+        .then(() => context.query(SQL['drop_ranking_temp'], { transaction }))
+        .then(() => context.query(SQL['generate_rankings'], { transaction }))
+        .then(() => context.query(SQL['populate_rankings'], { transaction }))
+        .then(() => context.query(SQL['drop_ranking_temp'], { transaction }))
+        .then(() => ({ success: true, message: '' }))
+        .catch((error) => ({ success: false, message: error.message }))
+    );
   }
 };

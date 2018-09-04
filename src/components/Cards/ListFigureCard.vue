@@ -83,6 +83,10 @@ export default {
       validator: function(value) {
         return value === null || ['small'].includes(value);
       }
+    },
+    figureClass: {
+      type: String,
+      default: ''
     }
   },
   data: function() {
@@ -93,7 +97,7 @@ export default {
       return classNames('list-figure-card');
     },
     figureClasses: function() {
-      return classNames('list-figure-card__figure', {
+      return classNames('list-figure-card__figure', this.figureClass, {
         [`list-figure-card__figure--size_${this.figureSize}`]: this.figureSize
       });
     },

@@ -31,10 +31,11 @@
           v-show="c.isActive"
           class="versus-comparison__remove"
           :icon="removeIcon"
-          @click="handleRemoveCharacter"
+          @click="handleRemoveCharacter(c.id)"
         />
         <ListFigureCard
           class="comparison-card"
+          figureClass="comparison-card__figure"
           v-bind="c"
           :url-source="cardUrl"
         />
@@ -47,14 +48,13 @@
 </template>
 
 <script>
-import classNames from 'classnames';
-
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import { ListFigureCard } from '@/components/Cards';
 import Button from '@/components/Button';
 
 import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
+import Strings from '@/constants/strings';
 import { Query } from '@/graphql';
 import { createDummyCharacterCompare } from '@/utils/models';
 
@@ -75,7 +75,7 @@ export default {
         createDummyCharacterCompare(),
         createDummyCharacterCompare()
       ],
-      compareCharacters: [null, null]
+      compareCharacters: []
     };
   },
   apollo: {
@@ -97,16 +97,27 @@ export default {
   },
   computed: {
     characterSearchResults: function() {
-      return this.characters;
+      return this.characters.filter((x) => !this.characterIds.includes(x.id));
+    },
+    characterIds: function() {
+      const { characterIds } = this.$router.history.current.query;
+      const str = characterIds || ',';
+      return str.split(',').map((x) => (x ? Number(x) : null));
     },
     activeCharacters: function() {
-      console.log('active chara!', this.$router, this.characters, this.placeholders);
-      return this.compareCharacters.map(
-        (x, i) => (x === null ? this.placeholders[i] : { ...x, isActive: true })
-      );
+      const aChara = this.characterIds.map((id, i) => {
+        const c = this.compareCharacters.find((c) => c.id === id);
+        if (!id || !c) return this.placeholders[i];
+        return { ...c, isActive: true };
+      });
+
+      console.log(aChara, this.compareCharacters, this.characterIds);
+      return aChara;
     },
     hasTwoCharacters: function() {
-      return this.compareCharacters.every((x) => x !== null);
+      return (
+        this.characterIds.every((x) => !!x) && this.characterIds.length === 2
+      );
     }
   },
   methods: {
@@ -114,17 +125,39 @@ export default {
       this.characterFilter = value;
     },
     onSelectCharacter: function(characterId) {
-      const character = this.characters.find((x) => x.id === characterId);
-      const index = this.compareCharacters.findIndex((x) => x === null);
-      this.compareCharacters = this.compareCharacters.map(
-        (x, i) => (i === index ? character : x)
-      );
+      const index = this.characterIds.findIndex((x) => x === null);
+      const newQueryParam = [...this.characterIds]
+        .map((x, i) => (i === index ? characterId : x || ''))
+        .join(',');
+
+      this.$nextTick(() => {
+        const character = this.characters.find((x) => x.id === characterId);
+        this.compareCharacters.push(character);
+      });
+
+      this.updateRoute(newQueryParam);
     },
     onTriggerQuery: function() {
       this.$apollo.queries.characters.refresh();
     },
-    handleRemoveCharacter: function() {
+    handleRemoveCharacter: function(characterId) {
+      const newQueryParam = [...this.characterIds]
+        .map((x) => (x === characterId ? '' : x || ''))
+        .join(',');
 
+      this.$nextTick(() => {
+        this.compareCharacters = this.compareCharacters.filter(
+          (x) => x.id !== characterId
+        );
+      });
+
+      this.updateRoute(newQueryParam);
+    },
+    updateRoute: function(characterIds) {
+      this.$router.go({
+        name: Strings.route.versusComparison,
+        query: { characterIds }
+      });
     }
   }
 };
@@ -153,9 +186,15 @@ export default {
     right: 0;
   }
 }
-
+</style>
+<style lang="scss">
 .comparison-card {
   margin: 0 auto;
+
+  &__figure > img {
+    max-height: 100px;
+  }
 }
 </style>
+
 <style lang="scss" src="../../styles/_page-view.scss" />

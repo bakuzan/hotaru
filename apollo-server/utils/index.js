@@ -32,10 +32,14 @@ function roundFloat(value, exp) {
   return +(value[0] + 'e' + (value[1] ? +value[1] - exp : -exp));
 }
 
+const castStringToBool = (val) =>
+  val === 'true' ? true : val === 'false' ? false : val;
+
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
   separateArrIntoNewAndExisting,
   chunk,
-  roundFloat
+  roundFloat,
+  castStringToBool
 };

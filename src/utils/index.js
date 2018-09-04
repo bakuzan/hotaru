@@ -108,3 +108,6 @@ export const convertToBase64 = (file, callback) => {
   reader.onloadend = callback;
   reader.readAsDataURL(file);
 };
+
+export const castStringToBool = (val) =>
+  val === 'true' ? true : val === 'false' ? false : val;
