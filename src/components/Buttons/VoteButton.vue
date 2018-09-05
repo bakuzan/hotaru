@@ -59,10 +59,14 @@ export default {
   },
   computed: {
     buttonClasses: function() {
-      return classNames('vote-button', {
-        'vote-button--has-winner': this.hasWinner,
-        'vote-button--is-winner': this.isWinner
-      });
+      return classNames(
+        'vote-button',
+        {
+          'vote-button--has-winner': this.hasWinner,
+          'vote-button--is-winner': this.isWinner
+        },
+        this.className
+      );
     },
     maybeWinningIcon: function() {
       return this.isWinner ? Icons.tick : null;

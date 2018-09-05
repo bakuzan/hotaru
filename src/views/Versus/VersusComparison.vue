@@ -41,13 +41,29 @@
           open-new-tab
         />
       </div>
+      <div>
+        Put summary data here!
+        - total matches
+        - c1 wins - c2 wins
+      </div>
       <List 
         columns="one"
         :items="versusHistoryComparison"
       >
         <template slot-scope="slotProps">
-          {{slotProps.item.id}}
-          {{slotProps.item.updatedAt}}
+          <VoteButton 
+            class="versus-comparison__button"
+            :has-winner="!!slotProps.item.winnerId"
+            :is-winner="isWinner(slotProps.item, 0)"
+          />
+          <div class="versus-comparison__text">
+            {{formatDate(slotProps.item.updatedAt)}}
+          </div>
+          <VoteButton 
+            class="versus-comparison__button"
+            :has-winner="!!slotProps.item.winnerId"
+            :is-winner="isWinner(slotProps.item, 1)"
+          />
         </template>
       </List>
     </div>
@@ -57,7 +73,7 @@
 <script>
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import { ListFigureCard } from '@/components/Cards';
-import { Button } from '@/components/Buttons';
+import { Button, VoteButton } from '@/components/Buttons';
 import List from '@/components/List';
 
 import Icons from '@/constants/icons';
@@ -65,6 +81,7 @@ import Urls from '@/constants/urls';
 import Strings from '@/constants/strings';
 import { Query } from '@/graphql';
 import { createDummyCharacterCompare } from '@/utils/models';
+import { formatDateTimeForDisplay } from '@/utils/date';
 
 export default {
   name: 'VersusComparison',
@@ -72,6 +89,7 @@ export default {
     InputBoxAutocomplete,
     ListFigureCard,
     Button,
+    VoteButton,
     List
   },
   data: function() {
@@ -85,27 +103,11 @@ export default {
         createDummyCharacterCompare()
       ],
       compareCharacters: [],
-      versusHistoryComparison: []
+      versusHistoryComparison: [],
+      comparisonSummary: null
     };
   },
   apollo: {
-    charactersByIds: {
-      query: Query.getCharactersByIds,
-      skip() {
-        return (
-          this.characterIds.every((x) => x === null) ||
-          this.characterIds.every(
-            (x) => !x || this.compareCharacters.some((c) => c.id === x)
-          )
-        );
-      },
-      variables() {
-        return { characterIds: this.characterIds };
-      },
-      update(data) {
-        this.compareCharacters.push(...data.charactersByIds);
-      }
-    },
     characters: {
       query: Query.getCharactersForVersusCompare,
       skip() {
@@ -114,16 +116,27 @@ export default {
       variables() {
         return { search: this.characterFilter };
       }
-    },
-    versusHistoryComparison: {
-      query: Query.getVersusHistoryComparison,
-      manual: true,
-      result({ data, loading }) {
-        if (!loading) {
-          console.log('history >> ', data);
-        }
-      }
     }
+  },
+  created() {
+    if (
+      this.characterIds.every((x) => x === null) ||
+      this.characterIds.every(
+        (x) => !x || this.compareCharacters.some((c) => c.id === x)
+      )
+    )
+      return;
+
+    this.$apollo
+      .query({
+        query: Query.getCharactersByIds,
+        variables: { characterIds: this.characterIds }
+      })
+      .then(({ data, loading }) => {
+        if (!loading) {
+          this.compareCharacters.push(...data.charactersByIds);
+        }
+      });
   },
   computed: {
     characterSearchResults: function() {
@@ -148,6 +161,9 @@ export default {
     }
   },
   methods: {
+    formatDate: function(date) {
+      return formatDateTimeForDisplay(date);
+    },
     onSearchCharacters: function(value) {
       this.characterFilter = value;
     },
@@ -164,9 +180,17 @@ export default {
       this.characterFilter = '';
     },
     onTriggerQuery: function() {
-      this.$apollo.queries.versusHistoryComparison.refetch({
-        characterIds: this.characterIds
-      });
+      this.$apollo
+        .query({
+          query: Query.getVersusHistoryComparison,
+          variables: { characterIds: this.characterIds }
+        })
+        .then(({ data, loading }) => {
+          if (!loading) {
+            this.versusHistoryComparison = data.versusHistoryComparison;
+            // TODO set the summary here
+          }
+        });
     },
     handleRemoveCharacter: function(characterId) {
       const newQueryParam = [...this.characterIds]
@@ -178,12 +202,16 @@ export default {
         (x) => x.id !== characterId
       );
       this.versusHistoryComparison = [];
+      this.comparisonSummary = null;
     },
     updateRoute: function(characterIds) {
       this.$router.replace({
         name: Strings.route.versusComparison,
         query: { characterIds }
       });
+    },
+    isWinner: function(item, index) {
+      return item.winnerId === this.characterIds[index];
     }
   }
 };
@@ -210,6 +238,16 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  &__button,
+  &__text {
+    display: flex;
+    flex: 1;
+  }
+  &__text {
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

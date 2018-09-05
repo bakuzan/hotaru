@@ -12,7 +12,7 @@
             <HTRImage :src="displayImage" :class="imageClasses" />
             <figcaption v-if="!hideCaption" class="list-figure-card__caption">
                 <NavLink 
-                  v-if="itemUrl"
+                  v-if="itemUrl && name"
                   :to="itemUrl"
                   :target="linkTarget"
                 >

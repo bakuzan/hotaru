@@ -111,3 +111,8 @@ export const convertToBase64 = (file, callback) => {
 
 export const castStringToBool = (val) =>
   val === 'true' ? true : val === 'false' ? false : val;
+
+export const padNumber = (n, width, z = 0) => {
+  n += '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+};
