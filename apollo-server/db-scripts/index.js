@@ -21,10 +21,6 @@ function readFiles(onFileContent) {
   });
 }
 
-// const populateRankings = fs
-//   .readFileSync(path.join(__dirname, 'populate_rankings.sql'))
-//   .toString();
-
 readFiles((filename, content) => {
   const [name] = filename.split('.');
   module.exports[name] = content.toString();

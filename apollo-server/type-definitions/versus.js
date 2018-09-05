@@ -7,5 +7,6 @@ module.exports = gql`
     characters: [Character]
     winner: Character
     winnerId: Int
+    updatedAt: String
   }
 `;

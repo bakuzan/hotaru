@@ -1,6 +1,7 @@
 const Op = require('sequelize').Op;
 
-const { Versus } = require('../../connectors');
+const { db: context, Versus } = require('../../connectors');
+const SQL = require('../../db-scripts');
 
 module.exports = {
   versusDailyActive() {
@@ -27,6 +28,9 @@ module.exports = {
     });
   },
   versusHistoryComparison(_, { characterIds }) {
-    console.log('character history not implemented', characterIds);
+    const [c1, c2] = characterIds;
+    return context.query(SQL['get_versus_history_for_characters'], {
+      replacements: { c1, c2 }
+    });
   }
 };
