@@ -42,9 +42,20 @@ const castVote = gql`
   }
 `;
 
+const getVersusHistoryComparison = gql`
+  query getVersusHistoryComparison($characterIds: [Int]) {
+    versusHistoryComparison(characterIds: $characterIds) {
+      id
+      winnerId
+      updatedAt
+    }
+  }
+`;
+
 export default {
   query: {
-    getActiveDailyVersus
+    getActiveDailyVersus,
+    getVersusHistoryComparison
   },
   mutation: {
     createDailyVersus,

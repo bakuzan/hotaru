@@ -76,7 +76,8 @@ export default {
         createDummyCharacterCompare(),
         createDummyCharacterCompare()
       ],
-      compareCharacters: []
+      compareCharacters: [],
+      versusHistoryComparison: []
     };
   },
   apollo: {
@@ -104,6 +105,15 @@ export default {
       },
       variables() {
         return { search: this.characterFilter };
+      }
+    },
+    versusHistoryComparison: {
+      query: Query.getVersusHistoryComparison,
+      manual: true,
+      result({ data, loading }) {
+        if (!loading) {
+          console.log('history >> ', data);
+        }
       }
     }
   },
@@ -146,7 +156,9 @@ export default {
       this.characterFilter = '';
     },
     onTriggerQuery: function() {
-      console.log('trigger query');
+      this.$apollo.queries.versusHistoryComparison.refetch({
+        characterIds: this.characterIds
+      });
     },
     handleRemoveCharacter: function(characterId) {
       const newQueryParam = [...this.characterIds]
@@ -157,6 +169,7 @@ export default {
       this.compareCharacters = this.compareCharacters.filter(
         (x) => x.id !== characterId
       );
+      this.versusHistoryComparison = [];
     },
     updateRoute: function(characterIds) {
       this.$router.replace({

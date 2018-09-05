@@ -14,7 +14,7 @@ const Query = gql`
     tags(search: String): [Tag]
 
     versusDailyActive: [Versus]
-    versusCharacterHistory(characterIds: [Int]): [Versus]
+    versusHistoryComparison(characterIds: [Int]): [Versus]
 
     rankingsTopTen: [Ranking]
   }

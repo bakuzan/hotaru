@@ -26,7 +26,7 @@ module.exports = {
       order: [['createdAt', 'DESC']]
     });
   },
-  versusCharacterHistory(_, { characterIds }) {
+  versusHistoryComparison(_, { characterIds }) {
     console.log('character history not implemented', characterIds);
   }
 };
