@@ -38,6 +38,7 @@
           figureClass="comparison-card__figure"
           v-bind="c"
           :url-source="cardUrl"
+          open-new-tab
         />
       </div>
       <div>
@@ -83,27 +84,23 @@ export default {
       query: Query.getCharactersByIds,
       skip() {
         return (
-          this.characterIds.some((x) => x === null) ||
-          this.characterIds.length !== 2
+          this.characterIds.every((x) => x === null) ||
+          this.characterIds.every(
+            (x) => !x || this.compareCharacters.some((c) => c.id === x)
+          )
         );
       },
       variables() {
         return { characterIds: this.characterIds };
       },
       update(data) {
-        this.compareCharacters = data.charactersByIds;
+        this.compareCharacters.push(...data.charactersByIds);
       }
     },
     characters: {
       query: Query.getCharactersForVersusCompare,
-      manual: true,
       skip() {
         return !this.characterFilter;
-      },
-      result({ data, loading }) {
-        if (!loading) {
-          this.characters = data.characters;
-        }
       },
       variables() {
         return { search: this.characterFilter };
@@ -120,14 +117,11 @@ export default {
       return str.split(',').map((x) => (x ? Number(x) : null));
     },
     activeCharacters: function() {
-      const aChara = this.characterIds.map((id, i) => {
+      return this.characterIds.map((id, i) => {
         const c = this.compareCharacters.find((c) => c.id === id);
         if (!id || !c) return this.placeholders[i];
         return { ...c, isActive: true };
       });
-
-      console.log(aChara, this.compareCharacters, this.characterIds, this.$route);
-      return aChara;
     },
     hasTwoCharacters: function() {
       return (
@@ -140,20 +134,19 @@ export default {
       this.characterFilter = value;
     },
     onSelectCharacter: function(characterId) {
+      const character = this.characters.find((x) => x.id === characterId);
+      this.compareCharacters.push(character);
+
       const index = this.characterIds.findIndex((x) => x === null);
       const newQueryParam = [...this.characterIds]
         .map((x, i) => (i === index ? characterId : x || ''))
         .join(',');
 
       this.updateRoute(newQueryParam);
-      this.$nextTick(() => {
-        const character = this.characters.find((x) => x.id === characterId);
-        this.compareCharacters.push(character);
-        this.characterFilter = '';
-      });
+      this.characterFilter = '';
     },
     onTriggerQuery: function() {
-      this.$apollo.queries.characters.refresh();
+      console.log('trigger query');
     },
     handleRemoveCharacter: function(characterId) {
       const newQueryParam = [...this.characterIds]
@@ -161,11 +154,9 @@ export default {
         .join(',');
 
       this.updateRoute(newQueryParam);
-      this.$nextTick(() => {
-        this.compareCharacters = this.compareCharacters.filter(
-          (x) => x.id !== characterId
-        );
-      });
+      this.compareCharacters = this.compareCharacters.filter(
+        (x) => x.id !== characterId
+      );
     },
     updateRoute: function(characterIds) {
       this.$router.replace({
