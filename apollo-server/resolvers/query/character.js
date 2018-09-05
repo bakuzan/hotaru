@@ -39,6 +39,15 @@ module.exports = {
     const { id } = args;
     return Character.findById(id);
   },
+  charactersByIds(_, { characterIds = [] }) {
+    return Character.findAll({
+      where: {
+        id: {
+          [Op.in]: characterIds
+        }
+      }
+    });
+  },
   characterImages(_, { characterId, ...args }) {
     return Character.findById(characterId).then((character) =>
       character.getImages({ where: args })

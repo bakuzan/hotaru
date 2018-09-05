@@ -6,6 +6,7 @@ const Query = gql`
     charactersWithoutSeries(search: String): [Character]
     characterById(id: Int!): Character
     characterImages(characterId: Int!): [Image]
+    charactersByIds(characterIds: [Int]): [Character]
 
     series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series

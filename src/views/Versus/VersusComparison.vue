@@ -79,6 +79,21 @@ export default {
     };
   },
   apollo: {
+    charactersByIds: {
+      query: Query.getCharactersByIds,
+      skip() {
+        return (
+          this.characterIds.some((x) => x === null) ||
+          this.characterIds.length !== 2
+        );
+      },
+      variables() {
+        return { characterIds: this.characterIds };
+      },
+      update(data) {
+        this.compareCharacters = data.charactersByIds;
+      }
+    },
     characters: {
       query: Query.getCharactersForVersusCompare,
       manual: true,
@@ -100,7 +115,7 @@ export default {
       return this.characters.filter((x) => !this.characterIds.includes(x.id));
     },
     characterIds: function() {
-      const { characterIds } = this.$router.history.current.query;
+      const { characterIds } = this.$route.query;
       const str = characterIds || ',';
       return str.split(',').map((x) => (x ? Number(x) : null));
     },
@@ -111,7 +126,7 @@ export default {
         return { ...c, isActive: true };
       });
 
-      console.log(aChara, this.compareCharacters, this.characterIds);
+      console.log(aChara, this.compareCharacters, this.characterIds, this.$route);
       return aChara;
     },
     hasTwoCharacters: function() {
@@ -130,12 +145,12 @@ export default {
         .map((x, i) => (i === index ? characterId : x || ''))
         .join(',');
 
+      this.updateRoute(newQueryParam);
       this.$nextTick(() => {
         const character = this.characters.find((x) => x.id === characterId);
         this.compareCharacters.push(character);
+        this.characterFilter = '';
       });
-
-      this.updateRoute(newQueryParam);
     },
     onTriggerQuery: function() {
       this.$apollo.queries.characters.refresh();
@@ -145,16 +160,15 @@ export default {
         .map((x) => (x === characterId ? '' : x || ''))
         .join(',');
 
+      this.updateRoute(newQueryParam);
       this.$nextTick(() => {
         this.compareCharacters = this.compareCharacters.filter(
           (x) => x.id !== characterId
         );
       });
-
-      this.updateRoute(newQueryParam);
     },
     updateRoute: function(characterIds) {
-      this.$router.go({
+      this.$router.replace({
         name: Strings.route.versusComparison,
         query: { characterIds }
       });
@@ -192,7 +206,7 @@ export default {
   margin: 0 auto;
 
   &__figure > img {
-    max-height: 100px;
+    height: auto !important;
   }
 }
 </style>

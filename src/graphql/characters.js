@@ -50,6 +50,19 @@ const getCharacterById = gql`
   }
 `;
 
+const getCharactersByIds = gql`
+  query getCharactersByIds($characterIds: [Int]) {
+    charactersByIds(characterIds: $characterIds) {
+      id
+      name
+      displayImage
+      ranking {
+        rank
+      }
+    }
+  }
+`;
+
 const updateCharacter = gql`
   mutation updateCharacter($character: CharacterInput) {
     characterUpdate(character: $character) {
@@ -102,7 +115,8 @@ export default {
     getCharacters,
     getCharactersForVersusCompare,
     getCharactersWithoutSeries,
-    getCharacterById
+    getCharacterById,
+    getCharactersByIds
   },
   mutation: {
     updateCharacter,
