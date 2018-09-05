@@ -155,7 +155,7 @@
 import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
 import InputBoxChipList from '@/components/InputBoxChipList';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';

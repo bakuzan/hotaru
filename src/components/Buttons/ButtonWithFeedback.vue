@@ -15,7 +15,7 @@
 <script>
 import classNames from 'classnames';
 
-import Button from '@/components/Button';
+import Button from './Button';
 import LoadingBouncer from '@/components/LoadingBouncer';
 
 export default {
@@ -95,8 +95,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/_variables';
-@import '../styles/_extensions';
+@import '../../styles/_variables';
+@import '../../styles/_extensions';
 
 .feedback {
   .loading-bouncer {

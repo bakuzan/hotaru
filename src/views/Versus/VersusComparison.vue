@@ -41,9 +41,15 @@
           open-new-tab
         />
       </div>
-      <div>
-        PLACEHOLDERS
-      </div>
+      <List 
+        columns="one"
+        :items="versusHistoryComparison"
+      >
+        <template slot-scope="slotProps">
+          {{slotProps.item.id}}
+          {{slotProps.item.updatedAt}}
+        </template>
+      </List>
     </div>
   </div>
 </template>
@@ -51,7 +57,8 @@
 <script>
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import { ListFigureCard } from '@/components/Cards';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
+import List from '@/components/List';
 
 import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
@@ -64,7 +71,8 @@ export default {
   components: {
     InputBoxAutocomplete,
     ListFigureCard,
-    Button
+    Button,
+    List
   },
   data: function() {
     return {

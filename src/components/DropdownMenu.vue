@@ -31,7 +31,7 @@
 import classNames from 'classnames';
 
 import Backdrop from '@/components/Backdrop';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 
 import Strings from '@/constants/strings';
 import { getElementCoordinates } from '@/utils';

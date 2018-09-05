@@ -6,15 +6,13 @@
       figure-size="small"
       open-new-tab
     />
-    <Button
-      :className="buttonClasses"
-      theme="primary"
-      :icon="maybeWinningIcon"
-      :disabled="winnerId"
+    <VoteButton
+      :has-winner="!!winnerId"
+      :is-winner="isWinner"
       @click="handleVote"
     >
-      <span class="versus-card__vote-text">Vote {{item.name}}</span>
-    </Button>
+      Vote {{item.name}}
+    </VoteButton>
   </div>
 </template>
 
@@ -22,16 +20,16 @@
 import classNames from 'classnames';
 
 import ListFigureCard from './ListFigureCard';
-import Button from '@/components/Button';
+import { Button, VoteButton } from '@/components/Buttons';
 
 import Urls from '@/constants/urls';
-import Icons from '@/constants/icons';
 
 export default {
   name: 'VersusCard',
   components: {
     ListFigureCard,
-    Button
+    Button,
+    VoteButton
   },
   props: {
     item: {
@@ -54,15 +52,6 @@ export default {
   computed: {
     cardClasses: function() {
       return classNames('versus-card', { 'versus-card--grow': this.grow });
-    },
-    buttonClasses: function() {
-      return classNames('versus-card__vote-button', {
-        'versus-card__vote-button--has-winner': this.winnerId,
-        'versus-card__vote-button--is-winner': this.isWinner
-      });
-    },
-    maybeWinningIcon: function() {
-      return this.isWinner ? Icons.tick : null;
     },
     isWinner: function() {
       return this.item.id === this.winnerId;

@@ -57,7 +57,7 @@ import classNames from 'classnames';
 import List from '@/components/List';
 import VersusWidget from '@/components/VersusWidget';
 import { RankingCard } from '@/components/Cards';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import LoadingBouncer from '@/components/LoadingBouncer';
 
 import { Query, Mutation } from '@/graphql';

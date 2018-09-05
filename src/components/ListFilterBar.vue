@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
 
 import Strings from '@/constants/strings';
@@ -60,9 +60,6 @@ export default {
 
 .list-filter {
   display: flex;
-
-  &__search {
-  }
 
   &__add-button {
     margin: $app--margin-standard;

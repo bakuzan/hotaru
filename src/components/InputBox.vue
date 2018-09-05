@@ -30,7 +30,7 @@
 <script>
 import classNames from 'classnames';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import Icons from '@/constants/icons';
 import { getEventValue } from '@/utils';
 

@@ -31,7 +31,7 @@
 <script>
 import DropdownMenu from '@/components/DropdownMenu';
 import SelectBox from '@/components/SelectBox';
-import ButtonWithFeedback from '@/components/ButtonWithFeedback';
+import { ButtonWithFeedback } from '@/components/Buttons';
 
 import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';

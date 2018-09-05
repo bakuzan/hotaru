@@ -33,7 +33,7 @@ import classNames from 'classnames';
 
 import HTRImage from '@/components/HTRImage';
 import NavLink from '@/components/NavLink';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 
 import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';

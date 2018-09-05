@@ -123,7 +123,7 @@
 import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
 import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';

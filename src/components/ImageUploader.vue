@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Button from '@/components/Button';
+import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
 import UploadSvg from '@/assets/upload.svg';
 import LoadingBouncer from '@/components/LoadingBouncer';
