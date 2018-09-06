@@ -174,11 +174,13 @@ export default {
       if (!match) return value;
 
       const length = this.filter.length;
-      return {
+      const breakdown = {
         pre: value.slice(0, match.index),
         highlight: value.slice(match.index, match.index + length),
         post: value.slice(match.index + length)
       };
+
+      return breakdown;
     }
   }
 };
@@ -225,7 +227,7 @@ export default {
   }
   &__text {
     display: flex;
-    white-space: normal;
+    white-space: pre;
   }
 }
 

@@ -8,11 +8,9 @@
         @click="onClick"
       >
         <span class="suggestion__text">
-          {{textPart.pre}}
-          <span class="highlight">
-          {{textPart.highlight}}
-          </span>
-          {{textPart.post}}
+          <span>{{textPart.pre}}</span>
+          <span class="highlight">{{textPart.highlight}}</span>
+          <span>{{textPart.post}}</span>
         </span>
       </Button>
     </li>

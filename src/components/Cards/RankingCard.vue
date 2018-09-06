@@ -10,7 +10,14 @@
           hide-caption
         />
         <div class="rank-card__content">
-          <div class="rank-card__text">{{character.name}}</div>
+          <div class="rank-card__text">
+            <NavLink 
+              class="rank-card__link"
+              :to="cardUrl"
+            >
+            {{character.name}}
+            </NavLink>
+          </div>
           <div class="rank-card__text">{{winsText}}</div>
           <div class="rank-card__text">{{scoreText}}</div>
         </div>
@@ -19,11 +26,15 @@
 
 <script>
 import ImageCard from './ImageCard';
+import NavLink from '@/components/NavLink';
+
+import Urls from '@/constants/urls';
 
 export default {
   name: 'RankingCard',
   components: {
-    ImageCard
+    ImageCard,
+    NavLink
   },
   props: {
     id: {
@@ -49,6 +60,9 @@ export default {
     },
     scoreText: function() {
       return this.score === null ? 'No rating' : `${this.score} rating`;
+    },
+    cardUrl: function() {
+      return Urls.build(Urls.characterView, { id: this.character.id });
     }
   }
 };
@@ -74,6 +88,12 @@ export default {
 
   &__text {
     padding: $app--padding-small 0;
+  }
+
+  &__link {
+    height: auto;
+    padding: $app--padding-small 0;
+    border: none;
   }
 }
 

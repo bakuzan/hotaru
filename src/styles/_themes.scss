@@ -16,7 +16,8 @@
     // Inherit base background
     .multi-select__dropdown-container,
     .select-box__input,
-    .dropdown__menu {
+    .dropdown__menu,
+    .autocomplete__menu {
       background-color: $base-background;
     }
     .dropdown__arrow {
@@ -40,9 +41,12 @@
     .suggestion--active {
       border-color: $primary-background;
     }
-    .versus::after {
+    .versus__icon {
       background-color: $primary-background;
       color: $primary-colour;
+    }
+    .comparison-summary {
+      border-top: 1px solid $primary-background;
     }
 
     // Navigation

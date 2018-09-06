@@ -43,6 +43,7 @@
           <template slot-scope="slotProps">
             <VersusWidget
               v-bind="slotProps.item"
+              enable-compare
               @vote="handleVote"
             />
           </template>

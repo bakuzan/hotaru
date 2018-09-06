@@ -41,10 +41,9 @@
           open-new-tab
         />
       </div>
-      <div>
-        Put summary data here!
-        - total matches
-        - c1 wins - c2 wins
+      <div class="comparison-summary">
+        <div class="comparison-summary__text">{{comparisonSummaryTotal}}</div>
+        <div class="comparison-summary__text">{{comparisonSummaryWinSplit}}</div>
       </div>
       <List 
         columns="one"
@@ -158,6 +157,16 @@ export default {
       return (
         this.characterIds.every((x) => !!x) && this.characterIds.length === 2
       );
+    },
+    comparisonSummaryTotal: function() {
+      if (!this.comparisonSummary) return;
+      const value = this.comparisonSummary.total;
+      return value === 1 ? `${value} match` : `${value} matches`;
+    },
+    comparisonSummaryWinSplit: function() {
+      if (!this.comparisonSummary) return;
+      const { leftWinner, rightWinner } = this.comparisonSummary;
+      return `${leftWinner} - ${rightWinner}`;
     }
   },
   methods: {
@@ -187,8 +196,18 @@ export default {
         })
         .then(({ data, loading }) => {
           if (!loading) {
-            this.versusHistoryComparison = data.versusHistoryComparison;
-            // TODO set the summary here
+            const { versusHistoryComparison } = data;
+            const [c1, c2] = this.characterIds;
+            this.versusHistoryComparison = versusHistoryComparison;
+            this.comparisonSummary = {
+              total: versusHistoryComparison.length,
+              leftWinner: versusHistoryComparison.filter(
+                (x) => x.winnerId === c1
+              ).length,
+              rightWinner: versusHistoryComparison.filter(
+                (x) => x.winnerId === c2
+              ).length
+            };
           }
         });
     },
@@ -248,6 +267,18 @@ export default {
   &__text {
     justify-content: center;
     align-items: center;
+  }
+}
+
+.comparison-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding-top: #{$app--padding-standard * 2};
+
+  &__text {
+    margin: $app--margin-small 0;
   }
 }
 </style>

@@ -8,11 +8,23 @@
       grow
       @vote="handleVote"
     />
+    <div v-if="!enableCompare" class="versus__icon">
+      VS
+    </div>
+    <router-link 
+      v-if="enableCompare"
+      class="versus__icon"
+      :to="compareLink"
+    >
+      VS
+    </router-link>
   </div>
 </template>
 
 <script>
 import { VersusCard } from '@/components/Cards';
+
+import Urls from '@/constants/urls';
 
 export default {
   name: 'VersusWidget',
@@ -31,6 +43,16 @@ export default {
     winnerId: {
       type: Number,
       default: null
+    },
+    enableCompare: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    compareLink: function() {
+      const ids = this.characters.map(x => x.id).join(',');
+      return `${Urls.versusComparison}?characterIds=${ids}`;
     }
   },
   methods: {
@@ -50,12 +72,14 @@ export default {
   display: flex;
   justify-content: center;
 
-  &::after {
-    content: 'VS';
+  &__icon {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 50px;
+    height: auto;
+    padding: 0;
+    border-width: 1px;
     transform: translateY(-50%) translateX(-50%);
     border-radius: 50px;
     text-align: center;
