@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     compareLink: function() {
-      const ids = this.characters.map(x => x.id).join(',');
+      const ids = this.characters.map((x) => x.id).join(',');
       return `${Urls.versusComparison}?characterIds=${ids}`;
     }
   },

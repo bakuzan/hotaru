@@ -91,6 +91,7 @@ export default {
   }
 
   &__link {
+    justify-content: flex-start;
     height: auto;
     padding: $app--padding-small 0;
     border: none;

@@ -32,6 +32,9 @@ const Urls = {
   },
   get versusComparison() {
     return `${this.base}/versus/compare`;
+  },
+  get versusCreator() {
+    return `${this.base}/versus/creator`;
   }
 };
 
