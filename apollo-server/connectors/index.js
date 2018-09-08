@@ -53,11 +53,12 @@ RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 // Only add test data if sync is forced
 // Populate rankings
 const FORCE_DB_REBUILD = Utils.castStringToBool(process.env.FORCE_DB_REBUILD);
-console.log(`Sync DB. Force: ${FORCE_DB_REBUILD}`);
+const SEED_DB = Utils.castStringToBool(process.env.SEED_DB);
+
 db.sync({ force: FORCE_DB_REBUILD })
   .then(() => migrate(db))
   .then(async () => {
-    if (FORCE_DB_REBUILD) {
+    if (FORCE_DB_REBUILD && SEED_DB) {
       const { series, character, tag } = db.models;
       await series.bulkCreate(TestData.series);
       await character.bulkCreate(TestData.characters);

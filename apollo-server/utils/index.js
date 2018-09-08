@@ -33,7 +33,7 @@ function roundFloat(value, exp) {
 }
 
 const castStringToBool = (val) =>
-  val === 'true' ? true : val === 'false' ? false : val;
+  val === 'true' ? true : val === 'false' ? false : !!val;
 
 module.exports = {
   enumArrayToObject,
