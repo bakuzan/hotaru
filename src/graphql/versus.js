@@ -28,6 +28,20 @@ const createDailyVersus = gql`
   }
 `;
 
+const createVersusFromRules = gql`
+  mutation createVersusFromRules($rules: VersusRules) {
+    versusFromRules(rules: $rules) {
+      id
+      characters {
+        id
+        name
+        displayImage
+      }
+      winnerId
+    }
+  }
+`;
+
 const castVote = gql`
   mutation voteForCharacter($versusId: Int!, $winnerId: Int!) {
     versusVote(versusId: $versusId, winnerId: $winnerId) {
@@ -59,6 +73,7 @@ export default {
   },
   mutation: {
     createDailyVersus,
+    createVersusFromRules,
     castVote
   }
 };

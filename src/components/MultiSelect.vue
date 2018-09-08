@@ -185,8 +185,8 @@ $full-size-minus-padding: calc(100% - 10px);
     padding: $app--padding-standard;
     margin: $app--margin-standard 0;
     width: 100%;
-    z-index: map-get($z-index, above-siblings);
     list-style-type: none;
+    z-index: map-get($z-index, above-siblings);
   }
 
   &__separator {
@@ -201,6 +201,7 @@ $full-size-minus-padding: calc(100% - 10px);
     display: none;
     width: $full-size-minus-padding;
     @extend %standard-shadow;
+    z-index: map-get($z-index, above-siblings);
 
     &--is-open {
       display: flex;

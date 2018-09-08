@@ -54,5 +54,8 @@ module.exports = {
     return Versus.update({ winnerId }, { where: { id: versusId } }).then(() =>
       Versus.findById(versusId)
     );
+  },
+  versusFromRules(_, { rules }) {
+    console.log('create versus', rules);
   }
 };

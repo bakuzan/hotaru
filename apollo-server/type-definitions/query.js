@@ -35,6 +35,7 @@ const Mutation = gql`
 
     versusCreateDaily: [Versus]
     versusVote(versusId: Int!, winnerId: Int!): Versus
+    versusFromRules(rules: VersusRules): Versus
 
     populateRankings: RankingPopulateResponse
   }

@@ -9,4 +9,12 @@ module.exports = gql`
     winnerId: Int
     updatedAt: String
   }
+  input VersusRules {
+    genders: GenderType
+    isIncludeOnlyGender: Boolean
+    isIncludeOnlySeries: Boolean
+    isIncludeOnlySource: Boolean
+    series: [Int]
+    sources: [SourceType]
+  }
 `;
