@@ -56,6 +56,60 @@ module.exports = {
     );
   },
   versusFromRules(_, { rules }) {
-    console.log('create versus', rules);
+    const {
+      isIncludeOnlyGender,
+      isIncludeOnlySource,
+      isIncludeOnlySeries
+    } = rules;
+
+    const genderOp = Utils.resolveInOp(isIncludeOnlyGender);
+    const sourceOp = Utils.resolveInOp(isIncludeOnlySource);
+    const seriesOp = Utils.resolveInOp(isIncludeOnlySeries);
+
+    const genderRule = {
+      [genderOp]: rules.genders
+    };
+    const sourceRule = {
+      [sourceOp]: rules.sources
+    };
+    const seriesRule = {
+      [seriesOp]: rules.series
+    };
+
+    return context.transaction(async (transaction) => {
+      const randomCharacters = await Character.findAll(
+        {
+          where: {
+            gender: genderRule,
+            seriesId: seriesRule
+          },
+          order: context.literal('RANDOM()'),
+          limit: 2
+        },
+        {
+          transaction,
+          include: [
+            {
+              model: Series,
+              where: { source: sourceRule }
+            }
+          ]
+        }
+      );
+
+      if (randomCharacters.length < 2) {
+        throw Error('Unable to create any character pairs.');
+      }
+
+      const singleVersus = await Versus.create(
+        { type: 'Single' },
+        {
+          transaction
+        }
+      );
+
+      await singleVersus.setCharacters(characters, { transaction });
+      return singleVersus.reload();
+    });
   }
 };

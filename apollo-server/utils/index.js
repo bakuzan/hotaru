@@ -1,3 +1,5 @@
+const Op = require('sequelize').Op;
+
 const enumArrayToObject = (arr) =>
   arr.slice(0).reduce((p, c) => ({ ...p, [c]: c }), {});
 
@@ -35,11 +37,14 @@ function roundFloat(value, exp) {
 const castStringToBool = (val) =>
   val === 'true' ? true : val === 'false' ? false : !!val;
 
+const resolveInOp = (b) => (b ? Op.in : Op.notIn);
+
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
   separateArrIntoNewAndExisting,
   chunk,
   roundFloat,
-  castStringToBool
+  castStringToBool,
+  resolveInOp
 };

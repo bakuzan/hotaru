@@ -33,5 +33,15 @@ module.exports = {
       type: context.QueryTypes.SELECT,
       replacements: { c1, c2 }
     });
+  },
+  versusSinglesNotWon() {
+    return Versus.findAll({
+      where: {
+        type: 'Single',
+        winnerId: {
+          [Op.eq]: null
+        }
+      }
+    });
   }
 };

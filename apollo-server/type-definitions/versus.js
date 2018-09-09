@@ -10,7 +10,7 @@ module.exports = gql`
     updatedAt: String
   }
   input VersusRules {
-    genders: GenderType
+    genders: [GenderType]
     isIncludeOnlyGender: Boolean
     isIncludeOnlySeries: Boolean
     isIncludeOnlySource: Boolean
