@@ -24,3 +24,12 @@ export const createDummyCharacterCompare = () => {
     ranking: {}
   };
 };
+
+export const versusCreatorDefaultRules = () => ({
+  genders: [],
+  series: [],
+  sources: [],
+  isIncludeOnlyGender: false,
+  isIncludeOnlySeries: false,
+  isIncludeOnlySource: false
+});

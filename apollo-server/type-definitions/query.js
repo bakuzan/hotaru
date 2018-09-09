@@ -15,6 +15,7 @@ const Query = gql`
 
     versusDailyActive: [Versus]
     versusHistoryComparison(characterIds: [Int]): [Versus]
+    versusSinglesNotWon: [Versus]
 
     rankingsTopTen: [Ranking]
   }

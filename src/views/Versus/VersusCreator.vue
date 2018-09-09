@@ -105,6 +105,7 @@ import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import List from '@/components/List';
 import Tickbox from '@/components/Tickbox';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import VersusWidget from '@/components/VersusWidget';
 
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
@@ -112,6 +113,7 @@ import GenderType from '@/constants/gender-type';
 import SourceType from '@/constants/source-type';
 import { Query, Mutation } from '@/graphql';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import { versusCreatorDefaultRules } from '@/utils/models';
 
 export default {
   name: 'VersusCreator',
@@ -121,7 +123,8 @@ export default {
     Tickbox,
     List,
     Button,
-    LoadingBouncer
+    LoadingBouncer,
+    VersusWidget
   },
   data: function() {
     return {
@@ -131,14 +134,7 @@ export default {
       seriesFilter: '',
       series: [],
       versus: null,
-      rules: {
-        genders: [],
-        series: [],
-        sources: [],
-        isIncludeOnlyGender: false,
-        isIncludeOnlySeries: false,
-        isIncludeOnlySource: false
-      }
+      rules: versusCreatorDefaultRules()
     };
   },
   apollo: {
@@ -155,7 +151,7 @@ export default {
   },
   computed: {
     showButtons: function() {
-      return true;
+      return !this.versus || this.versus.winnerId;
     },
     mappedGenders: function() {
       return mapEnumToSelectBoxOptions(GenderType);
@@ -163,6 +159,19 @@ export default {
     mappedSources: function() {
       return mapEnumToSelectBoxOptions(SourceType);
     }
+  },
+  created() {
+    this.$apollo
+      .query({
+        query: Query.getVersusSingles
+      })
+      .then(({ data }) => {
+        const { versusSinglesNotWon } = data;
+        if (!versusSinglesNotWon || !versusSinglesNotWon.length) return null;
+
+        const [singleVersus] = versusSinglesNotWon;
+        this.versus = singleVersus;
+      });
   },
   methods: {
     includeExcludeText: function(value) {
@@ -185,18 +194,26 @@ export default {
       ];
     },
     submit: function() {
+      this.versus = null;
       this.mutationLoading = true;
-      const { series, ...passing } = this.rules;
-      const rules = { ...passing, series: series.map((x) => x.id) };
+      const { series, genders, sources, ...passing } = this.rules;
+      const rules = {
+        ...passing,
+        genders: [...genders],
+        sources: [...sources],
+        series: series.map((x) => x.id)
+      };
       console.log('submit!', rules);
       this.$apollo
         .mutate({
           mutation: Mutation.createVersusFromRules,
           variables: { rules }
         })
-        .then((data) => {
+        .then(({ data }) => {
+          const { versusFromRules } = data;
+
           this.mutationLoading = false;
-          this.versus = data.versusFromRules;
+          this.versus = versusFromRules ? versusFromRules : null;
         });
     },
     handleVote: function(versusId, winnerId) {
@@ -208,11 +225,12 @@ export default {
           variables: { versusId, winnerId }
         })
         .then(() => {
-          this.versus = null;
           this.mutationLoading = false;
+          this.versus = { ...this.versus, winnerId };
+          this.rules = versusCreatorDefaultRules();
         })
         .catch((error) => {
-          console.log('failed to create', error);
+          console.log('failed to vote', error);
           this.mutationLoading = false;
         });
     }
@@ -224,6 +242,8 @@ export default {
 @import '../../styles/_variables';
 
 .versus-creator {
+  flex-direction: column;
+
   &__rules {
     display: flex;
     flex: 1;

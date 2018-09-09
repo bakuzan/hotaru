@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Versus, Character } = require('../../connectors');
+const { db: context, Versus, Character, Series } = require('../../connectors');
 const Constants = require('../../constants');
 const Utils = require('../../utils');
 
@@ -81,19 +81,15 @@ module.exports = {
         {
           where: {
             gender: genderRule,
-            seriesId: seriesRule
+            'series.id': seriesRule,
+            'series.source': sourceRule
           },
           order: context.literal('RANDOM()'),
           limit: 2
         },
         {
           transaction,
-          include: [
-            {
-              model: Series,
-              where: { source: sourceRule }
-            }
-          ]
+          include: [Series]
         }
       );
 
@@ -101,15 +97,15 @@ module.exports = {
         throw Error('Unable to create any character pairs.');
       }
 
-      const singleVersus = await Versus.create(
+      return Versus.create(
         { type: 'Single' },
         {
           transaction
         }
-      );
-
-      await singleVersus.setCharacters(characters, { transaction });
-      return singleVersus.reload();
+      ).then(async (singleVersus) => {
+        await singleVersus.setCharacters(randomCharacters, { transaction });
+        return singleVersus.reload({ transaction });
+      });
     });
   }
 };

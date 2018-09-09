@@ -66,10 +66,25 @@ const getVersusHistoryComparison = gql`
   }
 `;
 
+const getVersusSingles = gql`
+  query versusSinglesNotWon {
+    versusSinglesNotWon {
+      id
+      characters {
+        id
+        name
+        displayImage
+      }
+      winnerId
+    }
+  }
+`;
+
 export default {
   query: {
     getActiveDailyVersus,
-    getVersusHistoryComparison
+    getVersusHistoryComparison,
+    getVersusSingles
   },
   mutation: {
     createDailyVersus,
