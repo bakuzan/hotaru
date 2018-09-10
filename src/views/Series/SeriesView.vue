@@ -251,6 +251,7 @@ export default {
     onSelectCharacter: function(characterId) {
       const character = this.characters.find((x) => x.id === characterId);
       this.editSeries.characters = [...this.editSeries.characters, character];
+      this.characterFilter = '';
     },
     onRemoveCharacter: function(characterId) {
       this.editSeries.characters = [

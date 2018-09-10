@@ -39,14 +39,6 @@ const castStringToBool = (val) =>
 
 const resolveInOp = (b) => (b ? Op.in : Op.notIn);
 
-const allowNoRecordForExclusions = (rule, isInclude) => {
-  return isInclude
-    ? { ...rule }
-    : {
-        [Op.or]: [{ seriesId: { [Op.eq]: null } }, { ...rule }]
-      };
-};
-
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
@@ -54,6 +46,5 @@ module.exports = {
   chunk,
   roundFloat,
   castStringToBool,
-  resolveInOp,
-  allowNoRecordForExclusions
+  resolveInOp
 };
