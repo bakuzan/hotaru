@@ -11,11 +11,13 @@
             :options="mappedGenders"
             @update="onInput"
           />
-          <Tickbox
+          <TickboxOnOff
+            id="isIncludeOnlyGender"
             name="isIncludeOnlyGender"
-            :text="includeExcludeText(rules.isIncludeOnlyGender)"
+            :text="onOffTextOptions"
             :checked="rules.isIncludeOnlyGender"
             @change="onInput"
+            align-left
           />
         </div>
         <div class="versus-creator__group">
@@ -27,11 +29,13 @@
             :options="mappedSources"
             @update="onInput"
           />
-          <Tickbox
+          <TickboxOnOff
+            id="isIncludeOnlySource"
             name="isIncludeOnlySource"
-            :text="includeExcludeText(rules.isIncludeOnlySource)"
+            :text="onOffTextOptions"
             :checked="rules.isIncludeOnlySource"
             @change="onInput"
+            align-left
           />
         </div>
         <div class="versus-creator__group">
@@ -47,11 +51,13 @@
               @on-select="onSelectSeries"
               disable-local-filter
             />
-            <Tickbox
+            <TickboxOnOff
+              id="isIncludeOnlySeries"
               name="isIncludeOnlySeries"
-              :text="includeExcludeText(rules.isIncludeOnlySeries)"
+              :text="onOffTextOptions"
               :checked="rules.isIncludeOnlySeries"
               @change="onInput"
+              align-left
             />
           </div>
           <List
@@ -103,7 +109,7 @@ import { Button } from '@/components/Buttons';
 import MultiSelect from '@/components/MultiSelect';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import List from '@/components/List';
-import Tickbox from '@/components/Tickbox';
+import TickboxOnOff from '@/components/TickboxOnOff';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import VersusWidget from '@/components/VersusWidget';
 
@@ -120,7 +126,7 @@ export default {
   components: {
     MultiSelect,
     InputBoxAutocomplete,
-    Tickbox,
+    TickboxOnOff,
     List,
     Button,
     LoadingBouncer,
@@ -131,6 +137,10 @@ export default {
       mutationLoading: false,
       removeIcon: Icons.cross,
       portalTarget: Strings.portal.actions,
+      onOffTextOptions: {
+        on: 'Include',
+        off: 'Exclude'
+      },
       seriesFilter: '',
       series: [],
       versus: null,
@@ -174,9 +184,6 @@ export default {
       });
   },
   methods: {
-    includeExcludeText: function(value) {
-      return value ? 'include' : 'exclude';
-    },
     onInput: function(value, name) {
       this.rules[name] = value;
     },

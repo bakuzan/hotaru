@@ -16,7 +16,6 @@ import classNames from 'classnames';
 export default {
   name: 'Button',
   props: {
-    id: String,
     className: String,
     type: {
       type: String,
