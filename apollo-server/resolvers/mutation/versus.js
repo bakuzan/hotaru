@@ -64,36 +64,29 @@ module.exports = {
     const sourceOp = Utils.resolveInOp(isIncludeOnlySource);
     const seriesOp = Utils.resolveInOp(isIncludeOnlySeries);
 
-    const genderRule = {
-      [genderOp]: rules.genders
-    };
-
-    const sourceRule = {
-      source: context.where(context.col('series.source'), {
-        [sourceOp]: rules.sources
-      })
-    };
-    const resolvedSourceRule = isIncludeOnlySource
-      ? { ...sourceRule }
-      : {
-          [Op.or]: [{ seriesId: { [Op.eq]: null } }, sourceRule]
-        };
-
-    const seriesRule = {
-      seriesId: { [seriesOp]: rules.series }
-    };
-    const resolvedSeriesRule = isIncludeOnlySeries
-      ? { ...seriesRule }
-      : {
-          [Op.or]: [{ seriesId: { [Op.eq]: null } }, seriesRule]
-        };
+    const seriesRule = Utils.allowNoRecordForExclusions(
+      {
+        seriesId: { [seriesOp]: rules.series }
+      },
+      isIncludeOnlySeries
+    );
+    const sourceRule = Utils.allowNoRecordForExclusions(
+      {
+        source: context.where(context.col('series.source'), {
+          [sourceOp]: rules.sources
+        })
+      },
+      isIncludeOnlySource
+    );
 
     return context.transaction(async (transaction) => {
       const randomCharacters = await Character.findAll({
         where: {
-          gender: genderRule,
-          ...resolvedSeriesRule,
-          ...resolvedSourceRule
+          gender: {
+            [genderOp]: rules.genders
+          },
+          ...seriesRule,
+          ...sourceRule
         },
         order: context.literal('RANDOM()'),
         limit: 2,

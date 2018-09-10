@@ -221,6 +221,10 @@ export default {
 
           this.mutationLoading = false;
           this.versus = versusFromRules ? versusFromRules : null;
+        })
+        .catch((error) => {
+          console.log('failed to create', error);
+          this.mutationLoading = false;
         });
     },
     handleVote: function(versusId, winnerId) {
