@@ -9,13 +9,11 @@ module.exports = {
     const createdAt = Date.now() - 1000;
 
     return context.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll(
-        {
-          order: context.literal('RANDOM()'),
-          limit: Constants.dailyVersusCharacterCount
-        },
-        { transaction }
-      );
+      const randomCharacters = await Character.findAll({
+        order: context.literal('RANDOM()'),
+        limit: Constants.dailyVersusCharacterCount,
+        transaction
+      });
 
       const versusCharacters = Utils.chunk(randomCharacters, 2).filter(
         (x) => x.length === 2
@@ -69,29 +67,39 @@ module.exports = {
     const genderRule = {
       [genderOp]: rules.genders
     };
+
     const sourceRule = {
-      [sourceOp]: rules.sources
+      source: context.where(context.col('series.source'), {
+        [sourceOp]: rules.sources
+      })
     };
+    const resolvedSourceRule = isIncludeOnlySource
+      ? { ...sourceRule }
+      : {
+          [Op.or]: [{ seriesId: { [Op.eq]: null } }, sourceRule]
+        };
+
     const seriesRule = {
-      [seriesOp]: rules.series
+      seriesId: { [seriesOp]: rules.series }
     };
+    const resolvedSeriesRule = isIncludeOnlySeries
+      ? { ...seriesRule }
+      : {
+          [Op.or]: [{ seriesId: { [Op.eq]: null } }, seriesRule]
+        };
 
     return context.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll(
-        {
-          where: {
-            gender: genderRule,
-            'series.id': seriesRule,
-            'series.source': sourceRule
-          },
-          order: context.literal('RANDOM()'),
-          limit: 2
+      const randomCharacters = await Character.findAll({
+        where: {
+          gender: genderRule,
+          ...resolvedSeriesRule,
+          ...resolvedSourceRule
         },
-        {
-          transaction,
-          include: [Series]
-        }
-      );
+        order: context.literal('RANDOM()'),
+        limit: 2,
+        include: [Series],
+        transaction
+      });
 
       if (randomCharacters.length < 2) {
         throw Error('Unable to create any character pairs.');
