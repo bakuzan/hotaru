@@ -11,8 +11,11 @@ const SourceType = Object.freeze([
 
 const VersusType = Object.freeze(['Daily', 'Single', 'List', 'Bracket']);
 
+const HTRTemplateType = Object.freeze(['Bracket', 'List']);
+
 module.exports = {
   GenderType,
   SourceType,
-  VersusType
+  VersusType,
+  HTRTemplateType
 };
