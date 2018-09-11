@@ -5,12 +5,14 @@ const character = require('./character');
 const series = require('./series');
 const versus = require('./versus');
 const image = require('./image');
+const htrtemplate = require('./htr-template');
 
 module.exports = {
   ...character,
   ...series,
   ...versus,
   ...image,
+  ...htrtemplate,
   tagCreate(_, { tag }) {
     return Tag.create({ ...tag }).then((tag) => tag);
   },

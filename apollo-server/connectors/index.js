@@ -21,6 +21,8 @@ const ImageModel = db.import('./image');
 const VersusModel = db.import('./versus');
 const RankingModel = db.import('./ranking');
 const CharacterOfTheDayModel = db.import('./character-of-the-day');
+const HTRTemplateModel = db.import('./htr-template');
+const HTRInstanceModel = db.import('./htr-instance');
 
 // Create relationships
 SeriesModel.Character = SeriesModel.hasMany(CharacterModel);
@@ -54,6 +56,27 @@ CharacterModel.CotD = CharacterModel.hasMany(CharacterOfTheDayModel);
 CharacterOfTheDayModel.Character = CharacterOfTheDayModel.belongsTo(
   CharacterModel
 );
+
+HTRTemplateModel.Instance = HTRTemplateModel.hasMany(HTRInstanceModel);
+HTRInstanceModel.Template = HTRInstanceModel.belongsTo(HTRTemplateModel);
+
+HTRInstanceModel.Character = HTRInstanceModel.belongsToMany(CharacterModel, {
+  through: 'HTRInstanceCharacter',
+  foreignKey: 'htrInstanceId'
+});
+CharacterModel.HTRInstance = CharacterModel.belongsToMany(HTRInstanceModel, {
+  through: 'HTRInstanceCharacter',
+  foreignKey: 'characterId'
+});
+
+HTRInstanceModel.Versus = HTRInstanceModel.belongsToMany(VersusModel, {
+  through: 'HTRInstanceVersus',
+  foreignKey: 'htrInstanceId'
+});
+VersusModel.HTRInstance = VersusModel.belongsToMany(HTRInstanceModel, {
+  through: 'HTRInstanceVersus',
+  foreignKey: 'versusId'
+});
 
 // Sync and Migrate db
 // Only add test data if sync is forced
@@ -89,6 +112,8 @@ const Image = db.models.image;
 const Versus = db.models.versus;
 const Ranking = db.models.ranking;
 const CharacterOfTheDay = db.models.characteroftheday;
+const HTRTemplate = db.models.htrtemplate;
+const HTRInstance = db.models.htrinstance;
 
 module.exports = {
   db,
@@ -98,5 +123,7 @@ module.exports = {
   Image,
   Versus,
   Ranking,
-  CharacterOfTheDay
+  CharacterOfTheDay,
+  HTRTemplate,
+  HTRInstance
 };

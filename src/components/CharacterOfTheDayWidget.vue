@@ -49,6 +49,8 @@ export default {
 @import '../styles/_variables';
 
 .character-of-the-day {
+  position: relative;
+
   &__header {
     display: flex;
     flex-direction: column;
