@@ -78,6 +78,12 @@ main {
 
 .padded {
   padding: $app--padding-standard * 2;
+  &--standard {
+    padding: $app--padding-standard;
+  }
+  &--small {
+    padding: $app--padding-small;
+  }
 }
 
 .button-group {

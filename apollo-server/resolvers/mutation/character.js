@@ -1,5 +1,11 @@
 const Op = require('sequelize').Op;
-const { db: context, Character, Tag, Image } = require('../../connectors');
+const {
+  db: context,
+  Character,
+  Tag,
+  Image,
+  CharacterOfTheDay
+} = require('../../connectors');
 
 const Utils = require('../../utils');
 
@@ -76,6 +82,31 @@ module.exports = {
           );
         })
         .then(() => character.reload());
+    });
+  },
+  characterOfTheDay(_, { onDate }) {
+    const todayMidnight = new Date(onDate || new Date());
+    todayMidnight.setUTCHours(0, 0, 0, 0);
+
+    return context.transaction(async (transaction) => {
+      const cotd = await CharacterOfTheDay.findOne({
+        where: { createdAt: { [Op.gte]: todayMidnight } },
+        transaction
+      });
+
+      if (cotd) return cotd.getCharacter({ transaction });
+
+      return Character.findOne({
+        order: context.literal('RANDOM()'),
+        transaction
+      })
+        .then((character) =>
+          CharacterOfTheDay.create(
+            { characterId: character.id },
+            { transaction }
+          )
+        )
+        .then((newCotd) => newCotd.getCharacter({ transaction }));
     });
   }
 };

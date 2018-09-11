@@ -110,17 +110,37 @@ const characterCore = gql`
   }
 `;
 
+const getRandomCharacterId = gql`
+  query getRandomCharacterId {
+    characterRandom {
+      id
+    }
+  }
+`;
+
+const getCharacterOfTheDay = gql`
+  mutation getCharacterOfTheDay($onDate: String) {
+    characterOfTheDay(onDate: $onDate) {
+      id
+      name
+      displayImage
+    }
+  }
+`;
+
 export default {
   query: {
     getCharacters,
     getCharactersForVersusCompare,
     getCharactersWithoutSeries,
     getCharacterById,
-    getCharactersByIds
+    getCharactersByIds,
+    getRandomCharacterId
   },
   mutation: {
     updateCharacter,
-    createCharacter
+    createCharacter,
+    getCharacterOfTheDay
   },
   fragment: {
     characterCore

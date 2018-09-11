@@ -20,6 +20,7 @@ const TagModel = db.import('./tag');
 const ImageModel = db.import('./image');
 const VersusModel = db.import('./versus');
 const RankingModel = db.import('./ranking');
+const CharacterOfTheDayModel = db.import('./character-of-the-day');
 
 // Create relationships
 SeriesModel.Character = SeriesModel.hasMany(CharacterModel);
@@ -48,6 +49,11 @@ VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
 
 CharacterModel.Ranking = CharacterModel.hasOne(RankingModel);
 RankingModel.Character = RankingModel.belongsTo(CharacterModel);
+
+CharacterModel.CotD = CharacterModel.hasMany(CharacterOfTheDayModel);
+CharacterOfTheDayModel.Character = CharacterOfTheDayModel.belongsTo(
+  CharacterModel
+);
 
 // Sync and Migrate db
 // Only add test data if sync is forced
@@ -82,6 +88,7 @@ const Tag = db.models.tag;
 const Image = db.models.image;
 const Versus = db.models.versus;
 const Ranking = db.models.ranking;
+const CharacterOfTheDay = db.models.characteroftheday;
 
 module.exports = {
   db,
@@ -90,5 +97,6 @@ module.exports = {
   Tag,
   Image,
   Versus,
-  Ranking
+  Ranking,
+  CharacterOfTheDay
 };

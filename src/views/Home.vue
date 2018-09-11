@@ -50,6 +50,17 @@
         </List>
       </section>
     </div>
+    <div :class="columnClasses">
+      <CharacterOfTheDayWidget />
+      <div class="center-contents padded padded--standard">
+        <Button
+          theme="primary"
+          @click="onRandom"
+        >
+        View Random Character
+        </Button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,7 +71,9 @@ import VersusWidget from '@/components/VersusWidget';
 import { RankingCard } from '@/components/Cards';
 import { Button } from '@/components/Buttons';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import CharacterOfTheDayWidget from '@/components/CharacterOfTheDayWidget';
 
+import Urls from '@/constants/urls';
 import { Query, Mutation } from '@/graphql';
 import { mapVersusToVotedVersus } from '@/utils/mappers';
 
@@ -70,17 +83,20 @@ export default {
     List,
     VersusWidget,
     RankingCard,
+    CharacterOfTheDayWidget,
     Button,
     LoadingBouncer
   },
   data: function() {
     return {
+      cardUrl: Urls.characterView,
       columnClasses: classNames(
         'page-view__left-column page-view__left-column--grow htr-column'
       ),
       blockCreateVersus: true,
       versusDailyActive: [],
-      rankingsTopTen: []
+      rankingsTopTen: [],
+      characterOfTheDay: {}
     };
   },
   apollo: {
@@ -110,6 +126,20 @@ export default {
     }
   },
   methods: {
+    onRandom: function() {
+      this.$apollo
+        .query({
+          query: Query.getRandomCharacterId
+        })
+        .then(({ data }) => {
+          this.$router.push(
+            Urls.build(Urls.characterView, { id: data.characterRandom.id })
+          );
+        })
+        .catch((error) => {
+          console.log('get random failed', error);
+        });
+    },
     handleCreateDaily: function() {
       if (!this.allowCreateCall) return;
       this.blockCreateVersus = true;
@@ -175,11 +205,6 @@ export default {
   &__title {
     margin: $app--margin-standard;
   }
-}
-
-// use while dashboard is sparse
-.top-ten-list {
-  margin-left: 30%;
 }
 
 .daily-verus__create {

@@ -7,6 +7,7 @@ const Query = gql`
     characterById(id: Int!): Character
     characterImages(characterId: Int!): [Image]
     charactersByIds(characterIds: [Int]): [Character]
+    characterRandom: Character
 
     series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series
@@ -25,6 +26,7 @@ const Mutation = gql`
   type Mutation {
     characterCreate(character: CharacterInput): Character
     characterUpdate(character: CharacterInput): Character
+    characterOfTheDay(onDate: String): Character
 
     seriesCreate(series: SeriesInput): Series
     seriesUpdate(series: SeriesInput): Series

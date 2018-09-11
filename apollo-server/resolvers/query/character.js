@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Character } = require('../../connectors');
+const { db: context, Character } = require('../../connectors');
 
 module.exports = {
   characters(_, { search = '', genders }) {
@@ -52,5 +52,10 @@ module.exports = {
     return Character.findById(characterId).then((character) =>
       character.getImages({ where: args })
     );
+  },
+  characterRandom() {
+    return Character.findOne({
+      order: context.literal('RANDOM()')
+    });
   }
 };
