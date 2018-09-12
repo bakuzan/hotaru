@@ -36,11 +36,17 @@ const Urls = {
   get versusCreator() {
     return `${this.base}/versus/creator`;
   },
+  get htrTemplateList() {
+    return `${this.base}/templates`;
+  },
   get htrTemplateCreator() {
-    return `${this.base}/template/creator`;
+    return `${this.htrTemplateList}/creator`;
   },
   get htrTemplateEditor() {
     return `${this.htrTemplateCreator}/:id`;
+  },
+  get htrInstanceList() {
+    return `${this.base}/instances`;
   }
 };
 

@@ -20,7 +20,6 @@ const rules = {
   // includes only!
   series: [],
   sources: [],
-  genders: [],
-  order: [['attr', 'direction']]
+  genders: []
 };
 console.log(rules);

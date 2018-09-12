@@ -38,9 +38,15 @@ export default {
         { id: 5, to: Urls.versusCreator, title: 'Versus Creator', text: 'VCr' },
         {
           id: 6,
-          to: Urls.htrTemplateCreator,
-          title: 'Template Creator',
+          to: Urls.htrTemplateList,
+          title: 'Templates',
           text: 'T'
+        },
+        {
+          id: 7,
+          to: Urls.htrInstanceList,
+          title: 'Lists and Brackets',
+          text: 'LB'
         }
       ]
     };

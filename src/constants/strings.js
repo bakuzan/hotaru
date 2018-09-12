@@ -30,8 +30,10 @@ export default Object.freeze({
     seriesCreate: 'series create',
     versusComparison: 'versus comparison',
     versusCreator: 'versus creator',
+    htrTemplateList: 'htr template list',
     htrTemplateCreator: 'htr template creator',
-    htrTemplateEditor: 'htr template editor'
+    htrTemplateEditor: 'htr template editor',
+    htrInstanceList: 'htr instance list'
   },
   slot: {
     viewBlock: 'view-block__read-only',
