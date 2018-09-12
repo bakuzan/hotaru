@@ -11,7 +11,6 @@ module.exports = gql`
     genders: [GenderType]
     series: [Int]
     sources: [SourceType]
-    order: [[String]]
   }
   input HTRTemplateInput {
     name: String
@@ -26,7 +25,6 @@ module.exports = gql`
     genders: [GenderType]
     series: [Int]
     sources: [SourceType]
-    order: [[String]]
   }
 
   type HTRInstance {
@@ -43,6 +41,7 @@ module.exports = gql`
     rules: HTRTemplateRules
     limit: Int
     status: BracketStatus
+    order: [[String]]
   }
   input HTRInstanceInput {
     name: String
@@ -53,5 +52,6 @@ module.exports = gql`
     rules: HTRTemplateRulesInput
     limit: Int
     status: BracketStatus
+    order: [[String]]
   }
 `;

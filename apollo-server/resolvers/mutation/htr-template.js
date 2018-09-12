@@ -1,13 +1,13 @@
-const { HTRInstance } = require('../../connectors');
+const { HTRTemplate } = require('../../connectors');
 
 module.exports = {
   htrTemplateCreate(_, { template }) {
-    return HTRInstance.create({ ...template });
+    return HTRTemplate.create({ ...template });
   },
   htrTemplateUpdate(_, { template }) {
     const { id, ...args } = template;
-    return HTRInstance.update({ ...args }, { where: { id } }).then(() =>
-      HTRInstance.findById(id)
+    return HTRTemplate.update({ ...args }, { where: { id } }).then(() =>
+      HTRTemplate.findById(id)
     );
   }
 };

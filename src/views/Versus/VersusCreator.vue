@@ -65,15 +65,10 @@
             :items="rules.series"
           >
             <template slot-scope="slotProps">
-              <div class="series-item">
-                {{slotProps.item.name}}
-                <Button
-                  className="series-item__remove"
-                  size="small"
-                  :icon="removeIcon"
-                  @click="onRemoveSeries(slotProps.item.id)"
-                />
-              </div>
+              <SeriesCard
+                v-bind="slotProps.item"
+                @remove="onRemoveSeries"
+              />
             </template>
           </List>
         </div>
@@ -112,6 +107,7 @@ import List from '@/components/List';
 import TickboxOnOff from '@/components/TickboxOnOff';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import VersusWidget from '@/components/VersusWidget';
+import { SeriesCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
@@ -130,7 +126,8 @@ export default {
     List,
     Button,
     LoadingBouncer,
-    VersusWidget
+    VersusWidget,
+    SeriesCard
   },
   data: function() {
     return {
@@ -264,13 +261,6 @@ export default {
     flex-direction: column;
     flex: 1;
   }
-}
-
-.series-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
 }
 </style>
 

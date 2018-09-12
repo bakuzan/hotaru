@@ -4,7 +4,7 @@
       <LoadingBouncer v-show="isLoading" />
 
       <div class="template-creator__group">
-          <h4 class="padded--standard">Template details</h4>
+          <h4 class="tempalte-creator__title">Details</h4>
         <InputBox
             id="name"
             name="name"
@@ -13,32 +13,32 @@
             @input="onInput"
         />
         <SelectBox
-            id="source"
-            name="source"
-            text="Source"
-            :options="mappedSources"
-            :value="editTemplate.source"
+            id="type"
+            name="type"
+            text="Type"
+            :options="mappedTemplateTypes"
+            :value="editTemplate.type"
             @on-select="onInput"
             required
         />
       </div>
         <div class="template-creator__group">
-            <h4 class="padded--standard">Template rules</h4>
+            <h4 class="tempalte-creator__title">Rules</h4>
             <MultiSelect 
-            id="gender"
-            name="genders"
-            label="genders"
-            :values="editTemplate.rules.genders"
-            :options="mappedGenders"
-            @update="onRulesInput"
+                id="gender"
+                name="genders"
+                label="genders"
+                :values="editTemplate.rules.genders"
+                :options="mappedGenders"
+                @update="onRulesInput"
             />
             <MultiSelect 
-            id="source"
-            name="sources"
-            label="sources"
-            :values="editTemplate.rules.sources"
-            :options="mappedSources"
-            @update="onRulesInput"
+                id="source"
+                name="sources"
+                label="sources"
+                :values="editTemplate.rules.sources"
+                :options="mappedSources"
+                @update="onRulesInput"
             />
             <div>
             <InputBoxAutocomplete
@@ -57,15 +57,10 @@
                 :items="editTemplate.rules.series"
             >
                 <template slot-scope="slotProps">
-                <div class="series-item">
-                    {{slotProps.item.name}}
-                    <Button
-                    className="series-item__remove"
-                    size="small"
-                    :icon="removeIcon"
-                    @click="onRemoveSeries(slotProps.item.id)"
-                    />
-                </div>
+                  <SeriesCard
+                    v-bind="slotProps.item"
+                    @remove="onRemoveSeries"
+                  />
                 </template>
             </List>
             </div>
@@ -100,6 +95,7 @@ import MultiSelect from '@/components/MultiSelect';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import List from '@/components/List';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import { SeriesCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -125,7 +121,8 @@ export default {
     InputBoxAutocomplete,
     List,
     Button,
-    LoadingBouncer
+    LoadingBouncer,
+    SeriesCard
   },
   props: {
     isCreate: {
@@ -219,6 +216,10 @@ export default {
       this.seriesFilter = '';
       this.editTemplate = { ...this.template };
     },
+    updateData: function(data) {
+      this.template = { ...data };
+      this.editTemplate = { ...data };
+    },
     submit: function() {
       this.mutationLoading = true;
       const template = mapHTRTemplateToPost(this.editTemplate, this.isCreate);
@@ -268,14 +269,31 @@ export default {
     display: flex;
     flex-direction: column;
     flex: 1;
-    margin: 0 $app--margin-large;
+    margin: 0 {
+      right: $app--margin-large;
+      left: 0;
+    }
 
-    &:first-child {
-      margin-left: 0;
-    }
     &:last-child {
-      margin-right: 0;
+      margin: {
+        left: $app--margin-large;
+        right: 0;
+      }
     }
+
+    & > .input-box,
+    & > .select-box,
+    & > .multi-select {
+      flex: 0 1 35px;
+      width: 100%;
+    }
+    & > .multi-select {
+      flex: 0 1 45px;
+    }
+  }
+
+  &__title {
+    margin: $app--margin-standard;
   }
 }
 </style>
