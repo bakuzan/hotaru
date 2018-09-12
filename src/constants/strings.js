@@ -29,7 +29,9 @@ export default Object.freeze({
     seriesView: 'series view',
     seriesCreate: 'series create',
     versusComparison: 'versus comparison',
-    versusCreator: 'versus creator'
+    versusCreator: 'versus creator',
+    htrTemplateCreator: 'htr template creator',
+    htrTemplateEditor: 'htr template editor'
   },
   slot: {
     viewBlock: 'view-block__read-only',

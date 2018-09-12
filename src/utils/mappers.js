@@ -123,3 +123,16 @@ export const mapMutationToListStore = (item) => {
 };
 
 export const mapVersusToVotedVersus = mutationWrapper('Versus', 'versusVote');
+
+export const mapHTRTemplateToPost = (template, isCreate) => {
+  const { name, type, rules } = template;
+  const resolvedType = isCreate ? { type } : {};
+  return {
+    name,
+    ...resolvedType,
+    rules: {
+      ...rules,
+      series: rules.series.map((x) => x.id)
+    }
+  };
+};

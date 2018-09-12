@@ -4,13 +4,15 @@ import tags from './tags';
 import image from './image';
 import versus from './versus';
 import ranking from './ranking';
+import htrTemplate from './htr-template';
 
 export const Query = {
   ...characters.query,
   ...series.query,
   ...tags.query,
   ...versus.query,
-  ...ranking.query
+  ...ranking.query,
+  ...htrTemplate.query
 };
 
 export const Mutation = {
@@ -18,7 +20,8 @@ export const Mutation = {
   ...series.mutation,
   ...image.mutation,
   ...versus.mutation,
-  ...ranking.mutation
+  ...ranking.mutation,
+  ...htrTemplate.mutation
 };
 
 export const Fragment = {

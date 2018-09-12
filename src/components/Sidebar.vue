@@ -35,7 +35,13 @@ export default {
           title: 'Versus Comparison',
           text: 'VCo'
         },
-        { id: 5, to: Urls.versusCreator, title: 'Versus Creator', text: 'VCr' }
+        { id: 5, to: Urls.versusCreator, title: 'Versus Creator', text: 'VCr' },
+        {
+          id: 6,
+          to: Urls.htrTemplateCreator,
+          title: 'Template Creator',
+          text: 'T'
+        }
       ]
     };
   },

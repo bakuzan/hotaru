@@ -33,3 +33,14 @@ export const versusCreatorDefaultRules = () => ({
   isIncludeOnlySeries: false,
   isIncludeOnlySource: false
 });
+
+export const defaultHTRTemplate = () => ({
+  name: '',
+  type: null,
+  rules: {
+    genders: [],
+    series: [],
+    sources: [],
+    order: []
+  }
+});

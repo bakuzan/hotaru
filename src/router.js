@@ -71,6 +71,20 @@ export default new Router({
       name: Strings.route.versusCreator,
       component: () =>
         import(/* webpackChunkName: "versus-creator" */ './views/Versus/VersusCreator.vue')
+    },
+    {
+      path: Urls.htrTemplateCreator,
+      name: Strings.route.htrTemplateCreator,
+      component: () =>
+        import(/* webpackChunkName: "htr-template-creator" */ './views/HTRTemplates/HTRTemplateCreator.vue'),
+      props: { isCreate: true }
+    },
+    {
+      path: Urls.htrTemplateEditor,
+      name: Strings.route.htrTemplateEditor,
+      component: () =>
+        import(/* webpackChunkName: "htr-template-creator" */ './views/HTRTemplates/HTRTemplateCreator.vue'),
+      props: { isCreate: false }
     }
   ]
 });

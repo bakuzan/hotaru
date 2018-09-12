@@ -3,6 +3,10 @@
 .page-view {
   display: flex;
 
+  &--column {
+    flex-direction: column;
+  }
+
   &__image {
     max-height: 300px;
     margin: {
