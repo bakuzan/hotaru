@@ -10,6 +10,10 @@ const templateFields = gql`
       series
       sources
     }
+    rulesSeries {
+      id
+      name
+    }
   }
 `;
 

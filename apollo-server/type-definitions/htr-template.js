@@ -6,6 +6,7 @@ module.exports = gql`
     name: String
     type: HTRTemplateType
     rules: HTRTemplateRules
+    rulesSeries: [Series]
   }
   type HTRTemplateRules {
     genders: [GenderType]
@@ -18,6 +19,7 @@ module.exports = gql`
     rules: HTRTemplateRulesInput
   }
   input HTRTemplateUpdateInput {
+    id: Int
     name: String
     rules: HTRTemplateRulesInput
   }

@@ -18,6 +18,7 @@
             text="Type"
             :options="mappedTemplateTypes"
             :value="editTemplate.type"
+            :disabled="!isCreate"
             @on-select="onInput"
             required
         />
@@ -152,9 +153,14 @@ export default {
         return { id };
       },
       update(data) {
-        const template = data.htrTemplateById || defaultHTRTemplate();
-        this.editTemplate = { ...template };
-        return { ...template };
+        const { rules, rulesSeries, ...template } =
+          data.htrTemplateById || defaultHTRTemplate();
+
+        this.editTemplate = {
+          ...template,
+          rules: { ...rules, series: rulesSeries }
+        };
+        return { ...template, rules: { ...rules, series: rulesSeries } };
       }
     },
     series: {

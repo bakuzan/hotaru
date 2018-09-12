@@ -4,6 +4,7 @@ const Series = require('./series');
 const Character = require('./character');
 const Versus = require('./versus');
 const Ranking = require('./ranking');
+const HTRTemplate = require('./htr-template');
 
 module.exports = {
   Query,
@@ -11,5 +12,6 @@ module.exports = {
   Series,
   Character,
   Versus,
-  Ranking
+  Ranking,
+  HTRTemplate
 };

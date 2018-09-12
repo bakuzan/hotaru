@@ -1,6 +1,13 @@
 <template>
   <div :class="selectClasses">
-    <select :value="value" @change="handleChange" class="select-box__input" :id="id" :name="name">
+    <select 
+      class="select-box__input"
+      :id="id"
+      :name="name"
+      :value="value" 
+      :disabled="disabled"
+      @change="handleChange"
+    >
         <option v-if="allowNulls" :value="null" class="select-box__option">
           None
         </option>
@@ -36,6 +43,9 @@ export default {
     required: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean
     }
   },
   computed: {
