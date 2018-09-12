@@ -65,5 +65,8 @@ export default {
     margin: $app--margin-standard;
     box-sizing: content-box;
   }
+  &__search {
+    max-height: 45px;
+  }
 }
 </style>

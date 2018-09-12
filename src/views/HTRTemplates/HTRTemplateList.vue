@@ -6,7 +6,14 @@
       @add="onAdd"
     >
       <div :slot="typeSlotName">
-          RADIO HERE
+        <RadioButtonGroup
+          id="type"
+          name="type"
+          column
+          :value="filters.type"
+          :options="mappedTypes"
+          @change="onInput"
+        />
       </div>
     </ListFilterBar>
     <List 
@@ -29,6 +36,7 @@ import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
 import { LinkCard } from '@/components/Cards';
 import MultiSelect from '@/components/MultiSelect';
+import RadioButtonGroup from '@/components/RadioButtonGroup';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -36,7 +44,7 @@ import HTRTemplateType, {
   HTRTemplateTypes
 } from '@/constants/htr-template-type';
 import { Query } from '@/graphql';
-import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
 
 export default {
   name: 'HTRTemplateList',
@@ -44,7 +52,8 @@ export default {
     List,
     ListFilterBar,
     LinkCard,
-    MultiSelect
+    MultiSelect,
+    RadioButtonGroup
   },
   data: function() {
     return {
@@ -69,7 +78,7 @@ export default {
   },
   computed: {
     mappedTypes: function() {
-      return mapEnumToSelectBoxOptions(HTRTemplateType);
+      return mapEnumToRadioButtonGroup(HTRTemplateType);
     }
   },
   methods: {

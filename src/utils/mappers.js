@@ -18,6 +18,9 @@ export const mapEnumToSelectBoxOptions = (arr) =>
 export const mapToSelectBoxOptions = (arr) =>
   arr.map((x) => ({ value: x.id, text: x.name }));
 
+export const mapEnumToRadioButtonGroup = (arr) =>
+  arr.map((x) => ({ text: x, value: x }));
+
 export const mapCharacterToPost = (character, allTags) => {
   const {
     id,

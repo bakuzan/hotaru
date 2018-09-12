@@ -49,6 +49,8 @@ const Mutation = gql`
 
     htrTemplateCreate(template: HTRTemplateInput): HTRTemplate
     htrTemplateUpdate(template: HTRTemplateUpdateInput): HTRTemplate
+    htrInstanceCreate(instance: HTRInstanceInput): HTRInstance
+    htrInstanceUpdate(instance: HTRInstanceInput): HTRInstance
   }
 `;
 
