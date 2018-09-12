@@ -22,6 +22,8 @@ const Query = gql`
 
     htrTemplates(search: String, type: HTRTemplateType!): [HTRTemplate]
     htrTemplateById(id: Int!): HTRTemplate
+    htrInstances(search: String, type: HTRTemplateType!): [HTRInstance]
+    htrInstanceById(id: Int!): HTRInstance
   }
 `;
 
