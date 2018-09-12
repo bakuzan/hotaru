@@ -6,6 +6,7 @@ const tag = require('./tag');
 const image = require('./image');
 const versus = require('./versus');
 const ranking = require('./ranking');
+const htrtemplate = require('./htr-template');
 
 module.exports = [
   ...query,
@@ -15,5 +16,6 @@ module.exports = [
   tag,
   image,
   versus,
-  ranking
+  ranking,
+  htrtemplate
 ];

@@ -19,6 +19,9 @@ const Query = gql`
     versusSinglesNotWon: [Versus]
 
     rankingsTopTen: [Ranking]
+
+    htrTemplates(search: String, type: HTRTemplateType!): [HTRTemplate]
+    htrTemplateById(id: Int!): HTRTemplate
   }
 `;
 
@@ -41,6 +44,9 @@ const Mutation = gql`
     versusFromRules(rules: VersusRules): Versus
 
     populateRankings: RankingPopulateResponse
+
+    htrTemplateCreate(template: HTRTemplateInput): HTRTemplate
+    htrTemplateUpdate(template: HTRTemplateUpdateInput): HTRTemplate
   }
 `;
 

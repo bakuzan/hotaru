@@ -14,3 +14,13 @@ module.exports = (db, Types) => {
     }
   });
 };
+
+// Example rules structure
+const rules = {
+  // includes only!
+  series: [],
+  sources: [],
+  genders: [],
+  order: [['attr', 'direction']]
+};
+console.log(rules);

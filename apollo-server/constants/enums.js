@@ -13,9 +13,12 @@ const VersusType = Object.freeze(['Daily', 'Single', 'List', 'Bracket']);
 
 const HTRTemplateType = Object.freeze(['Bracket', 'List']);
 
+const BracketStatus = Object.freeze(['NotStarted', 'InProgress', 'Complete']);
+
 module.exports = {
   GenderType,
   SourceType,
   VersusType,
-  HTRTemplateType
+  HTRTemplateType,
+  BracketStatus
 };
