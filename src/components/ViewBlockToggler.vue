@@ -40,7 +40,7 @@ export default {
       required: false
     },
     value: {
-      type: [String, Number, Array],
+      type: [String, Number, Array, Object],
       default: null
     },
     lockEdit: {
@@ -67,6 +67,11 @@ export default {
       if (newV && newV !== oldV) {
         this.isEditing = false;
       }
+    },
+    lockEdit: function(newV, oldV) {
+      if (newV !== oldV) {
+        this.isEditing = newV;
+      }
     }
   },
   computed: {
@@ -81,7 +86,10 @@ export default {
   },
   methods: {
     onToggle: function() {
+      if (this.forceReadOnly) return;
+
       this.isEditing = !this.isEditing;
+      this.$emit('toggle');
     }
   }
 };

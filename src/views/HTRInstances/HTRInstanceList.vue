@@ -24,7 +24,7 @@
       <template slot-scope="slotProps">
         <LinkCard 
           v-bind="slotProps.item" 
-          :url-source="cardUrl" 
+          :url-source="cardUrl"
         />
       </template>
     </List>

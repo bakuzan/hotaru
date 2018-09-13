@@ -48,6 +48,7 @@ export const defaultHTRTemplate = () => ({
 export const defaultInstanceModel = () => ({
   name: '',
   description: '',
+  htrTemplate: null,
   settings: {
     limit: null,
     order: 1,

@@ -5,6 +5,17 @@ const instanceFields = gql`
     id
     name
     description
+    hrtTemplate {
+      id
+      name
+    }
+    settings {
+      limit
+      rules
+      order
+      status
+      winnerId
+    }
   }
 `;
 
@@ -22,6 +33,20 @@ const getHTRInstanceById = gql`
   query getHTRInstanceById($id: Int!) {
     htrInstanceById(id: $id) {
       ...InstanceFields
+      characters {
+        id
+        name
+        displayImage
+      }
+      versus {
+        id
+        characters {
+          id
+          name
+          displayImage
+        }
+        winnerId
+      }
     }
   }
   ${instanceFields}

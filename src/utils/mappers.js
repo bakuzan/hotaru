@@ -142,3 +142,37 @@ export const mapHTRTemplateToPost = (template, isCreate) => {
     }
   };
 };
+
+export const mapHTRInstanceToPost = (instance, isCreate) => {
+  const { id, name, description, htrTemplate, characters, settings } = instance;
+  const { limit, order, rules, status, winnerId } = settings;
+  const resolvedLimit = isCreate ? { limit: Number(limit) } : {};
+  const resolvedRules = isCreate ? { rules: htrTemplate.rules } : { rules };
+  const resolvedCharacters =
+    characters && characters.length ? characters.map((x) => x.id) : [];
+
+  return {
+    id,
+    name,
+    description,
+    htrTemplateId: htrTemplate.id,
+    characters: resolvedCharacters,
+    settings: {
+      ...resolvedLimit,
+      ...resolvedRules,
+      order: Number(order),
+      status,
+      winnerId
+    }
+  };
+};
+
+export const mapHTRInstanceToStore = (instance) => ({
+  __typename: 'HTRInstance',
+  ...instance
+});
+
+export const mapHTRInstanceToOptimisticUpdate = (instance) => {
+  const mappedObj = { ...instance };
+  return mutationWrapper('HTRInstance', 'htrInstanceUpdate')(mappedObj);
+};

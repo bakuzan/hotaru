@@ -2,7 +2,7 @@
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
       <LoadingBouncer v-show="isLoading" />
-      <div class="page-view__content view-info">
+      <div class="page-view__left-column">
         <ViewBlockToggler
           id="name"
           label="Name"
@@ -19,48 +19,11 @@
           />
         </ViewBlockToggler>
         <ViewBlockToggler
-          id="description"
-          label="Description"
-          :value="instance.description"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <InputBox
-            id="description"
-            name="description"
-            label="Description"
-            :value="editInstance.description"
-            @input="onInput"
-          />
-        </ViewBlockToggler>
-        <ViewBlockToggler
-          id="htrTemplate"
-          :value="editInstance.htrTemplate"
-          blockClass="template-view-block"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
-            {{ value && value.name || 'Template' }}
-          </div>
-          <InputBoxAutocomplete
-            id="templateFilter"
-            name="templateFilter"
-            text="Templates"
-            attr="name"
-            :options="htrTemplates"
-            :filter="templateFilter"
-            @input="onSearchTemplates"
-            @on-select="onSelectTemplate"
-            disable-local-filter
-          />
-        </ViewBlockToggler>
-        <ViewBlockToggler
           id="limit"
           label="Limit"
           :value="instance.limit"
           :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
+          :forceReadOnly="lockedReadOnly"
         >
           <SelectBox
             id="limit"
@@ -91,7 +54,57 @@
           />
         </ViewBlockToggler>
       </div>
+      <div class="page-view__content">
+        <ViewBlockToggler
+          id="description"
+          label="Description"
+          :value="instance.description"
+          :lockEdit="isCreate"
+          :forceReadOnly="readOnly"
+        >
+          <InputBox
+            id="description"
+            name="description"
+            label="Description"
+            :value="editInstance.description"
+            @input="onInput"
+          />
+        </ViewBlockToggler>
+        <ViewBlockToggler
+          id="htrTemplate"
+          label="Template"
+          :value="editInstance.htrTemplate"
+          blockClass="template-view-block"
+          :lockEdit="!editInstance.htrTemplate"
+          :forceReadOnly="lockedReadOnly"
+          @toggle="onRemoveTemplate"
+        >
+          <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
+            {{ value && value.name }}
+          </div>
+          <InputBoxAutocomplete
+            id="templateFilter"
+            name="templateFilter"
+            label="Template"
+            attr="name"
+            :options="htrTemplates"
+            :filter="templateFilter"
+            @input="onSearchTemplates"
+            @on-select="onSelectTemplate"
+            disable-local-filter
+          />
+        </ViewBlockToggler>
 
+        <div class="instance-content">
+          <HTRInstanceViewList
+            v-if="isListType" 
+          />
+          <HTRInstanceViewBracket
+            v-else
+          />
+        </div>
+
+      </div>
 
       <template v-if="showButtons">
         <portal :to="portalTarget">
@@ -115,6 +128,8 @@
 </template>
 
 <script>
+import HTRInstanceViewList from './HTRInstanceViewList';
+import HTRInstanceViewBracket from './HTRInstanceViewBracket';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
@@ -123,13 +138,17 @@ import SelectBox from '@/components/SelectBox';
 import LoadingBouncer from '@/components/LoadingBouncer';
 
 import Strings from '@/constants/strings';
+import Urls from '@/constants/urls';
 import { Limit, Order } from '@/constants/htr-instance-settings';
 import { HTRTemplateTypes } from '@/constants/htr-template-type';
-import { Query } from '@/graphql';
-import { objectsAreEqual } from '@/utils';
+import { Query, Mutation } from '@/graphql';
+import { objectsAreEqual, getItemFromData } from '@/utils';
 import {
   mapEnumToSelectBoxOptions,
-  mapToSelectBoxOptions
+  mapToSelectBoxOptions,
+  mapHTRInstanceToPost,
+  mapHTRInstanceToOptimisticUpdate,
+  mapHTRInstanceToStore
 } from '@/utils/mappers';
 import * as CacheUpdate from '@/utils/cache';
 import { defaultInstanceModel } from '@/utils/models';
@@ -138,6 +157,8 @@ import * as Routing from '@/utils/routing';
 export default {
   name: 'HTRInstanceView',
   components: {
+    HTRInstanceViewList,
+    HTRInstanceViewBracket,
     ViewBlockToggler,
     Button,
     InputBox,
@@ -183,7 +204,7 @@ export default {
       }
     },
     htrTemplates: {
-      query: Query.getHTRTemplatesByType,
+      query: Query.getHTRTemplatesByTypeForAutocomplete,
       skip() {
         return !this.templateFilter;
       },
@@ -209,6 +230,9 @@ export default {
     isLoading: function() {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
+    lockedReadOnly: function() {
+      return !this.isCreate || this.readOnly;
+    },
     mappedLimits: function() {
       return mapEnumToSelectBoxOptions(Limit[this.type]);
     },
@@ -217,6 +241,10 @@ export default {
     }
   },
   methods: {
+    updateData: function(data) {
+      this.instance = { ...data };
+      this.editInstance = { ...data };
+    },
     onInput: function(value, name) {
       this.editInstance[name] = value;
     },
@@ -228,14 +256,76 @@ export default {
     },
     onSelectTemplate: function(templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);
-      this.editTemplate.htrTemplate = { ...template };
+      this.editInstance.htrTemplate = { ...template };
       this.templateFilter = '';
     },
     onRemoveTemplate: function() {
       this.editInstance.htrTemplate = null;
     },
-    cancel: function() {},
-    submit: function() {}
+    cancel: function() {
+      this.readOnly = true;
+      this.htrTemplates = [];
+      this.templateFilter = '';
+      this.editInstance = { ...this.instance };
+      this.$nextTick(function() {
+        this.readOnly = false;
+      });
+    },
+    submit: function() {
+      this.readOnly = true; // set back to read only.
+      console.log('submitted!');
+      if (this.isCreate) {
+        this.handleCreate();
+      } else {
+        this.handleUpdate();
+      }
+    },
+    handleCreate: function() {
+      this.mutationLoading = true;
+      const instance = mapHTRInstanceToPost(this.editInstance, this.isCreate);
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.createHTRInstance,
+          variables: { instance }
+        })
+        .then(({ data }) => {
+          const item = getItemFromData(data);
+          this.updateData(item);
+          this.mutationLoading = false;
+
+          const redirectToUrl = Urls.build(Urls.htrInstanceView, {
+            id: item.id
+          });
+          this.$router.push(redirectToUrl);
+        });
+    },
+    handleUpdate: function() {
+      this.mutationLoading = true;
+      const instance = mapHTRInstanceToPost(this.editInstance, this.isCreate);
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.updateHTRInstance,
+          variables: { instance },
+          update: (store, { data: { htrInstanceUpdate } }) => {
+            const data = { ...htrInstanceUpdate };
+
+            store.writeQuery({
+              query: Query.getHTRInstanceById,
+              variables: { id: data.id },
+              data: { htrInstanceById: mapHTRInstanceToStore(data) }
+            });
+          },
+          optimisticResponse: mapHTRInstanceToOptimisticUpdate(
+            this.editInstance
+          )
+        })
+        .then(() => {
+          this.readOnly = false; // allow edits again
+          this.mutationLoading = false;
+        });
+    }
   }
 };
 </script>

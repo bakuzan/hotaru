@@ -99,18 +99,18 @@ export default new Router({
         import(/* webpackChunkName: "instance-list" */ './views/HTRInstances/HTRInstanceList.vue')
     },
     {
-      path: Urls.htrInstanceView,
-      name: Strings.route.htrInstanceView,
-      component: () =>
-        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
-      props: { isCreate: false }
-    },
-    {
       path: Urls.htrInstanceCreate,
       name: Strings.route.htrInstanceCreate,
       component: () =>
         import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
       props: { isCreate: true }
+    },
+    {
+      path: Urls.htrInstanceView,
+      name: Strings.route.htrInstanceView,
+      component: () =>
+        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
+      props: { isCreate: false }
     }
   ]
 });

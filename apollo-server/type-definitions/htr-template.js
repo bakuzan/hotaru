@@ -28,33 +28,4 @@ module.exports = gql`
     series: [Int]
     sources: [SourceType]
   }
-
-  type HTRInstance {
-    id: Int!
-    name: String
-    description: String
-    settings: HTRInstanceSettings
-    htrTemplateId: Int
-    htrTemplate: HTRTemplate
-    characters: [Character]
-    versus: [Versus]
-    type: HTRTemplateType
-  }
-  type HTRInstanceSettings {
-    rules: HTRTemplateRules
-    limit: Int
-    status: BracketStatus
-    order: [[String]]
-  }
-  input HTRInstanceInput {
-    name: String
-    description: String
-    settings: HTRInstanceSettingsInput
-  }
-  input HTRInstanceSettingsInput {
-    rules: HTRTemplateRulesInput
-    limit: Int
-    status: BracketStatus
-    order: [[String]]
-  }
 `;

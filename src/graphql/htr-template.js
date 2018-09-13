@@ -27,6 +27,24 @@ const getHTRTemplatesByType = gql`
   }
 `;
 
+const getHTRTemplatesByTypeForAutocomplete = gql`
+  query getHTRTemplatesByTypeForAutocomplete(
+    $search: String
+    $type: HTRTemplateType!
+  ) {
+    htrTemplates(search: $search, type: $type) {
+      id
+      name
+      type
+      rules {
+        genders
+        series
+        sources
+      }
+    }
+  }
+`;
+
 const getHTRTemplateById = gql`
   query getHTRTemplateById($id: Int!) {
     htrTemplateById(id: $id) {
@@ -57,6 +75,7 @@ const createHTRTemplate = gql`
 export default {
   query: {
     getHTRTemplatesByType,
+    getHTRTemplatesByTypeForAutocomplete,
     getHTRTemplateById
   },
   mutation: {

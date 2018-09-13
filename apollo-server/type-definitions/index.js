@@ -7,6 +7,7 @@ const image = require('./image');
 const versus = require('./versus');
 const ranking = require('./ranking');
 const htrtemplate = require('./htr-template');
+const htrinstance = require('./htr-instance');
 
 module.exports = [
   ...query,
@@ -17,5 +18,6 @@ module.exports = [
   image,
   versus,
   ranking,
-  htrtemplate
+  htrtemplate,
+  htrinstance
 ];
