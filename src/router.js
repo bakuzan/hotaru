@@ -97,6 +97,12 @@ export default new Router({
       name: Strings.route.htrInstanceList,
       component: () =>
         import(/* webpackChunkName: "instance-list" */ './views/HTRInstances/HTRInstanceList.vue')
+    },
+    {
+      path: Urls.htrInstanceView,
+      name: Strings.route.htrInstanceView,
+      component: () =>
+        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue')
     }
   ]
 });

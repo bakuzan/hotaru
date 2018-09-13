@@ -9,7 +9,5 @@ module.exports = {
     return HTRTemplate.update({ ...args }, { where: { id } }).then(() =>
       HTRTemplate.findById(id)
     );
-  },
-  htrInstanceCreate(_, { instance }) {},
-  htrInstanceUpdate(_, { instance }) {}
+  }
 };

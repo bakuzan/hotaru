@@ -74,7 +74,7 @@ export default {
 
     &:checked::after {
       content: '\25c9';
-      color: #000;
+      color: inherit;
       font-size: 1.5rem;
     }
 

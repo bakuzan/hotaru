@@ -27,7 +27,8 @@ module.exports = {
           [Op.eq]: type
         })
       },
-      order: [['name', 'ASC']]
+      order: [['name', 'ASC']],
+      include: [HTRTemplate]
     });
   },
   htrInstanceById(_, { id }) {

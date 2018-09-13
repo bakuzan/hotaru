@@ -24,7 +24,7 @@ const getHTRInstanceById = gql`
       ...InstanceFields
     }
   }
-  ${templateFields}
+  ${instanceFields}
 `;
 
 const updateHTRInstance = gql`
