@@ -49,7 +49,10 @@ const Urls = {
     return `${this.base}/instances`;
   },
   get htrInstanceView() {
-    return `${this.htrInstanceList}/view/:type/:id`;
+    return `${this.htrInstanceList}/view/:id`;
+  },
+  get htrInstanceCreate() {
+    return `${this.htrInstanceList}/create/:type`;
   }
 };
 

@@ -1,4 +1,5 @@
 import Urls from '@/constants/urls';
+import { BracketStatuses } from '@/constants/bracket-status';
 import { generateUniqueId } from '@/utils';
 
 export const defaultCharacterModel = () => ({
@@ -41,5 +42,16 @@ export const defaultHTRTemplate = () => ({
     genders: [],
     series: [],
     sources: []
+  }
+});
+
+export const defaultInstanceModel = () => ({
+  name: '',
+  description: '',
+  settings: {
+    limit: null,
+    order: 1,
+    status: BracketStatuses.notstarted,
+    rules: {}
   }
 });

@@ -1,12 +1,13 @@
 <template>
-    <div class="link-card">
-        <NavLink 
-            :to="itemUrl"
-            :target="linkTarget"
-        >
-        {{name}}
-        </NavLink>
-    </div>
+  <div class="link-card">
+    <NavLink 
+        :to="itemUrl"
+        :target="linkTarget"
+    >
+    {{name}}
+    </NavLink>
+    <div>{{description}}</div>
+  </div>
 </template>
 
 <script>
@@ -28,7 +29,7 @@ export default {
       type: String,
       required: true
     },
-    type: {
+    description: {
       type: String
     },
     urlSource: {
@@ -42,7 +43,7 @@ export default {
   },
   computed: {
     itemUrl: function() {
-      return Urls.build(this.urlSource, { id: this.id, type: this.type });
+      return Urls.build(this.urlSource, { id: this.id });
     },
     linkTarget: function() {
       return this.openNewTab ? '_blank' : '';
@@ -50,12 +51,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.series-card {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-}
-</style>

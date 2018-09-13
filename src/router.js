@@ -102,7 +102,15 @@ export default new Router({
       path: Urls.htrInstanceView,
       name: Strings.route.htrInstanceView,
       component: () =>
-        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue')
+        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
+      props: { isCreate: false }
+    },
+    {
+      path: Urls.htrInstanceCreate,
+      name: Strings.route.htrInstanceCreate,
+      component: () =>
+        import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
+      props: { isCreate: true }
     }
   ]
 });

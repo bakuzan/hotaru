@@ -86,7 +86,9 @@ export default {
       this.filters[name] = value;
     },
     onAdd: function() {
-      this.$router.push(Urls.htrInstanceCreator);
+      this.$router.push(
+        Urls.build(Urls.htrInstanceCreate, { type: this.filters.type })
+      );
     }
   }
 };
