@@ -53,8 +53,21 @@
             required
           />
         </ViewBlockToggler>
+        <InputBoxAutocomplete
+          v-if="isListType"
+          id="characterFilter"
+          name="characterFilter"
+          label="Characters"
+          attr="name"
+          :options="filteredCharacters"
+          :filter="characterFilter"
+          :disabled="disableCharacterInput"
+          @input="onSearch"
+          @on-select="onSelectCharacter"
+          disable-local-filter
+        />
       </div>
-      <div class="page-view__content">
+      <div class="page-view__content padded padded--standard">
         <ViewBlockToggler
           id="description"
           label="Description"
@@ -89,7 +102,7 @@
             attr="name"
             :options="htrTemplates"
             :filter="templateFilter"
-            @input="onSearchTemplates"
+            @input="onSearch"
             @on-select="onSelectTemplate"
             disable-local-filter
           />
@@ -181,7 +194,9 @@ export default {
       instance: {},
       editInstance: defaultInstanceModel(),
       htrTemplates: [],
-      templateFilter: ''
+      templateFilter: '',
+      characters: [],
+      characterFilter: ''
     };
   },
   apollo: {
@@ -212,6 +227,25 @@ export default {
       variables() {
         return { search: this.templateFilter, type: this.type };
       }
+    },
+    characters: {
+      query: Query.getCharactersForTemplateRules,
+      skip() {
+        return !this.characterFilter;
+      },
+      debounce: 1000,
+      variables() {
+        const {
+          rules: { genders, sources, series }
+        } = this.editInstance.htrTemplate;
+        return {
+          search: this.characterFilter,
+          rules: { genders, sources, series }
+        };
+      },
+      update(data) {
+        return data.charactersForTemplateRules;
+      }
     }
   },
   computed: {
@@ -238,6 +272,17 @@ export default {
     },
     mappedOrders: function() {
       return mapToSelectBoxOptions(Order);
+    },
+    filteredCharacters: function() {
+      return this.characters.filter((x) =>
+        this.editInstance.characters.every((y) => y.id !== x.id)
+      );
+    },
+    disableCharacterInput: function() {
+      const { characters = [], settings } = this.editInstance;
+      return (
+        !this.editInstance.htrTemplate || characters.length >= settings.limit
+      );
     }
   },
   methods: {
@@ -251,8 +296,9 @@ export default {
     onSettingsInput: function(value, name) {
       this.editInstance.settings[name] = value;
     },
-    onSearchTemplates: function(value) {
-      this.templateFilter = value;
+    onSearch: function(value, name) {
+      this[name] = value;
+      console.log(name, this.templateFilter, value);
     },
     onSelectTemplate: function(templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);
@@ -261,6 +307,19 @@ export default {
     },
     onRemoveTemplate: function() {
       this.editInstance.htrTemplate = null;
+      this.editInstance.characters = [];
+      this.characterFilter = '';
+      this.characters = [];
+    },
+    onSelectCharacter: function(characterId) {
+      const character = this.characters.find((x) => x.id === characterId);
+      this.editInstance.characters.push({ ...character });
+      this.characterFilter = '';
+    },
+    onRemoveCharacter: function(characterId) {
+      this.editInstance.characters = this.editInstance.characters.filter(
+        (x) => x.id !== characterId
+      );
     },
     cancel: function() {
       this.readOnly = true;

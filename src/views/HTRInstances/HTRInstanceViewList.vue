@@ -1,17 +1,42 @@
 <template>
   <div class="instance-view">
-      LIST
+    <List 
+      columns="one"
+      :items="items"
+    >
+      <template slot-scope="slotProps">
+        <ListFigureCard 
+          v-bind="slotProps.item" 
+          :url-source="cardUrl" 
+        />
+      </template>
+    </List>
   </div>
 </template>
 
 <script>
+import List from '@/components/List';
+import { ListFigureCard } from '@/components/Cards';
+
+import Urls from '@/constants/urls';
+
 export default {
   name: 'HTRInstanceViewList',
-  components: {},
-  data: function() {
-    return {};
+  components: {
+    List,
+    ListFigureCard
   },
-  apollo: {},
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data: function() {
+    return {
+      cardUrl: Urls.characterView
+    };
+  },
   computed: {},
   methods: {}
 };

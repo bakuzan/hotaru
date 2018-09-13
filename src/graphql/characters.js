@@ -33,6 +33,19 @@ const getCharactersWithoutSeries = gql`
   }
 `;
 
+const getCharactersForTemplateRules = gql`
+  query getCharactersForTemplateRules(
+    $search: String
+    $rules: HTRTemplateRulesInput
+  ) {
+    charactersForTemplateRules(search: $search, rules: $rules) {
+      id
+      name
+      displayImage
+    }
+  }
+`;
+
 const getCharacterById = gql`
   query getCharacterById($id: Int!) {
     characterById(id: $id) {
@@ -133,6 +146,7 @@ export default {
     getCharacters,
     getCharactersForVersusCompare,
     getCharactersWithoutSeries,
+    getCharactersForTemplateRules,
     getCharacterById,
     getCharactersByIds,
     getRandomCharacterId

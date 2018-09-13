@@ -49,6 +49,8 @@ export const defaultInstanceModel = () => ({
   name: '',
   description: '',
   htrTemplate: null,
+  characters: [],
+  versus: [],
   settings: {
     limit: null,
     order: 1,

@@ -55,6 +55,9 @@ export default {
     label: {
       type: String
     },
+    name: {
+      type: String
+    },
     attr: {
       type: String,
       required: true
@@ -78,6 +81,9 @@ export default {
     inputProps: {
       type: Object,
       default: () => ({ class: '' })
+    },
+    disabled: {
+      type: Boolean
     }
   },
   data: function() {
