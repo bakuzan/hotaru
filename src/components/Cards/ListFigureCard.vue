@@ -84,6 +84,13 @@ export default {
         return value === null || ['small'].includes(value);
       }
     },
+    figureDirection: {
+      type: String,
+      default: 'column',
+      validator: function(value) {
+        return ['column', 'row'].includes(value);
+      }
+    },
     figureClass: {
       type: String,
       default: ''
@@ -98,7 +105,9 @@ export default {
     },
     figureClasses: function() {
       return classNames('list-figure-card__figure', this.figureClass, {
-        [`list-figure-card__figure--size_${this.figureSize}`]: this.figureSize
+        [`list-figure-card__figure--size_${this.figureSize}`]: this.figureSize,
+        [`list-figure-card__figure--direction_${this.figureDirection}`]: this
+          .figureDirection
       });
     },
     imageClasses: function() {
@@ -136,6 +145,7 @@ export default {
     right: 0;
     padding: 1px;
     margin: 1px;
+    background: transparent; // Having background can cause overlap.
   }
 
   &__figure {
@@ -162,10 +172,16 @@ export default {
   }
 }
 
-.list-figure-card__figure--size_small {
-  & .list-figure-card__image {
-    width: 50px;
-    height: 75px;
+.list-figure-card__figure {
+  &--direction_row {
+    flex-direction: row;
+  }
+
+  &--size_small {
+    & .list-figure-card__image {
+      width: 50px;
+      height: 75px;
+    }
   }
 }
 </style>

@@ -1,114 +1,117 @@
 <template>
   <form novalidate @submit.prevent="submit">
-    <div class="page page-view">
+    <div class="page">
       <LoadingBouncer v-show="isLoading" />
-      <div class="page-view__left-column">
-        <ViewBlockToggler
-          id="name"
-          label="Name"
-          :value="instance.name"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <InputBox
-            id="name"
-            name="name"
-            label="Name"
-            :value="editInstance.name"
-            @input="onInput"
-          />
-        </ViewBlockToggler>
-        <ViewBlockToggler
-          id="limit"
-          label="Limit"
-          :value="instance.limit"
-          :lockEdit="isCreate"
-          :forceReadOnly="lockedReadOnly"
-        >
-          <SelectBox
-            id="limit"
-            name="limit"
-            text="Limit"
-            :options="mappedLimits"
-            :value="editInstance.settings.limit"
-            @on-select="onSettingsInput"
-            required
-          />
-        </ViewBlockToggler>
-        <ViewBlockToggler
-          v-if="isListType"
-          id="order"
-          label="Order"
-          :value="instance.order"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <SelectBox
-            id="order"
-            name="order"
-            text="Order"
-            :options="mappedOrders"
-            :value="editInstance.settings.order"
-            @on-select="onSettingsInput"
-            required
-          />
-        </ViewBlockToggler>
-        <InputBoxAutocomplete
-          v-if="isListType"
-          id="characterFilter"
-          name="characterFilter"
-          label="Characters"
-          attr="name"
-          :options="filteredCharacters"
-          :filter="characterFilter"
-          :disabled="disableCharacterInput"
-          @input="onSearch"
-          @on-select="onSelectCharacter"
-          disable-local-filter
-        />
-      </div>
-      <div class="page-view__content padded padded--standard">
-        <ViewBlockToggler
-          id="description"
-          label="Description"
-          :value="instance.description"
-          :lockEdit="isCreate"
-          :forceReadOnly="readOnly"
-        >
-          <InputBox
-            id="description"
-            name="description"
-            label="Description"
-            :value="editInstance.description"
-            @input="onInput"
-          />
-        </ViewBlockToggler>
-        <ViewBlockToggler
-          id="htrTemplate"
-          label="Template"
-          :value="editInstance.htrTemplate"
-          blockClass="template-view-block"
-          :lockEdit="!editInstance.htrTemplate"
-          :forceReadOnly="lockedReadOnly"
-          @toggle="onRemoveTemplate"
-        >
-          <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
-            {{ value && value.name }}
+      <div class="page-view">
+        <div class="page-view__row page-view__row--grow">
+          <div class="page-view__left-column">
+            <ViewBlockToggler
+              id="name"
+              label="Name"
+              :value="instance.name"
+              :lockEdit="isCreate"
+              :forceReadOnly="readOnly"
+            >
+              <InputBox
+                id="name"
+                name="name"
+                label="Name"
+                :value="editInstance.name"
+                @input="onInput"
+              />
+            </ViewBlockToggler>
+            <ViewBlockToggler
+              id="limit"
+              label="Limit"
+              :value="instance.limit"
+              :lockEdit="isCreate"
+              :forceReadOnly="lockedReadOnly"
+            >
+              <SelectBox
+                id="limit"
+                name="limit"
+                text="Limit"
+                :options="mappedLimits"
+                :value="editInstance.settings.limit"
+                @on-select="onSettingsInput"
+                required
+              />
+            </ViewBlockToggler>
+            <ViewBlockToggler
+              v-if="isListType"
+              id="order"
+              label="Order"
+              :value="instance.order"
+              :lockEdit="isCreate"
+              :forceReadOnly="readOnly"
+            >
+              <SelectBox
+                id="order"
+                name="order"
+                text="Order"
+                :options="mappedOrders"
+                :value="editInstance.settings.order"
+                @on-select="onSettingsInput"
+                required
+              />
+            </ViewBlockToggler>
           </div>
-          <InputBoxAutocomplete
-            id="templateFilter"
-            name="templateFilter"
-            label="Template"
-            attr="name"
-            :options="htrTemplates"
-            :filter="templateFilter"
-            @input="onSearch"
-            @on-select="onSelectTemplate"
-            disable-local-filter
-          />
-        </ViewBlockToggler>
-
-        <div class="instance-content">
+          <div class="page-view__content padded padded--standard">
+            <ViewBlockToggler
+              id="description"
+              label="Description"
+              :value="instance.description"
+              :lockEdit="isCreate"
+              :forceReadOnly="readOnly"
+            >
+              <InputBox
+                id="description"
+                name="description"
+                label="Description"
+                :value="editInstance.description"
+                @input="onInput"
+              />
+            </ViewBlockToggler>
+            <ViewBlockToggler
+              id="htrTemplate"
+              label="Template"
+              :value="editInstance.htrTemplate"
+              blockClass="template-view-block"
+              :lockEdit="!editInstance.htrTemplate"
+              :forceReadOnly="lockedReadOnly"
+              @toggle="onRemoveTemplate"
+            >
+              <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
+                {{ value && value.name }}
+              </div>
+              <InputBoxAutocomplete
+                id="templateFilter"
+                name="templateFilter"
+                label="Template"
+                attr="name"
+                :options="htrTemplates"
+                :filter="templateFilter"
+                @input="onSearch"
+                @on-select="onSelectTemplate"
+                disable-local-filter
+              />
+            </ViewBlockToggler>
+            <InputBoxAutocomplete
+              v-if="isListType"
+              id="characterFilter"
+              name="characterFilter"
+              label="Characters"
+              attr="name"
+              :options="filteredCharacters"
+              :filter="characterFilter"
+              :disabled="disableCharacterInput"
+              @input="onSearch"
+              @on-select="onSelectCharacter"
+              disable-local-filter
+            />
+          </div>
+        </div>
+        <div class="page-view__left-column">
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
@@ -118,7 +121,6 @@
             v-else
           />
         </div>
-
       </div>
 
       <template v-if="showButtons">
@@ -392,5 +394,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/_variables';
+
+#characterFilter {
+  margin: $app--margin-standard 0;
+}
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

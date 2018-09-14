@@ -7,6 +7,8 @@
       <template slot-scope="slotProps">
         <ListFigureCard 
           v-bind="slotProps.item" 
+          figure-size="small"
+          figure-direction="row"
           :url-source="cardUrl" 
           :remove="handleRemove"
         />
