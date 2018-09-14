@@ -24,6 +24,30 @@ const instanceFields = gql`
   }
 `;
 
+const existingInstanceFields = gql`
+  ${instanceFields}
+  fragment ExistingInstanceFields on HTRInstance {
+    ...InstanceFields
+    characters {
+      id
+      name
+      displayImage
+      ranking {
+        rank
+      }
+    }
+    versus {
+      id
+      characters {
+        id
+        name
+        displayImage
+      }
+      winnerId
+    }
+  }
+`;
+
 const getHTRInstancesByType = gql`
   query getHTRInstancesByType($search: String, $type: HTRTemplateType!) {
     htrInstances(search: $search, type: $type) {
@@ -37,36 +61,19 @@ const getHTRInstancesByType = gql`
 const getHTRInstanceById = gql`
   query getHTRInstanceById($id: Int!) {
     htrInstanceById(id: $id) {
-      ...InstanceFields
-      characters {
-        id
-        name
-        displayImage
-        ranking {
-          rank
-        }
-      }
-      versus {
-        id
-        characters {
-          id
-          name
-          displayImage
-        }
-        winnerId
-      }
+      ...ExistingInstanceFields
     }
   }
-  ${instanceFields}
+  ${existingInstanceFields}
 `;
 
 const updateHTRInstance = gql`
   mutation updateHTRInstance($instance: HTRInstanceInput) {
     htrInstanceUpdate(instance: $instance) {
-      ...InstanceFields
+      ...ExistingInstanceFields
     }
   }
-  ${instanceFields}
+  ${existingInstanceFields}
 `;
 
 const createHTRInstance = gql`

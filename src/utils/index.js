@@ -90,10 +90,10 @@ export const objectsAreEqual = (a, b) => {
   return keys.every((k) => objectsAreEqual(a[k], b[k]));
 };
 
-export const getItemFromData = (data) => {
-  const key = Object.keys(data).pop();
-  return data[key];
-};
+export const getItemFromData = (o) =>
+  Object.keys(o)
+    .map((k) => o[k])
+    .pop();
 
 export const generateUniqueId = () =>
   ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>

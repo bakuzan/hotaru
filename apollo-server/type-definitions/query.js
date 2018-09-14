@@ -57,6 +57,11 @@ const Mutation = gql`
 
     htrInstanceCreate(instance: HTRInstanceInput): HTRInstance
     htrInstanceUpdate(instance: HTRInstanceInput): HTRInstance
+    htrInstanceVersusVote(
+      htrInstanceId: Int!
+      versusId: Int!
+      winnerId: Int!
+    ): HTRInstance
   }
 `;
 

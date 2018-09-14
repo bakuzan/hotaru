@@ -25,7 +25,7 @@
               label="Limit"
               :value="instance.settings.limit"
               :lockEdit="isCreate"
-              :forceReadOnly="lockedReadOnly"
+              :forceReadOnly="lockedReadOnlyBracket"
             >
               <SelectBox
                 id="limit"
@@ -295,6 +295,9 @@ export default {
     lockedReadOnly: function() {
       return !this.isCreate || this.readOnly;
     },
+    lockedReadOnlyBracket: function() {
+      return (!this.isCreate && !this.isListType) || this.readOnly;
+    },
     mappedLimits: function() {
       return mapEnumToSelectBoxOptions(Limit[this.type] || []);
     },
@@ -327,9 +330,11 @@ export default {
     },
     onInput: function(value, name) {
       this.editInstance[name] = value;
+      console.log(this.editInstance);
     },
     onSettingsInput: function(value, name) {
       this.editInstance.settings[name] = value;
+      console.log(this.editInstance);
     },
     onSearch: function(value, name) {
       this[name] = value;

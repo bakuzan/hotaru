@@ -149,7 +149,6 @@ export const mapHTRTemplateToPost = (template, isCreate) => {
 export const mapHTRInstanceToPost = (instance, isCreate) => {
   const { id, name, description, htrTemplate, characters, settings } = instance;
   const { limit, order, rules, status, winnerId } = settings;
-  const resolvedLimit = isCreate ? { limit: Number(limit) } : {};
   const resolvedRules = isCreate ? {} : { rules: mapWithoutTypename(rules) };
   const resolvedCharacters =
     characters && characters.length ? characters.map((x) => x.id) : [];
@@ -161,9 +160,9 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
     htrTemplateId: htrTemplate.id,
     characterIds: resolvedCharacters,
     settings: {
-      ...resolvedLimit,
-      ...resolvedRules,
+      limit: Number(limit),
       order: order ? Number(order) : undefined,
+      ...resolvedRules,
       status,
       winnerId
     }

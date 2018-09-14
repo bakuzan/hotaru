@@ -23,6 +23,7 @@ module.exports = gql`
     order: Int
   }
   input HTRInstanceInput {
+    id: Int
     name: String
     description: String
     htrTemplateId: Int
@@ -32,7 +33,11 @@ module.exports = gql`
   input HTRInstanceSettingsInput {
     rules: HTRTemplateRulesInput
     limit: Int
+    "Current Status - Bracket type only"
     status: BracketStatus
+    "Bracket Winner - Bracket type only"
+    winnerId: Int
+    "Character sort order - List type only"
     order: Int
   }
 `;
