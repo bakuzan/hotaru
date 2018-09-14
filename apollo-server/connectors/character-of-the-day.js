@@ -1,3 +1,3 @@
 module.exports = (db) => {
-  return db.define('characteroftheday');
+  return db.define('characterOfTheDay');
 };

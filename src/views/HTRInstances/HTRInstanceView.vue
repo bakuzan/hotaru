@@ -23,7 +23,7 @@
             <ViewBlockToggler
               id="limit"
               label="Limit"
-              :value="instance.limit"
+              :value="instance.settings.limit"
               :lockEdit="isCreate"
               :forceReadOnly="lockedReadOnly"
             >
@@ -41,7 +41,7 @@
               v-if="isListType"
               id="order"
               label="Order"
-              :value="instance.order"
+              :value="instanceOrder"
               :lockEdit="isCreate"
               :forceReadOnly="readOnly"
             >
@@ -76,7 +76,6 @@
               id="htrTemplate"
               label="Template"
               :value="editInstance.htrTemplate"
-              blockClass="template-view-block"
               :lockEdit="!editInstance.htrTemplate"
               :forceReadOnly="lockedReadOnly"
               @toggle="onRemoveTemplate"
@@ -96,6 +95,13 @@
                 disable-local-filter
               />
             </ViewBlockToggler>
+            <ViewBlockToggler
+              id="characters"
+              label="Characters"
+              value="Change selection?"
+              :lockEdit="isCreate"
+              :forceReadOnly="readOnly"
+            >
             <InputBoxAutocomplete
               v-if="isListType"
               id="characterFilter"
@@ -109,12 +115,14 @@
               @on-select="onSelectCharacter"
               disable-local-filter
             />
+            </ViewBlockToggler>
           </div>
         </div>
-        <div class="page-view__left-column">
+        <div :class="instanceContentClasses">
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
+            :options="editInstance.settings"
             @remove="onRemoveCharacter"
           />
           <HTRInstanceViewBracket
@@ -145,6 +153,8 @@
 </template>
 
 <script>
+import classNames from 'classnames';
+
 import HTRInstanceViewList from './HTRInstanceViewList';
 import HTRInstanceViewBracket from './HTRInstanceViewBracket';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
@@ -190,13 +200,15 @@ export default {
     }
   },
   data: function() {
+    const type = Routing.getParam(this.$router, 'type');
+
     return {
       viewBlockReadOnlySlot: Strings.slot.viewBlock,
       portalTarget: Strings.portal.actions,
       mutationLoading: false,
       readOnly: false,
-      instance: {},
-      editInstance: defaultInstanceModel(),
+      instance: { settings: {} },
+      editInstance: defaultInstanceModel(type),
       htrTemplates: [],
       templateFilter: '',
       characters: [],
@@ -239,9 +251,12 @@ export default {
       },
       debounce: 1000,
       variables() {
-        const {
-          rules: { genders, sources, series }
-        } = this.editInstance.htrTemplate;
+        const ruleSource = this.isCreate
+          ? this.editInstance.htrTemplate
+          : this.editInstance.settings;
+
+        const { rules: { genders, sources, series } } = ruleSource; // eslint-disable-line
+
         return {
           search: this.characterFilter,
           rules: { genders, sources, series }
@@ -254,10 +269,19 @@ export default {
   },
   computed: {
     type: function() {
-      return Routing.getParam(this.$router, 'type');
+      return (
+        Routing.getParam(this.$router, 'type') ||
+        (this.editInstance.htrTemplate && this.editInstance.htrTemplate.type)
+      );
     },
     isListType: function() {
       return this.type === HTRTemplateTypes.list;
+    },
+    instanceContentClasses: function() {
+      return classNames({
+        'page-view__left-column': this.isListType,
+        'page-view__content': !this.isListType
+      });
     },
     hasEdits: function() {
       return !objectsAreEqual(this.instance, this.editInstance);
@@ -272,14 +296,16 @@ export default {
       return !this.isCreate || this.readOnly;
     },
     mappedLimits: function() {
-      return mapEnumToSelectBoxOptions(Limit[this.type]);
+      return mapEnumToSelectBoxOptions(Limit[this.type] || []);
     },
     mappedOrders: function() {
       return mapToSelectBoxOptions(Order);
     },
     filteredCharacters: function() {
-      return this.characters.filter((x) =>
-        this.editInstance.characters.every((y) => y.id !== x.id)
+      return this.characters.filter(
+        (x) =>
+          !this.editInstance.characters ||
+          this.editInstance.characters.every((y) => y.id !== x.id)
       );
     },
     disableCharacterInput: function() {
@@ -287,6 +313,11 @@ export default {
       return (
         !this.editInstance.htrTemplate || characters.length >= settings.limit
       );
+    },
+    instanceOrder: function() {
+      const order =
+        Order.find((x) => x.id === this.editInstance.settings.order) || {};
+      return order.name;
     }
   },
   methods: {
@@ -302,7 +333,6 @@ export default {
     },
     onSearch: function(value, name) {
       this[name] = value;
-      console.log(name, this.templateFilter, value);
     },
     onSelectTemplate: function(templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);

@@ -58,7 +58,9 @@ CharacterOfTheDayModel.Character = CharacterOfTheDayModel.belongsTo(
 );
 
 HTRTemplateModel.Instance = HTRTemplateModel.hasMany(HTRInstanceModel);
-HTRInstanceModel.Template = HTRInstanceModel.belongsTo(HTRTemplateModel);
+HTRInstanceModel.Template = HTRInstanceModel.belongsTo(HTRTemplateModel, {
+  foreignKey: 'htrTemplateId'
+});
 
 HTRInstanceModel.Character = HTRInstanceModel.belongsToMany(CharacterModel, {
   through: 'HTRInstanceCharacter',
@@ -88,10 +90,11 @@ db.sync({ force: FORCE_DB_REBUILD })
   .then(() => migrate(db))
   .then(async () => {
     if (FORCE_DB_REBUILD && SEED_DB) {
-      const { series, character, tag } = db.models;
+      const { series, character, tag, htrTemplate } = db.models;
       await series.bulkCreate(TestData.series);
       await character.bulkCreate(TestData.characters);
       await tag.bulkCreate(TestData.tags);
+      await htrTemplate.bulkCreate(TestData.templates);
     }
   })
   .then(() => {
@@ -111,9 +114,9 @@ const Tag = db.models.tag;
 const Image = db.models.image;
 const Versus = db.models.versus;
 const Ranking = db.models.ranking;
-const CharacterOfTheDay = db.models.characteroftheday;
-const HTRTemplate = db.models.htrtemplate;
-const HTRInstance = db.models.htrinstance;
+const CharacterOfTheDay = db.models.characterOfTheDay;
+const HTRTemplate = db.models.htrTemplate;
+const HTRInstance = db.models.htrInstance;
 
 module.exports = {
   db,

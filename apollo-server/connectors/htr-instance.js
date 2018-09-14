@@ -1,5 +1,5 @@
 module.exports = (db, Types) => {
-  return db.define('htrinstance', {
+  return db.define('htrInstance', {
     name: {
       type: Types.STRING
     },

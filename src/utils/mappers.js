@@ -1,5 +1,8 @@
 import { isString, parseIfInt } from './index';
 
+// eslint-disable-next-line
+const mapWithoutTypename = ({ __typename, ...o }) => ({ ...o });
+
 const mutationWrapper = (__typename, key, defaultObj = {}) => (obj) => ({
   __typename: 'Mutation',
   [key]: {
@@ -147,7 +150,7 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
   const { id, name, description, htrTemplate, characters, settings } = instance;
   const { limit, order, rules, status, winnerId } = settings;
   const resolvedLimit = isCreate ? { limit: Number(limit) } : {};
-  const resolvedRules = isCreate ? { rules: htrTemplate.rules } : { rules };
+  const resolvedRules = isCreate ? {} : { rules: mapWithoutTypename(rules) };
   const resolvedCharacters =
     characters && characters.length ? characters.map((x) => x.id) : [];
 
@@ -156,11 +159,11 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
     name,
     description,
     htrTemplateId: htrTemplate.id,
-    characters: resolvedCharacters,
+    characterIds: resolvedCharacters,
     settings: {
       ...resolvedLimit,
       ...resolvedRules,
-      order: Number(order),
+      order: order ? Number(order) : undefined,
       status,
       winnerId
     }

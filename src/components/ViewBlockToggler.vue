@@ -80,7 +80,8 @@ export default {
     },
     classes: function() {
       return classNames('view-block-toggler', {
-        'view-block-toggler--read-only': this.readOnly
+        'view-block-toggler--read-only': this.readOnly,
+        'view-block-toggler--read-only_forced': this.forceReadOnly
       });
     }
   },
@@ -101,5 +102,13 @@ export default {
 
 .view-block-toggler {
   margin: $app--margin-standard 0;
+}
+</style>
+<style lang="scss">
+.view-block-toggler--read-only_forced .view-block__button {
+  cursor: default;
+  &:hover {
+    border-color: transparent;
+  }
 }
 </style>

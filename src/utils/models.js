@@ -1,5 +1,5 @@
 import Urls from '@/constants/urls';
-import { BracketStatuses } from '@/constants/bracket-status';
+import { HTRTemplateTypes } from '@/constants/htr-template-type';
 import { generateUniqueId } from '@/utils';
 
 export const defaultCharacterModel = () => ({
@@ -45,7 +45,7 @@ export const defaultHTRTemplate = () => ({
   }
 });
 
-export const defaultInstanceModel = () => ({
+export const defaultInstanceModel = (type) => ({
   name: '',
   description: '',
   htrTemplate: null,
@@ -53,8 +53,7 @@ export const defaultInstanceModel = () => ({
   versus: [],
   settings: {
     limit: null,
-    order: 1,
-    status: BracketStatuses.notstarted,
-    rules: {}
+    rules: {},
+    ...(type === HTRTemplateTypes.list ? { order: 1 } : {})
   }
 });

@@ -5,13 +5,18 @@ const instanceFields = gql`
     id
     name
     description
-    hrtTemplate {
+    htrTemplate {
       id
       name
+      type
     }
     settings {
       limit
-      rules
+      rules {
+        genders
+        sources
+        series
+      }
       order
       status
       winnerId
@@ -37,6 +42,9 @@ const getHTRInstanceById = gql`
         id
         name
         displayImage
+        ranking {
+          rank
+        }
       }
       versus {
         id

@@ -2,7 +2,7 @@
   <div class="instance-view">
     <List 
       columns="one"
-      :items="items"
+      :items="sortedItems"
     >
       <template slot-scope="slotProps">
         <ListFigureCard 
@@ -33,6 +33,10 @@ export default {
     items: {
       type: Array,
       default: () => []
+    },
+    options: {
+      type: Object,
+      default: () => {}
     }
   },
   data: function() {
@@ -40,7 +44,12 @@ export default {
       cardUrl: Urls.characterView
     };
   },
-  computed: {},
+  computed: {
+    sortedItems: function() {
+      // TODO apply sorting
+      return this.items;
+    }
+  },
   methods: {
     handleRemove: function(characterId) {
       this.$emit('remove', characterId);

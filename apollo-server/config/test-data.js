@@ -100,9 +100,39 @@ const tags = [
   { name: 'thigh-highs' },
   { name: 'mask' }
 ];
+const templates = [
+  {
+    name: 'Free Test',
+    type: 'List',
+    rules: {
+      genders: [],
+      sources: [],
+      series: []
+    }
+  },
+  {
+    name: 'Only Female Test',
+    type: 'List',
+    rules: {
+      genders: ['Female'],
+      sources: [],
+      series: []
+    }
+  },
+  {
+    name: 'Only Anime Test',
+    type: 'List',
+    rules: {
+      genders: [],
+      sources: ['Anime'],
+      series: []
+    }
+  }
+];
 
 module.exports = {
   series,
   characters,
-  tags
+  tags,
+  templates
 };

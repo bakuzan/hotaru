@@ -1,7 +1,7 @@
 const { HTRTemplateType } = require('../constants/enums');
 
 module.exports = (db, Types) => {
-  return db.define('htrtemplate', {
+  return db.define('htrTemplate', {
     name: {
       type: Types.STRING
     },

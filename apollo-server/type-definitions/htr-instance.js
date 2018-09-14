@@ -20,17 +20,19 @@ module.exports = gql`
     "Bracket Winner - Bracket type only"
     winnerId: Int
     "Character sort order - List type only"
-    order: [[String]]
+    order: Int
   }
   input HTRInstanceInput {
     name: String
     description: String
+    htrTemplateId: Int
+    characterIds: [Int]
     settings: HTRInstanceSettingsInput
   }
   input HTRInstanceSettingsInput {
     rules: HTRTemplateRulesInput
     limit: Int
     status: BracketStatus
-    order: [[String]]
+    order: Int
   }
 `;
