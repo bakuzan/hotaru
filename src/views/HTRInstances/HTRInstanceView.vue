@@ -110,7 +110,9 @@
 
         <div class="instance-content">
           <HTRInstanceViewList
-            v-if="isListType" 
+            v-if="isListType"
+            :items="editInstance.characters"
+            @remove="onRemoveCharacter"
           />
           <HTRInstanceViewBracket
             v-else

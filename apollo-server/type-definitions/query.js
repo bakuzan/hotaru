@@ -8,6 +8,10 @@ const Query = gql`
     characterImages(characterId: Int!): [Image]
     charactersByIds(characterIds: [Int]): [Character]
     characterRandom: Character
+    charactersForTemplateRules(
+      search: String
+      rules: HTRTemplateRulesInput
+    ): [Character]
 
     series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series
@@ -22,6 +26,7 @@ const Query = gql`
 
     htrTemplates(search: String, type: HTRTemplateType!): [HTRTemplate]
     htrTemplateById(id: Int!): HTRTemplate
+
     htrInstances(search: String, type: HTRTemplateType!): [HTRInstance]
     htrInstanceById(id: Int!): HTRInstance
   }
@@ -49,6 +54,7 @@ const Mutation = gql`
 
     htrTemplateCreate(template: HTRTemplateInput): HTRTemplate
     htrTemplateUpdate(template: HTRTemplateUpdateInput): HTRTemplate
+
     htrInstanceCreate(instance: HTRInstanceInput): HTRInstance
     htrInstanceUpdate(instance: HTRInstanceInput): HTRInstance
   }

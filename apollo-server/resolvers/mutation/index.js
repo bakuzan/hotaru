@@ -1,4 +1,4 @@
-const { db: context, Tag } = require('../../connectors');
+const { db, Tag } = require('../../connectors');
 const SQL = require('../../db-scripts');
 
 const character = require('./character');
@@ -19,13 +19,13 @@ module.exports = {
     return Tag.create({ ...tag }).then((tag) => tag);
   },
   populateRankings() {
-    return context.transaction((transaction) =>
-      context
+    return db.transaction((transaction) =>
+      db
         .query(SQL['delete_from_rankings'], { transaction })
-        .then(() => context.query(SQL['drop_ranking_temp'], { transaction }))
-        .then(() => context.query(SQL['generate_rankings'], { transaction }))
-        .then(() => context.query(SQL['populate_rankings'], { transaction }))
-        .then(() => context.query(SQL['drop_ranking_temp'], { transaction }))
+        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
+        .then(() => db.query(SQL['generate_rankings'], { transaction }))
+        .then(() => db.query(SQL['populate_rankings'], { transaction }))
+        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
         .then(() => ({ success: true, message: '' }))
         .catch((error) => ({ success: false, message: error.message }))
     );

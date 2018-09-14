@@ -8,6 +8,7 @@
         <ListFigureCard 
           v-bind="slotProps.item" 
           :url-source="cardUrl" 
+          :remove="handleRemove"
         />
       </template>
     </List>
@@ -38,7 +39,11 @@ export default {
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    handleRemove: function(characterId) {
+      this.$emit('remove', characterId);
+    }
+  }
 };
 </script>
 

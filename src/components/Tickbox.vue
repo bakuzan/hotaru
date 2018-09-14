@@ -54,7 +54,8 @@ export default {
   cursor: pointer;
 }
 .tickbox__input {
-  appearance: none;
+  // eslint-disable-next-line
+  appearance: none; // scss-lint:disable-line unknown-property
   transition: all 0.3s;
   position: relative;
   display: flex;

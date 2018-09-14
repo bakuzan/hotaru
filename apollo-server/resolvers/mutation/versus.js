@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Versus, Character, Series } = require('../../connectors');
+const { db, Versus, Character, Series } = require('../../connectors');
 const Constants = require('../../constants');
 const Utils = require('../../utils');
 
@@ -8,9 +8,9 @@ module.exports = {
   versusCreateDaily() {
     const createdAt = Date.now() - 1000;
 
-    return context.transaction(async (transaction) => {
+    return db.transaction(async (transaction) => {
       const randomCharacters = await Character.findAll({
-        order: context.literal('RANDOM()'),
+        order: db.literal('RANDOM()'),
         limit: Constants.dailyVersusCharacterCount,
         transaction
       });
@@ -53,54 +53,11 @@ module.exports = {
       Versus.findById(versusId)
     );
   },
-  versusFromRules(_, { rules }) {
-    const {
-      isIncludeOnlyGender,
-      isIncludeOnlySource,
-      isIncludeOnlySeries
-    } = rules;
-
-    const genderOp = Utils.resolveInOp(isIncludeOnlyGender);
-    const sourceOp = Utils.resolveInOp(isIncludeOnlySource);
-    const seriesOp = Utils.resolveInOp(isIncludeOnlySeries);
-
-    let filters = {};
-    const seriesRule = { seriesId: { [seriesOp]: rules.series } };
-    const sourceRule = {
-      source: context.where(context.col('series.source'), {
-        [sourceOp]: rules.sources
-      })
-    };
-
-    if (!isIncludeOnlySource && !isIncludeOnlySeries) {
-      filters = {
-        [Op.and]: [
-          {
-            [Op.or]: [{ seriesId: { [Op.eq]: null } }, sourceRule]
-          },
-          {
-            [Op.or]: [{ seriesId: { [Op.eq]: null } }, seriesRule]
-          }
-        ]
-      };
-    } else {
-      filters = {
-        ...seriesRule,
-        ...sourceRule
-      };
-    }
-
-    return context.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll({
-        where: {
-          gender: {
-            [genderOp]: rules.genders
-          },
-          ...filters
-        },
-        order: context.literal('RANDOM()'),
+  versusFromRules(_, args, context) {
+    return db.transaction(async (transaction) => {
+      const randomCharacters = await context.Character.findFromRules(args, {
+        order: db.literal('RANDOM()'),
         limit: 2,
-        include: [Series],
         transaction
       });
 

@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 const {
-  db: context,
+  db,
   Character,
   Tag,
   Image,
@@ -45,7 +45,7 @@ module.exports = {
     } = Utils.separateArrIntoNewAndExisting(images);
 
     return Character.findById(id).then(async (character) => {
-      return context
+      return db
         .transaction(async (transaction) => {
           await character.setSeries(seriesId, { transaction });
           await character.setTags(existingTagIds, { transaction });
@@ -88,7 +88,7 @@ module.exports = {
     const todayMidnight = new Date(onDate || new Date());
     todayMidnight.setUTCHours(0, 0, 0, 0);
 
-    return context.transaction(async (transaction) => {
+    return db.transaction(async (transaction) => {
       const cotd = await CharacterOfTheDay.findOne({
         where: { createdAt: { [Op.gte]: todayMidnight } },
         transaction
@@ -97,7 +97,7 @@ module.exports = {
       if (cotd) return cotd.getCharacter({ transaction });
 
       return Character.findOne({
-        order: context.literal('RANDOM()'),
+        order: db.literal('RANDOM()'),
         transaction
       })
         .then((character) =>

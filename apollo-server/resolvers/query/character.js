@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Character } = require('../../connectors');
+const { db, Character } = require('../../connectors');
 
 module.exports = {
   characters(_, { search = '', genders }) {
@@ -55,7 +55,10 @@ module.exports = {
   },
   characterRandom() {
     return Character.findOne({
-      order: context.literal('RANDOM()')
+      order: db.literal('RANDOM()')
     });
+  },
+  charactersForTemplateRules(_, args, context) {
+    return context.Character.findFromRules(args);
   }
 };

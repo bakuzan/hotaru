@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, HTRTemplate, HTRInstance } = require('../../connectors');
+const { db, HTRTemplate, HTRInstance } = require('../../connectors');
 
 module.exports = {
   htrTemplates(_, { search, type }) {
@@ -23,7 +23,7 @@ module.exports = {
         name: {
           [Op.like]: `%${search}%`
         },
-        type: context.where(context.col('htrtemplate.type'), {
+        type: db.where(db.col('htrtemplate.type'), {
           [Op.eq]: type
         })
       },

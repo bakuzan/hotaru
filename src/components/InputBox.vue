@@ -8,6 +8,7 @@
         placeholder=" "
         autoComplete="off"
         :maxLength="maxLength"
+        :disabled="disabled"
         @input="handleChange" 
         @focus="onFocus"
         @blur="onBlur"
@@ -69,6 +70,9 @@ export default {
     clearButtonClass: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean
     }
   },
   data: function() {

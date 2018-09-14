@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db: context, Versus } = require('../../connectors');
+const { db, Versus } = require('../../connectors');
 const SQL = require('../../db-scripts');
 
 module.exports = {
@@ -29,8 +29,8 @@ module.exports = {
   },
   versusHistoryComparison(_, { characterIds }) {
     const [c1, c2] = characterIds;
-    return context.query(SQL['get_versus_history_for_characters'], {
-      type: context.QueryTypes.SELECT,
+    return db.query(SQL['get_versus_history_for_characters'], {
+      type: db.QueryTypes.SELECT,
       replacements: { c1, c2 }
     });
   },

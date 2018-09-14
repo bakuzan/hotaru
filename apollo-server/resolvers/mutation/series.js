@@ -1,4 +1,4 @@
-const { db: context, Series } = require('../../connectors');
+const { db, Series } = require('../../connectors');
 
 module.exports = {
   seriesCreate(_, { series }) {
@@ -13,7 +13,7 @@ module.exports = {
     const { id, characterIds = [], ...args } = series;
 
     return Series.findById(id).then(async (series) => {
-      return context
+      return db
         .transaction(async (transaction) => {
           await series.setCharacters(characterIds, { transaction });
 

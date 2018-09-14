@@ -11,11 +11,15 @@ const { ApolloServer } = require('apollo-server-express');
 const Constants = require('./constants/index');
 const typeDefs = require('./type-definitions');
 const resolvers = require('./resolvers');
+const context = require('./context');
 
 const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: () => ({
+    ...context
+  }),
   playground: {
     settings: {
       'editor.theme': 'light'
