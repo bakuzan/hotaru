@@ -8,7 +8,7 @@
             <ViewBlockToggler
               id="name"
               label="Name"
-              :value="instance.name"
+              :value="editInstance.name"
               :lockEdit="isCreate"
               :forceReadOnly="readOnly"
             >
@@ -23,7 +23,7 @@
             <ViewBlockToggler
               id="limit"
               label="Limit"
-              :value="instance.settings.limit"
+              :value="editInstance.settings.limit"
               :lockEdit="isCreate"
               :forceReadOnly="lockedReadOnlyBracket"
             >
@@ -60,7 +60,7 @@
             <ViewBlockToggler
               id="description"
               label="Description"
-              :value="instance.description"
+              :value="editInstance.description"
               :lockEdit="isCreate"
               :forceReadOnly="readOnly"
             >
@@ -212,7 +212,8 @@ export default {
       htrTemplates: [],
       templateFilter: '',
       characters: [],
-      characterFilter: ''
+      characterFilter: '',
+      mappedOrders: mapToSelectBoxOptions(Order)
     };
   },
   apollo: {
@@ -229,9 +230,10 @@ export default {
       update(data) {
         const instance = data.htrInstanceById || defaultInstanceModel();
         this.editInstance = {
-          ...instance
+          ...instance,
+          settings: { ...instance.settings }
         };
-        return { ...instance };
+        return { ...instance, settings: { ...instance.settings } };
       }
     },
     htrTemplates: {
@@ -283,8 +285,14 @@ export default {
         'page-view__content': !this.isListType
       });
     },
+    mappedLimits: function() {
+      return mapEnumToSelectBoxOptions(Limit[this.type] || []);
+    },
     hasEdits: function() {
-      return !objectsAreEqual(this.instance, this.editInstance);
+      return (
+        !objectsAreEqual(this.instance, this.editInstance) ||
+        !objectsAreEqual(this.instance.settings, this.editInstance.settings)
+      );
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
@@ -298,12 +306,6 @@ export default {
     lockedReadOnlyBracket: function() {
       return (!this.isCreate && !this.isListType) || this.readOnly;
     },
-    mappedLimits: function() {
-      return mapEnumToSelectBoxOptions(Limit[this.type] || []);
-    },
-    mappedOrders: function() {
-      return mapToSelectBoxOptions(Order);
-    },
     filteredCharacters: function() {
       return this.characters.filter(
         (x) =>
@@ -314,7 +316,9 @@ export default {
     disableCharacterInput: function() {
       const { characters = [], settings } = this.editInstance;
       return (
-        !this.editInstance.htrTemplate || characters.length >= settings.limit
+        !this.editInstance.htrTemplate ||
+        !characters ||
+        characters.length >= settings.limit
       );
     },
     instanceOrder: function() {
@@ -330,11 +334,9 @@ export default {
     },
     onInput: function(value, name) {
       this.editInstance[name] = value;
-      console.log(this.editInstance);
     },
     onSettingsInput: function(value, name) {
       this.editInstance.settings[name] = value;
-      console.log(this.editInstance);
     },
     onSearch: function(value, name) {
       this[name] = value;
@@ -352,7 +354,10 @@ export default {
     },
     onSelectCharacter: function(characterId) {
       const character = this.characters.find((x) => x.id === characterId);
-      this.editInstance.characters.push({ ...character });
+      this.editInstance.characters = [
+        ...this.editInstance.characters,
+        { ...character }
+      ];
       this.characterFilter = '';
     },
     onRemoveCharacter: function(characterId) {
@@ -432,7 +437,7 @@ export default {
 @import '../../styles/_variables';
 
 #characterFilter {
-  margin: $app--margin-standard 0;
+  margin-top: -2px;
 }
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

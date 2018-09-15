@@ -42,6 +42,9 @@ const getCharactersForTemplateRules = gql`
       id
       name
       displayImage
+      ranking {
+        rank
+      }
     }
   }
 `;
