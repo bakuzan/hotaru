@@ -24,6 +24,8 @@ const Order = Object.freeze([
   { id: 4, name: 'Custom' }
 ]);
 
+const BracketSizes = Object.freeze([64, 32, 16, 8]);
+
 module.exports = {
   GenderType,
   GenderTypes: enumArrayToObject(GenderType),
@@ -35,5 +37,6 @@ module.exports = {
   HTRTemplateTypes: enumArrayToObject(HTRTemplateType),
   BracketStatus,
   BracketStatuses: enumArrayToObject(BracketStatus),
-  Order
+  Order,
+  BracketSizes
 };

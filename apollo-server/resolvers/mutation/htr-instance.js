@@ -3,7 +3,7 @@ const { db, HTRTemplate, HTRInstance } = require('../../connectors');
 const Enums = require('../../constants/enums');
 
 module.exports = {
-  htrInstanceCreate(_, { instance }) {
+  htrInstanceCreate(_, { instance }, context) {
     return db.transaction((transaction) =>
       HTRTemplate.findById(instance.htrTemplateId, { transaction }).then(
         (template) => {
@@ -19,14 +19,23 @@ module.exports = {
                   .setCharacters(characterIds, { transaction })
                   .then(() => newInstance);
               } else {
-                /* TODO
+                return await context.Character.findFromRules(
+                  {
+                    rules: template.rules
+                  },
+                  { transaction, limit: data.settings.limit }
+                ).then((queryCharacters) => {
+                  // context.Versus.createForCharacters();
+                  /* TODO
                * handle Braket type
                *    (1) query for characters
                *    (2) refactor existing versus creation from character list (cotnext)
                *    (3) setVersus
-               *    (4) update instance with versus matches (save into settings) & status BracketStatuses.notstarted
+               *    (4) update instance with versus matches (save into settings) 
+               *        & status BracketStatuses.notstarted
                */
-                return newInstance;
+                  return newInstance;
+                });
               }
             })
             .then((newInstance) => newInstance.reload({ transaction }));
