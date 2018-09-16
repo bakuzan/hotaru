@@ -129,6 +129,35 @@ const templates = [
     }
   }
 ];
+const templates = [
+  {
+    name: 'Free Test',
+    type: 'Bracket',
+    rules: {
+      genders: [],
+      sources: [],
+      series: []
+    }
+  },
+  {
+    name: 'Only Female Bracket',
+    type: 'Bracket',
+    rules: {
+      genders: ['Female'],
+      sources: [],
+      series: []
+    }
+  },
+  {
+    name: 'Only Anime Bracket',
+    type: 'Bracket',
+    rules: {
+      genders: [],
+      sources: ['Anime'],
+      series: []
+    }
+  }
+];
 
 module.exports = {
   series,

@@ -6,7 +6,7 @@
     >
       <template slot-scope="slotProps">
         <ListFigureCard
-          v-if="isNotRankSorted"
+          v-show="isNotRankSorted"
           v-bind="slotProps.item" 
           figure-size="small"
           figure-direction="row"
@@ -14,7 +14,7 @@
           :remove="handleRemove"
         />
         <RankingCard
-          v-else
+          v-show="!isNotRankSorted"
           :character="slotProps.item"
           :rank="getRank(slotProps.item)"
         />
@@ -59,6 +59,7 @@ export default {
     },
     sortedItems: function() {
       const { order: sortType } = this.options;
+
       if (sortType === Orders.name) {
         return orderBy(this.items, ['name']);
       } else if (sortType === Orders.rank) {

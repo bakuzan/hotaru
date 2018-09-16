@@ -56,9 +56,11 @@ export default {
   },
   computed: {
     winsText: function() {
+      if (this.wins === undefined) return null;
       return this.wins === 1 ? `${this.wins} win` : `${this.wins} wins`;
     },
     scoreText: function() {
+      if (this.score === undefined) return null;
       return this.score === null ? 'No rating' : `${this.score} rating`;
     },
     cardUrl: function() {

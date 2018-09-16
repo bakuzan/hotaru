@@ -2,7 +2,7 @@
   <form novalidate @submit.prevent="submit">
     <div class="page">
       <LoadingBouncer v-show="isLoading" />
-      <div class="page-view">
+      <div :class="instanceViewClasses">
         <div class="page-view__row page-view__row--grow">
           <div class="page-view__left-column">
             <ViewBlockToggler
@@ -279,6 +279,11 @@ export default {
     isListType: function() {
       return this.type === HTRTemplateTypes.list;
     },
+    instanceViewClasses: function() {
+      return classNames('page-view', {
+        'page-view--column': !this.isListType
+      });
+    },
     instanceContentClasses: function() {
       return classNames({
         'page-view__left-column': this.isListType,
@@ -336,7 +341,7 @@ export default {
       this.editInstance[name] = value;
     },
     onSettingsInput: function(value, name) {
-      this.editInstance.settings[name] = value;
+      this.editInstance.settings[name] = Number(value);
     },
     onSearch: function(value, name) {
       this[name] = value;
