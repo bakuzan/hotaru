@@ -240,7 +240,10 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.createHTRTemplate,
-          variables: { template }
+          variables: { template },
+          update: (store) => {
+            store.deleteQueryHTR('htrTemplate');
+          }
         })
         .then(({ data }) => {
           const item = getItemFromData(data);

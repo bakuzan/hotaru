@@ -39,6 +39,13 @@ const castStringToBool = (val) =>
 
 const resolveInOp = (b, arr) => (b && arr.length ? Op.in : Op.notIn);
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
@@ -46,5 +53,6 @@ module.exports = {
   chunk,
   roundFloat,
   castStringToBool,
-  resolveInOp
+  resolveInOp,
+  shuffleArray
 };

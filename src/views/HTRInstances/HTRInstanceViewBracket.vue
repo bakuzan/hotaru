@@ -95,7 +95,7 @@ export default {
             : prev.reduce((p, versus, i) => {
                 const div = i / 2;
                 const keep = Math.floor(div) === pos;
-                if (!keep) return p;
+                if (!keep || !versus) return p;
 
                 const place = div === pos ? 0 : 1;
                 p[place] = !versus.winnerId

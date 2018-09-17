@@ -14,5 +14,6 @@ select
 	v.winnerId as winnerId,
 	v.updatedAt as updatedAt
 from versus as v
+order by v.updatedAt desc
 join c1_cte as c1 on v.id = c1.id
 join c2_cte as c2 on v.id = c2.id

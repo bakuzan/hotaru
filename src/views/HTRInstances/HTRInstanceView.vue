@@ -398,7 +398,10 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.createHTRInstance,
-          variables: { instance }
+          variables: { instance },
+          update: (store) => {
+            store.deleteQueryHTR('htrInstance');
+          }
         })
         .then(({ data }) => {
           const item = getItemFromData(data);
