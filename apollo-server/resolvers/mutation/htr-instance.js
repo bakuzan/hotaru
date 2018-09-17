@@ -103,7 +103,7 @@ module.exports = {
       return Versus.update(
         { winnerId },
         { where: { id: versusId }, transaction }
-      ).then(() => Versus.findById(versusId));
+      );
     });
   }
 };

@@ -4,7 +4,7 @@
     theme="primary"
     :className="buttonClasses"
     :icon="maybeWinningIcon"
-    :disabled="hasWinner"
+    :disabled="hasWinner || disabled"
     @click="handleClick"
   >
     <span class="vote-button__vote-text">
@@ -48,6 +48,10 @@ export default {
     },
     rounded: Boolean,
     depress: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     hasWinner: {
       type: Boolean,
       default: false
@@ -63,7 +67,8 @@ export default {
         'vote-button',
         {
           'vote-button--has-winner': this.hasWinner,
-          'vote-button--is-winner': this.isWinner
+          'vote-button--is-winner': this.isWinner,
+          'vote-button--is-disabled': this.disabled
         },
         this.className
       );
@@ -81,3 +86,27 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@import '../../styles/_variables';
+@import '../../styles/_extensions';
+
+.vote-button {
+  width: 100%;
+  margin: auto;
+
+  &--has-winner .vote-button__vote-text,
+  &--is-disabled .vote-button__vote-text {
+    visibility: hidden;
+  }
+
+  &--is-winner::before {
+    @extend %center-contents;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $app--success-background-colour;
+    color: $app--success-colour;
+  }
+}
+</style>

@@ -111,7 +111,11 @@ export default {
       });
     },
     imageClasses: function() {
-      return classNames('list-figure-card__image');
+      const isPlaceholder =
+        this.displayImage === Urls.images.characterPlaceholder;
+      return classNames('list-figure-card__image', {
+        'list-figure-card__image--placeholder': isPlaceholder
+      });
     },
     itemUrl: function() {
       if (!this.urlSource) return null;
@@ -181,6 +185,11 @@ export default {
     & .list-figure-card__image {
       width: 50px;
       height: 75px;
+
+      &--placeholder {
+        width: 60px;
+        height: 84px;
+      }
     }
   }
 }

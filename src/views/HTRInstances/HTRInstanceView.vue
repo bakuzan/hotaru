@@ -96,25 +96,25 @@
               />
             </ViewBlockToggler>
             <ViewBlockToggler
+              v-if="isListType"
               id="characters"
               label="Characters"
               value="Change selection?"
               :lockEdit="isCreate"
               :forceReadOnly="readOnly"
             >
-            <InputBoxAutocomplete
-              v-if="isListType"
-              id="characterFilter"
-              name="characterFilter"
-              label="Characters"
-              attr="name"
-              :options="filteredCharacters"
-              :filter="characterFilter"
-              :disabled="disableCharacterInput"
-              @input="onSearch"
-              @on-select="onSelectCharacter"
-              disable-local-filter
-            />
+              <InputBoxAutocomplete
+                id="characterFilter"
+                name="characterFilter"
+                label="Characters"
+                attr="name"
+                :options="filteredCharacters"
+                :filter="characterFilter"
+                :disabled="disableCharacterInput"
+                @input="onSearch"
+                @on-select="onSelectCharacter"
+                disable-local-filter
+              />
             </ViewBlockToggler>
           </div>
         </div>
@@ -127,6 +127,8 @@
           />
           <HTRInstanceViewBracket
             v-else
+            :items="editInstance.versus"
+            :options="editInstance.settings"
           />
         </div>
       </div>

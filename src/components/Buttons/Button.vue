@@ -141,24 +141,3 @@ export default {
   }
 }
 </style>
-<style lang="scss" scoped>
-@import '../../styles/_variables';
-
-.vote-button {
-  width: 100%;
-  margin: auto;
-
-  &--has-winner .vote-button__vote-text {
-    visibility: hidden;
-  }
-
-  &--is-winner::before {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: $app--success-background-colour;
-    color: $app--success-colour;
-    font-size: 1em;
-  }
-}
-</style>

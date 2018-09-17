@@ -1,18 +1,19 @@
 <template>
-  <div class="versus">
+  <div :class="classes">
     <VersusCard 
       v-for="item in characters"
       :key="item.id"
       :item="item"
       :winner-id="winnerId"
+      :is-dummy="isDummy"
       grow
       @vote="handleVote"
     />
-    <div v-if="!enableCompare" class="versus__icon">
+    <div v-if="!enableCompare || isDummy" class="versus__icon">
       VS
     </div>
     <router-link 
-      v-if="enableCompare"
+      v-if="enableCompare && !isDummy"
       class="versus__icon"
       :to="compareLink"
     >
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+import classNames from 'classnames';
 import { VersusCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
@@ -33,7 +35,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: [Number, String],
       required: true
     },
     characters: {
@@ -47,9 +49,16 @@ export default {
     enableCompare: {
       type: Boolean,
       default: false
+    },
+    isDummy: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
+    classes: function() {
+      return classNames('versus', { 'versus--is-dummy': this.isDummy });
+    },
     compareLink: function() {
       const ids = this.characters.map((x) => x.id).join(',');
       return `${Urls.versusComparison}?characterIds=${ids}`;
@@ -57,6 +66,7 @@ export default {
   },
   methods: {
     handleVote: function(characterId) {
+      if (this.isDummy) return;
       this.$emit('vote', this.id, characterId);
     }
   }

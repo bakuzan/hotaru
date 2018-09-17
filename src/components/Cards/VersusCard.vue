@@ -1,14 +1,15 @@
 <template>
   <div :class="cardClasses">
     <ListFigureCard
-      v-bind="item" 
-      :url-source="characterCardUrl"
+      v-bind="item"
+      :url-source="isDummy ? null : characterCardUrl"
       figure-size="small"
       open-new-tab
     />
     <VoteButton
       :has-winner="!!winnerId"
       :is-winner="isWinner"
+      :disabled="isDummy"
       @click="handleVote"
     >
       Vote {{item.name}}
@@ -42,6 +43,10 @@ export default {
     grow: {
       type: Boolean,
       default: false
+    },
+    isDummy: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -51,7 +56,10 @@ export default {
   },
   computed: {
     cardClasses: function() {
-      return classNames('versus-card', { 'versus-card--grow': this.grow });
+      return classNames('versus-card', {
+        'versus-card--grow': this.grow,
+        'versus-card--is-dummy': this.isDummy
+      });
     },
     isWinner: function() {
       return this.item.id === this.winnerId;
@@ -59,6 +67,7 @@ export default {
   },
   methods: {
     handleVote: function() {
+      if (this.isDummy || this.winnerId) return;
       this.$emit('vote', this.item.id);
     }
   }
@@ -76,24 +85,6 @@ export default {
 
   &--grow {
     width: 50%;
-  }
-
-  &__vote-button {
-    width: 100%;
-    margin: auto;
-
-    &--has-winner .versus-card__vote-text {
-      visibility: hidden;
-    }
-
-    &--is-winner::before {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: $app--success-background-colour;
-      color: $app--success-colour;
-      font-size: 1em;
-    }
   }
 }
 </style>
