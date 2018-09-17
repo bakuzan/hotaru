@@ -8,8 +8,8 @@
       <VersusWidget 
         v-for="match in round" 
         :key="match.id"
-        v-bind="match"
         enable-compare
+        v-bind="match"
         @vote="handleVote"
       />
     </div>
@@ -81,6 +81,7 @@ export default {
     getDummyVersus: function(winners) {
       return {
         isDummy: true,
+        enableCompare: winners.every((w) => !!w),
         id: generateUniqueId(),
         characters: winners.map((x) => (x ? x : this.getDummyCharacter()))
       };
@@ -109,7 +110,6 @@ export default {
         });
     },
     handleVote: function(versusId, winnerId) {
-      console.log('voted', versusId, winnerId);
       this.mutationLoading = true;
 
       this.$apollo

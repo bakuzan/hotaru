@@ -87,7 +87,7 @@ const createHTRInstance = gql`
 `;
 
 const castVoteInBracket = gql`
-  query castVoteInBracket(
+  mutation castVoteInBracket(
     $htrInstanceId: Int!
     $versusId: Int!
     $winnerId: Int!
@@ -97,10 +97,10 @@ const castVoteInBracket = gql`
       versusId: $versusId
       winnerId: $winnerId
     ) {
-      ...InstanceFields
+      ...ExistingInstanceFields
     }
   }
-  ${instanceFields}
+  ${existingInstanceFields}
 `;
 
 export default {

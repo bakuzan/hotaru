@@ -9,11 +9,11 @@
       grow
       @vote="handleVote"
     />
-    <div v-if="!enableCompare || isDummy" class="versus__icon">
+    <div v-if="!enableCompare" class="versus__icon">
       VS
     </div>
     <router-link 
-      v-if="enableCompare && !isDummy"
+      v-if="enableCompare"
       class="versus__icon"
       :to="compareLink"
     >

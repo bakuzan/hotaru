@@ -1,4 +1,10 @@
-const { db, HTRTemplate, HTRInstance, Versus } = require('../../connectors');
+const {
+  db,
+  HTRTemplate,
+  HTRInstance,
+  Versus,
+  Character
+} = require('../../connectors');
 
 const {
   HTRTemplateTypes,
@@ -92,18 +98,77 @@ module.exports = {
       )
     );
   },
-  htrInstanceVersusVote(_, { htrInstanceId, versusId, winnerId }) {
-    console.log(
-      'versus vote for bracket not implemented',
-      htrInstanceId,
-      versusId,
-      winnerId
-    );
+  htrInstanceVersusVote(_, { htrInstanceId, versusId, winnerId }, context) {
     return db.transaction((transaction) => {
       return Versus.update(
         { winnerId },
         { where: { id: versusId }, transaction }
-      );
+      )
+        .then(() =>
+          HTRInstance.findById(htrInstanceId, {
+            transaction,
+            include: [{ model: Versus, include: [Character] }]
+          })
+        )
+        .then((instance) => {
+          let instanceUpdate;
+          const { settings } = instance;
+          const [currentRound] = settings.layout.slice(-1);
+
+          if (currentRound.length === 1) {
+            instanceUpdate = {
+              ...settings,
+              winnerId,
+              status: BracketStatuses.Complete
+            };
+
+            return instanceUpdate;
+          }
+
+          instanceUpdate = {
+            ...settings,
+            winnerId: null,
+            status: BracketStatuses.InProgress
+          };
+
+          const roundComplete = currentRound.every((vId) =>
+            instance.versus.some((v) => v.id === vId && v.winnerId)
+          );
+
+          if (!roundComplete) return instanceUpdate;
+
+          const advancingCharacters = currentRound
+            .map((vId) => instance.versus.find((v) => v.id === vId))
+            .map((v) => v.characters.find((c) => c.id === v.winnerId));
+
+          return context.Versus.createForCharacters(
+            VersusTypes.Bracket,
+            advancingCharacters,
+            {
+              transaction
+            }
+          )
+            .then((roundVersus) => {
+              const roundVersusIds = roundVersus.map((x) => x.id);
+              instanceUpdate = {
+                ...instanceUpdate,
+                layout: [...settings.layout, roundVersusIds]
+              };
+              return instance.addVersus(roundVersusIds, { transaction });
+            })
+            .then(() => instanceUpdate);
+        })
+        .then((settings) =>
+          HTRInstance.update(
+            { settings },
+            { where: { id: htrInstanceId }, transaction }
+          )
+        )
+        .then(() =>
+          HTRInstance.findById(htrInstanceId, {
+            transaction
+          })
+        );
     });
   }
 };
