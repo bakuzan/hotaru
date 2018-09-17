@@ -1,6 +1,10 @@
-const { db, HTRTemplate, HTRInstance } = require('../../connectors');
+const { db, HTRTemplate, HTRInstance, Versus } = require('../../connectors');
 
-const Enums = require('../../constants/enums');
+const {
+  HTRTemplateTypes,
+  VersusTypes,
+  BracketStatuses
+} = require('../../constants/enums');
 
 module.exports = {
   htrInstanceCreate(_, { instance }, context) {
@@ -14,7 +18,7 @@ module.exports = {
             { transaction }
           )
             .then(async (newInstance) => {
-              if (template.type === Enums.HTRTemplateTypes.List) {
+              if (template.type === HTRTemplateTypes.List) {
                 return await newInstance
                   .setCharacters(characterIds, { transaction })
                   .then(() => newInstance);
@@ -24,18 +28,35 @@ module.exports = {
                     rules: template.rules
                   },
                   { transaction, limit: data.settings.limit }
-                ).then((queryCharacters) => {
-                  // context.Versus.createForCharacters();
-                  /* TODO
-               * handle Braket type
-               *    (1) query for characters
-               *    (2) refactor existing versus creation from character list (cotnext)
-               *    (3) setVersus
-               *    (4) update instance with versus matches (save into settings) 
-               *        & status BracketStatuses.notstarted
-               */
-                  return newInstance;
-                });
+                )
+                  .then((queryCharacters) =>
+                    context.Versus.createForCharacters(
+                      VersusTypes.Bracket,
+                      queryCharacters,
+                      {
+                        transaction,
+                        bracketLimit: data.settings.limit
+                      }
+                    )
+                  )
+                  .then((firstRoundVersus) => {
+                    const firstRoundIds = firstRoundVersus.map((x) => x.id);
+                    return newInstance
+                      .setVersus(firstRoundIds, { transaction })
+                      .then(() =>
+                        HTRInstance.update(
+                          {
+                            settings: {
+                              ...newInstance.settings,
+                              layout: [firstRoundIds],
+                              status: BracketStatuses.NotStarted
+                            }
+                          },
+                          { where: { id: newInstance.id }, transaction }
+                        )
+                      )
+                      .then(() => newInstance);
+                  });
               }
             })
             .then((newInstance) => newInstance.reload({ transaction }));
@@ -55,7 +76,7 @@ module.exports = {
           ).then(() =>
             HTRInstance.findById(id, { transaction }).then(
               async (updatedInstance) => {
-                if (template.type === Enums.HTRTemplateTypes.List) {
+                if (template.type === HTRTemplateTypes.List) {
                   return await updatedInstance
                     .setCharacters(characterIds, {
                       transaction
@@ -71,7 +92,18 @@ module.exports = {
       )
     );
   },
-  htrInstanceVersusVote(_, args) {
-    console.log('versus vote for bracket not implemented', args);
+  htrInstanceVersusVote(_, { htrInstanceId, versusId, winnerId }) {
+    console.log(
+      'versus vote for bracket not implemented',
+      htrInstanceId,
+      versusId,
+      winnerId
+    );
+    return db.transaction((transaction) => {
+      return Versus.update(
+        { winnerId },
+        { where: { id: versusId }, transaction }
+      ).then(() => Versus.findById(versusId));
+    });
   }
 };

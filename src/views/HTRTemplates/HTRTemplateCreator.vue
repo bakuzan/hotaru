@@ -45,7 +45,7 @@
             <InputBoxAutocomplete
                 id="seriesFilter"
                 name="seriesFilter"
-                text="Series"
+                label="Series"
                 attr="name"
                 :options="series"
                 :filter="seriesFilter"

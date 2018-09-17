@@ -19,6 +19,8 @@ module.exports = gql`
     status: BracketStatus
     "Bracket Winner - Bracket type only"
     winnerId: Int
+    "Bracket Layout - Bracket type only"
+    layout: [[Int]]
     "Character sort order - List type only"
     order: Int
   }
@@ -37,6 +39,8 @@ module.exports = gql`
     status: BracketStatus
     "Bracket Winner - Bracket type only"
     winnerId: Int
+    "Bracket Layout - Bracket type only"
+    layout: [[Int]]
     "Character sort order - List type only"
     order: Int
   }

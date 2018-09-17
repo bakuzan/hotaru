@@ -1,51 +1,23 @@
-const Op = require('sequelize').Op;
-
-const { db, Versus, Character, Series } = require('../../connectors');
+const { db, Versus, Character } = require('../../connectors');
 const Constants = require('../../constants');
-const Utils = require('../../utils');
+const { VersusTypes } = require('../../constants/enums');
 
 module.exports = {
-  versusCreateDaily() {
-    const createdAt = Date.now() - 1000;
-
+  versusCreateDaily(_, __, context) {
     return db.transaction(async (transaction) => {
-      const randomCharacters = await Character.findAll({
+      return await Character.findAll({
         order: db.literal('RANDOM()'),
         limit: Constants.dailyVersusCharacterCount,
         transaction
-      });
-
-      const versusCharacters = Utils.chunk(randomCharacters, 2).filter(
-        (x) => x.length === 2
-      );
-
-      if (!versusCharacters.length) {
-        throw Error('Unable to create any character pairs.');
-      }
-
-      const versusShells = versusCharacters.map(() => ({ type: 'Daily' }));
-      return await Versus.bulkCreate(versusShells, {
-        transaction
-      }).then(async () => {
-        const promises = [];
-        const createdVersus = await Versus.findAll({
-          where: { createdAt: { [Op.gte]: createdAt } },
-          transaction
-        });
-
-        createdVersus.forEach((v, i) => {
-          const characters = versusCharacters[i];
-          promises.push(v.setCharacters(characters, { transaction }));
-        });
-
-        return Promise.all(promises).then(() => {
-          const versusIds = createdVersus.map((x) => x.id);
-          return Versus.findAll({
-            where: { id: { [Op.in]: versusIds } },
+      }).then((randomCharacters) =>
+        context.Versus.createForCharacters(
+          VersusTypes.Daily,
+          randomCharacters,
+          {
             transaction
-          });
-        });
-      });
+          }
+        )
+      );
     });
   },
   versusVote(_, { versusId, winnerId }) {
@@ -66,7 +38,7 @@ module.exports = {
       }
 
       return Versus.create(
-        { type: 'Single' },
+        { type: VersusTypes.Single },
         {
           transaction
         }

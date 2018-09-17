@@ -19,6 +19,7 @@ const instanceFields = gql`
       }
       order
       status
+      layout
       winnerId
     }
   }

@@ -127,9 +127,7 @@ const templates = [
       sources: ['Anime'],
       series: []
     }
-  }
-];
-const templates = [
+  },
   {
     name: 'Free Test',
     type: 'Bracket',
