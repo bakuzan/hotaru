@@ -127,6 +127,7 @@
           />
           <HTRInstanceViewBracket
             v-else
+            :bracketId="editInstance.id"
             :items="editInstance.versus"
             :options="editInstance.settings"
           />

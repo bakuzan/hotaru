@@ -21,6 +21,8 @@ import VersusWidget from '@/components/VersusWidget';
 
 import Urls from '@/constants/urls';
 import { generateUniqueId, bracketProgression } from '@/utils';
+import { Query, Mutation } from '@/graphql';
+import { mapHTRInstanceToStore } from '@/utils/mappers';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -28,6 +30,9 @@ export default {
     VersusWidget
   },
   props: {
+    bracketId: {
+      type: Number
+    },
     items: {
       type: Array,
       default: () => []
@@ -38,7 +43,7 @@ export default {
     }
   },
   data: function() {
-    return {};
+    return { mutationLoading: false };
   },
   apollo: {},
   computed: {
@@ -56,41 +61,77 @@ export default {
 
       const fullBracket = this.bracketRounds.map((size, i) => {
         const round = existingProgress[i];
-        if (!round) return this.getDummyRound(size);
-        return [...round];
+        if (round) return [...round];
+
+        const previousRound = existingProgress[i - 1];
+        return this.getDummyRound(size, previousRound);
       });
       console.log(layout, this.bracketRounds, fullBracket);
       return fullBracket;
     }
   },
   methods: {
-    getDummyVersus: function() {
-      // TODO
-      // Display previous winner character if any have won!
+    getDummyCharacter: function() {
+      return {
+        id: generateUniqueId(),
+        name: 'TBC',
+        displayImage: Urls.images.characterPlaceholder
+      };
+    },
+    getDummyVersus: function(winners) {
       return {
         isDummy: true,
         id: generateUniqueId(),
-        characters: [
-          {
-            id: generateUniqueId(),
-            name: 'TBC',
-            displayImage: Urls.images.characterPlaceholder
-          },
-          {
-            id: generateUniqueId(),
-            name: 'TBC',
-            displayImage: Urls.images.characterPlaceholder
-          }
-        ]
+        characters: winners.map((x) => (x ? x : this.getDummyCharacter()))
       };
     },
-    getDummyRound: function(count) {
+    getDummyRound: function(count, prev) {
       return Array(count)
         .fill(null)
-        .map(this.getDummyVersus);
+        .map((_, pos) => {
+          const winningCharacters = !prev
+            ? Array(2).fill(null)
+            : prev.reduce((p, versus, i) => {
+                const div = i / 2;
+                const keep = Math.floor(div) === pos;
+                if (!keep) return p;
+
+                const place = div === pos ? 0 : 1;
+                p[place] = !versus.winnerId
+                  ? null
+                  : {
+                      ...versus.characters.find((c) => c.id === versus.winnerId)
+                    };
+                return p;
+              }, []);
+
+          return this.getDummyVersus(winningCharacters);
+        });
     },
     handleVote: function(versusId, winnerId) {
       console.log('voted', versusId, winnerId);
+      this.mutationLoading = true;
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.castVoteInBracket,
+          variables: { htrInstanceId: this.bracketId, versusId, winnerId },
+          update: (store, { data: { htrInstanceVersusVote } }) => {
+            const data = { ...htrInstanceVersusVote };
+
+            store.writeQuery({
+              query: Query.getHTRInstanceById,
+              variables: { id: data.id },
+              data: { htrInstanceById: mapHTRInstanceToStore(data) }
+            });
+          }
+          // optimisticResponse: mapHTRInstanceToOptimisticUpdate(
+          //   this.editInstance
+          // )
+        })
+        .then(() => {
+          this.mutationLoading = false;
+        });
     }
   }
 };
