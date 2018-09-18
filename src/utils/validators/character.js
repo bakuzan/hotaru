@@ -11,9 +11,6 @@ class CharacterValidator {
     if (!character.gender) {
       return invalidInstance('Gender is required');
     }
-    // if (!character.displayImage) {
-    //   return invalidInstance('Display Image is required');
-    // }
 
     return validInstance();
   }

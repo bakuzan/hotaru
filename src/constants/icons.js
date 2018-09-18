@@ -8,6 +8,8 @@ export default Object.freeze({
   save: '\uD83D\uDCBE',
   left: '\u2039',
   right: '\u203A',
+  down: '\u25BC',
+  up: '\u25B2',
   settings: '\u2699',
   calendar: '\uD83D\uDCC5',
   info: '\uD83D\uDEC8'

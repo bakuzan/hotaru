@@ -7,6 +7,7 @@
         <router-view />
       </div>
     </main>
+    <Alert />
     <portal-target :name="portalName">
     </portal-target>
   </div>
@@ -15,6 +16,7 @@
 <script>
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
+import Alert from '@/components/Alert';
 
 import Strings from '@/constants/strings';
 
@@ -22,7 +24,8 @@ export default {
   name: 'App',
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Alert
   },
   data: function() {
     return {
@@ -63,6 +66,7 @@ main {
     top: $header--height;
     left: $sidebar--width;
   }
+  overflow-x: hidden;
 }
 
 // App helpers
@@ -89,6 +93,9 @@ main {
 
 .button-group {
   display: flex;
+  &--shrink {
+    flex: 0 1;
+  }
 }
 </style>
 <style lang="scss" src="./styles/_themes.scss" />

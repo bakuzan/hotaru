@@ -23,8 +23,10 @@ $app--padding-standard: 0.33em;
 
 $app--failure-background-colour: $red;
 $app--failure-colour: $white;
+$app--info-background-colour: $cyan;
 $app--success-background-colour: $green;
 $app--success-colour: $white;
+$app--warning-background-colour: $orange;
 // App variables
 $accent--colour: $hotaru--ribbon;
 
@@ -52,6 +54,29 @@ $z-index: (
   alert: 1000
 );
 
+// messaging
+$ui-messaging: (
+  success: (
+    background: $app--success-background-colour,
+    colour: #000,
+    icon: '\2713'
+  ),
+  error: (
+    background: $app--failure-background-colour,
+    colour: #fff,
+    icon: '\0021'
+  ),
+  warning: (
+    background: $app--warning-background-colour,
+    colour: #000,
+    icon: '\26a0'
+  ),
+  info: (
+    background: $app--info-background-colour,
+    colour: #000,
+    icon: '\2139'
+  )
+);
 // Themes
 $theme-maps: (
   one: (
