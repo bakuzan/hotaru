@@ -3,23 +3,23 @@ const { HTRTemplateType } = require('../constants/enums');
 module.exports = (db, Types) => {
   return db.define('htrTemplate', {
     name: {
-      type: Types.STRING
+      type: Types.STRING,
+      allowNull: false
     },
     type: {
       type: Types.ENUM,
       values: [...HTRTemplateType]
     },
     rules: {
-      type: Types.JSON
+      type: Types.JSON,
+      allowNull: false
     }
   });
 };
 
 // Example rules structure
-const rules = {
-  // includes only!
-  series: [],
-  sources: [],
-  genders: []
-};
-console.log(rules);
+// {
+//   series: [],
+//   sources: [],
+//   genders: []
+// }
