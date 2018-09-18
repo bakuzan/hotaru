@@ -81,6 +81,7 @@ export default {
   position: relative;
   display: flex;
   justify-content: center;
+  min-height: 180px;
 
   &__icon {
     position: absolute;

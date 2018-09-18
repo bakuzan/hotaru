@@ -44,10 +44,22 @@ export default {
     }
   },
   data: function() {
-    return { mutationLoading: false, bracketRef: generateUniqueId() };
+    return {
+      mutationLoading: false,
+      bracketRef: generateUniqueId(),
+      zoomController: null
+    };
   },
   mounted() {
-    panzoom(this.$refs[this.bracketRef], {});
+    /* 
+      beforeWheel: function(e) return bool;
+      zoomSpeed: 0.1 // 10% of wheel event
+      maxZoom: 1,
+      minZoom: 0.1
+      smoothScroll: false
+      zoomDoubleClickSpeed: 1 // 1 is disabled..above 1 is multiplier
+    */
+    this.zoomController = panzoom(this.$refs[this.bracketRef], {});
   },
   computed: {
     bracketRounds: function() {
@@ -160,13 +172,15 @@ export default {
 
 .bracket {
   display: flex;
-  overflow: hidden;
+  outline: none;
 
   &__round {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     flex: 1;
+    min-width: 350px;
+    padding: $app--padding-standard;
   }
 }
 </style>
