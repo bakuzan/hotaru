@@ -1,5 +1,6 @@
 <template>
   <div class="instance-view bracket" :ref="bracketRef">
+    <canvas class="bracket__canvas" :ref="canvasRef"></canvas>
     <div 
       v-for="(round, i) in customBracketLayout" 
       :key="i"
@@ -44,9 +45,11 @@ export default {
     }
   },
   data: function() {
+    const id = generateUniqueId();
     return {
       mutationLoading: false,
-      bracketRef: generateUniqueId(),
+      bracketRef: id,
+      canvasRef: `canvas-${id}`,
       zoomController: null
     };
   },
@@ -60,6 +63,24 @@ export default {
       zoomDoubleClickSpeed: 1 // 1 is disabled..above 1 is multiplier
     */
     this.zoomController = panzoom(this.$refs[this.bracketRef], {});
+  },
+  updated() {
+    this.$nextTick(function() {
+      const canvas = this.$refs[this.canvasRef];
+      const ctx = canvas.getContext('2d');
+      console.log(this, canvas, ctx);
+
+      /*
+        var rect = element.getBoundingClientRect();
+        console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(300,150);
+        ctx.stroke();
+      
+      */
+    });
   },
   computed: {
     bracketRounds: function() {
@@ -181,6 +202,16 @@ export default {
     flex: 1;
     min-width: 350px;
     padding: $app--padding-standard;
+    margin: 0 $app--margin-large;
+  }
+
+  &__canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
   }
 }
 </style>

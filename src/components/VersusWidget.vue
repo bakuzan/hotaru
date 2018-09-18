@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes">
+  <div :class="classes" :id="id">
     <VersusCard 
       v-for="item in characters"
       :key="item.id"
