@@ -1,7 +1,7 @@
 <template>
-  <div class="instance-view bracket">
+  <div class="instance-view bracket" :ref="bracketRef">
     <div 
-      v-for="(round, i) in bracket" 
+      v-for="(round, i) in customBracketLayout" 
       :key="i"
       class="bracket__round"
     >
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import panzoom from 'panzoom';
 import VersusWidget from '@/components/VersusWidget';
 
 import Urls from '@/constants/urls';
@@ -43,9 +44,11 @@ export default {
     }
   },
   data: function() {
-    return { mutationLoading: false };
+    return { mutationLoading: false, bracketRef: generateUniqueId() };
   },
-  apollo: {},
+  mounted() {
+    panzoom(this.$refs[this.bracketRef], {});
+  },
   computed: {
     bracketRounds: function() {
       const { layout } = this.options;
@@ -55,19 +58,36 @@ export default {
     },
     bracket: function() {
       const { layout = [] } = this.options;
-      const existingProgress = layout.map((round) =>
+      const existingProgress = [...layout].map((round) =>
         round.map((id) => this.items.find((x) => x.id === id))
       );
 
       const fullBracket = this.bracketRounds.map((size, i) => {
         const round = existingProgress[i];
         if (round) return [...round];
+        if (!size) return [];
 
         const previousRound = existingProgress[i - 1];
         return this.getDummyRound(size, previousRound);
       });
-      console.log(layout, this.bracketRounds, fullBracket);
+
       return fullBracket;
+    },
+    customBracketLayout: function() {
+      const columCount = this.bracket.length * 2 - 2;
+      const customBracketLayout = this.bracket.reduce((p, r, i) => {
+        const roundCount = r.length;
+        const halfRound = roundCount / 2;
+        const isFinalRound = Math.floor(halfRound) === 0;
+
+        p[i] = isFinalRound ? r : r.slice(0, halfRound);
+        if (!isFinalRound) {
+          p[columCount - i] = r.slice(halfRound);
+        }
+        return p;
+      }, []);
+
+      return customBracketLayout;
     }
   },
   methods: {
@@ -90,6 +110,7 @@ export default {
       return Array(count)
         .fill(null)
         .map((_, pos) => {
+          console.log(count, prev);
           const winningCharacters = !prev
             ? Array(2).fill(null)
             : prev.reduce((p, versus, i) => {
@@ -125,9 +146,6 @@ export default {
               data: { htrInstanceById: mapHTRInstanceToStore(data) }
             });
           }
-          // optimisticResponse: mapHTRInstanceToOptimisticUpdate(
-          //   this.editInstance
-          // )
         })
         .then(() => {
           this.mutationLoading = false;
@@ -142,6 +160,7 @@ export default {
 
 .bracket {
   display: flex;
+  overflow: hidden;
 
   &__round {
     display: flex;

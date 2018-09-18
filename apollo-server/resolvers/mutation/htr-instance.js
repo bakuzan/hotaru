@@ -11,6 +11,7 @@ const {
   VersusTypes,
   BracketStatuses
 } = require('../../constants/enums');
+const Utils = require('../../utils');
 
 module.exports = {
   htrInstanceCreate(_, { instance }, context) {
@@ -38,7 +39,7 @@ module.exports = {
                   .then((queryCharacters) =>
                     context.Versus.createForCharacters(
                       VersusTypes.Bracket,
-                      queryCharacters,
+                      Utils.shuffleArray(queryCharacters),
                       {
                         transaction,
                         bracketLimit: data.settings.limit

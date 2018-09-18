@@ -58,6 +58,7 @@ button {
 }
 
 main {
+  min-height: calc(100vh - #{$header--height});
   padding: {
     top: $header--height;
     left: $sidebar--width;
