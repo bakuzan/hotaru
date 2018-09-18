@@ -112,6 +112,7 @@ import {
 import * as CacheUpdate from '@/utils/cache';
 import { defaultHTRTemplate } from '@/utils/models';
 import * as Routing from '@/utils/routing';
+import { TemplateValidator } from '@/utils/validators';
 
 export default {
   name: 'HTRTemplates',
@@ -230,9 +231,12 @@ export default {
       this.mutationLoading = true;
       const template = mapHTRTemplateToPost(this.editTemplate, this.isCreate);
 
-      if (this.isCreate) {
+      if (this.isCreate && TemplateValidator.isValidNew(this.editTemplate)) {
         this.handleCreate(template);
-      } else {
+      } else if (
+        !this.isCreate &&
+        TemplateValidator.isValidExisting(this.editTemplate)
+      ) {
         this.handleUpdate(template);
       }
     },

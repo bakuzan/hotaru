@@ -183,6 +183,7 @@ import {
 import * as CacheUpdate from '@/utils/cache';
 import { defaultInstanceModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
+import { InstanceValidator } from '@/utils/validators';
 
 export default {
   name: 'HTRInstanceView',
@@ -385,9 +386,12 @@ export default {
     submit: function() {
       this.readOnly = true; // set back to read only.
       console.log('submitted!');
-      if (this.isCreate) {
+      if (this.isCreate && InstanceValidator.isValidNew(this.editInstance)) {
         this.handleCreate();
-      } else {
+      } else if (
+        !this.isCreate &&
+        InstanceValidator.isValidExisiting(this.editInstance)
+      ) {
         this.handleUpdate();
       }
     },

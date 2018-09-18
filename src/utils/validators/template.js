@@ -1,14 +1,14 @@
 import Validator, { ValidatorResponse } from './validator-base';
 
-const instance = new Validator((series) => {
+const instance = new Validator((template) => {
   const response = new ValidatorResponse();
 
-  response.updateResponse(series, 'No instance');
+  response.updateResponse(template, 'No instance');
   response.updateResponse(
-    series.name && series.name.trim(),
+    template.name && template.name.trim(),
     'Name is required'
   );
-  response.updateResponse(series.source, 'Source is required');
+  response.updateResponse(template.type, 'Type is required');
 
   return response;
 });

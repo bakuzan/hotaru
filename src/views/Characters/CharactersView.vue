@@ -324,7 +324,10 @@ export default {
       console.log('submitted character!');
       if (this.isCreate && CharacterValidator.isValidNew(this.editCharacter)) {
         this.handleCreate();
-      } else if (CharacterValidator.isValidExisting(this.editCharacter)) {
+      } else if (
+        !this.isCreate &&
+        CharacterValidator.isValidExisting(this.editCharacter)
+      ) {
         this.handleUpdate();
       }
     },

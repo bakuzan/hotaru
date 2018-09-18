@@ -272,7 +272,10 @@ export default {
       console.log('submitted series!');
       if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
         this.handleCreate();
-      } else if (SeriesValidator.isValidExisting(this.editSeries)) {
+      } else if (
+        !this.isCreate &&
+        SeriesValidator.isValidExisting(this.editSeries)
+      ) {
         this.handleUpdate();
       }
     },

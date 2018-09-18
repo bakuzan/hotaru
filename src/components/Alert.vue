@@ -43,16 +43,19 @@ export default {
   },
   data: function() {
     return {
-      expandIcon: Icons.down,
       closeIcon: Icons.cross,
       alerts: []
     };
   },
   computed: {
+    expandIcon: function() {
+      return this.alerts.some((x) => x.showDetail) ? Icons.up : Icons.down;
+    },
     hasAlert: function() {
       return !!this.alerts.length;
     },
     activeAlert: function() {
+      console.log(this.alerts);
       return this.hasAlert ? this.alerts[0] : {};
     },
     alertType: function() {
@@ -77,10 +80,6 @@ export default {
       this.alerts = this.alerts.map(
         (x) => (x.id !== alertId ? x : { ...x, showDetail: !x.showDetail })
       );
-
-      this.expandIcon = this.alerts.some((x) => x.showDetail)
-        ? Icons.up
-        : Icons.down;
     },
     remove: function(alertId) {
       this.alerts = this.alerts.filter((x) => x.id !== alertId);
