@@ -154,7 +154,9 @@ const templates = [
     rules: {
       genders: ['Female'],
       sources: [],
-      series: []
+      series: [],
+      isSeeded: true,
+      limit: 32
     }
   },
   {

@@ -33,6 +33,7 @@
                 text="Limit"
                 :options="mappedLimits"
                 :value="editInstance.settings.limit"
+                :disabled="!editInstance.htrTemplate"
                 @on-select="onSettingsInput"
                 required
               />
@@ -359,6 +360,7 @@ export default {
     onSelectTemplate: function(templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);
       this.editInstance.htrTemplate = { ...template };
+      this.editInstance.settings.rules = { ...template.rules };
       if (template.rules.limit) {
         this.editInstance.settings.limit = template.rules.limit;
       }
@@ -466,6 +468,7 @@ export default {
 
 .htr-instance-content {
   position: relative;
+  min-height: 25px;
   overflow: hidden;
   border: 1px dashed transparent;
 }

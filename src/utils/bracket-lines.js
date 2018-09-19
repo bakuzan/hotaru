@@ -5,27 +5,30 @@ export default function bracketCanvasDrawer(canvas, nodes, layout) {
 
   layout.forEach((round, rIndex, rounds) => {
     round.forEach((versus, vIndex) => {
-      const node = nodes.find((x) => x.id === versus.id);
-      const rect = node.$el.getBoundingClientRect();
-      const midY = rect.height / 2;
-      const midX = rect.width / 2;
-
-      const startX = rect.left + midX;
-      const startY = rect.top + midY;
-
+      const node = nodes.find((x) => Number(x.id) === versus.id.toString());
+      console.log(versus.id, nodes.find((x) => x.id === versus.id.toString()));
+      const startX = node.offsetLeft + node.offsetWidth;
+      const startY = node.offsetTop + node.offsetHeight / 2;
+      console.log(
+        node.offsetHeight,
+        node.offsetLeft,
+        node.offsetTop,
+        node.offsetWidth
+      );
       // next versus
       const nextRound = rounds[rIndex + 1];
       if (nextRound) {
         const nextVersus = nextRound.find(
           (_, i) => i === Math.floor(vIndex / 2)
         );
-        const nextNode = nodes.find((x) => x.id === nextVersus.id);
-        const nextRect = nextNode.$el.getBoundingClientRect();
-        // const nMidY = nextRect.height / 2;
-        const nMidX = nextRect.width / 2;
+        console.log(
+          nextVersus.id,
+          nodes.find((x) => x.id === nextVersus.id.toString())
+        );
+        const nextNode = nodes.find((x) => x.id === nextVersus.id.toString());
 
-        const endX = nextRect.left + nMidX;
-        const endY = nextRect.top;
+        const endX = nextNode.offsetLeft + nextNode.offsetWidth / 2;
+        const endY = nextNode.offsetTop;
 
         ctx.beginPath();
         ctx.moveTo(startX, startY);

@@ -65,12 +65,21 @@ export default {
     */
     this.zoomController = panzoom(this.$refs[this.bracketRef], {});
   },
+  created() {
+    this.$nextTick(function() {
+      const canvas = this.$refs[this.canvasRef];
+      const nodes = Array.from(this.$el.getElementsByClassName('versus'));
+      const layout = this.customBracketLayout;
+      console.log('cre', this.$el);
+      bracketLineDrawer(canvas, nodes, layout);
+    });
+  },
   updated() {
     this.$nextTick(function() {
       const canvas = this.$refs[this.canvasRef];
-      const nodes = this.$children;
+      const nodes = Array.from(this.$el.getElementsByClassName('versus'));
       const layout = this.customBracketLayout;
-
+      console.log('up', this.$el);
       bracketLineDrawer(canvas, nodes, layout);
     });
   },

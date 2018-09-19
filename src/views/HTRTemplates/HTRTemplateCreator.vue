@@ -157,6 +157,9 @@ export default {
     return {
       portalTarget: Strings.portal.actions,
       mutationLoading: false,
+      mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+      mappedSources: mapEnumToSelectBoxOptions(SourceType),
+      mappedTemplateTypes: mapEnumToSelectBoxOptions(HTRTemplateType),
       template: {},
       editTemplate: defaultHTRTemplate(),
       series: [],
@@ -205,15 +208,6 @@ export default {
     },
     isLoading: function() {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
-    },
-    mappedGenders: function() {
-      return mapEnumToSelectBoxOptions(GenderType);
-    },
-    mappedSources: function() {
-      return mapEnumToSelectBoxOptions(SourceType);
-    },
-    mappedTemplateTypes: function() {
-      return mapEnumToSelectBoxOptions(HTRTemplateType);
     },
     mappedLimits: function() {
       const type = this.editTemplate.type;
