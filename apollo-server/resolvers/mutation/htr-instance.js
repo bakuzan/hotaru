@@ -12,6 +12,7 @@ const {
   BracketStatuses
 } = require('../../constants/enums');
 const Utils = require('../../utils');
+const createSeeding = require('../../utils/seeder');
 
 module.exports = {
   htrInstanceCreate(_, { instance }, context) {
@@ -36,16 +37,20 @@ module.exports = {
                   },
                   { transaction, limit: data.settings.limit }
                 )
-                  .then((queryCharacters) =>
-                    context.Versus.createForCharacters(
+                  .then((queryCharacters) => {
+                    const preppedCharacters = template.rules.isSeeded
+                      ? createSeeding(queryCharacters)
+                      : Utils.shuffleArray(queryCharacters);
+
+                    return context.Versus.createForCharacters(
                       VersusTypes.Bracket,
-                      Utils.shuffleArray(queryCharacters),
+                      preppedCharacters,
                       {
                         transaction,
                         bracketLimit: data.settings.limit
                       }
-                    )
-                  )
+                    );
+                  })
                   .then((firstRoundVersus) => {
                     const firstRoundIds = firstRoundVersus.map((x) => x.id);
                     return newInstance

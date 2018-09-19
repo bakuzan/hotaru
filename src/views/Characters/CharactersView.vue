@@ -19,6 +19,14 @@
               @on-upload="handleUserChanges"
             />
           </ViewBlockToggler>
+          <TickboxHeart 
+            class="span-column"
+            id="isWaifu"
+            name="isWaifu"
+            text="Is Waifu"
+            :checked="editCharacter.isWaifu"
+            @change="handleUserChanges"
+          />
         </div>
       </div>
       <Tabs>
@@ -164,6 +172,7 @@ import ImageUploader from '@/components/ImageUploader';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import List from '@/components/List';
 import { ImageCard } from '@/components/Cards';
+import TickboxHeart from '@/components/TickboxHeart';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -198,7 +207,8 @@ export default {
     ImageUploader,
     LoadingBouncer,
     List,
-    ImageCard
+    ImageCard,
+    TickboxHeart
   },
   props: {
     isCreate: {

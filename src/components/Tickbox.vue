@@ -1,6 +1,6 @@
 <template>
   <div class="input-container">
-    <label class="tickbox" :for="name">
+    <label :class="tickboxClasses" :for="name">
       <input
         type="checkbox"
         class="tickbox__input"
@@ -16,9 +16,14 @@
 </template>
 
 <script>
+import classNames from 'classnames';
+
 export default {
   name: 'Tickbox',
   props: {
+    id: {
+      type: [String, Number]
+    },
     name: {
       type: String,
       required: true
@@ -32,6 +37,14 @@ export default {
     },
     disabled: {
       type: Boolean
+    },
+    customTickbox: {
+      type: String
+    }
+  },
+  computed: {
+    tickboxClasses: function() {
+      return classNames('tickbox', this.customTickbox);
     }
   },
   methods: {

@@ -13,7 +13,7 @@
       <div class="chip-list__selected-inner">
         <InputBoxChipListTag
           v-for="(tag, index) in values"
-          :key="tag.id"
+          :key="index"
           :is-active="isActiveTag(index)"
           :data="tag"
           has-remove

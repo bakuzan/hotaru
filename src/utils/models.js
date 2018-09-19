@@ -5,6 +5,7 @@ import { generateUniqueId } from '@/utils';
 export const defaultCharacterModel = () => ({
   name: '',
   displayImage: null,
+  isWaifu: false,
   gender: null,
   seriesId: null,
   tagIds: [],

@@ -39,57 +39,68 @@ const characters = [
   {
     name: 'Shidare Hotaru',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/jLwdACg.jpg'
+    displayImage: 'https://i.imgur.com/jLwdACg.jpg',
+    isWaifu: false
   },
   {
     name: 'Kagari Ayaka',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/3xdrczj.jpg'
+    displayImage: 'https://i.imgur.com/3xdrczj.jpg',
+    isWaifu: true
   },
   {
     name: 'Shiraki Meiko',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/5hLv07N.jpg'
+    displayImage: 'https://i.imgur.com/5hLv07N.jpg',
+    isWaifu: true
   },
   {
     name: 'Kurihara Mari',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/3BeLYsy.jpg'
+    displayImage: 'https://i.imgur.com/3BeLYsy.jpg',
+    isWaifu: false
   },
   {
-    name: 'Kiruin Satsuki',
+    name: 'Kiryuin Satsuki',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/hwpbszY.jpg'
+    displayImage: 'https://i.imgur.com/hwpbszY.jpg',
+    isWaifu: false
   },
   {
-    name: 'Kiruin Ragyo',
+    name: 'Kiryuin Ragyo',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/xRWCpHW.jpg'
+    displayImage: 'https://i.imgur.com/xRWCpHW.jpg',
+    isWaifu: false
   },
   {
     name: 'Matoi Ryuuko',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/Gq8ulAp.jpg'
+    displayImage: 'https://i.imgur.com/Gq8ulAp.jpg',
+    isWaifu: false
   },
   {
     name: 'Guts',
     gender: 'Male',
-    displayImage: 'https://i.imgur.com/0c3p5VT.jpg'
+    displayImage: 'https://i.imgur.com/0c3p5VT.jpg',
+    isWaifu: false
   },
   {
     name: 'Joseph Joestar',
     gender: 'Male',
-    displayImage: 'https://i.imgur.com/0jtjOQD.jpg'
+    displayImage: 'https://i.imgur.com/0jtjOQD.jpg',
+    isWaifu: false
   },
   {
     name: 'Darth Vader',
     gender: 'Male',
-    displayImage: 'https://i.imgur.com/EHFqL3C.jpg'
+    displayImage: 'https://i.imgur.com/EHFqL3C.jpg',
+    isWaifu: false
   },
   {
     name: 'Bishamonten',
     gender: 'Female',
-    displayImage: 'https://i.imgur.com/NTkNb9T.jpg'
+    displayImage: 'https://i.imgur.com/NTkNb9T.jpg',
+    isWaifu: false
   }
 ];
 const tags = [

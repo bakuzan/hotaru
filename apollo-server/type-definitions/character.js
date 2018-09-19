@@ -12,6 +12,7 @@ module.exports = gql`
     tagIds: [Int]
     images: [Image]
     ranking: Ranking
+    isWaifu: Boolean
   }
   input CharacterInput {
     id: Int
@@ -22,5 +23,6 @@ module.exports = gql`
     tags: [TagInput]
     tagIds: [Int]
     images: [ImageInput]
+    isWaifu: Boolean
   }
 `;

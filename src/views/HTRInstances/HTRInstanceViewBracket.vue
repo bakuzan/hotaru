@@ -68,7 +68,10 @@ export default {
     this.$nextTick(function() {
       const canvas = this.$refs[this.canvasRef];
       const ctx = canvas.getContext('2d');
-      console.log(this, canvas, ctx);
+      const nodes = this.$children;
+      const layout = this.customBracketLayout;
+
+      console.log('CANVAS', ctx, layout, nodes);
 
       /*
         var rect = element.getBoundingClientRect();

@@ -9,6 +9,7 @@
           @click="handleRemove"
         />
         <figure :class="figureClasses">
+          <div v-if="isWaifu" class="heart" title="Waifu"></div>
             <HTRImage :src="displayImage" :class="imageClasses" />
             <figcaption v-if="!hideCaption" class="list-figure-card__caption">
                 <NavLink 
@@ -52,6 +53,10 @@ export default {
     },
     name: String,
     displayImage: String,
+    isWaifu: {
+      type: Boolean,
+      default: false
+    },
     urlSource: {
       type: String,
       default: null,
@@ -191,6 +196,18 @@ export default {
         height: 84px;
       }
     }
+  }
+}
+
+.heart {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &::before {
+    content: '\2665';
+    font-size: 1.5em;
+    color: #f0f;
   }
 }
 </style>

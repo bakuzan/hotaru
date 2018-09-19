@@ -30,6 +30,7 @@ export const mapCharacterToPost = (character, allTags) => {
     name,
     gender,
     displayImage,
+    isWaifu,
     images = [],
     seriesId,
     tagIds = []
@@ -42,6 +43,7 @@ export const mapCharacterToPost = (character, allTags) => {
     name,
     gender,
     displayImage,
+    isWaifu,
     images: images.map(
       (x) => (isString(x.id) ? { url: x.url } : { id: x.id, url: x.url })
     ),

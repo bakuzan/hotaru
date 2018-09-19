@@ -10,6 +10,11 @@ module.exports = (db, Types) => {
     displayImage: {
       type: Types.STRING,
       allowNull: true
+    },
+    isWaifu: {
+      type: Types.BOOLEAN,
+      default: false,
+      allowNull: false
     }
   });
 };

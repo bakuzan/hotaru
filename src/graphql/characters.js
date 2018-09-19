@@ -1,11 +1,31 @@
 import gql from 'graphql-tag';
 
+const characterCreationFields = gql`
+  fragment CreationFields on Character {
+    id
+    name
+    displayImage
+    isWaifu
+    gender
+    seriesId
+    tags {
+      id
+      name
+    }
+    images {
+      id
+      url
+    }
+  }
+`;
+
 const getCharacters = gql`
   query getCharacters($search: String, $genders: [GenderType]) {
     characters(search: $search, genders: $genders) {
       id
       name
       displayImage
+      isWaifu
     }
   }
 `;
@@ -16,6 +36,7 @@ const getCharactersForVersusCompare = gql`
       id
       name
       displayImage
+      isWaifu
       ranking {
         rank
       }
@@ -55,6 +76,7 @@ const getCharacterById = gql`
       id
       name
       displayImage
+      isWaifu
       gender
       seriesId
       tagIds
@@ -82,41 +104,19 @@ const getCharactersByIds = gql`
 const updateCharacter = gql`
   mutation updateCharacter($character: CharacterInput) {
     characterUpdate(character: $character) {
-      id
-      name
-      displayImage
-      gender
-      seriesId
-      tags {
-        id
-        name
-      }
-      images {
-        id
-        url
-      }
+      ...CreationFields
     }
   }
+  ${characterCreationFields}
 `;
 
 const createCharacter = gql`
   mutation createCharacter($character: CharacterInput) {
     characterCreate(character: $character) {
-      id
-      name
-      displayImage
-      gender
-      seriesId
-      tags {
-        id
-        name
-      }
-      images {
-        id
-        url
-      }
+      ...CreationFields
     }
   }
+  ${characterCreationFields}
 `;
 
 const characterCore = gql`
