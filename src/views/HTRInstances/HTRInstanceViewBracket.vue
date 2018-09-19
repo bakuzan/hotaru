@@ -192,6 +192,7 @@ export default {
 @import '../../styles/_variables';
 
 .bracket {
+  position: relative;
   display: flex;
   outline: none;
 

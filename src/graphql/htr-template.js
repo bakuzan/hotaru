@@ -9,6 +9,8 @@ const templateFields = gql`
       genders
       series
       sources
+      limit
+      isSeeded
     }
     rulesSeries {
       id
@@ -40,6 +42,8 @@ const getHTRTemplatesByTypeForAutocomplete = gql`
         genders
         series
         sources
+        limit
+        isSeeded
       }
     }
   }

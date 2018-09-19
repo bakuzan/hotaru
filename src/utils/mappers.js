@@ -132,13 +132,15 @@ export const mapVersusToVotedVersus = mutationWrapper('Versus', 'versusVote');
 
 export const mapHTRTemplateToPost = (template, isCreate) => {
   const { id, name, type, rules } = template;
-  const { genders, sources } = rules;
+  const { genders, sources, limit, isSeeded } = rules;
   const resolvedType = isCreate ? { type } : {};
   return {
     id,
     name,
     ...resolvedType,
     rules: {
+      limit: Number(limit) || null,
+      isSeeded,
       genders,
       sources,
       series: rules.series.map((x) => x.id)

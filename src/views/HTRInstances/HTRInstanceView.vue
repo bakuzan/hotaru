@@ -119,6 +119,7 @@
           </div>
         </div>
         <div :class="instanceContentClasses">
+          <div v-if="isSeeded" class="seed-icon" title="Is Seeded"></div>
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
@@ -289,7 +290,7 @@ export default {
       });
     },
     instanceContentClasses: function() {
-      return classNames({
+      return classNames('htr-instance-content', {
         'page-view__left-column': this.isListType,
         'page-view__content': !this.isListType
       });
@@ -334,6 +335,10 @@ export default {
       const order =
         Order.find((x) => x.id === this.editInstance.settings.order) || {};
       return order.name;
+    },
+    isSeeded: function() {
+      const { settings } = this.editInstance;
+      return settings && settings.rules.isSeeded;
     }
   },
   methods: {
@@ -353,6 +358,9 @@ export default {
     onSelectTemplate: function(templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);
       this.editInstance.htrTemplate = { ...template };
+      if (template.rules.limit) {
+        this.editInstance.settings.limit = template.rules.limit;
+      }
       this.templateFilter = '';
     },
     onRemoveTemplate: function() {
@@ -453,6 +461,20 @@ export default {
 
 #characterFilter {
   margin-top: -2px;
+}
+
+.htr-instance-content {
+  position: relative;
+}
+.seed-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  &::before {
+    content: '\D83C\DF42';
+  }
 }
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

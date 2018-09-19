@@ -16,6 +16,7 @@ const instanceFields = gql`
         genders
         sources
         series
+        isSeeded
       }
       order
       status

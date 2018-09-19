@@ -12,6 +12,8 @@ module.exports = gql`
     genders: [GenderType]
     series: [Int]
     sources: [SourceType]
+    limit: Int
+    isSeeded: Boolean
   }
   input HTRTemplateInput {
     name: String
@@ -27,5 +29,7 @@ module.exports = gql`
     genders: [GenderType]
     series: [Int]
     sources: [SourceType]
+    limit: Int
+    isSeeded: Boolean
   }
 `;

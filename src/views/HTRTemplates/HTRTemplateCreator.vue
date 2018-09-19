@@ -22,6 +22,22 @@
             @on-select="onInput"
             required
         />
+        <SelectBox
+          id="limit"
+          name="limit"
+          text="Limit"
+          :options="mappedLimits"
+          :value="editTemplate.rules.limit"
+          @on-select="onRulesInput"
+        />
+        <Tickbox 
+          v-show="isBracket"
+          id="isSeeded"
+          name="isSeeded"
+          text="Is Seeded"
+          :checked="!!editTemplate.rules.isSeeded"
+          @change="onRulesInput"
+        />
       </div>
         <div class="template-creator__group">
             <h4 class="tempalte-creator__title">Rules</h4>
@@ -97,12 +113,16 @@ import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import List from '@/components/List';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import { SeriesCard } from '@/components/Cards';
+import Tickbox from '@/components/Tickbox';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import SourceType from '@/constants/source-type';
 import GenderType from '@/constants/gender-type';
-import HTRTemplateType from '@/constants/htr-template-type';
+import HTRTemplateType, {
+  HTRTemplateTypes
+} from '@/constants/htr-template-type';
+import { Limit } from '@/constants/htr-instance-settings';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData } from '@/utils';
 import {
@@ -119,6 +139,7 @@ export default {
   components: {
     InputBox,
     SelectBox,
+    Tickbox,
     MultiSelect,
     InputBoxAutocomplete,
     List,
@@ -193,6 +214,14 @@ export default {
     },
     mappedTemplateTypes: function() {
       return mapEnumToSelectBoxOptions(HTRTemplateType);
+    },
+    mappedLimits: function() {
+      const type = this.editTemplate.type;
+      if (!type) return [];
+      return mapEnumToSelectBoxOptions(Limit[type] || []);
+    },
+    isBracket: function() {
+      return this.editTemplate.type === HTRTemplateTypes.bracket;
     }
   },
   methods: {

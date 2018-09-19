@@ -41,7 +41,8 @@ export const defaultHTRTemplate = () => ({
   rules: {
     genders: [],
     series: [],
-    sources: []
+    sources: [],
+    limit: null
   }
 });
 
