@@ -285,14 +285,12 @@ export default {
     },
     hasEdits: function() {
       const notEqual = !objectsAreEqual(this.character, this.editCharacter);
-      console.log(this.character, this.editCharacter, notEqual);
       return notEqual;
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
     },
     isLoading: function() {
-      console.log(this.$apollo);
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     }
   },

@@ -93,5 +93,10 @@
       background-color: $active-background;
       color: $active-colour;
     }
+
+    // Instance view
+    .htr-instance-content.htr-instance-content--bracket {
+      border-color: $primary-background;
+    }
   }
 }

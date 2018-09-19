@@ -55,7 +55,6 @@ export default {
       return !!this.alerts.length;
     },
     activeAlert: function() {
-      console.log(this.alerts);
       return this.hasAlert ? this.alerts[0] : {};
     },
     alertType: function() {

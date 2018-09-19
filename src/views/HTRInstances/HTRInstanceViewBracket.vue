@@ -25,6 +25,7 @@ import Urls from '@/constants/urls';
 import { generateUniqueId, bracketProgression } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
+import bracketLineDrawer from '@/utils/bracket-lines';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -67,22 +68,10 @@ export default {
   updated() {
     this.$nextTick(function() {
       const canvas = this.$refs[this.canvasRef];
-      const ctx = canvas.getContext('2d');
       const nodes = this.$children;
       const layout = this.customBracketLayout;
 
-      console.log('CANVAS', ctx, layout, nodes);
-
-      /*
-        var rect = element.getBoundingClientRect();
-        console.log(rect.top, rect.right, rect.bottom, rect.left);
-
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(300,150);
-        ctx.stroke();
-      
-      */
+      bracketLineDrawer(canvas, nodes, layout);
     });
   },
   computed: {
@@ -215,6 +204,8 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
   }
 }

@@ -291,6 +291,7 @@ export default {
     },
     instanceContentClasses: function() {
       return classNames('htr-instance-content', {
+        'htr-instance-content--bracket': !this.isListType,
         'page-view__left-column': this.isListType,
         'page-view__content': !this.isListType
       });
@@ -465,7 +466,10 @@ export default {
 
 .htr-instance-content {
   position: relative;
+  overflow: hidden;
+  border: 1px dashed transparent;
 }
+
 .seed-icon {
   position: absolute;
   top: 0;
