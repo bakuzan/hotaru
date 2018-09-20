@@ -54,7 +54,8 @@ export default {
       bracketRef: id,
       canvasRef: `canvas-${id}`,
       zoomController: null,
-      resizeListeners: null
+      resizeListeners: null,
+      timer: null
     };
   },
   mounted() {
@@ -68,16 +69,13 @@ export default {
 
     this.resizeListeners = createListeners('resize', () => {
       console.log('resized! - TODO - update canvas');
-    })();
+      clearTimeout(this.timer);
+      this.timer = setTimeout(this.updateCanvas, 10);
+    })(window);
     this.resizeListeners.listen();
   },
   updated() {
-    this.$nextTick(function() {
-      const canvas = this.$refs[this.canvasRef];
-      const layout = this.customBracketLayout;
-
-      bracketLineDrawer(canvas, this.$el, layout);
-    });
+    this.$nextTick(this.updateCanvas);
   },
   beforeDestroy() {
     this.resizeListeners.remove();
@@ -126,6 +124,12 @@ export default {
   methods: {
     isFinal: function(index) {
       return Math.floor(this.customBracketLayout.length / 2) === index;
+    },
+    updateCanvas: function() {
+      const canvas = this.$refs[this.canvasRef];
+      const layout = this.customBracketLayout;
+
+      bracketLineDrawer(canvas, this.$el, layout);
     },
     getDummyCharacter: function() {
       return {

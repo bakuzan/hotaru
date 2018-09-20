@@ -1,7 +1,13 @@
+const GET_ZOOM_LEVEL = /\d(?=,)/;
+
 function positionRelativeToParent(element) {
-  const parentRect = element.offsetParent.getBoundingClientRect();
+  const parent = element.offsetParent;
+  const parentRect = parent.getBoundingClientRect();
   const rect = element.getBoundingClientRect();
 
+  const [zLevel] = parent.style.transform.match(GET_ZOOM_LEVEL);
+  const zoom = parseFloat(zLevel.trim());
+  console.log(parent, parent.style, zoom);
   const top = rect.top - parentRect.top;
   const left = rect.left - parentRect.left;
   const relativePos = {
