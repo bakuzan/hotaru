@@ -1,15 +1,19 @@
 function positionRelativeToParent(element) {
   const parentRect = element.offsetParent.getBoundingClientRect();
   const rect = element.getBoundingClientRect();
+
+  const top = rect.top - parentRect.top;
+  const left = rect.left - parentRect.left;
   const relativePos = {
-    top: rect.top - parentRect.top,
-    left: rect.left - parentRect.left,
-    bottom: rect.bottom - parentRect.bottom,
-    right: rect.right - parentRect.right,
+    top,
+    left,
+    // the real right/bottom are not what I actually want.
+    bottom: top + rect.height,
+    right: left + rect.width,
     width: rect.width,
     height: rect.height
   };
-  console.log('pos', relativePos);
+
   return relativePos;
 }
 
@@ -22,11 +26,8 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
   layout.forEach((round, rIndex, rounds) => {
     round.forEach((versus, vIndex) => {
       const nodeRect = getNodeRectForVersus(versus, nodes);
-      const startX = isLHS ? nodeRect.left + nodeRect.width : nodeRect.left;
-      const startY =
-        vIndex % 2 === 0
-          ? nodeRect.top + nodeRect.height * 0.25
-          : nodeRect.top + nodeRect.height * 0.75;
+      const startX = isLHS ? nodeRect.right : nodeRect.left;
+      const startY = nodeRect.top + nodeRect.height * 0.5;
 
       // next versus
       const nextRound = rounds[rIndex + 1];
@@ -35,28 +36,37 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
           (_, i) => i === Math.floor(vIndex / 2)
         );
         const nextNodeRect = getNodeRectForVersus(nextVersus, nodes);
-        const endX = nextNodeRect.left + nextNodeRect.width / 2;
-        const endY = vIndex % 2 === 0 ? nextNodeRect.top : nextNodeRect.bottom;
+        const isOneToOne = round.length === 1 && nextRound.length === 1;
 
         ctx.beginPath();
         ctx.moveTo(startX, startY);
+        ctx.lineWidth = 2;
 
-        if (round.length === 1 && nextRound.length === 1) {
-          const endX = isLHS
-            ? nextNodeRect.left
-            : nextNodeRect.left + nextNodeRect.width;
+        if (isOneToOne) {
+          const endX = isLHS ? nextNodeRect.left : nextNodeRect.right;
           const endY = nextNodeRect.top + nextNodeRect.height * 0.5;
+
           ctx.lineTo(endX, endY);
+          console.log(
+            'one-to-one',
+            `(${startX}, ${startY})`,
+            `(${endX}, ${endY})`
+          );
         } else {
+          const endX = nextNodeRect.left + nextNodeRect.width * 0.5;
+          const endY =
+            vIndex % 2 === 0 ? nextNodeRect.top : nextNodeRect.bottom;
+
           ctx.lineTo(endX, startY);
           ctx.lineTo(endX, endY);
+          console.log(
+            'many-to-x',
+            `(${startX}, ${startY})`,
+            `(${endX}, ${endY})`
+          );
         }
 
-        ctx.closePath();
-        ctx.lineWidth = 2;
         ctx.stroke();
-
-        console.log(rIndex, `(${startX}, ${startY})`, `(${endX}, ${endY})`);
       }
     });
   });

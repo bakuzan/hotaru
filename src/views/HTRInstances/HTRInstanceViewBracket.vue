@@ -9,6 +9,7 @@
       <VersusWidget 
         v-for="match in round" 
         :key="match.id"
+        class="bracket__versus"
         enable-compare
         v-bind="match"
         @vote="handleVote"
@@ -26,7 +27,6 @@ import { generateUniqueId, bracketProgression } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
-import { setTimeout, clearTimeout } from 'timers';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -52,37 +52,24 @@ export default {
       mutationLoading: false,
       bracketRef: id,
       canvasRef: `canvas-${id}`,
-      zoomController: null,
-      timer: null
+      zoomController: null
     };
   },
   mounted() {
-    /* 
-      beforeWheel: function(e) return bool;
-      zoomSpeed: 0.1 // 10% of wheel event
+    this.zoomController = panzoom(this.$refs[this.bracketRef], {
+      zoomSpeed: 0.1,
       maxZoom: 1,
-      minZoom: 0.1
-      smoothScroll: false
-      zoomDoubleClickSpeed: 1 // 1 is disabled..above 1 is multiplier
-    */
-    this.zoomController = panzoom(this.$refs[this.bracketRef], {});
-    // this.$nextTick(function() {
-    //   const canvas = this.$refs[this.canvasRef];
-    //   const nodes = Array.from(this.$el.getElementsByClassName('versus'));
-    //   const layout = this.customBracketLayout;
-    //   console.log('mount', canvas, nodes, layout);
-    //   bracketLineDrawer(canvas, nodes, layout);
-    // });
+      minZoom: 0.1,
+      smoothScroll: true,
+      zoomDoubleClickSpeed: 4
+    });
   },
   updated() {
     this.$nextTick(function() {
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        const canvas = this.$refs[this.canvasRef];
-        const layout = this.customBracketLayout;
-        console.log('updated', canvas, layout);
-        bracketLineDrawer(canvas, this.$el, layout);
-      }, 1000);
+      const canvas = this.$refs[this.canvasRef];
+      const layout = this.customBracketLayout;
+
+      bracketLineDrawer(canvas, this.$el, layout);
     });
   },
   computed: {
@@ -207,6 +194,10 @@ export default {
     min-width: 350px;
     padding: $app--padding-standard;
     margin: 0 $app--margin-large;
+  }
+
+  &__versus + &__versus {
+    margin-top: 182px;
   }
 
   &__canvas {
