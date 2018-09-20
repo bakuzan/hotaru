@@ -26,6 +26,7 @@ import { generateUniqueId, bracketProgression } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
+import { setTimeout, clearTimeout } from 'timers';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -51,7 +52,8 @@ export default {
       mutationLoading: false,
       bracketRef: id,
       canvasRef: `canvas-${id}`,
-      zoomController: null
+      zoomController: null,
+      timer: null
     };
   },
   mounted() {
@@ -64,23 +66,23 @@ export default {
       zoomDoubleClickSpeed: 1 // 1 is disabled..above 1 is multiplier
     */
     this.zoomController = panzoom(this.$refs[this.bracketRef], {});
-  },
-  created() {
-    this.$nextTick(function() {
-      const canvas = this.$refs[this.canvasRef];
-      const nodes = Array.from(this.$el.getElementsByClassName('versus'));
-      const layout = this.customBracketLayout;
-      console.log('cre', this.$el);
-      bracketLineDrawer(canvas, nodes, layout);
-    });
+    // this.$nextTick(function() {
+    //   const canvas = this.$refs[this.canvasRef];
+    //   const nodes = Array.from(this.$el.getElementsByClassName('versus'));
+    //   const layout = this.customBracketLayout;
+    //   console.log('mount', canvas, nodes, layout);
+    //   bracketLineDrawer(canvas, nodes, layout);
+    // });
   },
   updated() {
     this.$nextTick(function() {
-      const canvas = this.$refs[this.canvasRef];
-      const nodes = Array.from(this.$el.getElementsByClassName('versus'));
-      const layout = this.customBracketLayout;
-      console.log('up', this.$el);
-      bracketLineDrawer(canvas, nodes, layout);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        const canvas = this.$refs[this.canvasRef];
+        const layout = this.customBracketLayout;
+        console.log('updated', canvas, layout);
+        bracketLineDrawer(canvas, this.$el, layout);
+      }, 1000);
     });
   },
   computed: {
@@ -144,7 +146,7 @@ export default {
       return Array(count)
         .fill(null)
         .map((_, pos) => {
-          console.log(count, prev);
+          // console.log(count, prev);
           const winningCharacters = !prev
             ? Array(2).fill(null)
             : prev.reduce((p, versus, i) => {
@@ -215,7 +217,7 @@ export default {
     right: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    // z-index: -1;
   }
 }
 </style>
