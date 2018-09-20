@@ -114,11 +114,11 @@ export default {
       height: 100%;
     }
   }
-  &--is-winner {
+  &--is-winner::before {
     background-color: $app--success-background-colour;
     color: $app--success-colour;
   }
-  &--is-champion {
+  &--is-champion::before {
     background-color: $app--champion-background-colour;
     color: $app--champion-colour;
   }

@@ -24,7 +24,7 @@ import panzoom from 'panzoom';
 import VersusWidget from '@/components/VersusWidget';
 
 import Urls from '@/constants/urls';
-import { generateUniqueId, bracketProgression, createListeners } from '@/utils';
+import { generateUniqueId, bracketProgression } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
@@ -54,9 +54,15 @@ export default {
       bracketRef: id,
       canvasRef: `canvas-${id}`,
       zoomController: null,
-      resizeListeners: null,
-      timer: null
+      resizeListeners: null
     };
+  },
+  watch: {
+    customBracketLayout: function(newV, oldV) {
+      if (newV && newV.length !== oldV) {
+        this.$nextTick(this.updateCanvas);
+      }
+    }
   },
   mounted() {
     this.zoomController = panzoom(this.$refs[this.bracketRef], {
@@ -66,19 +72,6 @@ export default {
       smoothScroll: true,
       zoomDoubleClickSpeed: 4
     });
-
-    this.resizeListeners = createListeners('resize', () => {
-      console.log('resized! - TODO - update canvas');
-      clearTimeout(this.timer);
-      this.timer = setTimeout(this.updateCanvas, 10);
-    })(window);
-    this.resizeListeners.listen();
-  },
-  updated() {
-    this.$nextTick(this.updateCanvas);
-  },
-  beforeDestroy() {
-    this.resizeListeners.remove();
   },
   computed: {
     bracketRounds: function() {
@@ -200,13 +193,14 @@ export default {
 .bracket {
   position: relative;
   display: flex;
+  width: 20000px;
   outline: none;
 
   &__round {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    flex: 1;
+    flex: 0;
     min-width: 350px;
     padding: $app--padding-standard;
     margin: 0 $app--margin-large;
