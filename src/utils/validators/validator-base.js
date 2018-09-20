@@ -65,7 +65,7 @@ export class ValidatorResponse {
   }
 
   updateResponse(valid, message = 'Invalid') {
-    this.__valid = !!valid;
+    this.__valid = this.__valid && !!valid;
     if (!valid) {
       this.__messages = [...this.__messages, message];
     }

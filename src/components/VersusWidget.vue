@@ -6,6 +6,7 @@
       :item="item"
       :winner-id="winnerId"
       :is-dummy="isDummy"
+      :is-final="isFinal"
       grow
       @vote="handleVote"
     />
@@ -51,6 +52,10 @@ export default {
       default: false
     },
     isDummy: {
+      type: Boolean,
+      default: false
+    },
+    isFinal: {
       type: Boolean,
       default: false
     }

@@ -3,7 +3,7 @@
     v-bind="$props"
     theme="primary"
     :className="buttonClasses"
-    :icon="maybeWinningIcon"
+    :icon="maybeIcon"
     :disabled="hasWinner || disabled"
     @click="handleClick"
   >
@@ -59,6 +59,10 @@ export default {
     isWinner: {
       type: Boolean,
       default: false
+    },
+    isChampion: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -68,13 +72,14 @@ export default {
         {
           'vote-button--has-winner': this.hasWinner,
           'vote-button--is-winner': this.isWinner,
+          'vote-button--is-champion': this.isChampion,
           'vote-button--is-disabled': this.disabled
         },
         this.className
       );
     },
-    maybeWinningIcon: function() {
-      return this.isWinner ? Icons.tick : null;
+    maybeIcon: function() {
+      return this.isChampion ? Icons.trophy : this.isWinner ? Icons.tick : null;
     }
   },
   methods: {
@@ -100,13 +105,22 @@ export default {
     visibility: hidden;
   }
 
-  &--is-winner::before {
-    @extend %center-contents;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+  &--is-winner,
+  &--is-champion {
+    &::before {
+      @extend %center-contents;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &--is-winner {
     background-color: $app--success-background-colour;
     color: $app--success-colour;
+  }
+  &--is-champion {
+    background-color: $app--champion-background-colour;
+    color: $app--champion-colour;
   }
 }
 </style>

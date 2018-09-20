@@ -3,7 +3,8 @@ const {
   HTRTemplate,
   HTRInstance,
   Versus,
-  Character
+  Character,
+  Ranking
 } = require('../../connectors');
 
 const {
@@ -35,11 +36,15 @@ module.exports = {
                   {
                     rules: template.rules
                   },
-                  { transaction, limit: data.settings.limit }
+                  {
+                    transaction,
+                    limit: data.settings.limit,
+                    include: template.rules.isSeeded ? [Ranking] : null
+                  }
                 )
                   .then((queryCharacters) => {
                     const preppedCharacters = template.rules.isSeeded
-                      ? createSeeding(queryCharacters)
+                      ? createSeeding(queryCharacters, data.settings.limit)
                       : Utils.shuffleArray(queryCharacters);
 
                     return context.Versus.createForCharacters(

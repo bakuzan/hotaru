@@ -51,7 +51,7 @@ function findFromRules({ rules, search = '' }, options = {}) {
       ...filters
     },
     ...options,
-    include: [Series]
+    include: options.include ? [Series, ...options.include] : [Series]
   });
 }
 

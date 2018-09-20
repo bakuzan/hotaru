@@ -1,6 +1,6 @@
 <template>
   <div class="instance-view bracket" :ref="bracketRef">
-    <canvas class="bracket__canvas" :ref="canvasRef"></canvas>
+   <canvas class="bracket__canvas" :ref="canvasRef"></canvas>
     <div 
       v-for="(round, i) in customBracketLayout" 
       :key="i"
@@ -12,6 +12,7 @@
         class="bracket__versus"
         enable-compare
         v-bind="match"
+        :is-final="isFinal(i)"
         @vote="handleVote"
       />
     </div>
@@ -23,7 +24,7 @@ import panzoom from 'panzoom';
 import VersusWidget from '@/components/VersusWidget';
 
 import Urls from '@/constants/urls';
-import { generateUniqueId, bracketProgression } from '@/utils';
+import { generateUniqueId, bracketProgression, createListeners } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
@@ -52,7 +53,8 @@ export default {
       mutationLoading: false,
       bracketRef: id,
       canvasRef: `canvas-${id}`,
-      zoomController: null
+      zoomController: null,
+      resizeListeners: null
     };
   },
   mounted() {
@@ -63,6 +65,11 @@ export default {
       smoothScroll: true,
       zoomDoubleClickSpeed: 4
     });
+
+    this.resizeListeners = createListeners('resize', () => {
+      console.log('resized! - TODO - update canvas');
+    })();
+    this.resizeListeners.listen();
   },
   updated() {
     this.$nextTick(function() {
@@ -71,6 +78,9 @@ export default {
 
       bracketLineDrawer(canvas, this.$el, layout);
     });
+  },
+  beforeDestroy() {
+    this.resizeListeners.remove();
   },
   computed: {
     bracketRounds: function() {
@@ -114,6 +124,9 @@ export default {
     }
   },
   methods: {
+    isFinal: function(index) {
+      return Math.floor(this.customBracketLayout.length / 2) === index;
+    },
     getDummyCharacter: function() {
       return {
         id: generateUniqueId(),
@@ -133,7 +146,6 @@ export default {
       return Array(count)
         .fill(null)
         .map((_, pos) => {
-          // console.log(count, prev);
           const winningCharacters = !prev
             ? Array(2).fill(null)
             : prev.reduce((p, versus, i) => {
@@ -197,6 +209,8 @@ export default {
   }
 
   &__versus + &__versus {
+    // TODO
+    // Space the versus out within the column without this
     margin-top: 182px;
   }
 

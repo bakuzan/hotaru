@@ -12,5 +12,6 @@ export default Object.freeze({
   up: '\u25B2',
   settings: '\u2699',
   calendar: '\uD83D\uDCC5',
-  info: '\uD83D\uDEC8'
+  info: '\uD83D\uDEC8',
+  trophy: '\uD83C\uDFC6'
 });

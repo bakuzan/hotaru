@@ -9,6 +9,7 @@
     <VoteButton
       :has-winner="!!winnerId"
       :is-winner="isWinner"
+      :is-champion="isWinner && isFinal"
       :disabled="isDummy"
       @click="handleVote"
     >
@@ -47,6 +48,10 @@ export default {
     isDummy: {
       type: Boolean,
       default: false
+    },
+    isFinal: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -58,7 +63,8 @@ export default {
     cardClasses: function() {
       return classNames('versus-card', {
         'versus-card--grow': this.grow,
-        'versus-card--is-dummy': this.isDummy
+        'versus-card--is-dummy': this.isDummy,
+        'versus-card--is-champion': this.isWinner && this.isFinal
       });
     },
     isWinner: function() {

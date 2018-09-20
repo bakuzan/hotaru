@@ -1,30 +1,21 @@
 const Op = require('sequelize').Op;
 
 const { Versus } = require('../connectors');
-const BracketSizes = require('../constants/enums').BracketSizes;
 const Utils = require('../utils');
+const bracktCorrector = require('../utils/bracket-corrector');
 
 async function createForCharacters(versusType, characters, options = {}) {
   const { transaction, bracketLimit } = options;
   const createdAt = Date.now() - 1000;
 
-  let versusCharacters = Utils.chunk(characters, 2).filter(
-    (x) => x.length === 2
-  );
+  const versusCharacters = Utils.chunk(
+    bracktCorrector(characters, bracketLimit),
+    2
+  ).filter((x) => x.length === 2);
 
   const versusCount = versusCharacters.length;
   if (!versusCount) {
     throw Error('Unable to create any character pairs.');
-  }
-
-  const characterCount = versusCount * 2;
-  if (bracketLimit && characterCount !== bracketLimit) {
-    const newCharacterLimit = BracketSizes.find((x) => x <= characterCount);
-    if (!newCharacterLimit)
-      throw Error('Too few characters to create a bracket.');
-
-    const newVersusLimit = newCharacterLimit / 2;
-    versusCharacters = versusCharacters.slice(0, newVersusLimit);
   }
 
   const versusShells = versusCharacters.map(() => ({ type: versusType }));
