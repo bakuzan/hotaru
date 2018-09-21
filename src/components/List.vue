@@ -1,6 +1,10 @@
 <template>
-    <ul 
-        :class="listClasses"
+    <draggable 
+      :class="listClasses"
+      element="ul"
+      v-model="items"
+      :options="sortableOptions"
+      @update="onUpdate"
     >
         <li v-for="item in items" :class="listItemClasses" :key="item.id">
             <slot v-bind:item="item">
@@ -8,14 +12,18 @@
             {{ item.id }}
             </slot>
         </li>
-    </ul>
+    </draggable>
 </template>
 
 <script>
 import classNames from 'classnames';
+import draggable from 'vuedraggable';
 
 export default {
   name: 'List',
+  components: {
+    draggable
+  },
   props: {
     className: String,
     itemClassName: String,
@@ -28,6 +36,10 @@ export default {
     },
     items: Array,
     wrap: {
+      type: Boolean,
+      default: false
+    },
+    isSortable: {
       type: Boolean,
       default: false
     }
@@ -46,6 +58,14 @@ export default {
     },
     listItemClasses: function() {
       return classNames('list__item', this.itemClassName);
+    },
+    sortableOptions: function() {
+      return { disabled: !this.isSortable };
+    }
+  },
+  methods: {
+    onUpdate: function(...stuff) {
+      this.$emit('update', ...stuff);
     }
   }
 };

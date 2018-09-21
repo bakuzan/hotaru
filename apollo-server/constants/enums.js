@@ -38,5 +38,6 @@ module.exports = {
   BracketStatus,
   BracketStatuses: enumArrayToObject(BracketStatus),
   Order,
+  Orders: enumArrayToObject(Order),
   BracketSizes
 };

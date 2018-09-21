@@ -10,7 +10,8 @@ const {
 const {
   HTRTemplateTypes,
   VersusTypes,
-  BracketStatuses
+  BracketStatuses,
+  Orders
 } = require('../../constants/enums');
 const createSeeding = require('../../utils/seeder');
 
@@ -22,7 +23,17 @@ module.exports = {
           const { characterIds, versus, ...data } = instance;
 
           return HTRInstance.create(
-            { ...data, settings: { ...data.settings, rules: template.rules } },
+            {
+              ...data,
+              settings: {
+                ...data.settings,
+                rules: template.rules,
+                customOrder:
+                  data.settings.order === Orders.Custom
+                    ? data.settings.customOrder
+                    : null
+              }
+            },
             { transaction }
           )
             .then(async (newInstance) => {
@@ -89,7 +100,16 @@ module.exports = {
           const { id, characterIds, versus, ...data } = instance;
 
           return HTRInstance.update(
-            { ...data, settings: { ...data.settings } },
+            {
+              ...data,
+              settings: {
+                ...data.settings,
+                customOrder:
+                  data.settings.order === Orders.Custom
+                    ? data.settings.customOrder
+                    : null
+              }
+            },
             { where: { id }, transaction }
           ).then(() =>
             HTRInstance.findById(id, { transaction }).then(

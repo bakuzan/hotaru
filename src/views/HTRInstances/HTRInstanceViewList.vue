@@ -1,8 +1,10 @@
 <template>
   <div class="instance-view">
     <List 
+      is-sortable
       columns="one"
       :items="sortedItems"
+      @update="onSorting"
     >
       <template slot-scope="slotProps">
         <ListFigureCard
@@ -65,7 +67,11 @@ export default {
       } else if (sortType === Orders.rank) {
         return orderBy(this.items, ['ranking.rank']);
       } else {
-        return this.items; // TODO custom sorting
+        return this.options.customOrder
+          ? this.options.customOrder.map((x) =>
+              this.items.find((c) => c.id === x)
+            )
+          : this.items;
       }
     }
   },
@@ -75,6 +81,13 @@ export default {
     },
     getRank: function(item) {
       return item && item.ranking ? item.ranking.rank : '';
+    },
+    onSorting: function(event) {
+      this.options.customOrder.splice(
+        event.newIndex,
+        0,
+        this.options.customOrder.splice(event.oldIndex, 1)[0]
+      );
     }
   }
 };

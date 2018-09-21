@@ -23,6 +23,7 @@ module.exports = gql`
     layout: [[Int]]
     "Character sort order - List type only"
     order: Int
+    customOrder: [Int]
   }
   input HTRInstanceInput {
     id: Int
@@ -43,5 +44,6 @@ module.exports = gql`
     layout: [[Int]]
     "Character sort order - List type only"
     order: Int
+    customOrder: [Int]
   }
 `;

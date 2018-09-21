@@ -1,4 +1,5 @@
 import { isString, parseIfInt } from './index';
+import { Orders } from '@/constants/htr-instance-settings';
 
 // eslint-disable-next-line
 const mapWithoutTypename = ({ __typename, ...o }) => ({ ...o });
@@ -152,7 +153,15 @@ export const mapHTRTemplateToPost = (template, isCreate) => {
 
 export const mapHTRInstanceToPost = (instance, isCreate) => {
   const { id, name, description, htrTemplate, characters, settings } = instance;
-  const { limit, order, rules, status, layout, winnerId } = settings;
+  const {
+    limit,
+    order,
+    customOrder,
+    rules,
+    status,
+    layout,
+    winnerId
+  } = settings;
   const resolvedRules = isCreate ? {} : { rules: mapWithoutTypename(rules) };
   const resolvedCharacters =
     characters && characters.length ? characters.map((x) => x.id) : [];
@@ -166,6 +175,7 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
     settings: {
       limit: Number(limit),
       order: order ? Number(order) : undefined,
+      customOrder: order === Orders.custom ? customOrder : null,
       ...resolvedRules,
       layout,
       status,

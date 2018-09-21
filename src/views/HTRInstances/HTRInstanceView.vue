@@ -171,7 +171,7 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import { Limit, Order } from '@/constants/htr-instance-settings';
+import { Limit, Order, Orders } from '@/constants/htr-instance-settings';
 import { HTRTemplateTypes } from '@/constants/htr-template-type';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData } from '@/utils';
@@ -353,6 +353,12 @@ export default {
     },
     onSettingsInput: function(value, name) {
       this.editInstance.settings[name] = Number(value);
+      if (name === 'order') {
+        this.editInstance.settings.customOrder =
+          value === Orders.custom
+            ? [...this.editInstance.characters.map((x) => x.id)] || []
+            : null;
+      }
     },
     onSearch: function(value, name) {
       this[name] = value;
@@ -378,12 +384,23 @@ export default {
         ...this.editInstance.characters,
         { ...character }
       ];
+
+      if (this.editInstance.settings.order === Orders.custom) {
+        this.editInstance.settings.customOrder.push(characterId);
+      }
+
       this.characterFilter = '';
     },
     onRemoveCharacter: function(characterId) {
       this.editInstance.characters = this.editInstance.characters.filter(
         (x) => x.id !== characterId
       );
+
+      if (this.editInstance.settings.order === Orders.custom) {
+        this.editInstance.settings.customOrder = this.editInstance.settings.customOrder.filter(
+          (x) => x.id !== characterId
+        );
+      }
     },
     cancel: function() {
       this.readOnly = true;

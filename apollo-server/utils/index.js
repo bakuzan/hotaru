@@ -1,7 +1,13 @@
 const Op = require('sequelize').Op;
 
 const enumArrayToObject = (arr) =>
-  arr.slice(0).reduce((p, c) => ({ ...p, [c]: c }), {});
+  arr
+    .slice(0)
+    .reduce(
+      (p, c) =>
+        typeof c === 'object' ? { ...p, [c.name]: c.id } : { ...p, [c]: c },
+      {}
+    );
 
 const mapArrToGraphqlString = (arr) => arr.join(' ');
 
