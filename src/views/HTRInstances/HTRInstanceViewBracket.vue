@@ -24,7 +24,7 @@ import panzoom from 'panzoom';
 import VersusWidget from '@/components/VersusWidget';
 
 import Urls from '@/constants/urls';
-import { generateUniqueId, bracketProgression } from '@/utils';
+import { generateUniqueId, bracketProgression, orderBy } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
@@ -80,12 +80,30 @@ export default {
       const firstRoundMatchCount = round.length;
       return bracketProgression(firstRoundMatchCount);
     },
+    matches: function() {
+      const { isSeeded } = this.options.rules || {};
+      if (isSeeded) {
+        const seeds = orderBy(
+          this.items.reduce((p, c) => [...p, ...c.characters], []),
+          ['ranking.rank']
+        ).map((x, i) => ({ id: x.id, seed: i + 1 }));
+
+        return this.items.map((v) => ({
+          ...v,
+          characters: v.characters.map((c) => ({
+            ...c,
+            seed: seeds.find((s) => s.id === c.id).seed
+          }))
+        }));
+      }
+      return this.items;
+    },
     bracket: function() {
       if (!this.items.length) return [];
 
       const { layout = [] } = this.options;
       const existingProgress = [...layout].map((round) =>
-        round.map((id) => this.items.find((x) => x.id === id))
+        round.map((id) => this.matches.find((x) => x.id === id))
       );
 
       const fullBracket = this.bracketRounds.map((size, i) => {

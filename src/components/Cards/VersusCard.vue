@@ -6,6 +6,12 @@
       figure-size="small"
       open-new-tab
     />
+    <div 
+      v-if="item.seed"
+      class="versus-card__seed themed-background"
+      title="Seed in bracket">
+      {{item.seed}}
+    </div>
     <VoteButton
       :has-winner="!!winnerId"
       :is-winner="isWinner"
@@ -91,6 +97,18 @@ export default {
 
   &--grow {
     width: 50%;
+  }
+
+  &__seed {
+    $seed-size: 1.5em;
+
+    position: relative;
+    @extend %center-contents;
+    width: $seed-size;
+    height: $seed-size;
+    border-radius: 50%;
+    margin-top: -$seed-size;
+    font-size: $seed-size * 0.5;
   }
 }
 </style>
