@@ -1,13 +1,8 @@
-// const GET_ZOOM_LEVEL = /\d(?=,)/;
-
 function positionRelativeToParent(element) {
   const parent = element.offsetParent;
   const parentRect = parent.getBoundingClientRect();
   const rect = element.getBoundingClientRect();
 
-  // const [zLevel] = parent.style.transform.match(GET_ZOOM_LEVEL);
-  // const zoom = parseFloat(zLevel.trim());
-  // console.log(parent, parent.style, zoom);
   const top = rect.top - parentRect.top;
   const left = rect.left - parentRect.left;
   const relativePos = {
@@ -42,7 +37,7 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
         );
         const nextNodeRect = nodeRects.get(nextVersus.id.toString());
         const isOneToOne = round.length === 1 && nextRound.length === 1;
-        // console.log('RECTS => ', versus.id, nodeRect, nextNodeRect);
+
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.lineWidth = 2;
@@ -52,11 +47,6 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
           const endY = nextNodeRect.top + nextNodeRect.height * 0.5;
 
           ctx.lineTo(endX, endY);
-          // console.log(
-          //   'one-to-one',
-          //   `(${startX}, ${startY})`,
-          //   `(${endX}, ${endY})`
-          // );
         } else {
           const endX = nextNodeRect.left + nextNodeRect.width * 0.5;
           const endY =
@@ -64,11 +54,6 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
 
           ctx.lineTo(endX, startY);
           ctx.lineTo(endX, endY);
-          // console.log(
-          //   'many-to-x',
-          //   `(${startX}, ${startY})`,
-          //   `(${endX}, ${endY})`
-          // );
         }
 
         ctx.stroke();

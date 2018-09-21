@@ -12,7 +12,6 @@ const {
   VersusTypes,
   BracketStatuses
 } = require('../../constants/enums');
-const Utils = require('../../utils');
 const createSeeding = require('../../utils/seeder');
 
 module.exports = {
@@ -32,6 +31,7 @@ module.exports = {
                   .setCharacters(characterIds, { transaction })
                   .then(() => newInstance);
               } else {
+                const isSeeded = template.rules.isSeeded;
                 return await context.Character.findFromRules(
                   {
                     rules: template.rules
@@ -39,13 +39,14 @@ module.exports = {
                   {
                     transaction,
                     limit: data.settings.limit,
-                    include: template.rules.isSeeded ? [Ranking] : null
+                    order: db.literal('RANDOM()'),
+                    include: isSeeded ? [Ranking] : null
                   }
                 )
                   .then((queryCharacters) => {
-                    const preppedCharacters = template.rules.isSeeded
+                    const preppedCharacters = isSeeded
                       ? createSeeding(queryCharacters, data.settings.limit)
-                      : Utils.shuffleArray(queryCharacters);
+                      : queryCharacters;
 
                     return context.Versus.createForCharacters(
                       VersusTypes.Bracket,

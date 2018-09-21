@@ -81,6 +81,8 @@ export default {
       return bracketProgression(firstRoundMatchCount);
     },
     bracket: function() {
+      if (!this.items.length) return [];
+
       const { layout = [] } = this.options;
       const existingProgress = [...layout].map((round) =>
         round.map((id) => this.items.find((x) => x.id === id))
@@ -220,7 +222,6 @@ export default {
     right: 0;
     width: 100%;
     height: 100%;
-    // z-index: -1;
   }
 }
 </style>
