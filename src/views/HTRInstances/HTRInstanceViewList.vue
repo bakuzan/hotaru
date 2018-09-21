@@ -1,8 +1,8 @@
 <template>
   <div class="instance-view">
     <List 
-      is-sortable
       columns="one"
+      :is-sortable="isCustomOrder"
       :items="sortedItems"
       @update="onSorting"
     >
@@ -45,9 +45,12 @@ export default {
       type: Array,
       default: () => []
     },
-    options: {
-      type: Object,
-      default: () => {}
+    order: {
+      type: Number,
+      required: true
+    },
+    customOrder: {
+      type: Array
     }
   },
   data: function() {
@@ -57,20 +60,21 @@ export default {
   },
   computed: {
     isNotRankSorted: function() {
-      return this.options.order !== Orders.rank;
+      return this.order !== Orders.rank;
+    },
+    isCustomOrder: function() {
+      return this.order === Orders.custom;
     },
     sortedItems: function() {
-      const { order: sortType } = this.options;
+      const sortType = this.order;
 
       if (sortType === Orders.name) {
         return orderBy(this.items, ['name']);
       } else if (sortType === Orders.rank) {
         return orderBy(this.items, ['ranking.rank']);
-      } else {
-        return this.options.customOrder
-          ? this.options.customOrder.map((x) =>
-              this.items.find((c) => c.id === x)
-            )
+      } else if (this.isCustomOrder) {
+        return this.customOrder
+          ? this.customOrder.map((x) => this.items.find((c) => c.id === x))
           : this.items;
       }
     }
@@ -83,11 +87,9 @@ export default {
       return item && item.ranking ? item.ranking.rank : '';
     },
     onSorting: function(event) {
-      this.options.customOrder.splice(
-        event.newIndex,
-        0,
-        this.options.customOrder.splice(event.oldIndex, 1)[0]
-      );
+      const from = event.oldIndex;
+      const to = event.newIndex;
+      this.$emit('moved', from, to);
     }
   }
 };

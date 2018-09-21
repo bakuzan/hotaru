@@ -2,11 +2,12 @@
     <draggable 
       :class="listClasses"
       element="ul"
-      v-model="items"
+      :list="items"
       :options="sortableOptions"
       @update="onUpdate"
     >
         <li v-for="item in items" :class="listItemClasses" :key="item.id">
+            <div class="sort-handle" v-if="isSortable">+</div>
             <slot v-bind:item="item">
             <!-- Fallback content -->
             {{ item.id }}
@@ -60,7 +61,10 @@ export default {
       return classNames('list__item', this.itemClassName);
     },
     sortableOptions: function() {
-      return { disabled: !this.isSortable };
+      return {
+        disabled: !this.isSortable,
+        handle: '.sort-handle'
+      };
     }
   },
   methods: {
@@ -111,10 +115,23 @@ $columns: (
   }
 }
 .list__item {
+  position: relative;
   display: flex;
   justify-content: center;
   padding: $app--padding-standard;
   @extend %standard-border;
   box-sizing: border-box;
+}
+.sort-handle {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  border: 1px dashed;
+  z-index: map-get($z-index, above-siblings);
 }
 </style>

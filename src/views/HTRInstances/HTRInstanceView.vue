@@ -124,7 +124,8 @@
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
-            :options="editInstance.settings"
+            v-bind="editInstance.settings"
+            @moved="onMove"
             @remove="onRemoveCharacter"
           />
           <HTRInstanceViewBracket
@@ -352,10 +353,11 @@ export default {
       this.editInstance[name] = value;
     },
     onSettingsInput: function(value, name) {
-      this.editInstance.settings[name] = Number(value);
+      const intValue = Number(value);
+      this.editInstance.settings[name] = intValue;
       if (name === 'order') {
         this.editInstance.settings.customOrder =
-          value === Orders.custom
+          intValue === Orders.custom
             ? [...this.editInstance.characters.map((x) => x.id)] || []
             : null;
       }
@@ -401,6 +403,15 @@ export default {
           (x) => x.id !== characterId
         );
       }
+    },
+    onMove: function(from, to) {
+      const order = this.editInstance.settings.customOrder;
+      order.splice(to, 0, order.splice(from, 1)[0]);
+
+      this.$set(this.editInstance, 'settings', {
+        ...this.editInstance.settings,
+        customOrder: [...order]
+      });
     },
     cancel: function() {
       this.readOnly = true;
