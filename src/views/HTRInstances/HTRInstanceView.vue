@@ -388,7 +388,11 @@ export default {
       ];
 
       if (this.editInstance.settings.order === Orders.custom) {
-        this.editInstance.settings.customOrder.push(characterId);
+        const order = [...(this.editInstance.settings.customOrder || [])];
+        this.$set(this.editInstance, 'settings', {
+          ...this.editInstance.settings,
+          customOrder: [...order, characterId]
+        });
       }
 
       this.characterFilter = '';
@@ -399,13 +403,16 @@ export default {
       );
 
       if (this.editInstance.settings.order === Orders.custom) {
-        this.editInstance.settings.customOrder = this.editInstance.settings.customOrder.filter(
-          (x) => x.id !== characterId
-        );
+        const order = [...(this.editInstance.settings.customOrder || [])];
+        console.log(order, characterId);
+        this.$set(this.editInstance, 'settings', {
+          ...this.editInstance.settings,
+          customOrder: [...order.filter((x) => x.id !== characterId)]
+        });
       }
     },
     onMove: function(from, to) {
-      const order = this.editInstance.settings.customOrder;
+      const order = [...(this.editInstance.settings.customOrder || [])];
       order.splice(to, 0, order.splice(from, 1)[0]);
 
       this.$set(this.editInstance, 'settings', {
@@ -429,7 +436,7 @@ export default {
         this.handleCreate();
       } else if (
         !this.isCreate &&
-        InstanceValidator.isValidExisiting(this.editInstance)
+        InstanceValidator.isValidExisting(this.editInstance)
       ) {
         this.handleUpdate();
       }

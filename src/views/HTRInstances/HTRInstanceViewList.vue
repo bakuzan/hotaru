@@ -67,15 +67,15 @@ export default {
     },
     sortedItems: function() {
       const sortType = this.order;
-
+      console.log(this.items, this.customOrder);
       if (sortType === Orders.name) {
-        return orderBy(this.items, ['name']);
+        return [...orderBy(this.items, ['name'])];
       } else if (sortType === Orders.rank) {
-        return orderBy(this.items, ['ranking.rank']);
+        return [...orderBy(this.items, ['ranking.rank'])];
       } else if (this.isCustomOrder) {
         return this.customOrder
-          ? this.customOrder.map((x) => this.items.find((c) => c.id === x))
-          : this.items;
+          ? [...this.customOrder.map((x) => this.items.find((c) => c.id === x))]
+          : [...this.items];
       }
     }
   },

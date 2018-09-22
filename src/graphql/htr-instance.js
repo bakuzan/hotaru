@@ -19,6 +19,7 @@ const instanceFields = gql`
         isSeeded
       }
       order
+      customOrder
       status
       layout
       winnerId
@@ -26,9 +27,9 @@ const instanceFields = gql`
   }
 `;
 
-const existingInstanceFields = gql`
+const instanceAndAssociationFields = gql`
   ${instanceFields}
-  fragment ExistingInstanceFields on HTRInstance {
+  fragment InstanceAndAssociationFields on HTRInstance {
     ...InstanceFields
     characters {
       id
@@ -44,6 +45,9 @@ const existingInstanceFields = gql`
         id
         name
         displayImage
+        ranking {
+          rank
+        }
       }
       winnerId
     }
@@ -63,28 +67,28 @@ const getHTRInstancesByType = gql`
 const getHTRInstanceById = gql`
   query getHTRInstanceById($id: Int!) {
     htrInstanceById(id: $id) {
-      ...ExistingInstanceFields
+      ...InstanceAndAssociationFields
     }
   }
-  ${existingInstanceFields}
+  ${instanceAndAssociationFields}
 `;
 
 const updateHTRInstance = gql`
   mutation updateHTRInstance($instance: HTRInstanceInput) {
     htrInstanceUpdate(instance: $instance) {
-      ...ExistingInstanceFields
+      ...InstanceAndAssociationFields
     }
   }
-  ${existingInstanceFields}
+  ${instanceAndAssociationFields}
 `;
 
 const createHTRInstance = gql`
   mutation createHTRInstance($instance: HTRInstanceInput) {
     htrInstanceCreate(instance: $instance) {
-      ...InstanceFields
+      ...InstanceAndAssociationFields
     }
   }
-  ${instanceFields}
+  ${instanceAndAssociationFields}
 `;
 
 const castVoteInBracket = gql`
@@ -98,10 +102,10 @@ const castVoteInBracket = gql`
       versusId: $versusId
       winnerId: $winnerId
     ) {
-      ...ExistingInstanceFields
+      ...InstanceAndAssociationFields
     }
   }
-  ${existingInstanceFields}
+  ${instanceAndAssociationFields}
 `;
 
 export default {

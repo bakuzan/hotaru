@@ -156,7 +156,7 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
   const {
     limit,
     order,
-    customOrder,
+    customOrder = [],
     rules,
     status,
     layout,
@@ -175,7 +175,7 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
     settings: {
       limit: Number(limit),
       order: order ? Number(order) : undefined,
-      customOrder: order === Orders.custom ? customOrder : null,
+      customOrder: Number(order) === Orders.custom ? customOrder : null,
       ...resolvedRules,
       layout,
       status,
