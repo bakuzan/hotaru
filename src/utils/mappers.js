@@ -164,8 +164,8 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
   } = settings;
   const resolvedRules = isCreate ? {} : { rules: mapWithoutTypename(rules) };
   const resolvedCharacters =
-    characters && characters.length ? characters.map((x) => x.id) : [];
-
+    characters && characters.length ? [...characters.map((x) => x.id)] : [];
+  console.log('posting...', resolvedCharacters, customOrder);
   return {
     id,
     name,
@@ -175,7 +175,8 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
     settings: {
       limit: Number(limit),
       order: order ? Number(order) : undefined,
-      customOrder: Number(order) === Orders.custom ? customOrder : null,
+      customOrder:
+        Number(order) === Orders.custom ? customOrder.slice(0) : null,
       ...resolvedRules,
       layout,
       status,
@@ -190,6 +191,15 @@ export const mapHTRInstanceToStore = (instance) => ({
 });
 
 export const mapHTRInstanceToOptimisticUpdate = (instance) => {
-  const mappedObj = { ...instance };
+  const mappedObj = {
+    ...instance,
+    settings: {
+      ...instance.settings,
+      customOrder: instance.settings.customOrder
+        ? [...instance.settings.customOrder]
+        : null
+    }
+  };
+  console.log('op up...', mappedObj);
   return mutationWrapper('HTRInstance', 'htrInstanceUpdate')(mappedObj);
 };

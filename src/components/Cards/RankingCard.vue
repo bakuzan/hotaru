@@ -1,40 +1,51 @@
 <template>
     <div class="rank-card">
-        <div class="rank-card__rank rank">
-          <div class="rank__bubble">{{rank}}</div>
+      <Button
+        v-if="remove"
+        className="rank-card__remove"
+        size="small"
+        theme="secondary"
+        :icon="removeIcon"
+        @click="handleRemove"
+      />
+      <div class="rank-card__rank rank">
+        <div class="rank__bubble">{{rank}}</div>
+      </div>
+      <ImageCard
+        v-bind="$props"
+        :url="character.displayImage"
+        figure-size="small"
+        hide-caption
+      />
+      <div class="rank-card__content">
+        <div class="rank-card__text">
+          <NavLink 
+            class="rank-card__link"
+            :to="cardUrl"
+          >
+          {{character.name}}
+          </NavLink>
         </div>
-        <ImageCard
-          v-bind="$props"
-          :url="character.displayImage"
-          figure-size="small"
-          hide-caption
-        />
-        <div class="rank-card__content">
-          <div class="rank-card__text">
-            <NavLink 
-              class="rank-card__link"
-              :to="cardUrl"
-            >
-            {{character.name}}
-            </NavLink>
-          </div>
-          <div class="rank-card__text">{{winsText}}</div>
-          <div class="rank-card__text">{{scoreText}}</div>
-        </div>
+        <div class="rank-card__text">{{winsText}}</div>
+        <div class="rank-card__text">{{scoreText}}</div>
+      </div>
   </div>
 </template>
 
 <script>
 import ImageCard from './ImageCard';
 import NavLink from '@/components/NavLink';
+import { Button } from '@/components/Buttons';
 
 import Urls from '@/constants/urls';
+import Icons from '@/constants/icons';
 
 export default {
   name: 'RankingCard',
   components: {
     ImageCard,
-    NavLink
+    NavLink,
+    Button
   },
   props: {
     id: {
@@ -52,7 +63,14 @@ export default {
     character: {
       type: Object,
       default: () => {}
+    },
+    remove: {
+      type: Function,
+      default: null
     }
+  },
+  data: function() {
+    return { removeIcon: Icons.cross };
   },
   computed: {
     winsText: function() {
@@ -65,6 +83,12 @@ export default {
     },
     cardUrl: function() {
       return Urls.build(Urls.characterView, { id: this.character.id });
+    }
+  },
+  methods: {
+    handleRemove: function() {
+      const id = this.id || this.character.id;
+      this.remove(id);
     }
   }
 };
@@ -97,6 +121,22 @@ export default {
     height: auto;
     padding: $app--padding-small 0;
     border: none;
+  }
+
+  &__remove {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1px;
+    margin: 1px;
+    background: transparent; // Having background can cause overlap.
+  }
+}
+
+.rank-card:hover {
+  .rank-card__remove {
+    display: block;
   }
 }
 

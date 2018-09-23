@@ -294,6 +294,7 @@ export default {
     instanceContentClasses: function() {
       return classNames('htr-instance-content', {
         'htr-instance-content--bracket': !this.isListType,
+        'htr-instance-content--wider': this.isListType,
         'page-view__left-column': this.isListType,
         'page-view__content': !this.isListType
       });
@@ -407,7 +408,7 @@ export default {
         console.log(order, characterId);
         this.$set(this.editInstance, 'settings', {
           ...this.editInstance.settings,
-          customOrder: [...order.filter((x) => x.id !== characterId)]
+          customOrder: [...order.filter((x) => x !== characterId)]
         });
       }
     },
@@ -456,6 +457,7 @@ export default {
         .then(({ data }) => {
           const item = getItemFromData(data);
           this.updateData(item);
+          this.readOnly = false;
           this.mutationLoading = false;
 
           const redirectToUrl = Urls.build(Urls.htrInstanceView, {
@@ -474,7 +476,7 @@ export default {
           variables: { instance },
           update: (store, { data: { htrInstanceUpdate } }) => {
             const data = { ...htrInstanceUpdate };
-
+            console.log('mutate update ...', data, instance);
             store.writeQuery({
               query: Query.getHTRInstanceById,
               variables: { id: data.id },
@@ -506,6 +508,10 @@ export default {
   min-height: 25px;
   overflow: hidden;
   border: 1px dashed transparent;
+
+  &--wider {
+    flex-basis: 33%;
+  }
 }
 
 .seed-icon {
