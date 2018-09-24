@@ -277,6 +277,8 @@ export default {
         SeriesValidator.isValidExisting(this.editSeries)
       ) {
         this.handleUpdate();
+      } else {
+        this.readOnly = false;
       }
     },
     handleCreate: function() {
@@ -304,6 +306,7 @@ export default {
         .then(({ data }) => {
           const item = getItemFromData(data);
           this.updateData(item);
+          this.readOnly = false;
           this.mutationLoading = false;
 
           const redirectToUrl = Urls.build(Urls.seriesView, { id: item.id });

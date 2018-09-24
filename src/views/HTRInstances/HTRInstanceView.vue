@@ -440,6 +440,8 @@ export default {
         InstanceValidator.isValidExisting(this.editInstance)
       ) {
         this.handleUpdate();
+      } else {
+        this.readOnly = false;
       }
     },
     handleCreate: function() {
