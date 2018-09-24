@@ -4,6 +4,7 @@ node_modules
 *.css
 *.example.*
 *.sqlite*
+web.config
 
 # local env files
 .env.local
