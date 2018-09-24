@@ -52,8 +52,6 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/_variables';
-
 .radio {
   display: inline-flex;
   align-items: center;

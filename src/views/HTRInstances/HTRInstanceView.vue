@@ -497,8 +497,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../styles/_variables';
-
 #characterFilter {
   margin-top: -2px;
 }

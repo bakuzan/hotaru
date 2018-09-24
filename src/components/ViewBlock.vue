@@ -75,15 +75,4 @@ export default {
     }
   }
 }
-// .view-block--no-data {
-//   .view-block__label {
-//     @extend %standard-border;
-//     padding: $app--padding-standard;
-//     cursor: pointer;
-
-//     &:hover {
-//       border-color: darken($white, 33%);
-//     }
-//   }
-// }
 </style>

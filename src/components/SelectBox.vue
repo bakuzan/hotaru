@@ -66,8 +66,6 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/_variables';
-
 .select-box {
   flex: 1;
   padding: 5px;

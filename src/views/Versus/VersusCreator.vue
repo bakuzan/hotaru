@@ -247,8 +247,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../styles/_variables';
-
 .versus-creator {
   flex-direction: column;
 
