@@ -405,7 +405,7 @@ export default {
 
       if (this.editInstance.settings.order === Orders.custom) {
         const order = [...(this.editInstance.settings.customOrder || [])];
-        console.log(order, characterId);
+
         this.$set(this.editInstance, 'settings', {
           ...this.editInstance.settings,
           customOrder: [...order.filter((x) => x !== characterId)]
@@ -476,7 +476,7 @@ export default {
           variables: { instance },
           update: (store, { data: { htrInstanceUpdate } }) => {
             const data = { ...htrInstanceUpdate };
-            console.log('mutate update ...', data, instance);
+
             store.writeQuery({
               query: Query.getHTRInstanceById,
               variables: { id: data.id },
