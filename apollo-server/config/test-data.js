@@ -40,49 +40,57 @@ const characters = [
     name: 'Shidare Hotaru',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/jLwdACg.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 1
   },
   {
     name: 'Kagari Ayaka',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/3xdrczj.jpg',
-    isWaifu: true
+    isWaifu: true,
+    seriesId: 2
   },
   {
     name: 'Shiraki Meiko',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/5hLv07N.jpg',
-    isWaifu: true
+    isWaifu: true,
+    seriesId: 3
   },
   {
     name: 'Kurihara Mari',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/3BeLYsy.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 3
   },
   {
     name: 'Kiryuin Satsuki',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/hwpbszY.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 4
   },
   {
     name: 'Kiryuin Ragyo',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/xRWCpHW.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 4
   },
   {
     name: 'Matoi Ryuuko',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/Gq8ulAp.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 4
   },
   {
     name: 'Guts',
     gender: 'Male',
     displayImage: 'https://i.imgur.com/0c3p5VT.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 5
   },
   {
     name: 'Joseph Joestar',
@@ -94,13 +102,15 @@ const characters = [
     name: 'Darth Vader',
     gender: 'Male',
     displayImage: 'https://i.imgur.com/EHFqL3C.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 7
   },
   {
     name: 'Bishamonten',
     gender: 'Female',
     displayImage: 'https://i.imgur.com/NTkNb9T.jpg',
-    isWaifu: false
+    isWaifu: false,
+    seriesId: 6
   }
 ];
 const tags = [
@@ -109,7 +119,8 @@ const tags = [
   { name: 'student council' },
   { name: 'glasses' },
   { name: 'thigh-highs' },
-  { name: 'mask' }
+  { name: 'mask' },
+  { name: 'sword' }
 ];
 const templates = [
   {
@@ -127,7 +138,8 @@ const templates = [
     rules: {
       genders: ['Female'],
       sources: [],
-      series: []
+      series: [],
+      limit: 3
     }
   },
   {
@@ -149,7 +161,7 @@ const templates = [
     }
   },
   {
-    name: 'Only Female Bracket',
+    name: 'Only Female Bracket (Seeded)',
     type: 'Bracket',
     rules: {
       genders: ['Female'],
