@@ -62,7 +62,7 @@ app.use('/graphql', cors(corsOptions), bodyParser.json());
 // Always return the main index.html, so react-router render the route in the client
 if (process.env.NODE_ENV === Constants.environment.production) {
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
   });
 }
 
