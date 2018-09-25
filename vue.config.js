@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? '/hotaru/' : '/',
+  baseUrl: '/',
   assetsDir: 'static',
   chainWebpack: (config) => {
     // remove the prefetch plugin

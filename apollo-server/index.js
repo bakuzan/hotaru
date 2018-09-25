@@ -48,14 +48,17 @@ app.use(function(req, _, next) {
   next();
 });
 
+app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(
   `/${Constants.appName}/favicon.ico`,
   favicon(path.join(__dirname, '..', 'dist', 'favicon.ico'))
 );
 app.use(
-  `/${Constants.appName}/static`,
+  '/static',
   express.static(path.resolve(__dirname, '..', 'dist/static'))
 );
+app.use('/img', express.static(path.resolve(__dirname, '..', 'public/img')));
 
 app.use('/graphql', cors(corsOptions), bodyParser.json());
 
