@@ -9,7 +9,7 @@ const Urls = {
   },
   images: {
     deadImage: 'https://i.imgur.com/gKr1YhF.png',
-    characterPlaceholder: 'https://i.imgur.com/bW0heWj.jpg'
+    characterPlaceholder: 'https://i.imgur.com/VYw06nf.jpg'
   },
   base: '/hotaru',
   get characterList() {

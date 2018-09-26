@@ -190,11 +190,6 @@ export default {
     & .list-figure-card__image {
       width: 50px;
       height: 75px;
-
-      &--placeholder {
-        width: 60px;
-        height: 84px;
-      }
     }
   }
 }

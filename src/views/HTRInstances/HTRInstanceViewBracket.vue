@@ -59,7 +59,7 @@ export default {
   },
   watch: {
     customBracketLayout: function(newV, oldV) {
-      if (newV && newV.length !== oldV) {
+      if (newV && (!oldV || newV.length !== oldV.length)) {
         this.$nextTick(this.updateCanvas);
       }
     }

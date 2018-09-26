@@ -5,7 +5,7 @@
       <div class="page-view__left-column htr-column">
         <div class="htr-column__inner">
           <HTRImage 
-            :src="series.displayImage" 
+            :src="editSeries.displayImage" 
             class="page-view__image" 
           />
           <ViewBlockToggler
