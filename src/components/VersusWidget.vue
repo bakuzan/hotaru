@@ -58,11 +58,18 @@ export default {
     isFinal: {
       type: Boolean,
       default: false
+    },
+    grow: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     classes: function() {
-      return classNames('versus', { 'versus--is-dummy': this.isDummy });
+      return classNames('versus', {
+        'versus--is-dummy': this.isDummy,
+        'versus--grow': this.grow
+      });
     },
     compareLink: function() {
       const ids = this.characters.map((x) => x.id).join(',');
@@ -88,6 +95,10 @@ export default {
   justify-content: center;
   min-height: 180px;
   max-width: 100%;
+
+  &--grow {
+    flex: 1;
+  }
 
   &__icon {
     position: absolute;

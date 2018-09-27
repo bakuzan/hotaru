@@ -44,6 +44,7 @@
             <VersusWidget
               v-bind="slotProps.item"
               enable-compare
+              grow
               @vote="handleVote"
             />
           </template>
