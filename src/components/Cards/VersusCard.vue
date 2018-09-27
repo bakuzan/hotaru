@@ -93,10 +93,11 @@ export default {
 @import '../../styles/_extensions.scss';
 
 .versus-card {
+  width: 50%;
   padding: $app--padding-small;
 
   &--grow {
-    width: 50%;
+    flex: 1;
   }
 
   &__seed {

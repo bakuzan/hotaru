@@ -1,6 +1,7 @@
 module.exports = {
   baseUrl: '/',
   assetsDir: 'static',
+  productionSourceMap: false,
   chainWebpack: (config) => {
     // remove the prefetch plugin
     config.plugins.delete('prefetch');
