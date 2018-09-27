@@ -91,7 +91,8 @@ export default {
     return {
       cardUrl: Urls.characterView,
       columnClasses: classNames(
-        'page-view__left-column page-view__left-column--grow htr-column'
+        'page-view__left-column htr-column',
+        'home-content-column'
       ),
       blockCreateVersus: true,
       versusDailyActive: [],
@@ -196,7 +197,16 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/_variables';
 
+.home-content-column {
+  width: 24%;
+  &:nth-child(2) {
+    width: 49%;
+  }
+}
+
 .htr-section {
+  max-width: 100%;
+
   &__header {
     display: flex;
     flex-direction: column;

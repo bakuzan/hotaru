@@ -14,8 +14,10 @@
             <figcaption v-if="!hideCaption" class="list-figure-card__caption">
                 <NavLink 
                   v-if="itemUrl && name"
+                  class="list-figure-card__link"
                   :to="itemUrl"
                   :target="linkTarget"
+                  :title="name"
                 >
                 {{name}}
                 </NavLink>
@@ -167,6 +169,13 @@ export default {
     width: 100%;
     padding: $app--padding-standard 0;
     text-align: center;
+  }
+
+  &__link {
+    display: flex;
+    align-items: flex-start;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__image {
