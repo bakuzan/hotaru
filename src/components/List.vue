@@ -1,4 +1,5 @@
 <template>
+  <div>
     <draggable 
       :class="listClasses"
       element="ul"
@@ -14,11 +15,15 @@
             </slot>
         </li>
     </draggable>
+    <div ref="observedDiv" class="observer"></div>
+  </div>
 </template>
 
 <script>
 import classNames from 'classnames';
 import draggable from 'vuedraggable';
+
+import { infiniteScroll } from '@/utils';
 
 export default {
   name: 'List',
@@ -44,6 +49,20 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data: function() {
+    return {
+      observer: null
+    };
+  },
+  mounted() {
+    this.observer = infiniteScroll(this.$el, ([entry]) =>
+      this.$emit('intersect')
+    );
+    this.observer.observe(this.$refs.observedDiv);
+  },
+  destroyed() {
+    this.observer.disconnect();
   },
   computed: {
     listClasses: function() {
@@ -133,5 +152,9 @@ $columns: (
   height: 1em;
   border: 1px dashed;
   z-index: map-get($z-index, above-siblings);
+}
+.observer {
+  width: 100%;
+  height: 5px;
 }
 </style>

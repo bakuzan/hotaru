@@ -16,11 +16,13 @@
       />
     </ListFilterBar>
     <List 
+      id="character-list"
       wrap
       columns="four"
       className="characters"
       itemClassName="characters__item"
       :items="charactersPaged.nodes"
+      @intersect="showMore"
     >
       <template slot-scope="slotProps">
         <ListFigureCard 
@@ -29,7 +31,6 @@
         />
       </template>
     </List>
-    <button @click="showMore">show more temp button</button>
   </div>
 </template>
 
@@ -67,7 +68,7 @@ export default {
         genders: [...GenderType]
       },
       page: 0,
-      showMoreEnabled: true,
+      showMoreEnabled: false,
       charactersPaged: {
         nodes: [],
         total: 0
@@ -85,7 +86,8 @@ export default {
           page: 0,
           size
         }
-      }
+      },
+      update() {}
     }
   },
   computed: {
@@ -113,6 +115,8 @@ export default {
       this.$router.push(Urls.characterCreate);
     },
     showMore() {
+      const loading = this.$apollo.queries.charactersPaged.isLoading;
+      if (!this.showMoreEnabled || loading) return;
       this.page++;
       this.$apollo.queries.charactersPaged.fetchMore({
         variables: {
