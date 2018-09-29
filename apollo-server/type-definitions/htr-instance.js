@@ -25,6 +25,11 @@ module.exports = gql`
     order: Int
     customOrder: [Int]
   }
+  type HTRInstancePage {
+    nodes: [HTRInstance]
+    total: Int
+    hasMore: Boolean
+  }
   input HTRInstanceInput {
     id: Int
     name: String

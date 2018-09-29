@@ -1,4 +1,4 @@
-import { isString, parseIfInt } from './index';
+import { isString, parseIfInt, getItemFromData, getKeyForData } from './index';
 import { Orders } from '@/constants/htr-instance-settings';
 
 // eslint-disable-next-line
@@ -202,4 +202,20 @@ export const mapHTRInstanceToOptimisticUpdate = (instance) => {
   };
   console.log('op up...', mappedObj);
   return mutationWrapper('HTRInstance', 'htrInstanceUpdate')(mappedObj);
+};
+
+export const mapPagedResponseToUpdate = (
+  previousResult,
+  { fetchMoreResult }
+) => {
+  const key = getKeyForData(previousResult);
+  const prev = getItemFromData(previousResult);
+  const data = getItemFromData(fetchMoreResult);
+  return {
+    [key]: {
+      __typename: prev.__typename,
+      ...data,
+      nodes: [...prev.nodes, ...data.nodes]
+    }
+  };
 };

@@ -77,6 +77,11 @@ const orderBy = (arr, props, orders) =>
     }, 0)
   );
 
+const setHasMoreFlag = (total, paging) => {
+  const nodesSoFar = paging.page * paging.size + paging.size;
+  return total - nodesSoFar > 0;
+};
+
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
@@ -86,5 +91,6 @@ module.exports = {
   castStringToBool,
   resolveInOp,
   shuffleArray,
-  orderBy
+  orderBy,
+  setHasMoreFlag
 };

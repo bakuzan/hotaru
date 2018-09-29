@@ -2,6 +2,11 @@ const gql = require('graphql-tag');
 
 const Query = gql`
   type Query {
+    charactersPaged(
+      search: String
+      genders: [GenderType]
+      paging: Paging
+    ): CharacterPage
     characters(search: String, genders: [GenderType]): [Character]
     charactersWithoutSeries(search: String): [Character]
     characterById(id: Int!): Character
@@ -13,6 +18,11 @@ const Query = gql`
       rules: HTRTemplateRulesInput
     ): [Character]
 
+    seriesPaged(
+      search: String
+      sources: [SourceType]
+      paging: Paging
+    ): SeriesPage
     series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series
 
@@ -24,10 +34,18 @@ const Query = gql`
 
     rankingsTopTen: [Ranking]
 
-    htrTemplates(search: String, type: HTRTemplateType!): [HTRTemplate]
+    htrTemplatesPaged(
+      search: String
+      type: HTRTemplateType!
+      paging: Paging
+    ): HTRTemplatePage
     htrTemplateById(id: Int!): HTRTemplate
 
-    htrInstances(search: String, type: HTRTemplateType!): [HTRInstance]
+    htrInstancesPaged(
+      search: String
+      type: HTRTemplateType!
+      paging: Paging
+    ): HTRInstancePage
     htrInstanceById(id: Int!): HTRInstance
   }
 `;

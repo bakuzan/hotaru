@@ -15,6 +15,11 @@ module.exports = gql`
     limit: Int
     isSeeded: Boolean
   }
+  type HTRTemplatePage {
+    nodes: [HTRTemplate]
+    total: Int
+    hasMore: Boolean
+  }
   input HTRTemplateInput {
     name: String
     type: HTRTemplateType

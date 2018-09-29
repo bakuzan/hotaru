@@ -8,6 +8,11 @@ module.exports = gql`
     source: SourceType
     characters(gender: GenderType): [Character]
   }
+  type SeriesPage {
+    nodes: [Series]
+    total: Int
+    hasMore: Boolean
+  }
   input SeriesInput {
     id: Int
     name: String

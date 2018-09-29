@@ -1,3 +1,5 @@
+const gql = require('graphql-tag');
+
 const query = require('./query');
 const enums = require('./enums');
 const character = require('./character');
@@ -19,5 +21,11 @@ module.exports = [
   versus,
   ranking,
   htrtemplate,
-  htrinstance
+  htrinstance,
+  gql`
+    input Paging {
+      size: Int
+      page: Int
+    }
+  `
 ];

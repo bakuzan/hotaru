@@ -1,5 +1,14 @@
 import gql from 'graphql-tag';
 
+const charactersQueryFields = gql`
+  fragment CharactersQueryFields on Character {
+    id
+    name
+    displayImage
+    isWaifu
+  }
+`;
+
 const characterCreationFields = gql`
   fragment CreationFields on Character {
     id
@@ -19,15 +28,30 @@ const characterCreationFields = gql`
   }
 `;
 
+const getCharactersPaged = gql`
+  query getCharactersPaged(
+    $search: String
+    $genders: [GenderType]
+    $paging: Paging
+  ) {
+    charactersPaged(search: $search, genders: $genders, paging: $paging) {
+      nodes {
+        ...CharactersQueryFields
+      }
+      total
+      hasMore
+    }
+  }
+  ${charactersQueryFields}
+`;
+
 const getCharacters = gql`
   query getCharacters($search: String, $genders: [GenderType]) {
     characters(search: $search, genders: $genders) {
-      id
-      name
-      displayImage
-      isWaifu
+      ...CharactersQueryFields
     }
   }
+  ${charactersQueryFields}
 `;
 
 const getCharactersForVersusCompare = gql`
@@ -146,6 +170,7 @@ const getCharacterOfTheDay = gql`
 
 export default {
   query: {
+    getCharactersPaged,
     getCharacters,
     getCharactersForVersusCompare,
     getCharactersWithoutSeries,

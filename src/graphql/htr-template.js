@@ -20,11 +20,19 @@ const templateFields = gql`
 `;
 
 const getHTRTemplatesByType = gql`
-  query getHTRTemplatesByType($search: String, $type: HTRTemplateType!) {
-    htrTemplates(search: $search, type: $type) {
-      id
-      name
-      type
+  query getHTRTemplatesByType(
+    $search: String
+    $type: HTRTemplateType!
+    $paging: Paging
+  ) {
+    htrTemplatesPaged(search: $search, type: $type, paging: $paging) {
+      nodes {
+        id
+        name
+        type
+      }
+      total
+      hasMore
     }
   }
 `;

@@ -55,11 +55,19 @@ const instanceAndAssociationFields = gql`
 `;
 
 const getHTRInstancesByType = gql`
-  query getHTRInstancesByType($search: String, $type: HTRTemplateType!) {
-    htrInstances(search: $search, type: $type) {
-      id
-      name
-      description
+  query getHTRInstancesByType(
+    $search: String
+    $type: HTRTemplateType!
+    $paging: Paging
+  ) {
+    htrInstancesPaged(search: $search, type: $type, paging: $paging) {
+      nodes {
+        id
+        name
+        description
+      }
+      total
+      hasMore
     }
   }
 `;

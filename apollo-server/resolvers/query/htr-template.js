@@ -1,24 +1,31 @@
 const Op = require('sequelize').Op;
 
 const { db, HTRTemplate, HTRInstance } = require('../../connectors');
+const Utils = require('../../utils');
 
 module.exports = {
-  htrTemplates(_, { search, type }) {
-    return HTRTemplate.findAll({
+  htrTemplatesPaged(_, { search, type, paging = {} }) {
+    return HTRTemplate.findAndCountAll({
       where: {
         name: {
           [Op.like]: `%${search}%`
         },
         type: { [Op.eq]: type }
       },
-      order: [['name', 'ASC']]
-    });
+      order: [['name', 'ASC']],
+      limit: paging.size,
+      offset: paging.size * paging.page
+    }).then((result) => ({
+      nodes: result.rows,
+      total: result.count,
+      hasMore: Utils.setHasMoreFlag(result.count, paging)
+    }));
   },
   htrTemplateById(_, { id }) {
     return HTRTemplate.findById(id);
   },
-  htrInstances(_, { search, type }) {
-    return HTRInstance.findAll({
+  htrInstancesPaged(_, { search, type, paging = {} }) {
+    return HTRInstance.findAndCountAll({
       where: {
         name: {
           [Op.like]: `%${search}%`
@@ -28,8 +35,14 @@ module.exports = {
         })
       },
       order: [['name', 'ASC']],
+      limit: paging.size,
+      offset: paging.size * paging.page,
       include: [HTRTemplate]
-    });
+    }).then((result) => ({
+      nodes: result.rows,
+      total: result.count,
+      hasMore: Utils.setHasMoreFlag(result.count, paging)
+    }));
   },
   htrInstanceById(_, { id }) {
     return HTRInstance.findById(id);

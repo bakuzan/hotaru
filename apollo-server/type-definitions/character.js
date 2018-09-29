@@ -14,6 +14,11 @@ module.exports = gql`
     ranking: Ranking
     isWaifu: Boolean
   }
+  type CharacterPage {
+    nodes: [Character]
+    total: Int
+    hasMore: Boolean
+  }
   input CharacterInput {
     id: Int
     name: String

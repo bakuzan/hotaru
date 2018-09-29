@@ -90,6 +90,8 @@ export const objectsAreEqual = (a, b) => {
   return keys.every((k) => objectsAreEqual(a[k], b[k]));
 };
 
+export const getKeyForData = (o) => Object.keys(o).pop();
+
 export const getItemFromData = (o) =>
   Object.keys(o)
     .map((k) => o[k])

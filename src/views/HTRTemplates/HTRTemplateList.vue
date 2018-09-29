@@ -44,8 +44,12 @@ import HTRTemplateType, {
   HTRTemplateTypes
 } from '@/constants/htr-template-type';
 import { Query } from '@/graphql';
-import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
+import {
+  mapEnumToRadioButtonGroup,
+  mapPagedResponseToUpdate
+} from '@/utils/mappers';
 
+const size = 10;
 export default {
   name: 'HTRTemplateList',
   components: {
@@ -64,15 +68,25 @@ export default {
         search: '',
         type: HTRTemplateTypes.list
       },
-      htrTemplates: []
+      page: 0,
+      showMoreEnabled: true,
+      htrTemplatesPaged: {
+        nodes: [],
+        total: 0
+      }
     };
   },
   apollo: {
-    htrTemplates: {
+    htrTemplatesPaged: {
       query: Query.getHTRTemplatesByType,
       debounce: 1000,
-      variables() {
-        return { ...this.filters };
+      variables: {
+        search: '',
+        type: HTRTemplateTypes.list,
+        paging: {
+          page: 0,
+          size
+        }
       }
     }
   },
@@ -84,9 +98,38 @@ export default {
   methods: {
     onInput: function(value, name) {
       this.filters[name] = value;
+      this.page = 0;
+
+      clearTimeout(this.searchTimer);
+      this.searchTimer = setTimeout(() => {
+        this.$apollo.queries.htrTemplatesPaged.refetch({
+          ...this.filters,
+          paging: {
+            page: this.page,
+            size
+          }
+        });
+      }, 1000);
     },
     onAdd: function() {
       this.$router.push(Urls.htrTemplateCreator);
+    },
+    showMore() {
+      this.page++;
+      this.$apollo.queries.htrTemplatesPaged.fetchMore({
+        variables: {
+          ...this.filters,
+          paging: {
+            page: this.page,
+            size
+          }
+        },
+        updateQuery: (...response) => {
+          const updated = mapPagedResponseToUpdate(...response);
+          this.showMoreEnabled = updated.hasMore;
+          return updated;
+        }
+      });
     }
   }
 };

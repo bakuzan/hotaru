@@ -1,8 +1,34 @@
 const Op = require('sequelize').Op;
 
 const { db, Character } = require('../../connectors');
+const Utils = require('../../utils');
 
 module.exports = {
+  charactersPaged(_, { search = '', genders, paging = {} }) {
+    const resolvedArgs = genders
+      ? {
+          gender: {
+            [Op.in]: genders
+          }
+        }
+      : {};
+
+    return Character.findAndCountAll({
+      where: {
+        name: {
+          [Op.like]: `%${search}%`
+        },
+        ...resolvedArgs
+      },
+      order: [['name', 'ASC']],
+      limit: paging.size,
+      offset: paging.size * paging.page
+    }).then((result) => ({
+      nodes: result.rows,
+      total: result.count,
+      hasMore: Utils.setHasMoreFlag(result.count, paging)
+    }));
+  },
   characters(_, { search = '', genders }) {
     const resolvedArgs = genders
       ? {

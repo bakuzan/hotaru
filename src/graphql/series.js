@@ -1,5 +1,13 @@
 import gql from 'graphql-tag';
 
+const seriesQueryFields = gql`
+  fragment SeriesQueryFields on Series {
+    id
+    name
+    displayImage
+  }
+`;
+
 const allSeries = gql`
   query allSeries {
     series {
@@ -9,14 +17,30 @@ const allSeries = gql`
   }
 `;
 
+const getSeriesPaged = gql`
+  query getSeriesPaged(
+    $search: String
+    $sources: [SourceType]
+    $paging: Paging
+  ) {
+    seriesPaged(search: $search, sources: $sources, paging: $paging) {
+      nodes {
+        ...SeriesQueryFields
+      }
+      total
+      hasMore
+    }
+  }
+  ${seriesQueryFields}
+`;
+
 const getSeries = gql`
   query getSeries($search: String, $sources: [SourceType]) {
     series(search: $search, sources: $sources) {
-      id
-      name
-      displayImage
+      ...SeriesQueryFields
     }
   }
+  ${seriesQueryFields}
 `;
 
 const getSeriesById = gql`
@@ -78,6 +102,7 @@ const seriesCore = gql`
 export default {
   query: {
     allSeries,
+    getSeriesPaged,
     getSeries,
     getSeriesById
   },
