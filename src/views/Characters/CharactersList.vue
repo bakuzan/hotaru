@@ -44,12 +44,9 @@ import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/gender-type';
 import { Query } from '@/graphql';
-import {
-  mapEnumToSelectBoxOptions,
-  mapPagedResponseToUpdate
-} from '@/utils/mappers';
+import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import * as LP from '@/utils/list-pages';
 
-const size = 10;
 export default {
   name: 'CharactersList',
   components: {
@@ -62,16 +59,18 @@ export default {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.characterView,
+      mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+      filterHandler: LP.updateFilterAndRefetch(this, 'charactersPaged'),
       searchTimer: null,
       filters: {
         search: '',
         genders: [...GenderType]
       },
       page: 0,
-      showMoreEnabled: false,
       charactersPaged: {
         nodes: [],
-        total: 0
+        total: 0,
+        hasMore: true
       }
     };
   },
@@ -84,54 +83,20 @@ export default {
         genders: [...GenderType],
         paging: {
           page: 0,
-          size
+          size: LP.size
         }
-      },
-      update() {}
-    }
-  },
-  computed: {
-    mappedGenders: function() {
-      return mapEnumToSelectBoxOptions(GenderType);
+      }
     }
   },
   methods: {
     onInput: function(value, name) {
-      this.filters[name] = value;
-      this.page = 0;
-
-      clearTimeout(this.searchTimer);
-      this.searchTimer = setTimeout(() => {
-        this.$apollo.queries.charactersPaged.refetch({
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        });
-      }, 1000);
+      this.filterHandler(value, name);
     },
     onAdd: function() {
       this.$router.push(Urls.characterCreate);
     },
-    showMore() {
-      const loading = this.$apollo.queries.charactersPaged.isLoading;
-      if (!this.showMoreEnabled || loading) return;
-      this.page++;
-      this.$apollo.queries.charactersPaged.fetchMore({
-        variables: {
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        },
-        updateQuery: (...response) => {
-          const updated = mapPagedResponseToUpdate(...response);
-          this.showMoreEnabled = updated.hasMore;
-          return updated;
-        }
-      });
+    showMore: function() {
+      LP.showMore(this, 'charactersPaged');
     }
   }
 };

@@ -199,6 +199,7 @@ export default {
 @import '../styles/_variables';
 
 .home-content-column {
+  flex-basis: unset;
   width: 24%;
   &:nth-child(2) {
     width: 49%;

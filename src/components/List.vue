@@ -23,8 +23,6 @@
 import classNames from 'classnames';
 import draggable from 'vuedraggable';
 
-import { infiniteScroll } from '@/utils';
-
 export default {
   name: 'List',
   components: {
@@ -56,9 +54,11 @@ export default {
     };
   },
   mounted() {
-    this.observer = infiniteScroll(this.$el, ([entry]) =>
-      this.$emit('intersect')
-    );
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (entry && entry.isIntersecting) {
+        this.$emit('intersect');
+      }
+    });
     this.observer.observe(this.$refs.observedDiv);
   },
   destroyed() {
@@ -152,9 +152,5 @@ $columns: (
   height: 1em;
   border: 1px dashed;
   z-index: map-get($z-index, above-siblings);
-}
-.observer {
-  width: 100%;
-  height: 5px;
 }
 </style>

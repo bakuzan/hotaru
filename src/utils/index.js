@@ -148,11 +148,3 @@ export const bracketProgression = (end, start = 1, step = 2) =>
   })
     .map((v, i) => start * step ** i)
     .reverse();
-
-export const infiniteScroll = (root, callback) => {
-  return new IntersectionObserver(callback, {
-    root,
-    rootMargin: '0px',
-    threshold: 1.0
-  });
-};
