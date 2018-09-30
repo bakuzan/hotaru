@@ -44,6 +44,7 @@ import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/gender-type';
 import { Query } from '@/graphql';
+import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
 import * as LP from '@/utils/list-pages';
 
@@ -67,11 +68,7 @@ export default {
         genders: [...GenderType]
       },
       page: 0,
-      charactersPaged: {
-        nodes: [],
-        total: 0,
-        hasMore: true
-      }
+      charactersPaged: defaultPagedResponse()
     };
   },
   apollo: {
@@ -89,11 +86,11 @@ export default {
     }
   },
   methods: {
-    onInput: function(value, name) {
-      this.filterHandler(value, name);
-    },
     onAdd: function() {
       this.$router.push(Urls.characterCreate);
+    },
+    onInput: function(value, name) {
+      this.filterHandler(value, name);
     },
     showMore: function() {
       LP.showMore(this, 'charactersPaged');

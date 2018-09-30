@@ -44,12 +44,10 @@ import HTRTemplateType, {
   HTRTemplateTypes
 } from '@/constants/htr-template-type';
 import { Query } from '@/graphql';
-import {
-  mapEnumToRadioButtonGroup,
-  mapPagedResponseToUpdate
-} from '@/utils/mappers';
+import { defaultPagedResponse } from '@/utils/models';
+import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
+import * as LP from '@/utils/list-pages';
 
-const size = 10;
 export default {
   name: 'HTRInstanceList',
   components: {
@@ -63,17 +61,15 @@ export default {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrInstanceView,
+      mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
+      filterHandler: LP.updateFilterAndRefetch(this, 'htrInstancesPaged'),
       searchTimer: null,
       filters: {
         search: '',
         type: HTRTemplateTypes.list
       },
       page: 0,
-      showMoreEnabled: true,
-      htrInstancesPaged: {
-        nodes: [],
-        total: 0
-      }
+      htrInstancesPaged: defaultPagedResponse()
     };
   },
   apollo: {
@@ -85,53 +81,22 @@ export default {
         type: HTRTemplateTypes.list,
         paging: {
           page: 0,
-          size
+          size: LP.size
         }
       }
     }
   },
-  computed: {
-    mappedTypes: function() {
-      return mapEnumToRadioButtonGroup(HTRTemplateType);
-    }
-  },
   methods: {
-    onInput: function(value, name) {
-      this.filters[name] = value;
-      this.page = 0;
-
-      clearTimeout(this.searchTimer);
-      this.searchTimer = setTimeout(() => {
-        this.$apollo.queries.htrInstancesPaged.refetch({
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        });
-      }, 1000);
-    },
     onAdd: function() {
       this.$router.push(
         Urls.build(Urls.htrInstanceCreate, { type: this.filters.type })
       );
     },
-    showMore() {
-      this.page++;
-      this.$apollo.queries.htrInstancesPaged.fetchMore({
-        variables: {
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        },
-        updateQuery: (...response) => {
-          const updated = mapPagedResponseToUpdate(...response);
-          this.showMoreEnabled = updated.hasMore;
-          return updated;
-        }
-      });
+    onInput: function(value, name) {
+      this.filterHandler(value, name);
+    },
+    showMore: function() {
+      LP.showMore(this, 'htrInstancesPaged');
     }
   }
 };

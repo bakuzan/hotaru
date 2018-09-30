@@ -59,3 +59,9 @@ export const defaultInstanceModel = (type) => ({
     ...(type === HTRTemplateTypes.list ? { order: 1 } : {})
   }
 });
+
+export const defaultPagedResponse = () => ({
+  nodes: [],
+  total: 0,
+  hasMore: true
+});

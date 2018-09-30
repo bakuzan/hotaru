@@ -42,12 +42,10 @@ import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import SourceType from '@/constants/source-type';
 import { Query } from '@/graphql';
-import {
-  mapEnumToSelectBoxOptions,
-  mapPagedResponseToUpdate
-} from '@/utils/mappers';
+import { defaultPagedResponse } from '@/utils/models';
+import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import * as LP from '@/utils/list-pages';
 
-const size = 10;
 export default {
   name: 'SeriesList',
   components: {
@@ -60,17 +58,15 @@ export default {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.seriesView,
+      mappedSources: mapEnumToSelectBoxOptions(SourceType),
+      filterHandler: LP.updateFilterAndRefetch(this, 'seriesPaged'),
       searchTimer: null,
       filters: {
         search: '',
         sources: [...SourceType]
       },
       page: 0,
-      showMoreEnabled: true,
-      seriesPaged: {
-        nodes: [],
-        total: 0
-      }
+      seriesPaged: defaultPagedResponse()
     };
   },
   apollo: {
@@ -82,51 +78,20 @@ export default {
         sources: [...SourceType],
         paging: {
           page: 0,
-          size
+          size: LP.size
         }
       }
     }
   },
-  computed: {
-    mappedSources: function() {
-      return mapEnumToSelectBoxOptions(SourceType);
-    }
-  },
   methods: {
-    onInput: function(value, name) {
-      this.filters[name] = value;
-      this.page = 0;
-
-      clearTimeout(this.searchTimer);
-      this.searchTimer = setTimeout(() => {
-        this.$apollo.queries.seriesPaged.refetch({
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        });
-      }, 1000);
-    },
     onAdd: function() {
       this.$router.push(Urls.seriesCreate);
     },
-    showMore() {
-      this.page++;
-      this.$apollo.queries.seriesPaged.fetchMore({
-        variables: {
-          ...this.filters,
-          paging: {
-            page: this.page,
-            size
-          }
-        },
-        updateQuery: (...response) => {
-          const updated = mapPagedResponseToUpdate(...response);
-          this.showMoreEnabled = updated.hasMore;
-          return updated;
-        }
-      });
+    onInput: function(value, name) {
+      this.filterHandler(value, name);
+    },
+    showMore: function() {
+      LP.showMore(this, 'seriesPaged');
     }
   }
 };
