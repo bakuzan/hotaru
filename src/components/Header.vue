@@ -4,7 +4,7 @@
         <Logo :id="logoId" />
       </div>
       <div :class="headerInnerClass">
-        <!-- universal search placeholder (?) -->
+        <InputBoxNavi />
       </div>
       <div class="flex-spacer"></div>
       <h1 :class="titleClass">Hotaru</h1>
@@ -24,6 +24,7 @@ import classNames from 'classnames';
 
 import Logo from '@/components/Logo';
 import AppSettings from '@/components/AppSettings';
+import InputBoxNavi from '@/components/InputBoxNavi';
 import Strings from '@/constants/strings';
 import appPrefix from '@/constants/selectors';
 import { createListeners, getWindowScrollPosition } from '@/utils';
@@ -32,7 +33,8 @@ export default {
   name: 'Header',
   components: {
     Logo,
-    AppSettings
+    AppSettings,
+    InputBoxNavi
   },
   data: function() {
     return {

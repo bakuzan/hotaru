@@ -142,9 +142,9 @@ $tab-controls-height: 35px;
 .tab {
   display: flex;
   align-items: center;
-  padding: $app--padding-standard;
 
   &__option {
+    padding: $app--padding-standard;
     color: inherit;
     text-decoration: none;
   }

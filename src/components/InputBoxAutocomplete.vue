@@ -84,6 +84,9 @@ export default {
     },
     disabled: {
       type: Boolean
+    },
+    menuClass: {
+      type: String
     }
   },
   data: function() {
@@ -99,7 +102,11 @@ export default {
       });
     },
     menuClasses: function() {
-      return classNames('autocomplete__menu', 'list column one');
+      return classNames(
+        'autocomplete__menu',
+        'list column one',
+        this.menuClass
+      );
     },
     showMenu: function() {
       const focussedWithFilter = this.isFocussed && this.filter;

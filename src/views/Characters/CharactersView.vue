@@ -24,7 +24,7 @@
             id="isWaifu"
             name="isWaifu"
             text="Is Waifu"
-            :checked="editCharacter.isWaifu"
+            :checked="!!editCharacter.isWaifu"
             @change="handleUserChanges"
           />
         </div>

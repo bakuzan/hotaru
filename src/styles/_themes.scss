@@ -41,9 +41,14 @@
     .suggestion--active {
       border-color: $primary-background;
     }
-    .versus__icon {
+    .versus__icon,
+    .input-navi__menu,
+    .input-navi input {
       background-color: $primary-background;
       color: $primary-colour;
+    }
+    .input-navi__menu .suggestion--active {
+      border-color: $primary-colour;
     }
     .comparison-summary {
       border-top: 1px solid $primary-background;

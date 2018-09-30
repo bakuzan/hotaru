@@ -15,7 +15,11 @@
             </slot>
         </li>
     </draggable>
-    <div ref="observedDiv" class="observer"></div>
+    <div 
+      ref="observedDiv"
+      v-show="showObserver"
+      class="observer">
+    </div>
   </div>
 </template>
 
@@ -38,7 +42,10 @@ export default {
         return ['', 'one', 'two', 'three', 'four', 'five'].includes(value);
       }
     },
-    items: Array,
+    items: {
+      type: Array,
+      default: () => []
+    },
     wrap: {
       type: Boolean,
       default: false
@@ -50,6 +57,7 @@ export default {
   },
   data: function() {
     return {
+      showObserver: true,
       observer: null
     };
   },
