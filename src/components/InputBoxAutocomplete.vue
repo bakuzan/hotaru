@@ -9,31 +9,60 @@
       @blur="onBlur"
       @keydown="onKeyDown"
     />
-    <ul
-      v-show="hasSuggestions"
-      :class="menuClasses"
-    >
-      <InputBoxAutocompleteSuggestion
-        v-for="(item, index) in suggestions"
-        :key="item.id"
-        :active-suggestion="activeSuggestion"
-        :index="index"
-        :attr="attr"
-        :item="item"
-        @on-select="onSelectAutocompleteSuggestion"
-        :highlight-match="highlightMatchingText"
-      />
-    </ul>
-    <ul
-      v-show="showNoSuggestionsText"
-      :class="menuClasses"
-    >
-      <li
-        class="suggestion suggestion--active"
+    <portal :to="portalTarget" v-if="portalMenu">
+      <ul
+        v-show="hasSuggestions"
+        :class="menuClasses"
       >
-        <div>No suggestions available</div>
-      </li>
-    </ul>
+        <InputBoxAutocompleteSuggestion
+          v-for="(item, index) in suggestions"
+          :key="item.id"
+          :active-suggestion="activeSuggestion"
+          :index="index"
+          :attr="attr"
+          :item="item"
+          @on-select="onSelectAutocompleteSuggestion"
+          :highlight-match="highlightMatchingText"
+        />
+      </ul>
+      <ul
+        v-show="showNoSuggestionsText"
+        :class="menuClasses"
+      >
+        <li
+          class="suggestion suggestion--active"
+        >
+          <div>No suggestions available</div>
+        </li>
+      </ul>
+    </portal>
+      <ul
+        v-if="!portalMenu"
+        v-show="hasSuggestions"
+        :class="menuClasses"
+      >
+        <InputBoxAutocompleteSuggestion
+          v-for="(item, index) in suggestions"
+          :key="item.id"
+          :active-suggestion="activeSuggestion"
+          :index="index"
+          :attr="attr"
+          :item="item"
+          @on-select="onSelectAutocompleteSuggestion"
+          :highlight-match="highlightMatchingText"
+        />
+      </ul>
+      <ul
+        v-if="!portalMenu"
+        v-show="showNoSuggestionsText"
+        :class="menuClasses"
+      >
+        <li
+          class="suggestion suggestion--active"
+        >
+          <div>No suggestions available</div>
+        </li>
+      </ul>
   </div>
 </template>
 
@@ -44,6 +73,7 @@ import InputBox from '@/components/InputBox';
 import InputBoxAutocompleteSuggestion from '@/components/InputBoxAutocompleteSuggestion';
 
 import KeyCodes from '@/constants/key-codes';
+import Strings from '@/constants/strings';
 
 export default {
   name: 'InputBoxAutocomplete',
@@ -87,10 +117,19 @@ export default {
     },
     menuClass: {
       type: String
+    },
+    portalMenu: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
-    return { isFocussed: false, activeSuggestion: 0, timer: null };
+    return {
+      isFocussed: false,
+      activeSuggestion: 0,
+      timer: null,
+      portalTarget: Strings.portal.naviMenu
+    };
   },
   beforeDestroy() {
     clearTimeout(this.timer);

@@ -74,7 +74,6 @@ export default {
   apollo: {
     charactersPaged: {
       query: Query.getCharactersPaged,
-      debounce: 1000,
       variables: {
         search: '',
         genders: [...GenderType],

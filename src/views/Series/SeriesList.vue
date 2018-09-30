@@ -20,7 +20,8 @@
       columns="four"
       className="series"
       itemClassName="series__item"
-      :items="series"
+      :items="seriesPaged.nodes"
+      @intersect="showMore"
     >
       <template slot-scope="slotProps">
         <ListFigureCard 
@@ -72,7 +73,6 @@ export default {
   apollo: {
     seriesPaged: {
       query: Query.getSeriesPaged,
-      debounce: 1000,
       variables: {
         search: '',
         sources: [...SourceType],

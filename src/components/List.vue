@@ -17,7 +17,6 @@
     </draggable>
     <div 
       ref="observedDiv"
-      v-show="showObserver"
       class="observer">
     </div>
   </div>
@@ -57,7 +56,6 @@ export default {
   },
   data: function() {
     return {
-      showObserver: true,
       observer: null
     };
   },

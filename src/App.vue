@@ -10,6 +10,8 @@
     <Alert />
     <portal-target :name="portalName">
     </portal-target>
+    <portal-target :name="naviPortalName">
+    </portal-target>
   </div>
 </template>
 
@@ -29,7 +31,8 @@ export default {
   },
   data: function() {
     return {
-      portalName: Strings.portal.modal
+      portalName: Strings.portal.modal,
+      naviPortalName: Strings.portal.naviMenu
     };
   }
 };

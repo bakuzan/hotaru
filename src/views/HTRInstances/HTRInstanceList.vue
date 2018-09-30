@@ -19,7 +19,8 @@
     <List 
       wrap
       columns="four"
-      :items="htrInstances"
+      :items="htrInstancesPaged.nodes"
+      @intersect="showMore"
     >
       <template slot-scope="slotProps">
         <LinkCard 
@@ -75,7 +76,6 @@ export default {
   apollo: {
     htrInstancesPaged: {
       query: Query.getHTRInstancesByType,
-      debounce: 1000,
       variables: {
         search: '',
         type: HTRTemplateTypes.list,

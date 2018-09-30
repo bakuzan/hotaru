@@ -10,6 +10,7 @@
     :filter="filter"
     @input="onInput"
     @on-select="onSelect"
+    portal-menu
   />
 </template>
 
@@ -83,3 +84,21 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@import '../styles/_variables';
+
+.vue-portal-target .input-navi__menu {
+  position: fixed;
+  top: $header--height;
+  left: #{$sidebar--width + 5};
+  right: unset;
+  bottom: unset;
+  width: 235px;
+  transform: none;
+
+  .suggestion__button {
+    justify-content: flex-start;
+  }
+}
+</style>

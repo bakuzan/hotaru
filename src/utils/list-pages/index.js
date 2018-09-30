@@ -1,6 +1,6 @@
 import { mapPagedResponseToUpdate } from '@/utils/mappers';
 
-export const size = 8;
+export const size = 10;
 
 export const updateFilterAndRefetch = (ctrl, attr) => (value, name) => {
   ctrl.filters[name] = value;

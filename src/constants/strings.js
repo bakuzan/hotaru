@@ -5,7 +5,8 @@ export default Object.freeze({
   center: 'center',
   portal: {
     modal: 'htr-backdrop-portal',
-    actions: 'htr-action-portal'
+    actions: 'htr-action-portal',
+    naviMenu: 'htr-navi-menu-portal'
   },
   localStorageKey: 'htr-settings',
   // input types
