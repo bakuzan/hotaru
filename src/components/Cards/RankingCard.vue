@@ -27,6 +27,7 @@
           </NavLink>
         </div>
         <div class="rank-card__text">{{winsText}}</div>
+        <div class="rank-card__text">{{totalText}}</div>
         <div class="rank-card__text">{{scoreText}}</div>
       </div>
   </div>
@@ -60,6 +61,9 @@ export default {
     wins: {
       type: Number
     },
+    total: {
+      type: Number
+    },
     character: {
       type: Object,
       default: () => {}
@@ -76,6 +80,10 @@ export default {
     winsText: function() {
       if (this.wins === undefined) return null;
       return this.wins === 1 ? `${this.wins} win` : `${this.wins} wins`;
+    },
+    totalText: function() {
+      if (this.total === undefined) return null;
+      return this.total === 1 ? `${this.total} match` : `${this.total} matches`;
     },
     scoreText: function() {
       if (this.score === undefined) return null;

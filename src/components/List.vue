@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="hasPaging" class="paged-total">{{totalText}}</div>
     <draggable 
       :class="listClasses"
       element="ul"
@@ -17,6 +18,7 @@
     </draggable>
     <div 
       ref="observedDiv"
+      v-show="showObserver"
       class="observer">
     </div>
   </div>
@@ -52,11 +54,16 @@ export default {
     isSortable: {
       type: Boolean,
       default: false
+    },
+    pagedTotal: {
+      type: Number
     }
   },
   data: function() {
     return {
-      observer: null
+      observer: null,
+      showObserver: true,
+      timer: null
     };
   },
   mounted() {
@@ -66,6 +73,24 @@ export default {
       }
     });
     this.observer.observe(this.$refs.observedDiv);
+
+    this.$watch(
+      function() {
+        return this.items.length === this.pagedTotal;
+      },
+      function(curr, prev) {
+        console.log('item watch', prev, curr);
+        if (prev && !curr) {
+          this.showObserver = false;
+          console.log('hide observer');
+          clearTimeout(this.timer);
+          this.timer = setTimeout(() => {
+            console.log('show observer');
+            this.showObserver = true;
+          }, 100);
+        }
+      }
+    );
   },
   destroyed() {
     this.observer.disconnect();
@@ -90,6 +115,12 @@ export default {
         disabled: !this.isSortable,
         handle: '.sort-handle'
       };
+    },
+    hasPaging: function() {
+      return !(this.pagedTotal === null || isNaN(this.pagedTotal));
+    },
+    totalText: function() {
+      return `Displaying ${this.items.length} of ${this.pagedTotal}`;
     }
   },
   methods: {
@@ -158,5 +189,12 @@ $columns: (
   height: 1em;
   border: 1px dashed;
   z-index: map-get($z-index, above-siblings);
+}
+.paged-total {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.33rem;
+  font-size: 0.6em;
 }
 </style>

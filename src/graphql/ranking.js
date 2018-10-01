@@ -15,7 +15,7 @@ const getTopTen = gql`
       id
       rank
       wins
-      score
+      total
       character {
         id
         name

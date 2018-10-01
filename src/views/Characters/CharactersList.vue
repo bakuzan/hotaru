@@ -22,6 +22,7 @@
       className="characters"
       itemClassName="characters__item"
       :items="charactersPaged.nodes"
+      :paged-total="charactersPaged.total"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">

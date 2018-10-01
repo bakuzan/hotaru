@@ -20,6 +20,7 @@
       wrap
       columns="four"
       :items="htrTemplatesPaged.nodes"
+      :paged-total="htrTemplatesPaged.total"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">

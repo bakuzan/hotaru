@@ -21,6 +21,7 @@
       className="series"
       itemClassName="series__item"
       :items="seriesPaged.nodes"
+      :paged-total="seriesPaged.total"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
