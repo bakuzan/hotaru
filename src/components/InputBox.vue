@@ -2,7 +2,8 @@
   <div :class="classes">
     <input 
         :type="type" 
-        :id="id" 
+        :id="id"
+        class="input-box__input"
         :name="name" 
         :value="value" 
         placeholder=" "

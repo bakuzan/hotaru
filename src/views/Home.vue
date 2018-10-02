@@ -14,6 +14,7 @@
           <template slot-scope="slotProps">
             <RankingCard
               v-bind="slotProps.item"
+              :figure-size="null"
             />
           </template>
         </List>
@@ -45,6 +46,7 @@
               v-bind="slotProps.item"
               enable-compare
               grow
+              :figure-size="null"
               @vote="handleVote"
             />
           </template>
@@ -131,7 +133,8 @@ export default {
     onRandom: function() {
       this.$apollo
         .query({
-          query: Query.getRandomCharacterId
+          query: Query.getRandomCharacterId,
+          fetchPolicy: 'network-only'
         })
         .then(({ data }) => {
           this.$router.push(
@@ -200,9 +203,9 @@ export default {
 
 .home-content-column {
   flex-basis: unset;
-  width: 24%;
+  width: 30%;
   &:nth-child(2) {
-    width: 49%;
+    width: 40%;
   }
 }
 

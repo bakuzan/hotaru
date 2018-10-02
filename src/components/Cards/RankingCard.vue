@@ -14,7 +14,7 @@
       <ImageCard
         v-bind="$props"
         :url="character.displayImage"
-        figure-size="small"
+        :figure-size="figureSize"
         hide-caption
       />
       <div class="rank-card__content">
@@ -71,6 +71,13 @@ export default {
     remove: {
       type: Function,
       default: null
+    },
+    figureSize: {
+      type: String,
+      default: 'small',
+      validator: function(value) {
+        return value === null || ['small'].includes(value);
+      }
     }
   },
   data: function() {

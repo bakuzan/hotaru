@@ -149,6 +149,21 @@ import { defaultSeriesModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { SeriesValidator } from '@/utils/validators';
 
+function getInitialState() {
+  return {
+    viewBlockReadOnlySlot: Strings.slot.viewBlock,
+    portalTarget: Strings.portal.actions,
+    characterCardUrl: Urls.characterView,
+    mutationLoading: false,
+    readOnly: false,
+    series: {},
+    editSeries: defaultSeriesModel(),
+    characters: [],
+    characterFilter: '',
+    mappedSources: mapEnumToSelectBoxOptions(SourceType)
+  };
+}
+
 export default {
   name: 'SeriesView',
   components: {
@@ -172,17 +187,13 @@ export default {
     }
   },
   data: function() {
-    return {
-      viewBlockReadOnlySlot: Strings.slot.viewBlock,
-      portalTarget: Strings.portal.actions,
-      characterCardUrl: Urls.characterView,
-      mutationLoading: false,
-      readOnly: false,
-      series: {},
-      editSeries: defaultSeriesModel(),
-      characters: [],
-      characterFilter: ''
-    };
+    return getInitialState();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.path === Urls.seriesCreate) {
+      Object.assign(this.$data, getInitialState());
+    }
+    next();
   },
   apollo: {
     series: {
@@ -218,9 +229,6 @@ export default {
     }
   },
   computed: {
-    mappedSources: function() {
-      return mapEnumToSelectBoxOptions(SourceType);
-    },
     characterSearchResults: function() {
       return this.characters.filter(
         (x) => !this.editSeries.characters.some((y) => y.id === x.id)
@@ -233,7 +241,6 @@ export default {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
     },
     isLoading: function() {
-      console.log(this.$apollo);
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     }
   },

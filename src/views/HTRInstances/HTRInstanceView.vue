@@ -188,6 +188,22 @@ import { defaultInstanceModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { InstanceValidator } from '@/utils/validators';
 
+function getInitialState(type) {
+  return {
+    viewBlockReadOnlySlot: Strings.slot.viewBlock,
+    portalTarget: Strings.portal.actions,
+    mutationLoading: false,
+    readOnly: false,
+    instance: { settings: {} },
+    editInstance: defaultInstanceModel(type),
+    htrTemplates: [],
+    templateFilter: '',
+    characters: [],
+    characterFilter: '',
+    mappedOrders: mapToSelectBoxOptions(Order)
+  };
+}
+
 export default {
   name: 'HTRInstanceView',
   components: {
@@ -208,20 +224,15 @@ export default {
   },
   data: function() {
     const type = Routing.getParam(this.$router, 'type');
-
-    return {
-      viewBlockReadOnlySlot: Strings.slot.viewBlock,
-      portalTarget: Strings.portal.actions,
-      mutationLoading: false,
-      readOnly: false,
-      instance: { settings: {} },
-      editInstance: defaultInstanceModel(type),
-      htrTemplates: [],
-      templateFilter: '',
-      characters: [],
-      characterFilter: '',
-      mappedOrders: mapToSelectBoxOptions(Order)
-    };
+    return getInitialState(type);
+  },
+  beforeRouteLeave(to, from, next) {
+    const type = to.params.type;
+    const url = Urls.build(Urls.htrInstanceCreate, { type });
+    if (type && to.path === url) {
+      Object.assign(this.$data, getInitialState(type));
+    }
+    next();
   },
   apollo: {
     instance: {
@@ -264,7 +275,9 @@ export default {
           ? this.editInstance.htrTemplate
           : this.editInstance.settings;
 
-        const { rules: { genders, sources, series } } = ruleSource; // eslint-disable-line
+        const {
+          rules: { genders, sources, series }
+        } = ruleSource; // eslint-disable-line
 
         return {
           search: this.characterFilter,

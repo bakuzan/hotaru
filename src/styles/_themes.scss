@@ -13,6 +13,11 @@
     background-color: $base-background;
     color: $base-colour;
 
+    .select-box__input,
+    .input-box__input {
+      color: $base-colour;
+    }
+
     // Inherit base background
     .multi-select__dropdown-container,
     .select-box__input,

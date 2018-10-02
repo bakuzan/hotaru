@@ -192,6 +192,23 @@ import { defaultCharacterModel } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { CharacterValidator } from '@/utils/validators';
 
+function getInitialState() {
+  console.log('get state');
+  return {
+    viewBlockReadOnlySlot: Strings.slot.viewBlock,
+    noSeries: Strings.missing.series,
+    noTags: Strings.missing.tags,
+    portalTarget: Strings.portal.actions,
+    mutationLoading: false,
+    readOnly: false,
+    editCharacter: defaultCharacterModel(),
+    character: {},
+    series: [],
+    tags: [],
+    newTags: []
+  };
+}
+
 export default {
   name: 'CharactersView',
   components: {
@@ -217,19 +234,13 @@ export default {
     }
   },
   data: function() {
-    return {
-      viewBlockReadOnlySlot: Strings.slot.viewBlock,
-      noSeries: Strings.missing.series,
-      noTags: Strings.missing.tags,
-      portalTarget: Strings.portal.actions,
-      mutationLoading: false,
-      readOnly: false,
-      editCharacter: defaultCharacterModel(),
-      character: {},
-      series: [],
-      tags: [],
-      newTags: []
-    };
+    return getInitialState();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.path === Urls.characterCreate) {
+      Object.assign(this.$data, getInitialState());
+    }
+    next();
   },
   apollo: {
     character: {

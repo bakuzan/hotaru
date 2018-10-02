@@ -3,7 +3,7 @@
     <ListFigureCard
       v-bind="item"
       :url-source="isDummy ? null : characterCardUrl"
-      figure-size="small"
+      :figure-size="figureSize"
       open-new-tab
     />
     <div 
@@ -58,6 +58,13 @@ export default {
     isFinal: {
       type: Boolean,
       default: false
+    },
+    figureSize: {
+      type: String,
+      default: 'small',
+      validator: function(value) {
+        return value === null || ['small'].includes(value);
+      }
     }
   },
   data: function() {

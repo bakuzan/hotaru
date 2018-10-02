@@ -7,6 +7,7 @@
       :winner-id="winnerId"
       :is-dummy="isDummy"
       :is-final="isFinal"
+      :figure-size="figureSize"
       grow
       @vote="handleVote"
     />
@@ -62,6 +63,13 @@ export default {
     grow: {
       type: Boolean,
       default: false
+    },
+    figureSize: {
+      type: String,
+      default: 'small',
+      validator: function(value) {
+        return value === null || ['small'].includes(value);
+      }
     }
   },
   computed: {

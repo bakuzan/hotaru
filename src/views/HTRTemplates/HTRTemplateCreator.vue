@@ -134,6 +134,20 @@ import { defaultHTRTemplate } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { TemplateValidator } from '@/utils/validators';
 
+function getInitialState() {
+  return {
+    portalTarget: Strings.portal.actions,
+    mutationLoading: false,
+    mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+    mappedSources: mapEnumToSelectBoxOptions(SourceType),
+    mappedTemplateTypes: mapEnumToSelectBoxOptions(HTRTemplateType),
+    template: {},
+    editTemplate: defaultHTRTemplate(),
+    series: [],
+    seriesFilter: ''
+  };
+}
+
 export default {
   name: 'HTRTemplates',
   components: {
@@ -154,17 +168,13 @@ export default {
     }
   },
   data: function() {
-    return {
-      portalTarget: Strings.portal.actions,
-      mutationLoading: false,
-      mappedGenders: mapEnumToSelectBoxOptions(GenderType),
-      mappedSources: mapEnumToSelectBoxOptions(SourceType),
-      mappedTemplateTypes: mapEnumToSelectBoxOptions(HTRTemplateType),
-      template: {},
-      editTemplate: defaultHTRTemplate(),
-      series: [],
-      seriesFilter: ''
-    };
+    return getInitialState();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.path === Urls.htrTemplateCreator) {
+      Object.assign(this.$data, getInitialState());
+    }
+    next();
   },
   apollo: {
     template: {
