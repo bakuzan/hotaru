@@ -124,6 +124,9 @@ export default {
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     padding: $app--padding-standard 0;
   }
 
