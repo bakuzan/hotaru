@@ -105,7 +105,6 @@
               @click="cancel"
             >
               Cancel
-              {{xxx}}
             </Button>
             <Button
               theme="secondary"

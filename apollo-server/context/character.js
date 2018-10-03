@@ -23,15 +23,19 @@ function findFromRules({ rules, search = '' }, options = {}) {
   };
 
   if (!isIncludeOnlySource && !isIncludeOnlySeries) {
-    filters = {
-      [Op.and]: [
-        {
+    const resolvedSourceRule = !rules.sources.length
+      ? sourceRule
+      : {
           [Op.or]: [{ seriesId: { [Op.eq]: null } }, sourceRule]
-        },
-        {
+        };
+    const resolvedSeriesRule = !rules.series.length
+      ? seriesRule
+      : {
           [Op.or]: [{ seriesId: { [Op.eq]: null } }, seriesRule]
-        }
-      ]
+        };
+
+    filters = {
+      [Op.and]: [resolvedSourceRule, resolvedSeriesRule]
     };
   } else {
     filters = {
