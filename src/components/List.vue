@@ -79,13 +79,11 @@ export default {
         return this.items.length === this.pagedTotal;
       },
       function(curr, prev) {
-        console.log('item watch', prev, curr);
         if (prev && !curr) {
           this.showObserver = false;
-          console.log('hide observer');
+
           clearTimeout(this.timer);
           this.timer = setTimeout(() => {
-            console.log('show observer');
             this.showObserver = true;
           }, 100);
         }

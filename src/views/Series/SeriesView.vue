@@ -105,6 +105,7 @@
               @click="cancel"
             >
               Cancel
+              {{xxx}}
             </Button>
             <Button
               theme="secondary"
@@ -189,11 +190,12 @@ export default {
   data: function() {
     return getInitialState();
   },
-  beforeRouteLeave(to, from, next) {
-    if (to.path === Urls.seriesCreate) {
-      Object.assign(this.$data, getInitialState());
+  watch: {
+    $route: function(newRoute) {
+      if (newRoute.path === Urls.seriesCreate) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
-    next();
   },
   apollo: {
     series: {

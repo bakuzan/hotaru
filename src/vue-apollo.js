@@ -75,7 +75,7 @@ export function createProvider(options = {}) {
     },
     errorHandler(error) {
       // eslint-disable-next-line no-console
-      console.log(
+      console.error(
         '%cError',
         'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
         error.message

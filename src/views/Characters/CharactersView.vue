@@ -193,18 +193,16 @@ import * as Routing from '@/utils/routing';
 import { CharacterValidator } from '@/utils/validators';
 
 function getInitialState() {
-  console.log('get state');
   return {
     viewBlockReadOnlySlot: Strings.slot.viewBlock,
     noSeries: Strings.missing.series,
     noTags: Strings.missing.tags,
     portalTarget: Strings.portal.actions,
+    mappedGenders: mapEnumToSelectBoxOptions(GenderType),
     mutationLoading: false,
     readOnly: false,
     editCharacter: defaultCharacterModel(),
     character: {},
-    series: [],
-    tags: [],
     newTags: []
   };
 }
@@ -234,13 +232,18 @@ export default {
     }
   },
   data: function() {
-    return getInitialState();
+    return {
+      series: [],
+      tags: [],
+      ...getInitialState()
+    };
   },
-  beforeRouteLeave(to, from, next) {
-    if (to.path === Urls.characterCreate) {
-      Object.assign(this.$data, getInitialState());
+  watch: {
+    $route: function(newRoute) {
+      if (newRoute.path === Urls.characterCreate) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
-    next();
   },
   apollo: {
     character: {
@@ -274,10 +277,9 @@ export default {
       return mapToSelectBoxOptions(this.series);
     },
     combinedTags: function() {
-      return [...this.tags, ...this.newTags];
-    },
-    mappedGenders: function() {
-      return mapEnumToSelectBoxOptions(GenderType);
+      const tags = [...this.tags, ...this.newTags];
+      const ids = new Set(tags.map((x) => x.id));
+      return Array.from(ids).map((id) => tags.find((x) => x.id === id));
     },
     characterSeries: function() {
       const { seriesId } = this.character;

@@ -165,7 +165,7 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
   const resolvedRules = isCreate ? {} : { rules: mapWithoutTypename(rules) };
   const resolvedCharacters =
     characters && characters.length ? [...characters.map((x) => x.id)] : [];
-  console.log('posting...', resolvedCharacters, customOrder);
+
   return {
     id,
     name,
@@ -200,7 +200,7 @@ export const mapHTRInstanceToOptimisticUpdate = (instance) => {
         : null
     }
   };
-  console.log('op up...', mappedObj);
+
   return mutationWrapper('HTRInstance', 'htrInstanceUpdate')(mappedObj);
 };
 

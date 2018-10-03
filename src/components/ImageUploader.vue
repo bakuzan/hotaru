@@ -107,7 +107,6 @@ export default {
       }
     },
     uploadUrl: function() {
-      console.log('upload url', this.imageUrl);
       this.mutationUploading = true;
       this.$apollo
         .mutate({
@@ -124,7 +123,7 @@ export default {
     },
     uploadBase64: function(event) {
       const base64 = event.target.result;
-      console.log(this, base64);
+
       this.mutationUploading = true;
       this.$apollo
         .mutate({

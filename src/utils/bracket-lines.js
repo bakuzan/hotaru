@@ -64,7 +64,7 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
 
 export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
   if (!canvas || !rawLayout.length) {
-    return console.log(
+    return console.info(
       '%c Missing arg for canvas drawer: ',
       'color: royalblue',
       canvas,
@@ -80,7 +80,7 @@ export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
   const nodes = Array.from(parent.getElementsByClassName('versus'));
 
   if (!nodes.length) {
-    return console.log(
+    return console.info(
       '%c No nodes for canvas drawer: ',
       'color: royalblue',
       parent

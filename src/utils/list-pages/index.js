@@ -21,7 +21,7 @@ export const updateFilterAndRefetch = (ctrl, attr) => (value, name) => {
 export const showMore = (ctrl, attr) => {
   const loading = ctrl.$apollo.queries[attr].isLoading;
   const noMore = !ctrl[attr].hasMore;
-  console.log('load more', ctrl.page, ctrl[attr]);
+
   if (noMore || loading) return;
 
   ctrl.page++;

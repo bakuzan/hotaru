@@ -170,11 +170,12 @@ export default {
   data: function() {
     return getInitialState();
   },
-  beforeRouteLeave(to, from, next) {
-    if (to.path === Urls.htrTemplateCreator) {
-      Object.assign(this.$data, getInitialState());
+  watch: {
+    $route: function(newRoute) {
+      if (newRoute.path === Urls.htrTemplateCreator) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
-    next();
   },
   apollo: {
     template: {

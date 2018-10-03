@@ -226,13 +226,14 @@ export default {
     const type = Routing.getParam(this.$router, 'type');
     return getInitialState(type);
   },
-  beforeRouteLeave(to, from, next) {
-    const type = to.params.type;
-    const url = Urls.build(Urls.htrInstanceCreate, { type });
-    if (type && to.path === url) {
-      Object.assign(this.$data, getInitialState(type));
+  watch: {
+    $route: function(newRoute) {
+      const { type } = newRoute.params;
+      const url = Urls.build(Urls.htrInstanceCreate, { type });
+      if (type && newRoute.path === url) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
-    next();
   },
   apollo: {
     instance: {
