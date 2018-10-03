@@ -39,6 +39,7 @@ const Query = gql`
       type: HTRTemplateType!
       paging: Paging
     ): HTRTemplatePage
+    htrTemplates(search: String, type: HTRTemplateType!): [HTRTemplate]
     htrTemplateById(id: Int!): HTRTemplate
 
     htrInstancesPaged(
