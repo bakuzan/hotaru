@@ -53,22 +53,19 @@ module.exports = {
                     order: db.literal('RANDOM()'),
                     include: isSeeded ? [Ranking] : null
                   }
-                )
-                  .then((queryCharacters) => {
-                    const preppedCharacters = isSeeded
-                      ? createSeeding(queryCharacters, data.settings.limit)
-                      : queryCharacters;
+                ).then((queryCharacters) => {
+                  const preppedData = isSeeded
+                    ? createSeeding(queryCharacters, data.settings.limit)
+                    : { characters: queryCharacters };
 
-                    return context.Versus.createForCharacters(
-                      VersusTypes.Bracket,
-                      preppedCharacters,
-                      {
-                        transaction,
-                        bracketLimit: data.settings.limit
-                      }
-                    );
-                  })
-                  .then((firstRoundVersus) => {
+                  return context.Versus.createForCharacters(
+                    VersusTypes.Bracket,
+                    preppedData.characters,
+                    {
+                      transaction,
+                      bracketLimit: data.settings.limit
+                    }
+                  ).then((firstRoundVersus) => {
                     const firstRoundIds = firstRoundVersus.map((x) => x.id);
                     return newInstance
                       .setVersus(firstRoundIds, { transaction })
@@ -78,6 +75,7 @@ module.exports = {
                             settings: {
                               ...newInstance.settings,
                               layout: [firstRoundIds],
+                              seedOrder: preppedData.seedOrder,
                               status: BracketStatuses.NotStarted
                             }
                           },
@@ -86,6 +84,7 @@ module.exports = {
                       )
                       .then(() => newInstance);
                   });
+                });
               }
             })
             .then((newInstance) => newInstance.reload({ transaction }));

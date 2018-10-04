@@ -9,6 +9,11 @@ module.exports = gql`
     winnerId: Int
     updatedAt: String
   }
+  type VersusPage {
+    nodes: [Versus]
+    total: Int
+    hasMore: Boolean
+  }
   input VersusRules {
     genders: [GenderType]
     isIncludeOnlyGender: Boolean

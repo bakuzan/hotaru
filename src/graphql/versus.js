@@ -80,9 +80,29 @@ const getVersusSingles = gql`
   }
 `;
 
+const getVersusHistory = gql`
+  query getVersusHistory($characterId: Int!, $paging: Paging) {
+    versusHistoryPaged(characterId: $characterId, paging: $paging) {
+      nodes {
+        id
+        characters {
+          id
+          name
+          displayImage
+        }
+        winnerId
+        updatedAt
+      }
+      total
+      hasMore
+    }
+  }
+`;
+
 export default {
   query: {
     getActiveDailyVersus,
+    getVersusHistory,
     getVersusHistoryComparison,
     getVersusSingles
   },

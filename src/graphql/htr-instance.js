@@ -20,6 +20,7 @@ const instanceFields = gql`
       }
       order
       customOrder
+      seedOrder
       status
       layout
       winnerId

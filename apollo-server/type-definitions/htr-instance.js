@@ -21,6 +21,8 @@ module.exports = gql`
     winnerId: Int
     "Bracket Layout - Bracket type only"
     layout: [[Int]]
+    "Bracket Seed Order - Seeded bracket only"
+    seedOrder: [Int]
     "Character sort order - List type only"
     order: Int
     customOrder: [Int]
@@ -47,6 +49,8 @@ module.exports = gql`
     winnerId: Int
     "Bracket Layout - Bracket type only"
     layout: [[Int]]
+    "Bracket Seed Order - Seeded bracket only"
+    seedOrder: [Int]
     "Character sort order - List type only"
     order: Int
     customOrder: [Int]

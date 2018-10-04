@@ -29,7 +29,7 @@
           />
         </div>
       </div>
-      <Tabs>
+      <Tabs @updated="handleTabChange">
         <Tab name="Detail">
           <div class="page-view__content view-info">
             <header class="view-info__header">
@@ -136,6 +136,22 @@
             </List>
           </div>
         </Tab>
+        <Tab name="Versus" :is-disabled="isCreate">
+          <div class="page-view__content view-info">
+            <List 
+              columns="one"
+              :items="versusHistoryPaged.nodes"
+              :paged-total="versusHistoryPaged.total"
+              @intersect="showMore"
+            >
+              <template slot-scope="slotProps">
+                {{slotProps.item.id}}
+                {{slotProps.item.updatedAt}}
+                {{slotProps.item.winnerId}}
+              </template>
+            </List>
+          </div>
+        </Tab>
       </Tabs>
 
       <template v-if="showButtons">
@@ -188,9 +204,10 @@ import {
   mapCharacterToOptimisticUpdate
 } from '@/utils/mappers';
 import * as CacheUpdate from '@/utils/cache';
-import { defaultCharacterModel } from '@/utils/models';
+import { defaultCharacterModel, defaultPagedResponse } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { CharacterValidator } from '@/utils/validators';
+import * as LP from '@/utils/list-pages';
 
 function getInitialState() {
   return {
@@ -203,7 +220,9 @@ function getInitialState() {
     readOnly: false,
     editCharacter: defaultCharacterModel(),
     character: {},
-    newTags: []
+    newTags: [],
+    page: 0,
+    versusHistoryPaged: defaultPagedResponse()
   };
 }
 
@@ -270,6 +289,24 @@ export default {
     },
     tags: {
       query: Query.allTags
+    },
+    versusHistoryPaged: {
+      query: Query.getVersusHistory,
+      skip() {
+        return true;
+      },
+      variables: {
+        characterId: null,
+        paging: {
+          page: 0,
+          size: LP.size
+        }
+      },
+      result({ data, loading }) {
+        if (!loading) {
+          this.versusHistoryPaged = data.versusHistoryPaged;
+        }
+      }
     }
   },
   computed: {
@@ -424,6 +461,16 @@ export default {
           this.readOnly = false; // allow edits again
           this.mutationLoading = false;
         });
+    },
+    handleTabChange: function(tabHash) {
+      if (tabHash !== '#versus') return;
+      console.log('tab change', tabHash, this.$apollo);
+      this.$apollo.queries.versusHistoryPaged.refetch({
+        characterId: this.editCharacter.id
+      });
+    },
+    showMore: function() {
+      LP.showMore(this, 'versusHistoryPaged');
     }
   }
 };

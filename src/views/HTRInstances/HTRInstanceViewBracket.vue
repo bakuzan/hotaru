@@ -90,18 +90,22 @@ export default {
       return bracketProgression(firstRoundMatchCount);
     },
     matches: function() {
-      const { isSeeded } = this.options.rules || {};
+      const { rules = {}, seedOrder } = this.options;
+      const { isSeeded } = rules;
       if (isSeeded) {
-        const seeds = orderBy(
-          this.items.reduce((p, c) => [...p, ...c.characters], []),
-          ['ranking.rank']
-        ).map((x, i) => ({ id: x.id, seed: i + 1 }));
+        const characterList = this.items.reduce(
+          (p, c) => [...p, ...c.characters],
+          []
+        );
+        const seeds = seedOrder
+          ? seedOrder.map((id) => characterList.find((x) => x.id === id))
+          : orderBy(characterList, ['ranking.rank']);
 
         return this.items.map((v) => ({
           ...v,
           characters: v.characters.map((c) => ({
             ...c,
-            seed: seeds.find((s) => s.id === c.id).seed
+            seed: seeds.findIndex((s) => s.id === c.id) + 1
           }))
         }));
       }

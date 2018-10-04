@@ -92,7 +92,7 @@ export default {
         t.isLocked = this.isLocked;
       });
 
-      this.$emit('updated', tab);
+      this.$emit('updated', tab.tabHash);
       this.activeTab = tab.tabHash;
     }
   }

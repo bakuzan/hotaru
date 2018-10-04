@@ -37,7 +37,7 @@ function drawCharacterMidPointLine(ctx, { parentRect, parentData }, isLHS) {
     const winnerIndex = parentData.characters.findIndex(
       (x) => x.id === parentData.winnerId
     );
-    console.log(parentData, winnerIndex, index, winnerIndex === index);
+
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, startY);
