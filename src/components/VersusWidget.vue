@@ -78,16 +78,19 @@ export default {
     }
   },
   computed: {
+    shouldStack: function() {
+      return this.column && !this.isFinal;
+    },
     classes: function() {
       return classNames('versus', {
         'versus--is-dummy': this.isDummy,
         'versus--grow': this.grow,
-        'versus--column': this.column
+        'versus--column': this.shouldStack
       });
     },
     versusClass: function() {
       return classNames('versus__versus-card', {
-        'versus__versus-card--stacked': this.column
+        'versus__versus-card--stacked': this.shouldStack
       });
     },
     compareLink: function() {
@@ -137,11 +140,14 @@ export default {
   }
 }
 
+$versus-stacked-spacing: 15px;
+
 .versus {
   &__versus-card--stacked {
     width: 100%;
+    margin-bottom: $versus-stacked-spacing;
     & + & {
-      margin-top: 20px;
+      margin-top: $versus-stacked-spacing;
     }
   }
 }

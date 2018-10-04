@@ -9,7 +9,7 @@
       <VersusWidget 
         v-for="match in round" 
         :key="match.id"
-        class="bracket__versus"
+        :class="bracketVersusClass(i)"
         v-bind="match"
         enable-compare
         column
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import classNames from 'classnames';
 import panzoom from 'panzoom';
 import VersusWidget from '@/components/VersusWidget';
 
@@ -139,6 +140,11 @@ export default {
     isFinal: function(index) {
       return Math.floor(this.customBracketLayout.length / 2) === index;
     },
+    bracketVersusClass: function(index) {
+      return classNames('bracket__versus', {
+        'bracket__versus--is-final': this.isFinal(index)
+      });
+    },
     updateCanvas: function() {
       const canvas = this.$refs[this.canvasRef];
       const layout = this.customBracketLayout;
@@ -211,6 +217,8 @@ export default {
 <style lang="scss" scoped>
 @import '../../styles/_variables';
 
+$bracket-width: 350px;
+
 .bracket {
   position: relative;
   display: flex;
@@ -222,18 +230,15 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     flex: 0;
-    min-width: 350px;
+    min-width: $bracket-width;
     padding: $app--padding-standard;
-    margin: 0 $app--margin-large;
+    margin: 0 #{$bracket-width / 3};
   }
 
   &__versus {
-    margin-right: 50%;
-    // + &__versus {
-    //   // TODO
-    //   // Space the versus out within the column without this
-    //   margin-top: 182px;
-    // }
+    & + & {
+      margin-top: 33%;
+    }
   }
 
   &__canvas {
