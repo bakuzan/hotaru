@@ -46,6 +46,7 @@
         <div class="comparison-summary__text">{{comparisonSummaryWinSplit}}</div>
       </div>
       <List 
+        class="comparison-list"
         columns="one"
         :items="versusHistoryComparison"
       >
@@ -281,6 +282,11 @@ export default {
   &__text {
     margin: $app--margin-small 0;
   }
+}
+
+.comparison-list {
+  display: flex;
+  width: 100%;
 }
 </style>
 <style lang="scss">
