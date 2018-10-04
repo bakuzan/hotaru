@@ -1,5 +1,5 @@
 <template>
-  <div :class="cardClasses">
+  <div :class="cardClasses" :id="versusId">
     <ListFigureCard
       v-bind="item"
       :url-source="isDummy ? null : characterCardUrl"
@@ -31,6 +31,7 @@ import ListFigureCard from './ListFigureCard';
 import { Button, VoteButton } from '@/components/Buttons';
 
 import Urls from '@/constants/urls';
+import { generateUniqueId } from '@/utils';
 
 export default {
   name: 'VersusCard',
@@ -69,6 +70,7 @@ export default {
   },
   data: function() {
     return {
+      versusId: generateUniqueId(),
       characterCardUrl: Urls.characterView
     };
   },

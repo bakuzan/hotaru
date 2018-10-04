@@ -10,8 +10,9 @@
         v-for="match in round" 
         :key="match.id"
         class="bracket__versus"
-        enable-compare
         v-bind="match"
+        enable-compare
+        column
         :is-final="isFinal(i)"
         @vote="handleVote"
       />
@@ -226,10 +227,13 @@ export default {
     margin: 0 $app--margin-large;
   }
 
-  &__versus + &__versus {
-    // TODO
-    // Space the versus out within the column without this
-    margin-top: 182px;
+  &__versus {
+    margin-right: 50%;
+    // + &__versus {
+    //   // TODO
+    //   // Space the versus out within the column without this
+    //   margin-top: 182px;
+    // }
   }
 
   &__canvas {

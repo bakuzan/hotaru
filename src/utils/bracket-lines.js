@@ -18,6 +18,24 @@ function positionRelativeToParent(element) {
   return relativePos;
 }
 
+function drawCharacterMidPointLine(ctx, parentRect, isLHS) {
+  return (_, index) => {
+    const direction = isLHS ? 1 : -1;
+    const cOffset = index ? 0.25 : 0.75;
+
+    const startX = isLHS ? parentRect.right : parentRect.left;
+    const startY = parentRect.top + parentRect.height * cOffset;
+    const endX = startX + parentRect.width * 0.5 * direction;
+    const endY = parentRect.top + parentRect.height * 0.5;
+
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+  };
+}
+
 function processLayout(ctx, nodes, layout, isLHS = true) {
   const nodeRects = new Map(
     nodes.map((x) => [x.id, positionRelativeToParent(x)])
@@ -25,13 +43,26 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
 
   layout.forEach((round, rIndex, rounds) => {
     round.forEach((versus, vIndex) => {
-      const nodeRect = nodeRects.get(versus.id.toString());
-      const startX = isLHS ? nodeRect.right : nodeRect.left;
-      const startY = nodeRect.top + nodeRect.height * 0.5;
-
-      // next versus
+      // only process those that have a next versus
       const nextRound = rounds[rIndex + 1];
       if (nextRound) {
+        const versusId = versus.id.toString();
+        const nodeRect = nodeRects.get(versusId);
+        const halfWidth = nodeRect.width * 0.5;
+        const startX = isLHS
+          ? nodeRect.right + halfWidth
+          : nodeRect.left - halfWidth;
+        const startY = nodeRect.top + nodeRect.height * 0.5;
+
+        const drawCharacterLines = drawCharacterMidPointLine(
+          ctx,
+          nodeRect,
+          isLHS
+        );
+
+        const node = nodes.find((x) => x.id === versusId);
+        Array.from(node.children).forEach(drawCharacterLines);
+
         const nextVersus = nextRound.find(
           (_, i) => i === Math.floor(vIndex / 2)
         );

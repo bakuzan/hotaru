@@ -2,6 +2,7 @@
   <div :class="classes" :id="id">
     <VersusCard 
       v-for="item in characters"
+      :class="versusClass"
       :key="item.id"
       :item="item"
       :winner-id="winnerId"
@@ -70,13 +71,23 @@ export default {
       validator: function(value) {
         return value === null || ['small'].includes(value);
       }
+    },
+    column: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     classes: function() {
       return classNames('versus', {
         'versus--is-dummy': this.isDummy,
-        'versus--grow': this.grow
+        'versus--grow': this.grow,
+        'versus--column': this.column
+      });
+    },
+    versusClass: function() {
+      return classNames('versus__versus-card', {
+        'versus__versus-card--stacked': this.column
       });
     },
     compareLink: function() {
@@ -119,6 +130,19 @@ export default {
     transform: translateY(-50%) translateX(-50%);
     border-radius: 50px;
     text-align: center;
+  }
+
+  &--column {
+    flex-direction: column;
+  }
+}
+
+.versus {
+  &__versus-card--stacked {
+    width: 100%;
+    & + & {
+      margin-top: 20px;
+    }
   }
 }
 </style>

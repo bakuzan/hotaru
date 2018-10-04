@@ -139,7 +139,8 @@ export default {
   },
   computed: {
     characterSearchResults: function() {
-      return this.characters.filter((x) => !this.characterIds.includes(x.id));
+      const characters = this.characters || [];
+      return characters.filter((x) => !this.characterIds.includes(x.id));
     },
     characterIds: function() {
       const { characterIds } = this.$route.query;
