@@ -1,3 +1,9 @@
+import { isString } from './index';
+
+const LINE_WIDTH = 2;
+const NORMAL_LINE_COLOUR = '#000';
+const WINNER_LINE_COLOUR = '#b22222';
+
 function positionRelativeToParent(element) {
   const parent = element.offsetParent;
   const parentRect = parent.getBoundingClientRect();
@@ -18,20 +24,27 @@ function positionRelativeToParent(element) {
   return relativePos;
 }
 
-function drawCharacterMidPointLine(ctx, parentRect, isLHS) {
+function drawCharacterMidPointLine(ctx, { parentRect, parentData }, isLHS) {
   return (_, index) => {
     const direction = isLHS ? 1 : -1;
-    const cOffset = index ? 0.25 : 0.75;
+    const cOffset = index ? 0.75 : 0.25;
 
     const startX = isLHS ? parentRect.right : parentRect.left;
     const startY = parentRect.top + parentRect.height * cOffset;
     const endX = startX + parentRect.width * 0.5 * direction;
     const endY = parentRect.top + parentRect.height * 0.5;
 
+    const winnerIndex = parentData.characters.findIndex(
+      (x) => x.id === parentData.winnerId
+    );
+    console.log(parentData, winnerIndex, index, winnerIndex === index);
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, startY);
     ctx.lineTo(endX, endY);
+    ctx.lineWidth = LINE_WIDTH;
+    ctx.strokeStyle =
+      winnerIndex !== index ? NORMAL_LINE_COLOUR : WINNER_LINE_COLOUR;
     ctx.stroke();
   };
 }
@@ -56,12 +69,14 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
 
         const drawCharacterLines = drawCharacterMidPointLine(
           ctx,
-          nodeRect,
+          { parentRect: nodeRect, parentData: versus },
           isLHS
         );
 
         const node = nodes.find((x) => x.id === versusId);
-        Array.from(node.children).forEach(drawCharacterLines);
+        Array.from(node.querySelectorAll('.versus-card')).forEach(
+          drawCharacterLines
+        );
 
         const nextVersus = nextRound.find(
           (_, i) => i === Math.floor(vIndex / 2)
@@ -71,7 +86,6 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
 
         ctx.beginPath();
         ctx.moveTo(startX, startY);
-        ctx.lineWidth = 2;
 
         if (isOneToOne) {
           const endX = isLHS ? nextNodeRect.left : nextNodeRect.right;
@@ -87,6 +101,10 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
           ctx.lineTo(endX, endY);
         }
 
+        ctx.lineWidth = LINE_WIDTH;
+        ctx.strokeStyle = nextVersus.characters.some((x) => isString(x.id))
+          ? NORMAL_LINE_COLOUR
+          : WINNER_LINE_COLOUR;
         ctx.stroke();
       }
     });

@@ -31,6 +31,8 @@ import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
 import bracketLineDrawer from '@/utils/bracket-lines';
 
+// const mapToWinnerIds = (p, r) => [...p, ...r.map((v) => v.winnerId)];
+
 export default {
   name: 'HTRInstanceViewBracket',
   components: {
@@ -61,7 +63,12 @@ export default {
   },
   watch: {
     customBracketLayout: function(newV, oldV) {
-      if (newV && (!oldV || newV.length !== oldV.length)) {
+      // const nWinners = newV.reduce(mapToWinnerIds, []).filter((x) => !!x);
+      // const oWinners = oldV.reduce(mapToWinnerIds, []).filter((x) => !!x);
+      // const winnerChosen = oWinners.length !== nWinners.length;
+      // console.log('layout changed', nWinners, oWinners);
+      const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
+      if (dataUpdated) {
         this.$nextTick(this.updateCanvas);
       }
     }
@@ -69,7 +76,7 @@ export default {
   mounted() {
     this.zoomController = panzoom(this.$refs[this.bracketRef], {
       zoomSpeed: 0.1,
-      maxZoom: 1,
+      maxZoom: 2,
       minZoom: 0.1,
       smoothScroll: true,
       zoomDoubleClickSpeed: 4
