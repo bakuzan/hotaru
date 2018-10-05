@@ -47,15 +47,19 @@ module.exports = {
   },
   versusHistoryPaged(_, { characterId, paging }) {
     return Versus.findAndCountAll({
-      where: {
-        'character.id': {
-          [Op.eq]: characterId
-        }
-      },
       order: [['updatedAt', 'DESC']],
       limit: paging.size,
       offset: paging.size * paging.page,
-      include: [Character]
+      include: [
+        {
+          model: Character,
+          where: {
+            id: {
+              [Op.eq]: characterId
+            }
+          }
+        }
+      ]
     }).then((result) => ({
       nodes: result.rows,
       total: result.count,

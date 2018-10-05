@@ -137,20 +137,37 @@
           </div>
         </Tab>
         <Tab name="Versus" :is-disabled="isCreate">
-          <div class="page-view__content view-info">
-            <List 
-              columns="one"
-              :items="versusHistoryPaged.nodes"
-              :paged-total="versusHistoryPaged.total"
-              @intersect="showMore"
-            >
-              <template slot-scope="slotProps">
-                {{slotProps.item.id}}
-                {{slotProps.item.updatedAt}}
-                {{slotProps.item.winnerId}}
-              </template>
-            </List>
-          </div>
+          <ApolloQuery
+            :query="versusQuery"
+            :skip="!editCharacter"
+            :variables="{ 
+              characterId: editCharacter.id,
+              paging: {
+                page,
+                size
+              }
+            }"
+          >
+            <template slot-scope="{ result: { loading, error, data } }">
+              <div v-if="(!loading && !data) || error">
+                Failed to load versus history
+              </div>
+              <div v-if="!loading && data" class="page-view__content view-info">
+                <List 
+                  columns="one"
+                  :items="data.versusHistoryPaged.nodes"
+                  :paged-total="data.versusHistoryPaged.total"
+                  @intersect="showMore"
+                >
+                  <template slot-scope="slotProps">
+                    {{slotProps.item.id}}
+                    {{slotProps.item.updatedAt}}
+                    {{slotProps.item.winnerId}}
+                  </template>
+                </List>
+              </div>
+            </template>
+          </ApolloQuery>
         </Tab>
       </Tabs>
 
@@ -176,6 +193,7 @@
 </template>
 
 <script>
+import { ApolloQuery } from 'vue-apollo';
 import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
@@ -222,13 +240,16 @@ function getInitialState() {
     character: {},
     newTags: [],
     page: 0,
-    versusHistoryPaged: defaultPagedResponse()
+    size: LP.size,
+    versusHistoryPaged: defaultPagedResponse(),
+    versusQuery: Query.getVersusHistory
   };
 }
 
 export default {
   name: 'CharactersView',
   components: {
+    ApolloQuery,
     HTRImage,
     ViewBlockToggler,
     SelectBox,
@@ -289,24 +310,6 @@ export default {
     },
     tags: {
       query: Query.allTags
-    },
-    versusHistoryPaged: {
-      query: Query.getVersusHistory,
-      skip() {
-        return true;
-      },
-      variables: {
-        characterId: null,
-        paging: {
-          page: 0,
-          size: LP.size
-        }
-      },
-      result({ data, loading }) {
-        if (!loading) {
-          this.versusHistoryPaged = data.versusHistoryPaged;
-        }
-      }
     }
   },
   computed: {
@@ -465,9 +468,9 @@ export default {
     handleTabChange: function(tabHash) {
       if (tabHash !== '#versus') return;
       console.log('tab change', tabHash, this.$apollo);
-      this.$apollo.queries.versusHistoryPaged.refetch({
-        characterId: this.editCharacter.id
-      });
+      // this.$apollo.queries.versusHistoryPaged.refetch({
+      //   characterId: this.editCharacter.id
+      // });
     },
     showMore: function() {
       LP.showMore(this, 'versusHistoryPaged');
