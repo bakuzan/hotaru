@@ -116,30 +116,44 @@
           </div>
         </Tab>
         <Tab name="Gallery">
-          <div class="page-view__content view-info">
-            <ImageUploader
-              name="galleryImage"
-              @on-upload="onGalleryImageUpload"
-            />
-            <List 
-              className="gallery"
-              itemClassName="gallery__item"
-              :items="editCharacter.images"
-            >
-              <template slot-scope="slotProps">
-                <ImageCard 
-                  v-bind="slotProps.item"
-                  :remove="onRemoveImage"
-                  hide-caption
+          <ApolloQuery
+            :query="imageQuery"
+            :skip="!editCharacter.id"
+            :variables="{ 
+              characterId: editCharacter.id
+            }"
+            @result="onImageQuery"
+          >
+            <template slot-scope="{ result: { loading, error, data } }">
+              <div v-if="(!loading && !data) || error">
+                Failed to load images
+              </div>
+              <div v-if="!loading && data" class="page-view__content view-info">
+                <ImageUploader
+                  name="galleryImage"
+                  @on-upload="onGalleryImageUpload"
                 />
-              </template>
-            </List>
-          </div>
+                <List 
+                  className="gallery"
+                  itemClassName="gallery__item"
+                  :items="editCharacter.images"
+                >
+                  <template slot-scope="slotProps">
+                    <ImageCard 
+                      v-bind="slotProps.item"
+                      :remove="onRemoveImage"
+                      hide-caption
+                    />
+                  </template>
+                </List>
+              </div>
+            </template>
+          </ApolloQuery>
         </Tab>
         <Tab name="Versus" :is-disabled="isCreate">
           <ApolloQuery
             :query="versusQuery"
-            :skip="!editCharacter"
+            :skip="!editCharacter.id"
             :variables="{ 
               characterId: editCharacter.id,
               paging: {
@@ -242,7 +256,8 @@ function getInitialState() {
     page: 0,
     size: LP.size,
     versusHistoryPaged: defaultPagedResponse(),
-    versusQuery: Query.getVersusHistory
+    versusQuery: Query.getVersusHistory,
+    imageQuery: Query.getImagesForCharacter
   };
 }
 
@@ -404,7 +419,10 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.createCharacter,
-          variables: { character: postCharacter },
+          variables: {
+            character: postCharacter,
+            withImages: !this.editCharacter.images
+          },
           update: (store, { data: { characterCreate } }) => {
             const character = { ...characterCreate };
             store.deleteQueryHTR('characters');
@@ -442,7 +460,10 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.updateCharacter,
-          variables: { character: postCharacter },
+          variables: {
+            character: postCharacter,
+            withImages: !this.editCharacter.images
+          },
           update: (store, { data: { characterUpdate } }) => {
             const data = { ...characterUpdate };
 
@@ -465,12 +486,19 @@ export default {
           this.mutationLoading = false;
         });
     },
+    onImageQuery: function(result) {
+      const { data } = result;
+
+      this.editCharacter.images = [
+        ...this.editCharacter.images,
+        ...data.imagesForCharacter
+      ];
+
+      return result;
+    },
     handleTabChange: function(tabHash) {
       if (tabHash !== '#versus') return;
       console.log('tab change', tabHash, this.$apollo);
-      // this.$apollo.queries.versusHistoryPaged.refetch({
-      //   characterId: this.editCharacter.id
-      // });
     },
     showMore: function() {
       LP.showMore(this, 'versusHistoryPaged');

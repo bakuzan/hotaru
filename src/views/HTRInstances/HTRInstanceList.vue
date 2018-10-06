@@ -18,6 +18,7 @@
     </ListFilterBar>
     <List 
       wrap
+      align-left
       columns="four"
       :items="htrInstancesPaged.nodes"
       :paged-total="htrInstancesPaged.total"

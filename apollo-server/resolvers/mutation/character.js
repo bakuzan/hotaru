@@ -33,7 +33,7 @@ module.exports = {
     });
   },
   characterUpdate(_, { character }) {
-    const { id, seriesId, tags = [], images = [], ...args } = character;
+    const { id, seriesId, tags = [], images, ...args } = character;
     const createdAt = Date.now();
     const {
       newItems: newTags,
@@ -49,7 +49,9 @@ module.exports = {
         .transaction(async (transaction) => {
           await character.setSeries(seriesId, { transaction });
           await character.setTags(existingTagIds, { transaction });
-          await character.setImages(existingImageIds, { transaction });
+          if (images) {
+            await character.setImages(existingImageIds, { transaction });
+          }
 
           if (newTags.length) {
             await Tag.bulkCreate(newTags, { transaction }).then(() =>

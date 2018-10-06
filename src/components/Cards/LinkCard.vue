@@ -51,3 +51,16 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.link-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  // don't do styling like this!!
+  .nav-link {
+    justify-content: flex-start;
+  }
+}
+</style>

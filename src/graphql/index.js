@@ -14,7 +14,8 @@ export const Query = {
   ...versus.query,
   ...ranking.query,
   ...htrTemplate.query,
-  ...htrInstance.query
+  ...htrInstance.query,
+  ...image.query
 };
 
 export const Mutation = {

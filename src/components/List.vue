@@ -57,6 +57,10 @@ export default {
     },
     pagedTotal: {
       type: Number
+    },
+    alignLeft: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -106,7 +110,9 @@ export default {
       );
     },
     listItemClasses: function() {
-      return classNames('list__item', this.itemClassName);
+      return classNames('list__item', this.itemClassName, {
+        'list__item--align_left': this.alignLeft
+      });
     },
     sortableOptions: function() {
       return {
@@ -175,6 +181,9 @@ $columns: (
   padding: $app--padding-standard;
   @extend %standard-border;
   box-sizing: border-box;
+  &--align_left {
+    justify-content: flex-start;
+  }
 }
 .sort-handle {
   position: absolute;

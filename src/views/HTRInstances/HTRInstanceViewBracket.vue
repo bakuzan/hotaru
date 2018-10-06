@@ -7,13 +7,13 @@
       class="bracket__round"
     >
       <VersusWidget 
-        v-for="match in round" 
+        v-for="match in round"
+        v-bind="match"
         :key="match.id"
         :class="bracketVersusClass(i)"
-        v-bind="match"
+        :is-final="isFinal(i)"
         enable-compare
         column
-        :is-final="isFinal(i)"
         @vote="handleVote"
       />
     </div>

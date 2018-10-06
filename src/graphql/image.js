@@ -18,7 +18,19 @@ const uploadImageBase64 = gql`
   }
 `;
 
+const getImagesForCharacter = gql`
+  query getImagesForCharacter($characterId: Int!) {
+    characterImages(characterId: $characterId) {
+      id
+      url
+    }
+  }
+`;
+
 export default {
+  query: {
+    getImagesForCharacter
+  },
   mutation: {
     uploadImageUrl,
     uploadImageBase64

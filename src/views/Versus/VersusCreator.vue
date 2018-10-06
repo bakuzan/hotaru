@@ -141,7 +141,9 @@ export default {
       seriesFilter: '',
       series: [],
       versus: null,
-      rules: versusCreatorDefaultRules()
+      rules: versusCreatorDefaultRules(),
+      mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+      mappedSources: mapEnumToSelectBoxOptions(SourceType)
     };
   },
   apollo: {
@@ -159,18 +161,13 @@ export default {
   computed: {
     showButtons: function() {
       return !this.versus || this.versus.winnerId;
-    },
-    mappedGenders: function() {
-      return mapEnumToSelectBoxOptions(GenderType);
-    },
-    mappedSources: function() {
-      return mapEnumToSelectBoxOptions(SourceType);
     }
   },
   created() {
     this.$apollo
       .query({
-        query: Query.getVersusSingles
+        query: Query.getVersusSingles,
+        fetchPolicy: 'network-only'
       })
       .then(({ data }) => {
         const { versusSinglesNotWon } = data;
@@ -207,7 +204,7 @@ export default {
         sources: [...sources],
         series: series.map((x) => x.id)
       };
-      console.log('submit!', rules);
+
       this.$apollo
         .mutate({
           mutation: Mutation.createVersusFromRules,

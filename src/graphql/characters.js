@@ -21,10 +21,6 @@ const characterCreationFields = gql`
       id
       name
     }
-    images {
-      id
-      url
-    }
   }
 `;
 
@@ -104,10 +100,6 @@ const getCharacterById = gql`
       gender
       seriesId
       tagIds
-      images {
-        id
-        url
-      }
     }
   }
 `;
@@ -126,18 +118,26 @@ const getCharactersByIds = gql`
 `;
 
 const updateCharacter = gql`
-  mutation updateCharacter($character: CharacterInput) {
+  mutation updateCharacter($character: CharacterInput, $withImages: Boolean) {
     characterUpdate(character: $character) {
       ...CreationFields
+      images @include(if: $withImages) {
+        id
+        url
+      }
     }
   }
   ${characterCreationFields}
 `;
 
 const createCharacter = gql`
-  mutation createCharacter($character: CharacterInput) {
+  mutation createCharacter($character: CharacterInput, $withImages: Boolean) {
     characterCreate(character: $character) {
       ...CreationFields
+      images @include(if: $withImages) {
+        id
+        url
+      }
     }
   }
   ${characterCreationFields}
