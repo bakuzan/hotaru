@@ -10,6 +10,7 @@
           />
           <ViewBlockToggler
             id="displayImage"
+            class="span-column"
             value="Change image"
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
@@ -174,9 +175,10 @@
                   @intersect="showMore"
                 >
                   <template slot-scope="slotProps">
-                    {{slotProps.item.id}}
-                    {{slotProps.item.updatedAt}}
-                    {{slotProps.item.winnerId}}
+                    <VersusHistoryCard
+                      :characterId="editCharacter.id"
+                      :item="slotProps.item"
+                    />
                   </template>
                 </List>
               </div>
@@ -219,7 +221,7 @@ import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import List from '@/components/List';
-import { ImageCard } from '@/components/Cards';
+import { ImageCard, VersusHistoryCard } from '@/components/Cards';
 import TickboxHeart from '@/components/TickboxHeart';
 
 import Strings from '@/constants/strings';
@@ -278,7 +280,8 @@ export default {
     LoadingBouncer,
     List,
     ImageCard,
-    TickboxHeart
+    TickboxHeart,
+    VersusHistoryCard
   },
   props: {
     isCreate: {
@@ -488,13 +491,8 @@ export default {
     },
     onImageQuery: function(result) {
       const { data } = result;
-
-      this.editCharacter.images = [
-        ...this.editCharacter.images,
-        ...data.imagesForCharacter
-      ];
-
-      return result;
+      const currentImages = this.editCharacter.images || [];
+      this.editCharacter.images = [...currentImages, ...data.characterImages];
     },
     handleTabChange: function(tabHash) {
       if (tabHash !== '#versus') return;

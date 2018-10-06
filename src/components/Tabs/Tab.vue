@@ -1,12 +1,12 @@
 <template>
     <section 
-        v-show="isActive"
-        :aria-hidden="!isActive"
-        :id="tabHash"
-        :class="panelClasses"
-        role="tabpanel"
+      v-show="isActive"
+      :aria-hidden="!isActive"
+      :id="tabHash"
+      :class="panelClasses"
+      role="tabpanel"
     >
-        <slot></slot>
+        <slot v-show="isActive"></slot>
     </section>
 </template>
 

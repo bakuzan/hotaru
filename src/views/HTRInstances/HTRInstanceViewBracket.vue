@@ -109,6 +109,8 @@ export default {
           }))
         }));
       }
+
+      console.log('matches', this.items);
       return this.items;
     },
     bracket: function() {

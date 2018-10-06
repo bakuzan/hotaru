@@ -10,6 +10,7 @@
           />
           <ViewBlockToggler
             id="displayImage"
+            class="span-column"
             value="Change image"
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"

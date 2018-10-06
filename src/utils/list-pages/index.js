@@ -19,13 +19,15 @@ export const updateFilterAndRefetch = (ctrl, attr) => (value, name) => {
 };
 
 export const showMore = (ctrl, attr) => {
-  const loading = ctrl.$apollo.queries[attr].isLoading;
+  const query = ctrl.$apollo.queries[attr];
+  console.log('showMore', query, attr);
+  const loading = query && query.isLoading;
   const noMore = !ctrl[attr].hasMore;
 
   if (noMore || loading) return;
 
   ctrl.page++;
-  ctrl.$apollo.queries[attr].fetchMore({
+  query.fetchMore({
     variables: {
       ...ctrl.filters,
       paging: {
