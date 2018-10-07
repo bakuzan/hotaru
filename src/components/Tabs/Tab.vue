@@ -6,7 +6,9 @@
       :class="panelClasses"
       role="tabpanel"
     >
-        <slot v-show="isActive"></slot>
+      <transition name="fade">
+        <slot v-if="isActive"></slot>
+      </transition>
     </section>
 </template>
 

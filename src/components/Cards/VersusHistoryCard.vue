@@ -4,12 +4,19 @@
       v-bind="opponent"
       :url-source="characterCardUrl"
       :figure-size="figureSize"
+      :style="{ width: '25%' }"
       open-new-tab
     />
     <div>
-      <div>{{item.updatedAt}}</div>
+      <div class="padded padded--standard">
+        {{item.updatedAt}}
+      </div>
       <div>
-        placeholder for success/failure colour
+        <VoteButton 
+          :has-winner="!!item.winnerId"
+          :is-winner="isWinner"
+          show-lost-colour
+        />
       </div>
     </div>
   </div>
@@ -19,13 +26,15 @@
 import classNames from 'classnames';
 
 import ListFigureCard from './ListFigureCard';
+import { VoteButton } from '@/components/Buttons';
 
 import Urls from '@/constants/urls';
 
 export default {
   name: 'VersusHistoryCard',
   components: {
-    ListFigureCard
+    ListFigureCard,
+    VoteButton
   },
   props: {
     characterId: {
@@ -69,6 +78,9 @@ export default {
     },
     opponent: function() {
       return this.item.characters.find((x) => x.id !== this.characterId) || {};
+    },
+    isWinner: function() {
+      return this.item.winnerId === this.characterId;
     }
   }
 };

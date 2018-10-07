@@ -126,8 +126,11 @@
             @result="onImageQuery"
           >
             <template slot-scope="{ result: { loading, error, data } }">
-              <div v-if="(!loading && !data) || error">
-                Failed to load images
+              <div class="page-view__query-status" v-if="!data || error">
+                <LoadingBouncer v-show="loading" local />
+                <div v-if="error">
+                  Failed to load images
+                </div>
               </div>
               <div v-if="!loading && data" class="page-view__content view-info">
                 <ImageUploader
@@ -164,8 +167,11 @@
             }"
           >
             <template slot-scope="{ result: { loading, error, data } }">
-              <div v-if="(!loading && !data) || error">
-                Failed to load versus history
+              <div class="page-view__query-status" v-show="!data || error">
+                <LoadingBouncer v-show="loading" local />
+                <div v-if="error">
+                  Failed to load images
+                </div>
               </div>
               <div v-if="!loading && data" class="page-view__content view-info">
                 <List 
@@ -318,9 +324,10 @@ export default {
         const character = data.characterById || defaultCharacterModel();
         this.editCharacter = {
           ...character,
+          images: undefined,
           tagIds: [...character.tagIds]
         };
-        return character;
+        return { ...character, images: undefined };
       }
     },
     series: {
@@ -356,7 +363,11 @@ export default {
     },
     hasEdits: function() {
       const notEqual = !objectsAreEqual(this.character, this.editCharacter);
-      return notEqual;
+      const imageChange = !objectsAreEqual(
+        this.character.images,
+        this.editCharacter.images
+      );
+      return notEqual || imageChange;
     },
     showButtons: function() {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
@@ -374,7 +385,15 @@ export default {
       this.editCharacter[name] = value;
     },
     onGalleryImageUpload: function(value) {
-      this.editCharacter.images.push({ id: generateUniqueId(), url: value });
+      const newImage = { id: generateUniqueId(), url: value };
+      if (this.editCharacter.images) {
+        this.$set(this.editCharacter, 'images', [
+          ...this.editCharacter.images,
+          newImage
+        ]);
+      } else {
+        this.editCharacter.images = [newImage];
+      }
     },
     onRemoveImage: function(imageId) {
       this.editCharacter.images = [
@@ -424,7 +443,7 @@ export default {
           mutation: Mutation.createCharacter,
           variables: {
             character: postCharacter,
-            withImages: !this.editCharacter.images
+            withImages: !!this.editCharacter.images
           },
           update: (store, { data: { characterCreate } }) => {
             const character = { ...characterCreate };
@@ -465,7 +484,7 @@ export default {
           mutation: Mutation.updateCharacter,
           variables: {
             character: postCharacter,
-            withImages: !this.editCharacter.images
+            withImages: !!this.editCharacter.images
           },
           update: (store, { data: { characterUpdate } }) => {
             const data = { ...characterUpdate };
@@ -492,7 +511,14 @@ export default {
     onImageQuery: function(result) {
       const { data } = result;
       const currentImages = this.editCharacter.images || [];
-      this.editCharacter.images = [...currentImages, ...data.characterImages];
+      const images = [
+        ...currentImages,
+        ...data.characterImages.filter((x) =>
+          currentImages.every((y) => y.id !== x.id)
+        )
+      ];
+      this.character.images = images;
+      this.editCharacter.images = images;
     },
     handleTabChange: function(tabHash) {
       if (tabHash !== '#versus') return;

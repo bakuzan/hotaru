@@ -7,6 +7,12 @@
     flex-direction: column;
   }
 
+  &__query-status {
+    position: relative;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
   &__image {
     max-height: 300px;
     margin: {

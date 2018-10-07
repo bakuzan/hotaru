@@ -63,6 +63,10 @@ export default {
     isChampion: {
       type: Boolean,
       default: false
+    },
+    showLostColour: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -72,6 +76,7 @@ export default {
         {
           'vote-button--has-winner': this.hasWinner,
           'vote-button--is-winner': this.isWinner,
+          'vote-button--has-lost': !this.isWinner && this.showLostColour,
           'vote-button--is-champion': this.isChampion,
           'vote-button--is-disabled': this.disabled
         },
@@ -79,7 +84,13 @@ export default {
       );
     },
     maybeIcon: function() {
-      return this.isChampion ? Icons.trophy : this.isWinner ? Icons.tick : null;
+      return this.isChampion
+        ? Icons.trophy
+        : this.isWinner
+          ? Icons.tick
+          : this.showLostColour
+            ? Icons.cross
+            : null;
     }
   },
   methods: {
@@ -106,13 +117,18 @@ export default {
   }
 
   &--is-winner,
-  &--is-champion {
+  &--is-champion,
+  &--has-lost {
     &::before {
       @extend %center-contents;
       position: absolute;
       width: 100%;
       height: 100%;
     }
+  }
+  &--has-lost::before {
+    background-color: $app--failure-background-colour;
+    color: $app--failure-colour;
   }
   &--is-winner::before {
     background-color: $app--success-background-colour;

@@ -118,7 +118,7 @@ const getCharactersByIds = gql`
 `;
 
 const updateCharacter = gql`
-  mutation updateCharacter($character: CharacterInput, $withImages: Boolean) {
+  mutation updateCharacter($character: CharacterInput, $withImages: Boolean!) {
     characterUpdate(character: $character) {
       ...CreationFields
       images @include(if: $withImages) {
@@ -131,7 +131,7 @@ const updateCharacter = gql`
 `;
 
 const createCharacter = gql`
-  mutation createCharacter($character: CharacterInput, $withImages: Boolean) {
+  mutation createCharacter($character: CharacterInput, $withImages: Boolean!) {
     characterCreate(character: $character) {
       ...CreationFields
       images @include(if: $withImages) {

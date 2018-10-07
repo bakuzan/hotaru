@@ -75,7 +75,7 @@ const optimisticCharacterModel = (obj, allTags) => {
 
   return {
     ...other,
-    images,
+    images: images.map((x) => ({ ...x, __typename: 'Image' })),
     seriesId: removeSeries ? null : seriesIdInt,
     tags: [
       ...allTags

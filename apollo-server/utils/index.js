@@ -82,6 +82,17 @@ const setHasMoreFlag = (total, paging) => {
   return total - nodesSoFar > 0;
 };
 
+function formatDateISO(date) {
+  const d = new Date(date);
+  return d.toISOString();
+}
+
+function formatDateDisplay(date) {
+  const d = formatDateISO(date);
+  const [dPart, tPart] = d.split('T');
+  return `${dPart} @ ${tPart.slice(0, 5)}`;
+}
+
 module.exports = {
   enumArrayToObject,
   mapArrToGraphqlString,
@@ -92,5 +103,7 @@ module.exports = {
   resolveInOp,
   shuffleArray,
   orderBy,
-  setHasMoreFlag
+  setHasMoreFlag,
+  formatDateISO,
+  formatDateDisplay
 };
