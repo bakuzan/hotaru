@@ -96,7 +96,7 @@ export default {
       this.filterHandler(value, name);
     },
     showMore: function() {
-      LP.showMore(this, 'htrTemplatesPaged');
+      LP.showMore(this, 'htrTemplatesPaged', 'HTRTemplatePage');
     }
   }
 };

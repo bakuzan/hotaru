@@ -206,7 +206,7 @@ export const mapHTRInstanceToOptimisticUpdate = (instance) => {
   return mutationWrapper('HTRInstance', 'htrInstanceUpdate')(mappedObj);
 };
 
-export const mapPagedResponseToUpdate = (
+export const mapPagedResponseToUpdate = (__typename) => (
   previousResult,
   { fetchMoreResult }
 ) => {
@@ -215,7 +215,7 @@ export const mapPagedResponseToUpdate = (
   const data = getItemFromData(fetchMoreResult);
   return {
     [key]: {
-      __typename: prev.__typename,
+      __typename: __typename,
       ...data,
       nodes: [...prev.nodes, ...data.nodes]
     }

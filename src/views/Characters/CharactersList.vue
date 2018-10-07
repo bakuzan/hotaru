@@ -93,7 +93,7 @@ export default {
       this.filterHandler(value, name);
     },
     showMore: function() {
-      LP.showMore(this, 'charactersPaged');
+      LP.showMore(this, 'charactersPaged', 'CharacterPage');
     }
   }
 };

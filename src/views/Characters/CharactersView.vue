@@ -119,10 +119,7 @@
         <Tab name="Gallery">
           <ApolloQuery
             :query="imageQuery"
-            :skip="!editCharacter.id"
-            :variables="{ 
-              characterId: editCharacter.id
-            }"
+            :variables="{ characterId }"
             @result="onImageQuery"
           >
             <template slot-scope="{ result: { loading, error, data } }">
@@ -155,41 +152,21 @@
           </ApolloQuery>
         </Tab>
         <Tab name="Versus" :is-disabled="isCreate">
-          <ApolloQuery
-            :query="versusQuery"
-            :skip="!editCharacter.id"
-            :variables="{ 
-              characterId: editCharacter.id,
-              paging: {
-                page,
-                size
-              }
-            }"
-          >
-            <template slot-scope="{ result: { loading, error, data } }">
-              <div class="page-view__query-status" v-show="!data || error">
-                <LoadingBouncer v-show="loading" local />
-                <div v-if="error">
-                  Failed to load images
-                </div>
-              </div>
-              <div v-if="!loading && data" class="page-view__content view-info">
-                <List 
-                  columns="one"
-                  :items="data.versusHistoryPaged.nodes"
-                  :paged-total="data.versusHistoryPaged.total"
-                  @intersect="showMore"
-                >
-                  <template slot-scope="slotProps">
-                    <VersusHistoryCard
-                      :characterId="editCharacter.id"
-                      :item="slotProps.item"
-                    />
-                  </template>
-                </List>
-              </div>
-            </template>
-          </ApolloQuery>
+          <div class="page-view__content view-info">
+            <List 
+              columns="one"
+              :items="versusHistoryPaged.nodes"
+              :paged-total="versusHistoryPaged.total"
+              @intersect="showMore"
+            >
+              <template slot-scope="slotProps">
+                <VersusHistoryCard
+                  :characterId="editCharacter.id"
+                  :item="slotProps.item"
+                />
+              </template>
+            </List>
+          </div>
         </Tab>
       </Tabs>
 
@@ -259,12 +236,14 @@ function getInitialState() {
     mutationLoading: false,
     readOnly: false,
     editCharacter: defaultCharacterModel(),
+    originalImages: null,
     character: {},
     newTags: [],
     page: 0,
-    size: LP.size,
-    versusHistoryPaged: defaultPagedResponse(),
-    versusQuery: Query.getVersusHistory,
+    versusHistoryPaged: {
+      ...defaultPagedResponse(),
+      hasMore: false
+    },
     imageQuery: Query.getImagesForCharacter
   };
 }
@@ -324,10 +303,9 @@ export default {
         const character = data.characterById || defaultCharacterModel();
         this.editCharacter = {
           ...character,
-          images: undefined,
           tagIds: [...character.tagIds]
         };
-        return { ...character, images: undefined };
+        return { ...character };
       }
     },
     series: {
@@ -335,9 +313,25 @@ export default {
     },
     tags: {
       query: Query.allTags
+    },
+    versusHistoryPaged: {
+      query: Query.getVersusHistory,
+      skip: true,
+      variables() {
+        return {
+          characterId: this.characterId,
+          paging: {
+            page: 0,
+            size: LP.size
+          }
+        };
+      }
     }
   },
   computed: {
+    characterId: function() {
+      return +Routing.getParam(this.$router, 'id');
+    },
     mappedSeries: function() {
       return mapToSelectBoxOptions(this.series);
     },
@@ -363,10 +357,13 @@ export default {
     },
     hasEdits: function() {
       const notEqual = !objectsAreEqual(this.character, this.editCharacter);
-      const imageChange = !objectsAreEqual(
-        this.character.images,
-        this.editCharacter.images
-      );
+      const imageChange =
+        this.originalImages &&
+        (this.originalImages.length !== this.editCharacter.images.length ||
+          !this.originalImages.every((x) =>
+            this.editCharacter.images.some((y) => x.id === y.id)
+          ));
+
       return notEqual || imageChange;
     },
     showButtons: function() {
@@ -517,15 +514,21 @@ export default {
           currentImages.every((y) => y.id !== x.id)
         )
       ];
-      this.character.images = images;
+      console.log(
+        'post query',
+        this.character,
+        this.originalImages,
+        this.editCharacter
+      );
+      this.originalImages = [...images];
       this.editCharacter.images = images;
     },
     handleTabChange: function(tabHash) {
       if (tabHash !== '#versus') return;
-      console.log('tab change', tabHash, this.$apollo);
+      this.$apollo.queries.versusHistoryPaged.skip = false;
     },
     showMore: function() {
-      LP.showMore(this, 'versusHistoryPaged');
+      LP.showMore(this, 'versusHistoryPaged', 'VersusPage');
     }
   }
 };

@@ -18,14 +18,14 @@ export const updateFilterAndRefetch = (ctrl, attr) => (value, name) => {
   }, 1000);
 };
 
-export const showMore = (ctrl, attr) => {
+export const showMore = (ctrl, attr, typename) => {
   const query = ctrl.$apollo.queries[attr];
   console.log('showMore', query, attr);
-  const loading = query && query.isLoading;
+  const loading = query && query.loading;
   const noMore = !ctrl[attr].hasMore;
 
   if (noMore || loading) return;
-
+  console.log('next page', ctrl.page, ctrl.filters);
   ctrl.page++;
   query.fetchMore({
     variables: {
@@ -35,6 +35,6 @@ export const showMore = (ctrl, attr) => {
         size
       }
     },
-    updateQuery: mapPagedResponseToUpdate
+    updateQuery: mapPagedResponseToUpdate(typename)
   });
 };

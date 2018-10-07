@@ -98,7 +98,7 @@ export default {
       this.filterHandler(value, name);
     },
     showMore: function() {
-      LP.showMore(this, 'htrInstancesPaged');
+      LP.showMore(this, 'htrInstancesPaged', 'HTRInstancePage');
     }
   }
 };
