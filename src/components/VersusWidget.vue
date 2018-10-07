@@ -1,7 +1,7 @@
 <template>
   <div :class="classes" :id="id">
     <VersusCard 
-      v-for="item in characters"
+      v-for="item in versusCharacters"
       :class="versusClass"
       :key="item.id"
       :item="item"
@@ -96,6 +96,10 @@ export default {
     compareLink: function() {
       const ids = this.characters.map((x) => x.id).join(',');
       return `${Urls.versusComparison}?characterIds=${ids}`;
+    },
+    versusCharacters: function() {
+      const [c1, c2] = this.characters;
+      return c1.order > c2.order ? [c2, c1] : [c1, c2];
     }
   },
   methods: {

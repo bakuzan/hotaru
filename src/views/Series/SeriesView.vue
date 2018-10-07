@@ -81,6 +81,7 @@
               />
               </ViewBlockToggler>
               <List 
+                wrap
                 className="characters"
                 itemClassName="characters__item"
                 :items="editSeries.characters"
@@ -358,6 +359,10 @@ export default {
 .characters-view-block > .button {
   font-weight: bold;
   margin-left: -5px;
+}
+
+.characters__item {
+  flex: 1 1 0;
 }
 </style>
 

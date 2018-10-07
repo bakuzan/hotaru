@@ -92,6 +92,8 @@ export default {
     matches: function() {
       const { rules = {}, seedOrder } = this.options;
       const { isSeeded } = rules;
+      let result;
+
       if (isSeeded) {
         const characterList = this.items.reduce(
           (p, c) => [...p, ...c.characters],
@@ -101,7 +103,7 @@ export default {
           ? seedOrder.map((id) => characterList.find((x) => x.id === id))
           : orderBy(characterList, ['ranking.rank']);
 
-        return this.items.map((v) => ({
+        result = this.items.map((v) => ({
           ...v,
           characters: v.characters.map((c) => ({
             ...c,
@@ -110,8 +112,15 @@ export default {
         }));
       }
 
-      console.log('matches', this.items);
-      return this.items;
+      result = this.items.map((x, i, arr) => ({
+        ...x,
+        characters: x.characters.map((c) => ({
+          ...c,
+          order: arr.findIndex((v) => v.characters.some((vc) => vc.id === c.id))
+        }))
+      }));
+
+      return result;
     },
     bracket: function() {
       if (!this.items.length) return [];

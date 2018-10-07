@@ -71,7 +71,6 @@ export default {
         search: '',
         type: HTRTemplateTypes.list
       },
-      page: 0,
       htrInstancesPaged: defaultPagedResponse()
     };
   },

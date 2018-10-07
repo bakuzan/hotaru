@@ -67,7 +67,6 @@ export default {
         search: '',
         sources: [...SourceType]
       },
-      page: 0,
       seriesPaged: defaultPagedResponse()
     };
   },

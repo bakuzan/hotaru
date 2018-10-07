@@ -117,39 +117,25 @@
           </div>
         </Tab>
         <Tab name="Gallery">
-          <ApolloQuery
-            :query="imageQuery"
-            :variables="{ characterId }"
-            @result="onImageQuery"
-          >
-            <template slot-scope="{ result: { loading, error, data } }">
-              <div class="page-view__query-status" v-if="!data || error">
-                <LoadingBouncer v-show="loading" local />
-                <div v-if="error">
-                  Failed to load images
-                </div>
-              </div>
-              <div v-if="!loading && data" class="page-view__content view-info">
-                <ImageUploader
-                  name="galleryImage"
-                  @on-upload="onGalleryImageUpload"
+          <div class="page-view__content view-info">
+            <ImageUploader
+              name="galleryImage"
+              @on-upload="onGalleryImageUpload"
+            />
+            <List 
+              className="gallery"
+              itemClassName="gallery__item"
+              :items="characterImages"
+            >
+              <template slot-scope="slotProps">
+                <ImageCard 
+                  v-bind="slotProps.item"
+                  :remove="onRemoveImage"
+                  hide-caption
                 />
-                <List 
-                  className="gallery"
-                  itemClassName="gallery__item"
-                  :items="editCharacter.images"
-                >
-                  <template slot-scope="slotProps">
-                    <ImageCard 
-                      v-bind="slotProps.item"
-                      :remove="onRemoveImage"
-                      hide-caption
-                    />
-                  </template>
-                </List>
-              </div>
-            </template>
-          </ApolloQuery>
+              </template>
+            </List>
+          </div>
         </Tab>
         <Tab name="Versus" :is-disabled="isCreate">
           <div class="page-view__content view-info">
@@ -239,12 +225,10 @@ function getInitialState() {
     originalImages: null,
     character: {},
     newTags: [],
-    page: 0,
     versusHistoryPaged: {
       ...defaultPagedResponse(),
       hasMore: false
-    },
-    imageQuery: Query.getImagesForCharacter
+    }
   };
 }
 
@@ -326,6 +310,29 @@ export default {
           }
         };
       }
+    },
+    imagesForCharacter: {
+      query: Query.getImagesForCharacter,
+      skip: true,
+      manual: true,
+      variables() {
+        return {
+          characterId: this.characterId
+        };
+      },
+      result(result) {
+        const { data } = result;
+        const currentImages = this.editCharacter.images || [];
+        const images = [
+          ...currentImages,
+          ...data.characterImages.filter((x) =>
+            currentImages.every((y) => y.id !== x.id)
+          )
+        ];
+
+        this.originalImages = [...images];
+        this.$set(this.editCharacter, 'images', [...images]);
+      }
     }
   },
   computed: {
@@ -356,9 +363,16 @@ export default {
       return tags;
     },
     hasEdits: function() {
-      const notEqual = !objectsAreEqual(this.character, this.editCharacter);
+      const notEqual = !objectsAreEqual(
+        {
+          ...this.character,
+          images: [...(this.editCharacter.images || [])]
+        },
+        this.editCharacter
+      );
       const imageChange =
         this.originalImages &&
+        this.editCharacter.images &&
         (this.originalImages.length !== this.editCharacter.images.length ||
           !this.originalImages.every((x) =>
             this.editCharacter.images.some((y) => x.id === y.id)
@@ -371,26 +385,35 @@ export default {
     },
     isLoading: function() {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
+    },
+    characterImages: function() {
+      const images = this.editCharacter.images || [];
+      return [...images];
     }
   },
   methods: {
     updateData: function(data) {
-      this.character = { ...data };
-      this.editCharacter = { ...data };
+      const resolvedImages = data.images ? { images: [...data.images] } : {};
+
+      this.character = { ...data, ...resolvedImages };
+      this.editCharacter = { ...data, ...resolvedImages };
     },
     handleUserChanges: function(value, name) {
       this.editCharacter[name] = value;
     },
     onGalleryImageUpload: function(value) {
       const newImage = { id: generateUniqueId(), url: value };
-      if (this.editCharacter.images) {
-        this.$set(this.editCharacter, 'images', [
-          ...this.editCharacter.images,
-          newImage
-        ]);
-      } else {
-        this.editCharacter.images = [newImage];
-      }
+      const currentImages = this.editCharacter.images || [];
+      const index = currentImages.length;
+      this.$set(this.editCharacter.images, index, newImage);
+      console.log(
+        this,
+        'gallery',
+        currentImages,
+        newImage,
+        'gogoo',
+        this.editCharacter
+      );
     },
     onRemoveImage: function(imageId) {
       this.editCharacter.images = [
@@ -505,27 +528,12 @@ export default {
           this.mutationLoading = false;
         });
     },
-    onImageQuery: function(result) {
-      const { data } = result;
-      const currentImages = this.editCharacter.images || [];
-      const images = [
-        ...currentImages,
-        ...data.characterImages.filter((x) =>
-          currentImages.every((y) => y.id !== x.id)
-        )
-      ];
-      console.log(
-        'post query',
-        this.character,
-        this.originalImages,
-        this.editCharacter
-      );
-      this.originalImages = [...images];
-      this.editCharacter.images = images;
-    },
     handleTabChange: function(tabHash) {
-      if (tabHash !== '#versus') return;
-      this.$apollo.queries.versusHistoryPaged.skip = false;
+      if (tabHash === '#versus') {
+        this.$apollo.queries.versusHistoryPaged.skip = false;
+      } else if (tabHash === '#gallery') {
+        this.$apollo.queries.imagesForCharacter.skip = false;
+      }
     },
     showMore: function() {
       LP.showMore(this, 'versusHistoryPaged', 'VersusPage');

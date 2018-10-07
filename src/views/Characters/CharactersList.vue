@@ -68,7 +68,6 @@ export default {
         search: '',
         genders: [...GenderType]
       },
-      page: 0,
       charactersPaged: defaultPagedResponse()
     };
   },

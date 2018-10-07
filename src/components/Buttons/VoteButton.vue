@@ -76,7 +76,8 @@ export default {
         {
           'vote-button--has-winner': this.hasWinner,
           'vote-button--is-winner': this.isWinner,
-          'vote-button--has-lost': !this.isWinner && this.showLostColour,
+          'vote-button--has-lost':
+            this.hasWinner && !this.isWinner && this.showLostColour,
           'vote-button--is-champion': this.isChampion,
           'vote-button--is-disabled': this.disabled
         },
@@ -88,7 +89,7 @@ export default {
         ? Icons.trophy
         : this.isWinner
           ? Icons.tick
-          : this.showLostColour
+          : this.hasWinner && this.showLostColour
             ? Icons.cross
             : null;
     }
