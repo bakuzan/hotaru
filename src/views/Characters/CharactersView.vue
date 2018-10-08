@@ -364,16 +364,15 @@ export default {
     },
     hasEdits: function() {
       const resolvedImages = this.editCharacter.images
-        ? { images: this.editCharacter.images }
+        ? { images: [...this.editCharacter.images] }
         : {};
 
-      const notEqual = !objectsAreEqual(
-        {
-          ...this.character,
-          ...resolvedImages
-        },
-        this.editCharacter
-      );
+      const combinedCharacter = {
+        ...this.character,
+        ...resolvedImages
+      };
+
+      const notEqual = !objectsAreEqual(combinedCharacter, this.editCharacter);
 
       const imageChange =
         this.originalImages &&
@@ -400,6 +399,7 @@ export default {
     updateData: function(data) {
       const resolvedImages = data.images ? { images: [...data.images] } : {};
 
+      this.originalImages = [...(data.images || [])];
       this.character = { ...data, ...resolvedImages };
       this.editCharacter = { ...data, ...resolvedImages };
     },
@@ -521,7 +521,9 @@ export default {
             this.combinedTags
           )
         })
-        .then(() => {
+        .then(({ data }) => {
+          const item = getItemFromData(data);
+          this.updateData(item);
           this.readOnly = false; // allow edits again
           this.mutationLoading = false;
         });

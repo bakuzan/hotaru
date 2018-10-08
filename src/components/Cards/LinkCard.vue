@@ -61,6 +61,9 @@ export default {
   // don't do styling like this!!
   .nav-link {
     justify-content: flex-start;
+    padding-left: 0;
+    border-left: 0;
+    margin-left: 0;
   }
 }
 </style>

@@ -66,8 +66,8 @@ export default {
       // const nWinners = newV.reduce(mapToWinnerIds, []).filter((x) => !!x);
       // const oWinners = oldV.reduce(mapToWinnerIds, []).filter((x) => !!x);
       // const winnerChosen = oWinners.length !== nWinners.length;
-      // console.log('layout changed', nWinners, oWinners);
       const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
+      // console.log('layout changed', nWinners, oWinners, dataUpdated);
       if (dataUpdated) {
         this.$nextTick(this.updateCanvas);
       }
@@ -77,7 +77,7 @@ export default {
     this.zoomController = panzoom(this.$refs[this.bracketRef], {
       zoomSpeed: 0.1,
       maxZoom: 2,
-      minZoom: 0.1,
+      minZoom: 0.05,
       smoothScroll: true,
       zoomDoubleClickSpeed: 4
     });
@@ -170,7 +170,8 @@ export default {
     updateCanvas: function() {
       const canvas = this.$refs[this.canvasRef];
       const layout = this.customBracketLayout;
-
+      // const { scale } = this.zoomController.getTransform();
+      // console.log('update canvas >', scale);
       bracketLineDrawer(canvas, this.$el, layout);
     },
     getDummyCharacter: function() {
