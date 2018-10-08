@@ -92,7 +92,7 @@ export default {
     matches: function() {
       const { rules = {}, seedOrder } = this.options;
       const { isSeeded } = rules;
-      let result;
+      let result = this.items;
 
       if (isSeeded) {
         const characterList = this.items.reduce(
@@ -112,7 +112,7 @@ export default {
         }));
       }
 
-      result = this.items.map((x, i, arr) => ({
+      result = result.map((x, i, arr) => ({
         ...x,
         characters: x.characters.map((c) => ({
           ...c,

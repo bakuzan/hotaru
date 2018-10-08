@@ -363,13 +363,18 @@ export default {
       return tags;
     },
     hasEdits: function() {
+      const resolvedImages = this.editCharacter.images
+        ? { images: this.editCharacter.images }
+        : {};
+
       const notEqual = !objectsAreEqual(
         {
           ...this.character,
-          images: [...(this.editCharacter.images || [])]
+          ...resolvedImages
         },
         this.editCharacter
       );
+
       const imageChange =
         this.originalImages &&
         this.editCharacter.images &&
@@ -405,15 +410,8 @@ export default {
       const newImage = { id: generateUniqueId(), url: value };
       const currentImages = this.editCharacter.images || [];
       const index = currentImages.length;
+
       this.$set(this.editCharacter.images, index, newImage);
-      console.log(
-        this,
-        'gallery',
-        currentImages,
-        newImage,
-        'gogoo',
-        this.editCharacter
-      );
     },
     onRemoveImage: function(imageId) {
       this.editCharacter.images = [
