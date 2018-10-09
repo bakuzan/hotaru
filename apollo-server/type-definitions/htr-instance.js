@@ -11,6 +11,7 @@ module.exports = gql`
     characters: [Character]
     versus: [Versus]
     type: HTRTemplateType
+    createdAt: String
   }
   type HTRInstanceSettings {
     rules: HTRTemplateRules

@@ -1,24 +1,30 @@
 <template>
   <div class="link-card">
+    <SeedIcon v-if="isSeeded" right />
+    <div v-if="hasWinner" class="trohpy-icon" :icon="trophyIcon"></div>
     <NavLink 
-        :to="itemUrl"
-        :target="linkTarget"
+      :to="itemUrl"
+      :target="linkTarget"
     >
     {{name}}
     </NavLink>
     <div>{{description}}</div>
+    <div v-if="createdAt" class="link-card__date">{{createdAt}}</div>
   </div>
 </template>
 
 <script>
 import NavLink from '@/components/NavLink';
+import SeedIcon from '@/components/SeedIcon';
 
 import Urls from '@/constants/urls';
+import Icons from '@/constants/icons';
 
 export default {
   name: 'LinkCard',
   components: {
-    NavLink
+    NavLink,
+    SeedIcon
   },
   props: {
     id: {
@@ -32,6 +38,13 @@ export default {
     description: {
       type: String
     },
+    createdAt: {
+      type: String
+    },
+    settings: {
+      type: Object,
+      default: () => {}
+    },
     urlSource: {
       type: String,
       required: true
@@ -41,22 +54,39 @@ export default {
       default: false
     }
   },
+  data: function() {
+    return { trophyIcon: Icons.trophy };
+  },
   computed: {
     itemUrl: function() {
       return Urls.build(this.urlSource, { id: this.id });
     },
     linkTarget: function() {
       return this.openNewTab ? '_blank' : '';
+    },
+    hasWinner: function() {
+      return !!this.settings.winnerId;
+    },
+    isSeeded: function() {
+      const { rules } = this.settings;
+      return rules && rules.isSeeded;
     }
   }
 };
 </script>
 
 <style lang="scss">
+@import '../../styles/_variables';
+
 .link-card {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-right: $app--margin-standard;
+
+  &__date {
+    margin-top: $app--margin-standard;
+  }
 
   // don't do styling like this!!
   .nav-link {
@@ -64,6 +94,18 @@ export default {
     padding-left: 0;
     border-left: 0;
     margin-left: 0;
+  }
+}
+
+.trohpy-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1em;
+  height: 1em;
+
+  &::before {
+    content: attr(icon);
   }
 }
 </style>

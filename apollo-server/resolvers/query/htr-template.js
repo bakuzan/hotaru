@@ -45,7 +45,7 @@ module.exports = {
           [Op.eq]: type
         })
       },
-      order: [['name', 'ASC']],
+      order: [['createdAt', 'DESC']],
       limit: paging.size,
       offset: paging.size * paging.page,
       include: [HTRTemplate]

@@ -353,12 +353,14 @@ export default {
       return series.name;
     },
     characterTags: function() {
-      const tagIds = this.character.tagIds || [];
+      let tagIds = this.character.tagIds || this.character.tags;
+      tagIds = (tagIds || []).map((x) => (typeof x === 'object' ? x.id : x));
       const tags = this.tags.filter((x) => tagIds.includes(x.id));
       return tags;
     },
     editCharacterTags: function() {
-      const tagIds = this.editCharacter.tagIds || [];
+      let tagIds = this.editCharacter.tagIds || this.editCharacter.tags;
+      tagIds = (tagIds || []).map((x) => (typeof x === 'object' ? x.id : x));
       const tags = this.combinedTags.filter((x) => tagIds.includes(x.id));
       return tags;
     },

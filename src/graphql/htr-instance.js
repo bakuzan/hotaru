@@ -66,6 +66,13 @@ const getHTRInstancesByType = gql`
         id
         name
         description
+        settings {
+          rules {
+            isSeeded
+          }
+          winnerId
+        }
+        createdAt
       }
       total
       hasMore

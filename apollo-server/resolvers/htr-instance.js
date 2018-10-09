@@ -1,3 +1,5 @@
+const Utils = require('../utils');
+
 module.exports = {
   type(instance) {
     return instance.getHtrTemplate().then((template) => template.type);
@@ -10,5 +12,8 @@ module.exports = {
   },
   versus(instance) {
     return instance.getVersus();
+  },
+  createdAt(instance) {
+    return Utils.formatDateDisplay(instance.createdAt);
   }
 };

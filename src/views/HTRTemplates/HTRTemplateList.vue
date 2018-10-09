@@ -19,7 +19,7 @@
     <List 
       wrap
       align-left
-      columns="four"
+      columns="three"
       :items="htrTemplatesPaged.nodes"
       :paged-total="htrTemplatesPaged.total"
       @intersect="showMore"

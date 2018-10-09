@@ -41,7 +41,7 @@ export const mapCharacterToPost = (character, allTags) => {
 
   return {
     id,
-    name,
+    name: name.trim(),
     gender,
     displayImage,
     isWaifu,
@@ -103,7 +103,7 @@ export const mapSeriesToPost = (series) => {
 
   return {
     id,
-    name,
+    name: name.trim(),
     source,
     displayImage,
     characterIds: [...characters.map((x) => x.id)]
@@ -141,7 +141,7 @@ export const mapHTRTemplateToPost = (template, isCreate) => {
   const resolvedType = isCreate ? { type } : {};
   return {
     id,
-    name,
+    name: name.trim(),
     ...resolvedType,
     rules: {
       limit: Number(limit) || null,
@@ -170,8 +170,8 @@ export const mapHTRInstanceToPost = (instance, isCreate) => {
 
   return {
     id,
-    name,
-    description,
+    name: name.trim(),
+    description: description.trim(),
     htrTemplateId: htrTemplate.id,
     characterIds: resolvedCharacters,
     settings: {

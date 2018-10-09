@@ -120,7 +120,7 @@
           </div>
         </div>
         <div :class="instanceContentClasses">
-          <div v-if="isSeeded" class="seed-icon" title="Is Seeded"></div>
+          <SeedIcon v-if="isSeeded" />
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
@@ -169,6 +169,7 @@ import InputBox from '@/components/InputBox';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import SelectBox from '@/components/SelectBox';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import SeedIcon from '@/components/SeedIcon';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -214,7 +215,8 @@ export default {
     InputBox,
     InputBoxAutocomplete,
     SelectBox,
-    LoadingBouncer
+    LoadingBouncer,
+    SeedIcon
   },
   props: {
     isCreate: {
@@ -525,17 +527,6 @@ export default {
 
   &--wider {
     flex-basis: 33%;
-  }
-}
-
-.seed-icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1em;
-  height: 1em;
-  &::before {
-    content: '\D83C\DF42';
   }
 }
 </style>
