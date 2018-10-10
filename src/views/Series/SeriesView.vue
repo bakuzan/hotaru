@@ -82,6 +82,8 @@
               </ViewBlockToggler>
               <List 
                 wrap
+                align-left
+                fixed-width
                 className="characters"
                 itemClassName="characters__item"
                 :items="editSeries.characters"
@@ -362,7 +364,7 @@ export default {
 }
 
 .characters__item {
-  flex: 1 1 0;
+  flex: 0 0 24%;
 }
 </style>
 

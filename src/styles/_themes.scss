@@ -53,6 +53,9 @@
       background-color: $primary-background;
       color: $primary-colour;
     }
+    .input-navi input:focus {
+      border-color: $primary-colour;
+    }
     .input-navi__menu .suggestion--active {
       border-color: $primary-colour;
     }

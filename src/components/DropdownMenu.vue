@@ -19,7 +19,7 @@
                     <slot></slot>
                 </ul>
                 <Backdrop 
-                    :id="backdropId" 
+                    :id="id" 
                     @close="toggleDropdown" 
                 />
             </portal>
@@ -44,6 +44,7 @@ export default {
   },
   props: {
     id: String,
+    className: String,
     icon: String,
     align: {
       type: String,
@@ -53,7 +54,11 @@ export default {
       }
     },
     portalTarget: String,
-    title: String
+    title: String,
+    ignorePosition: {
+      type: Boolean,
+      default: false
+    }
   },
   data: function() {
     return {
@@ -68,10 +73,9 @@ export default {
     menuId: function() {
       return `${this.id}__menu`;
     },
-    backdropId: function() {
-      return `${this.id}__backdrop`;
-    },
     menuStyle: function() {
+      if (this.ignorePosition) return {};
+
       const { top, left, right } = this.position;
       return this.align === Strings.left
         ? { top: `${top}px`, left: `${left}px` }
@@ -82,7 +86,8 @@ export default {
     dropdownMenuClasses: function() {
       return classNames(
         'dropdown__menu',
-        `dropdown__menu--align_${this.align}`
+        `dropdown__menu--align_${this.align}`,
+        this.className
       );
     }
   },

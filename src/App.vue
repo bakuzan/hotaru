@@ -1,9 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <Header />
     <Sidebar/>
     <main>
-      <div class="padded">
+      <div class="app__wrapper padded">
+        <portal-target :name="backPortalName">
+        </portal-target>
         <router-view />
       </div>
     </main>
@@ -32,12 +34,12 @@ export default {
   data: function() {
     return {
       portalName: Strings.portal.modal,
-      naviPortalName: Strings.portal.naviMenu
+      naviPortalName: Strings.portal.naviMenu,
+      backPortalName: Strings.portal.backButton
     };
   }
 };
 </script>
-
 
 <style lang="scss">
 @import './styles/_variables.scss';
@@ -98,6 +100,19 @@ main {
   display: flex;
   &--shrink {
     flex: 0 1;
+  }
+}
+
+.app {
+  &__wrapper {
+    position: relative;
+  }
+
+  &__back {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: map-get($z-index, above-siblings);
   }
 }
 </style>

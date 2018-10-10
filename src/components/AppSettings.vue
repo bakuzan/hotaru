@@ -1,10 +1,13 @@
 <template>
+  <div>
     <DropdownMenu
-        :id="id"
-        :portal-target="target"
-        :align="alignment"
-        :title="title"
-        :icon="icon"
+      ignore-position
+      :id="id"
+      className="app-settings"
+      :portal-target="target"
+      :align="alignment"
+      :title="title"
+      :icon="icon"
     >
         <li class="app-settings__item">
             <SelectBox
@@ -26,13 +29,27 @@
           </ButtonWithFeedback>
         </li>
     </DropdownMenu>
+    <portal :to="backPortalTarget">
+      <Button
+        class="app__back"
+        title="Go Back"
+        size="small"
+        @click="goBack"
+      >
+        <img :src="backIcon" alt="back arrow" />
+      </Button>
+    </portal>
+  </div>
 </template>
 
 <script>
 import DropdownMenu from '@/components/DropdownMenu';
 import SelectBox from '@/components/SelectBox';
 import { ButtonWithFeedback } from '@/components/Buttons';
+import { Button } from '@/components/Buttons';
 
+import BlackBackSvg from '@/assets/arrow_back_black.svg';
+import WhiteBackSvg from '@/assets/arrow_back_white.svg';
 import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
@@ -45,7 +62,8 @@ export default {
   components: {
     DropdownMenu,
     SelectBox,
-    ButtonWithFeedback
+    ButtonWithFeedback,
+    Button
   },
   data: function() {
     return {
@@ -56,7 +74,10 @@ export default {
       icon: Icons.settings,
       appThemes,
       theme: '',
-      setFeedbackButtonState: null
+      setFeedbackButtonState: null,
+      lightThemes: ['theme--one'],
+      backIcon: null,
+      backPortalTarget: Strings.portal.backButton
     };
   },
   computed: {
@@ -70,9 +91,19 @@ export default {
     }
   },
   methods: {
+    goBack: function() {
+      console.log('back?', this, this.$router);
+      this.$router.history.goBack();
+    },
+    setBackIcon: function() {
+      const isLightTheme = this.lightThemes.includes(this.themeName);
+      console.log('back', isLightTheme, this.themeName);
+      this.backIcon = isLightTheme ? BlackBackSvg : WhiteBackSvg;
+    },
     onChange: function(value) {
       document.body.classList.remove(this.themeName);
       this.themeName = htrLocal.saveTheme(value);
+      this.setBackIcon();
       document.body.classList.add(this.themeName);
     },
     updateRankings: function() {
@@ -91,6 +122,7 @@ export default {
   },
   created() {
     this.themeName = htrLocal.getTheme();
+    this.setBackIcon();
     document.body.classList.add(this.themeName);
   }
 };
@@ -100,9 +132,14 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/_variables';
 
-.app-settings__item {
-  display: flex;
-  justify-content: center;
-  margin: $app--margin-small 0;
+.app-settings {
+  top: 50px;
+  right: 5px;
+
+  &__item {
+    display: flex;
+    justify-content: center;
+    margin: $app--margin-small 0;
+  }
 }
 </style>
