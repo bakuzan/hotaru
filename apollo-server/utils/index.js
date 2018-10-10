@@ -1,5 +1,7 @@
 const Op = require('sequelize').Op;
 
+const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)));
+
 const enumArrayToObject = (arr) =>
   arr
     .slice(0)
@@ -17,6 +19,13 @@ const separateArrIntoNewAndExisting = (arr = []) => {
 
   return { newItems, existingItemIds };
 };
+
+const flatten = (arr, depth = 1) =>
+  arr.reduce(
+    (a, v) =>
+      a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v),
+    []
+  );
 
 const chunk = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -94,10 +103,12 @@ function formatDateDisplay(date) {
 }
 
 module.exports = {
+  compose,
   enumArrayToObject,
   mapArrToGraphqlString,
   separateArrIntoNewAndExisting,
   chunk,
+  flatten,
   roundFloat,
   castStringToBool,
   resolveInOp,

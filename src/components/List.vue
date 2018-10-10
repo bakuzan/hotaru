@@ -61,6 +61,10 @@ export default {
     alignLeft: {
       type: Boolean,
       default: false
+    },
+    fixedWidth: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -111,7 +115,8 @@ export default {
     },
     listItemClasses: function() {
       return classNames('list__item', this.itemClassName, {
-        'list__item--align_left': this.alignLeft
+        'list__item--align_left': this.alignLeft,
+        'list__item--fixed-width': this.fixedWidth
       });
     },
     sortableOptions: function() {
@@ -167,6 +172,9 @@ $columns: (
     @each $number, $percentage in $columns {
       &_#{$number} .list__item {
         flex: 1 1 $percentage;
+        &.list__item--fixed-width {
+          flex: 0 0 $percentage;
+        }
       }
     }
   }

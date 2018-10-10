@@ -65,10 +65,10 @@ export default {
       return this.openNewTab ? '_blank' : '';
     },
     hasWinner: function() {
-      return !!this.settings.winnerId;
+      return !!(this.settings && this.settings.winnerId);
     },
     isSeeded: function() {
-      const { rules } = this.settings;
+      const { rules } = this.settings || {};
       return rules && rules.isSeeded;
     }
   }

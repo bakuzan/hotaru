@@ -19,6 +19,7 @@
     <List 
       wrap
       align-left
+      fixed-width
       columns="three"
       :items="htrTemplatesPaged.nodes"
       :paged-total="htrTemplatesPaged.total"

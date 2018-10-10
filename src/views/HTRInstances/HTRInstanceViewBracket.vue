@@ -63,10 +63,10 @@ export default {
   },
   watch: {
     customBracketLayout: function(newV, oldV) {
+      const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
       // const nWinners = newV.reduce(mapToWinnerIds, []).filter((x) => !!x);
       // const oWinners = oldV.reduce(mapToWinnerIds, []).filter((x) => !!x);
       // const winnerChosen = oWinners.length !== nWinners.length;
-      const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
       // console.log('layout changed', nWinners, oWinners, dataUpdated);
       if (dataUpdated) {
         this.$nextTick(this.updateCanvas);
@@ -170,8 +170,15 @@ export default {
     updateCanvas: function() {
       const canvas = this.$refs[this.canvasRef];
       const layout = this.customBracketLayout;
-      // const { scale } = this.zoomController.getTransform();
-      // console.log('update canvas >', scale);
+      // const transform = this.zoomController.getTransform();
+      // const { scale, x, y } = transform;
+      // console.log('update canvas >', canvas, transform);
+      // canvas.style.cssText = `
+      //   top: ${y * -1}px;
+      //   left: ${x * -1}px;
+      //   transform-origin: 0px 0px 0px;
+      //   transform: matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})
+      // `;
       bracketLineDrawer(canvas, this.$el, layout);
     },
     getDummyCharacter: function() {
