@@ -93,7 +93,6 @@
                     v-bind="slotProps.item" 
                     :remove="onRemoveCharacter"
                     :url-source="characterCardUrl"
-                    open-new-tab
                   />
                 </template>
               </List>

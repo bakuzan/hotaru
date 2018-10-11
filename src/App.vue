@@ -3,9 +3,7 @@
     <Header />
     <Sidebar/>
     <main>
-      <div class="app__wrapper padded">
-        <portal-target :name="backPortalName">
-        </portal-target>
+      <div class="padded">
         <router-view />
       </div>
     </main>
@@ -34,8 +32,7 @@ export default {
   data: function() {
     return {
       portalName: Strings.portal.modal,
-      naviPortalName: Strings.portal.naviMenu,
-      backPortalName: Strings.portal.backButton
+      naviPortalName: Strings.portal.naviMenu
     };
   }
 };
@@ -100,19 +97,6 @@ main {
   display: flex;
   &--shrink {
     flex: 0 1;
-  }
-}
-
-.app {
-  &__wrapper {
-    position: relative;
-  }
-
-  &__back {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: map-get($z-index, above-siblings);
   }
 }
 </style>

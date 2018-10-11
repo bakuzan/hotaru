@@ -10,6 +10,7 @@
       :is-final="isFinal"
       :figure-size="figureSize"
       grow
+      :open-new-tab="openNewTab"
       @vote="handleVote"
     />
     <div v-if="!enableCompare" class="versus__icon">
@@ -19,6 +20,7 @@
       v-if="enableCompare"
       class="versus__icon"
       :to="compareLink"
+      :target="openNewTab ? '_blank': null"
     >
       VS
     </router-link>
@@ -73,6 +75,10 @@ export default {
       }
     },
     column: {
+      type: Boolean,
+      default: false
+    },
+    openNewTab: {
       type: Boolean,
       default: false
     }

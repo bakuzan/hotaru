@@ -93,11 +93,10 @@ export default {
   methods: {
     goBack: function() {
       console.log('back?', this, this.$router);
-      this.$router.history.goBack();
+      this.$router.go(-1);
     },
     setBackIcon: function() {
       const isLightTheme = this.lightThemes.includes(this.themeName);
-      console.log('back', isLightTheme, this.themeName);
       this.backIcon = isLightTheme ? BlackBackSvg : WhiteBackSvg;
     },
     onChange: function(value) {

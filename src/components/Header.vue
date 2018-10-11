@@ -6,6 +6,10 @@
       <div :class="headerInnerClass">
         <InputBoxNavi />
       </div>
+      <div :class="headerInnerClass">
+        <portal-target :name="backPortalName">
+        </portal-target>
+      </div>
       <div class="flex-spacer"></div>
       <h1 :class="titleClass">Hotaru</h1>
       <div class="flex-spacer"></div>
@@ -40,7 +44,8 @@ export default {
     return {
       logoId: `${appPrefix}-logo`,
       scrollListeners: null,
-      windowScrollPosition: 0
+      windowScrollPosition: 0,
+      backPortalName: Strings.portal.backButton
     };
   },
   computed: {

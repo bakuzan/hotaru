@@ -13,6 +13,7 @@
         :class="bracketVersusClass(i)"
         :is-final="isFinal(i)"
         enable-compare
+        open-new-tab
         column
         @vote="handleVote"
       />

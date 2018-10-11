@@ -4,7 +4,7 @@
       v-bind="item"
       :url-source="isDummy ? null : characterCardUrl"
       :figure-size="figureSize"
-      open-new-tab
+      :open-new-tab="openNewTab"
     />
     <div 
       v-if="item.seed"
@@ -66,6 +66,10 @@ export default {
       validator: function(value) {
         return value === null || ['small'].includes(value);
       }
+    },
+    openNewTab: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {

@@ -2,6 +2,7 @@
   <Button
     v-bind="$props"
     theme="primary"
+    title="Vote"
     :className="buttonClasses"
     :icon="maybeIcon"
     :disabled="hasWinner || disabled"

@@ -5,11 +5,14 @@
       :url-source="characterCardUrl"
       :figure-size="figureSize"
       :style="{ width: '25%' }"
-      open-new-tab
+      :open-new-tab="openNewTab"
     />
     <div>
       <div class="padded padded--standard">
         {{item.updatedAt}}
+      </div>
+      <div class="padded padded--standard">
+        {{item.type}}
       </div>
       <div>
         <VoteButton 
@@ -65,6 +68,10 @@ export default {
       validator: function(value) {
         return value === null || ['small'].includes(value);
       }
+    },
+    openNewTab: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {

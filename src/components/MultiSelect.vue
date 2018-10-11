@@ -211,6 +211,7 @@ $full-size-minus-padding: calc(100% - 10px);
 .display__input {
   display: flex;
   flex: 1 0 100%;
+  color: inherit;
   box-sizing: border-box;
   cursor: pointer;
 }

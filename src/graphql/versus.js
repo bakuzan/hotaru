@@ -60,6 +60,7 @@ const getVersusHistoryComparison = gql`
   query getVersusHistoryComparison($characterIds: [Int]) {
     versusHistoryComparison(characterIds: $characterIds) {
       id
+      type
       winnerId
       updatedAt
     }
@@ -85,6 +86,7 @@ const getVersusHistory = gql`
     versusHistoryPaged(characterId: $characterId, paging: $paging) {
       nodes {
         id
+        type
         characters {
           id
           name

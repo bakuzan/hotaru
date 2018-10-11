@@ -68,24 +68,31 @@
                   required
                 />
               </ViewBlockToggler>
-              <ViewBlockToggler
-                id="series"
-                label="Series"
-                :value="characterSeries"
-                :noDataText="noSeries"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
-              >
-                <SelectBox
+              <div class="character-toggler-wrapper">
+                <ViewBlockToggler
                   id="series"
-                  name="seriesId"
-                  text="Series"
-                  :options="mappedSeries"
-                  :value="editCharacter.seriesId"
-                  @on-select="handleUserChanges"
-                  allowNulls
-                />
-              </ViewBlockToggler>
+                  label="Series"
+                  :value="characterSeries"
+                  :noDataText="noSeries"
+                  :lockEdit="isCreate"
+                  :forceReadOnly="readOnly"
+                >
+                  <SelectBox
+                    id="series"
+                    name="seriesId"
+                    text="Series"
+                    :options="mappedSeries"
+                    :value="editCharacter.seriesId"
+                    @on-select="handleUserChanges"
+                    allowNulls
+                  />
+                </ViewBlockToggler>
+                <div v-show="editCharacter.seriesId">
+                  <NavLink :to="seriesUrl">
+                    <img :src="linkImg" />
+                  </NavLink>
+                </div>
+              </div>
               <ViewBlockToggler
                 id="tags"
                 label="Tags"
@@ -192,6 +199,8 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 import List from '@/components/List';
 import { ImageCard, VersusHistoryCard } from '@/components/Cards';
 import TickboxHeart from '@/components/TickboxHeart';
+import NavLink from '@/components/NavLink';
+import LinkSVG from '@/assets/link.svg';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -218,6 +227,7 @@ function getInitialState() {
     noSeries: Strings.missing.series,
     noTags: Strings.missing.tags,
     portalTarget: Strings.portal.actions,
+    linkImg: LinkSVG,
     mappedGenders: mapEnumToSelectBoxOptions(GenderType),
     mutationLoading: false,
     readOnly: false,
@@ -250,7 +260,8 @@ export default {
     List,
     ImageCard,
     TickboxHeart,
-    VersusHistoryCard
+    VersusHistoryCard,
+    NavLink
   },
   props: {
     isCreate: {
@@ -266,9 +277,19 @@ export default {
     };
   },
   watch: {
-    $route: function(newRoute) {
+    $route: function(newRoute, oldRoute) {
       if (newRoute.path === Urls.characterCreate) {
         Object.assign(this.$data, getInitialState());
+      }
+
+      const differentId = newRoute.params.id !== oldRoute.params.id;
+      const sameRoute =
+        newRoute.name === Strings.route.characterView &&
+        oldRoute.name === Strings.route.characterView;
+
+      if (sameRoute && differentId) {
+        const id = Number(Routing.getParam(this.$router, 'id'));
+        this.$apollo.queries.character.refetch({ id });
       }
     }
   },
@@ -395,6 +416,11 @@ export default {
     characterImages: function() {
       const images = this.editCharacter.images || [];
       return [...images];
+    },
+    seriesUrl: function() {
+      const seriesId = this.editCharacter.seriesId || null;
+      if (!seriesId) return;
+      return Urls.build(Urls.seriesView, { id: seriesId });
     }
   },
   methods: {
@@ -544,4 +570,10 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+.character-toggler-wrapper {
+  display: flex;
+  align-items: center;
+}
+</style>
 <style lang="scss" src="../../styles/_page-view.scss" />

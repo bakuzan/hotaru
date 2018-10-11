@@ -57,7 +57,8 @@
             :is-winner="isWinner(slotProps.item, 0)"
           />
           <div class="versus-comparison__text">
-            {{formatDate(slotProps.item.updatedAt)}}
+            <div>{{formatDate(slotProps.item.updatedAt)}}</div>
+            <div>{{slotProps.item.type}}</div>
           </div>
           <VoteButton 
             class="versus-comparison__button"
@@ -267,6 +268,7 @@ export default {
     flex: 1;
   }
   &__text {
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
