@@ -31,6 +31,7 @@
     </DropdownMenu>
     <portal :to="backPortalTarget">
       <Button
+        v-show="!!routeHistory.length"
         class="app__back"
         title="Go Back"
         size="small"
@@ -77,8 +78,14 @@ export default {
       setFeedbackButtonState: null,
       lightThemes: ['theme--one'],
       backIcon: null,
-      backPortalTarget: Strings.portal.backButton
+      backPortalTarget: Strings.portal.backButton,
+      routeHistory: []
     };
+  },
+  watch: {
+    $route: function(newRoute) {
+      this.routeHistory.push(newRoute);
+    }
   },
   computed: {
     themeName: {
@@ -92,7 +99,6 @@ export default {
   },
   methods: {
     goBack: function() {
-      console.log('back?', this, this.$router);
       this.$router.go(-1);
     },
     setBackIcon: function() {

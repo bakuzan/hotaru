@@ -200,7 +200,8 @@ import List from '@/components/List';
 import { ImageCard, VersusHistoryCard } from '@/components/Cards';
 import TickboxHeart from '@/components/TickboxHeart';
 import NavLink from '@/components/NavLink';
-import LinkSVG from '@/assets/link.svg';
+import BlackLinkSVG from '@/assets/link_black.svg';
+import WhiteLinkSVG from '@/assets/link_white.svg';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -220,6 +221,7 @@ import { defaultCharacterModel, defaultPagedResponse } from '@/utils/models';
 import * as Routing from '@/utils/routing';
 import { CharacterValidator } from '@/utils/validators';
 import * as LP from '@/utils/list-pages';
+import * as htrLocal from '@/utils/storage';
 
 function getInitialState() {
   return {
@@ -227,7 +229,8 @@ function getInitialState() {
     noSeries: Strings.missing.series,
     noTags: Strings.missing.tags,
     portalTarget: Strings.portal.actions,
-    linkImg: LinkSVG,
+    lightThemes: ['one'],
+    linkImg: null,
     mappedGenders: mapEnumToSelectBoxOptions(GenderType),
     mutationLoading: false,
     readOnly: false,
@@ -275,6 +278,17 @@ export default {
       tags: [],
       ...getInitialState()
     };
+  },
+  mounted() {
+    this.$watch(
+      function() {
+        const theme = htrLocal.getTheme();
+        return this.lightThemes.includes(theme) ? BlackLinkSVG : WhiteLinkSVG;
+      },
+      function(newV) {
+        this.linkImg = newV;
+      }
+    );
   },
   watch: {
     $route: function(newRoute, oldRoute) {
@@ -419,7 +433,7 @@ export default {
     },
     seriesUrl: function() {
       const seriesId = this.editCharacter.seriesId || null;
-      if (!seriesId) return;
+      if (!seriesId) return Urls.seriesList;
       return Urls.build(Urls.seriesView, { id: seriesId });
     }
   },
