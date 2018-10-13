@@ -31,7 +31,7 @@
     </DropdownMenu>
     <portal :to="backPortalTarget">
       <Button
-        v-show="!!routeHistory.length"
+        v-show="routeHistory.length > 0"
         class="app__back"
         title="Go Back"
         size="small"

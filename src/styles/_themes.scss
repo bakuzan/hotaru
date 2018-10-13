@@ -112,5 +112,13 @@
     .htr-instance-content.htr-instance-content--bracket {
       border-color: $primary-background;
     }
+
+    // Link image
+    .link-images {
+      $link-image-class: map-get($values, link-image-class);
+      &__#{$link-image-class} {
+        display: block !important;
+      }
+    }
   }
 }
