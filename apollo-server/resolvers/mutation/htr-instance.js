@@ -87,7 +87,19 @@ module.exports = {
                 });
               }
             })
-            .then((newInstance) => newInstance.reload({ transaction }));
+            .then((newInstance) => {
+              const includes = template.rules.isSeeded ? [Ranking] : [];
+
+              return newInstance.reload({
+                transaction,
+                include: [
+                  {
+                    model: Versus,
+                    include: [{ model: Character, include: [...includes] }]
+                  }
+                ]
+              });
+            });
         }
       )
     );
@@ -195,11 +207,19 @@ module.exports = {
             { where: { id: htrInstanceId }, transaction }
           )
         )
-        .then(() =>
+        .then(() => {
+          const includes = settings.rules.isSeeded ? [Ranking] : [];
+
           HTRInstance.findById(htrInstanceId, {
-            transaction
-          })
-        );
+            transaction,
+            include: [
+              {
+                model: Versus,
+                include: [{ model: Character, include: [...includes] }]
+              }
+            ]
+          });
+        });
     });
   }
 };

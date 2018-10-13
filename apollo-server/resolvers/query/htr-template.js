@@ -1,6 +1,13 @@
 const Op = require('sequelize').Op;
 
-const { db, HTRTemplate, HTRInstance } = require('../../connectors');
+const {
+  db,
+  HTRTemplate,
+  HTRInstance,
+  Versus,
+  Character,
+  Ranking
+} = require('../../connectors');
 const Utils = require('../../utils');
 
 module.exports = {
@@ -56,6 +63,13 @@ module.exports = {
     }));
   },
   htrInstanceById(_, { id }) {
-    return HTRInstance.findById(id);
+    return HTRInstance.findById(id, {
+      include: [
+        {
+          model: Versus,
+          include: [{ model: Character, include: [Ranking] }]
+        }
+      ]
+    });
   }
 };
