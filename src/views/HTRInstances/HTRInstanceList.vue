@@ -10,7 +10,7 @@
           id="type"
           name="type"
           column
-          :value="filters.type"
+          :value="getType()"
           :options="mappedTypes"
           @change="onInput"
         />
@@ -51,6 +51,7 @@ import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
 import * as LP from '@/utils/list-pages';
+import * as Routing from '@/utils/routing';
 
 export default {
   name: 'HTRInstanceList',
@@ -69,8 +70,8 @@ export default {
       filterHandler: LP.updateFilterAndRefetch(this, 'htrInstancesPaged'),
       searchTimer: null,
       filters: {
-        search: '',
-        type: HTRTemplateTypes.list
+        search: ''
+        // type: GET FROM QUERY ARG
       },
       htrInstancesPaged: defaultPagedResponse()
     };
@@ -80,7 +81,7 @@ export default {
       query: Query.getHTRInstancesByType,
       variables: {
         search: '',
-        type: HTRTemplateTypes.list,
+        type: Routing.getQueryFromLocation('type', HTRTemplateTypes.list),
         paging: {
           page: 0,
           size: LP.size
@@ -89,9 +90,12 @@ export default {
     }
   },
   methods: {
+    getType: function() {
+      return Routing.getQuery(this.$router, 'type') || HTRTemplateTypes.list;
+    },
     onAdd: function() {
       this.$router.push(
-        Urls.build(Urls.htrInstanceCreate, { type: this.filters.type })
+        Urls.build(Urls.htrInstanceCreate, { type: this.getType() })
       );
     },
     onInput: function(value, name) {

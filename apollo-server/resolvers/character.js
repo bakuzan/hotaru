@@ -12,6 +12,8 @@ module.exports = {
     return character.getImages();
   },
   ranking(character) {
+    if (character.ranking) return character.ranking;
+
     return character.getRanking();
   }
 };

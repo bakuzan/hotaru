@@ -25,7 +25,8 @@ module.exports = {
           }
         ]
       },
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      include: [Character]
     });
   },
   versusHistoryComparison(_, { characterIds }) {

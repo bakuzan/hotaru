@@ -10,6 +10,8 @@ module.exports = {
     return Utils.roundFloat(score, 2);
   },
   character(ranking) {
+    if (ranking.character) return ranking.character;
+
     return ranking.getCharacter();
   }
 };

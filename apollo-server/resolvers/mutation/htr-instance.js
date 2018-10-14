@@ -207,19 +207,17 @@ module.exports = {
             { where: { id: htrInstanceId }, transaction }
           )
         )
-        .then(() => {
-          const includes = settings.rules.isSeeded ? [Ranking] : [];
-
+        .then(() =>
           HTRInstance.findById(htrInstanceId, {
             transaction,
             include: [
               {
                 model: Versus,
-                include: [{ model: Character, include: [...includes] }]
+                include: [{ model: Character, include: [Ranking] }]
               }
             ]
-          });
-        });
+          })
+        );
     });
   }
 };

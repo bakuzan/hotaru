@@ -87,7 +87,7 @@
                     allowNulls
                   />
                 </ViewBlockToggler>
-                <div v-show="editCharacter.seriesId">
+                <div class="character-toggler-wrapper__icon" v-show="editCharacter.seriesId">
                   <NavLink :to="seriesUrl">
                     <LinkImages />
                   </NavLink>
@@ -575,6 +575,11 @@ export default {
 .character-toggler-wrapper {
   display: flex;
   align-items: center;
+
+  > div:not(.character-toggler-wrapper__icon):not(.view-block-toggler--read-only) {
+    display: flex;
+    flex: 1;
+  }
 }
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

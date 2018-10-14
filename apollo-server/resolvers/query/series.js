@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Series } = require('../../connectors');
+const { Series, Character } = require('../../connectors');
 const Utils = require('../../utils');
 
 module.exports = {
@@ -50,6 +50,8 @@ module.exports = {
   },
   seriesById(_, args) {
     const { id } = args;
-    return Series.findById(id);
+    return Series.findById(id, {
+      include: [Character]
+    });
   }
 };

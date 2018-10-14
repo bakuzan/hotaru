@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Tag, Ranking } = require('../../connectors');
+const { Tag, Ranking, Character } = require('../../connectors');
 
 const character = require('./character');
 const series = require('./series');
@@ -26,7 +26,8 @@ module.exports = {
   rankingsTopTen() {
     return Ranking.findAll({
       order: [['rank', 'asc']],
-      limit: 10
+      limit: 10,
+      include: [Character]
     });
   }
 };

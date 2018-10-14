@@ -1,14 +1,34 @@
+import * as Routing from '../routing';
 import { mapPagedResponseToUpdate } from '@/utils/mappers';
 
 export const size = 10;
 
-export const updateFilterAndRefetch = (ctrl, attr) => (value, name) => {
-  ctrl.filters[name] = value;
+export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
+  value,
+  name
+) => {
+  let resolvedQueryParam = {};
+
+  if (options.queryParam !== name) {
+    ctrl.filters[name] = value;
+  } else {
+    ctrl.$router.replace({
+      name: ctrl.$router.history.current.name,
+      query: { [name]: value }
+    });
+  }
+
+  if (options.queryParam) {
+    resolvedQueryParam =
+      Routing.getQuery(ctrl.$router, options.queryParam) ||
+      options.queryDefault;
+  }
 
   clearTimeout(ctrl.searchTimer);
   ctrl.searchTimer = setTimeout(() => {
     ctrl.$apollo.queries[attr].refetch({
       ...ctrl.filters,
+      ...resolvedQueryParam,
       paging: {
         page: 0,
         size
