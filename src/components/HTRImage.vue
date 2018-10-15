@@ -1,30 +1,42 @@
 <template>
-    <img 
-        :class="classes" 
-        :src="src" 
-        @error="onError"
-    />
+  <img 
+    class="image" 
+    @error="onError"
+  />
 </template>
 
 <script>
-import classNames from 'classnames';
-
 import Strings from '@/constants/strings';
 
 export default {
   name: 'HTRImage',
   props: {
-    src: String
+    src: {
+      type: String
+    }
   },
   data: function() {
     return {
-      fallback: Strings.deadImage
+      fallback: Strings.deadImage,
+      observer: null
     };
   },
-  computed: {
-    classes: function() {
-      return classNames('image');
-    }
+  mounted() {
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting) {
+          if (this.src) {
+            this.$el.setAttribute('src', this.src);
+          }
+          this.observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '50px 0px'
+      }
+    );
+
+    this.observer.observe(this.$el);
   },
   methods: {
     onError: function(event) {

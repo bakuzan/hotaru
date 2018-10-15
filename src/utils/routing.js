@@ -2,14 +2,9 @@ import { compose, castStringToBool, parseIfInt } from './index';
 
 export const getParams = (router) => router.history.current.params;
 export const getParam = (router, key) => getParams(router)[key];
-
 export const getRouteName = (router) => router.history.current.name;
-
-export const getQuery = (router) => {
-  console.log('gogogo', router);
-  return router.history.current.query;
-};
-export const getQueryArg = (router, key) => getQueryArg(router)[key];
+export const getQueryArg = (router, key, defaultValue) =>
+  router.history.current.query[key] || defaultValue;
 
 const parseSearchParamValue = compose(
   castStringToBool,

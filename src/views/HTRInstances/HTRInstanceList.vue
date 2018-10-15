@@ -10,7 +10,7 @@
           id="type"
           name="type"
           column
-          :value="getType()"
+          :value="queryType"
           :options="mappedTypes"
           @change="onInput"
         />
@@ -53,6 +53,11 @@ import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
 import * as LP from '@/utils/list-pages';
 import * as Routing from '@/utils/routing';
 
+const queryFilterOptions = {
+  queryParam: 'type',
+  queryDefault: HTRTemplateTypes.bracket
+};
+
 export default {
   name: 'HTRInstanceList',
   components: {
@@ -67,7 +72,11 @@ export default {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrInstanceView,
       mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
-      filterHandler: LP.updateFilterAndRefetch(this, 'htrInstancesPaged'),
+      filterHandler: LP.updateFilterAndRefetch(
+        this,
+        'htrInstancesPaged',
+        queryFilterOptions
+      ),
       searchTimer: null,
       filters: {
         search: ''
@@ -81,7 +90,10 @@ export default {
       query: Query.getHTRInstancesByType,
       variables: {
         search: '',
-        type: Routing.getQueryFromLocation('type', HTRTemplateTypes.list),
+        type: Routing.getQueryFromLocation(
+          'type',
+          queryFilterOptions.queryDefault
+        ),
         paging: {
           page: 0,
           size: LP.size
@@ -89,20 +101,31 @@ export default {
       }
     }
   },
+  computed: {
+    queryType: function() {
+      return Routing.getQueryArg(
+        this.$router,
+        'type',
+        queryFilterOptions.queryDefault
+      );
+    }
+  },
   methods: {
-    getType: function() {
-      return Routing.getQuery(this.$router, 'type') || HTRTemplateTypes.list;
-    },
     onAdd: function() {
       this.$router.push(
-        Urls.build(Urls.htrInstanceCreate, { type: this.getType() })
+        Urls.build(Urls.htrInstanceCreate, { type: this.queryType })
       );
     },
     onInput: function(value, name) {
       this.filterHandler(value, name);
     },
     showMore: function() {
-      LP.showMore(this, 'htrInstancesPaged', 'HTRInstancePage');
+      LP.showMore(
+        this,
+        'htrInstancesPaged',
+        'HTRInstancePage',
+        queryFilterOptions
+      );
     }
   }
 };

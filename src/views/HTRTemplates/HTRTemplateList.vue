@@ -10,7 +10,7 @@
           id="type"
           name="type"
           column
-          :value="filters.type"
+          :value="queryType"
           :options="mappedTypes"
           @change="onInput"
         />
@@ -51,6 +51,12 @@ import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToRadioButtonGroup } from '@/utils/mappers';
 import * as LP from '@/utils/list-pages';
+import * as Routing from '@/utils/routing';
+
+const queryFilterOptions = {
+  queryParam: 'type',
+  queryDefault: HTRTemplateTypes.bracket
+};
 
 export default {
   name: 'HTRTemplateList',
@@ -66,11 +72,15 @@ export default {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrTemplateEditor,
       mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
-      filterHandler: LP.updateFilterAndRefetch(this, 'htrTemplatesPaged'),
+      filterHandler: LP.updateFilterAndRefetch(
+        this,
+        'htrTemplatesPaged',
+        queryFilterOptions
+      ),
       searchTimer: null,
       filters: {
-        search: '',
-        type: HTRTemplateTypes.list
+        search: ''
+        // type: GET FROM QUERY ARG
       },
       htrTemplatesPaged: defaultPagedResponse()
     };
@@ -80,12 +90,24 @@ export default {
       query: Query.getHTRTemplatesByType,
       variables: {
         search: '',
-        type: HTRTemplateTypes.list,
+        type: Routing.getQueryFromLocation(
+          'type',
+          queryFilterOptions.queryDefault
+        ),
         paging: {
           page: 0,
           size: LP.size
         }
       }
+    }
+  },
+  computed: {
+    queryType: function() {
+      return Routing.getQueryArg(
+        this.$router,
+        'type',
+        queryFilterOptions.queryDefault
+      );
     }
   },
   methods: {
@@ -96,7 +118,12 @@ export default {
       this.filterHandler(value, name);
     },
     showMore: function() {
-      LP.showMore(this, 'htrTemplatesPaged', 'HTRTemplatePage');
+      LP.showMore(
+        this,
+        'htrTemplatesPaged',
+        'HTRTemplatePage',
+        queryFilterOptions
+      );
     }
   }
 };

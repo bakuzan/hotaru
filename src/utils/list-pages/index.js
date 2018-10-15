@@ -3,12 +3,22 @@ import { mapPagedResponseToUpdate } from '@/utils/mappers';
 
 export const size = 10;
 
+function getResolvedQueryParam(ctrl, options) {
+  if (!options.queryParam) return {};
+
+  return {
+    [options.queryParam]: Routing.getQueryArg(
+      ctrl.$router,
+      options.queryParam,
+      options.queryDefault
+    )
+  };
+}
+
 export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
   value,
   name
 ) => {
-  let resolvedQueryParam = {};
-
   if (options.queryParam !== name) {
     ctrl.filters[name] = value;
   } else {
@@ -18,11 +28,7 @@ export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
     });
   }
 
-  if (options.queryParam) {
-    resolvedQueryParam =
-      Routing.getQuery(ctrl.$router, options.queryParam) ||
-      options.queryDefault;
-  }
+  const resolvedQueryParam = getResolvedQueryParam(ctrl, options);
 
   clearTimeout(ctrl.searchTimer);
   ctrl.searchTimer = setTimeout(() => {
@@ -37,19 +43,21 @@ export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
   }, 1000);
 };
 
-export const showMore = (ctrl, attr, typename) => {
+export const showMore = (ctrl, attr, typename, options = {}) => {
   const query = ctrl.$apollo.queries[attr];
   const loading = query && query.loading;
   const noMore = !ctrl[attr].hasMore;
 
   if (noMore || loading) return;
 
+  const resolvedQueryParam = getResolvedQueryParam(ctrl, options);
   const items = ctrl.$apolloData.data[attr].nodes;
   const page = Math.ceil(items.length / size);
 
   query.fetchMore({
     variables: {
       ...ctrl.filters,
+      ...resolvedQueryParam,
       paging: {
         page: page || 1,
         size
