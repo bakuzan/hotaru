@@ -97,3 +97,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.instance-view .list-figure-card {
+  display: flex;
+  flex: 1;
+}
+</style>
