@@ -1,5 +1,6 @@
 const { db, Versus, Character } = require('../../connectors');
 const Constants = require('../../constants');
+const SQL = require('../../db-scripts');
 const { VersusTypes } = require('../../constants/enums');
 
 module.exports = {
@@ -26,26 +27,61 @@ module.exports = {
     );
   },
   versusFromRules(_, args, context) {
-    return db.transaction(async (transaction) => {
-      const randomCharacters = await context.Character.findFromRules(args, {
-        order: db.literal('RANDOM()'),
-        limit: 2,
-        transaction
+    if (args.rules && args.rules.hasNoVersusOnly) {
+      return db.transaction(async (transaction) => {
+        return db
+          .query(SQL['get_unblooded_characters'], { transaction })
+          .then(async (randomCharacters) => {
+            const needAnotherCharacter = randomCharacters.length < 2;
+            let otherCharacter = [];
+
+            if (needAnotherCharacter) {
+              otherCharacter = await Character.findAll({
+                where: {
+                  id: { [Op.nin]: randomCharacters.map((x) => x.id) }
+                },
+                order: db.literal('RANDOM()'),
+                limit: 1,
+                transaction
+              });
+            }
+
+            return Versus.create(
+              { type: VersusTypes.Single },
+              {
+                transaction
+              }
+            ).then(async (singleVersus) => {
+              await singleVersus.setCharacters(
+                [...randomCharacters, ...otherCharacter],
+                { transaction }
+              );
+              return singleVersus.reload({ transaction });
+            });
+          });
       });
-
-      if (randomCharacters.length < 2) {
-        throw Error('Unable to create any character pairs.');
-      }
-
-      return Versus.create(
-        { type: VersusTypes.Single },
-        {
+    } else {
+      return db.transaction(async (transaction) => {
+        const randomCharacters = await context.Character.findFromRules(args, {
+          order: db.literal('RANDOM()'),
+          limit: 2,
           transaction
+        });
+
+        if (randomCharacters.length < 2) {
+          throw Error('Unable to create any character pairs.');
         }
-      ).then(async (singleVersus) => {
-        await singleVersus.setCharacters(randomCharacters, { transaction });
-        return singleVersus.reload({ transaction });
+
+        return Versus.create(
+          { type: VersusTypes.Single },
+          {
+            transaction
+          }
+        ).then(async (singleVersus) => {
+          await singleVersus.setCharacters(randomCharacters, { transaction });
+          return singleVersus.reload({ transaction });
+        });
       });
-    });
+    }
   }
 };

@@ -9,6 +9,7 @@
             label="genders"
             :values="rules.genders"
             :options="mappedGenders"
+            :disabled="rules.hasNoVersusOnly"
             @update="onInput"
           />
           <TickboxOnOff
@@ -16,6 +17,7 @@
             name="isIncludeOnlyGender"
             :text="onOffTextOptions"
             :checked="rules.isIncludeOnlyGender"
+            :disabled="rules.hasNoVersusOnly"
             @change="onInput"
             align-left
           />
@@ -27,6 +29,7 @@
             label="sources"
             :values="rules.sources"
             :options="mappedSources"
+            :disabled="rules.hasNoVersusOnly"
             @update="onInput"
           />
           <TickboxOnOff
@@ -34,6 +37,7 @@
             name="isIncludeOnlySource"
             :text="onOffTextOptions"
             :checked="rules.isIncludeOnlySource"
+            :disabled="rules.hasNoVersusOnly"
             @change="onInput"
             align-left
           />
@@ -47,6 +51,7 @@
               attr="name"
               :options="series"
               :filter="seriesFilter"
+              :disabled="rules.hasNoVersusOnly"
               @input="onSearchSeries"
               @on-select="onSelectSeries"
               disable-local-filter
@@ -56,6 +61,7 @@
               name="isIncludeOnlySeries"
               :text="onOffTextOptions"
               :checked="rules.isIncludeOnlySeries"
+              :disabled="rules.hasNoVersusOnly"
               @change="onInput"
               align-left
             />
@@ -72,6 +78,13 @@
             </template>
           </List>
         </div>
+        <TickboxOnOff
+          id="hasNoVersusOnly"
+          name="hasNoVersusOnly"
+          :checked="rules.hasNoVersusOnly"
+          @change="onInput"
+          align-left
+        />
       </div>
 
       <div>
