@@ -74,12 +74,11 @@ export default {
       default: false
     }
   },
-  data: function() {
-    return {
-      characterCardUrl: Urls.characterView
-    };
-  },
   computed: {
+    characterCardUrl: function() {
+      const hash = this.$router.history.current.hash || '';
+      return `${Urls.characterView}${hash}`;
+    },
     cardClasses: function() {
       return classNames('versus-history-card');
     },

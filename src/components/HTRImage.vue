@@ -27,30 +27,28 @@ export default {
   },
   watch: {
     src: function(nv, ov) {
-      if (this.forceLoad && nv && nv !== ov) {
+      if (nv && nv !== ov) {
         this.$el.setAttribute('src', nv);
       }
     }
   },
   mounted() {
-    if (!this.forceLoad) {
-      this.observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry && entry.isIntersecting) {
-            console.log(entry, this.src);
-            if (this.src) {
+    this.$nextTick(function() {
+      if (!this.forceLoad) {
+        this.observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry && entry.isIntersecting && this.src) {
               this.$el.setAttribute('src', this.src);
               this.observer.disconnect();
             }
+          },
+          {
+            rootMargin: '50px 0px'
           }
-        },
-        {
-          rootMargin: '50px 0px'
-        }
-      );
-
-      this.observer.observe(this.$el);
-    }
+        );
+        this.observer.observe(this.$el);
+      }
+    });
   },
   methods: {
     onError: function(event) {

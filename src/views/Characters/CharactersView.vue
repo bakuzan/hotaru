@@ -290,8 +290,15 @@ export default {
         oldRoute.name === Strings.route.characterView;
 
       if (sameRoute && differentId) {
+        const tabHash = newRoute.hash;
         const id = Number(Routing.getParam(this.$router, 'id'));
         this.$apollo.queries.character.refetch({ id });
+
+        if (tabHash === '#versus') {
+          this.$apollo.queries.versusHistoryPaged.refetch({ characterId: id });
+        } else if (tabHash === '#gallery') {
+          this.$apollo.queries.imagesForCharacter.refetch({ characterId: id });
+        }
       }
     }
   },

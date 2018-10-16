@@ -40,7 +40,6 @@ import { Button } from '@/components/Buttons';
 
 import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
-import { isString } from '@/utils';
 
 export default {
   name: 'ListFigureCard',
@@ -61,16 +60,7 @@ export default {
     },
     urlSource: {
       type: String,
-      default: null,
-      validator: function(value) {
-        return (
-          value === null ||
-          Object.keys(Urls)
-            .filter((k) => isString(Urls[k]))
-            .map((k) => Urls[k])
-            .includes(value)
-        );
-      }
+      default: null
     },
     openNewTab: {
       type: Boolean,
