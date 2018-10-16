@@ -30,12 +30,12 @@
               class="multi-select__separator"
             />
             <li v-for="(op, i) in options" :key="op.value">
-                <Tickbox
-                    :name="getName(i)"
-                    :text="op.text"
-                    :checked="values.includes(op.value)"
-                    @change="handleOptionChange"
-                />
+              <Tickbox
+                :name="getName(i)"
+                :text="op.text"
+                :checked="values.includes(op.value)"
+                @change="handleOptionChange"
+              />
             </li>
           </ul>
           <Backdrop :id="id" @close="handleToggleClose" />
@@ -86,6 +86,10 @@ export default {
       type: Array,
       required: true
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     listClassName: {
       type: String
     }
@@ -125,6 +129,8 @@ export default {
     handleToggleOpen: function(e) {
       if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.keyCode))
         return;
+
+      if (this.disabled) return;
 
       e.stopPropagation();
       this.isOpen = true;

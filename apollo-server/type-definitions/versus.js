@@ -19,6 +19,7 @@ module.exports = gql`
     isIncludeOnlyGender: Boolean
     isIncludeOnlySeries: Boolean
     isIncludeOnlySource: Boolean
+    hasNoVersusOnly: Boolean
     series: [Int]
     sources: [SourceType]
   }

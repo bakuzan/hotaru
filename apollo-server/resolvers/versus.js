@@ -2,7 +2,8 @@ const Utils = require('../utils');
 
 module.exports = {
   characters(versus) {
-    if (versus.characters) return versus.characters;
+    if (versus.characters && versus.characters.length === 2)
+      return versus.characters;
 
     return versus.getCharacters();
   },

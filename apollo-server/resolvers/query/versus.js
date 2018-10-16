@@ -55,9 +55,7 @@ module.exports = {
         {
           model: Character,
           where: {
-            id: {
-              [Op.eq]: characterId
-            }
+            id: { [Op.eq]: characterId }
           }
         }
       ]

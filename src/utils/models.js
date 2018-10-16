@@ -33,7 +33,8 @@ export const versusCreatorDefaultRules = () => ({
   sources: [],
   isIncludeOnlyGender: false,
   isIncludeOnlySeries: false,
-  isIncludeOnlySource: false
+  isIncludeOnlySource: false,
+  hasNoVersusOnly: false
 });
 
 export const defaultHTRTemplate = () => ({

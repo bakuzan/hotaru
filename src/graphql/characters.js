@@ -56,10 +56,6 @@ const getCharactersForVersusCompare = gql`
       id
       name
       displayImage
-      isWaifu
-      ranking {
-        rank
-      }
     }
   }
 `;

@@ -111,6 +111,7 @@ export default {
   apollo: {
     characters: {
       query: Query.getCharactersForVersusCompare,
+      debounce: 1000,
       skip() {
         return !this.characterFilter;
       },
