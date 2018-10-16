@@ -78,13 +78,16 @@
             </template>
           </List>
         </div>
-        <TickboxOnOff
-          id="hasNoVersusOnly"
-          name="hasNoVersusOnly"
-          :checked="rules.hasNoVersusOnly"
-          @change="onInput"
-          align-left
-        />
+        <div class="versus-creator__group versus-creator__group--adjusted">
+          <div class="versus-creator__label">No Versus Only</div>
+          <TickboxOnOff
+            id="hasNoVersusOnly"
+            name="hasNoVersusOnly"
+            :checked="rules.hasNoVersusOnly"
+            @change="onInput"
+            align-left
+          />
+        </div>
       </div>
 
       <div>
@@ -129,6 +132,7 @@ import SourceType from '@/constants/source-type';
 import { Query, Mutation } from '@/graphql';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
 import { versusCreatorDefaultRules } from '@/utils/models';
+import alertService from '@/utils/alert-service';
 
 export default {
   name: 'VersusCreator',
@@ -230,7 +234,10 @@ export default {
           this.versus = versusFromRules ? versusFromRules : null;
         })
         .catch((error) => {
-          console.log('failed to create', error);
+          alertService.sendError({
+            message: 'Failed to Create',
+            detail: error.message || error
+          });
           this.mutationLoading = false;
         });
     },
@@ -248,7 +255,10 @@ export default {
           this.rules = versusCreatorDefaultRules();
         })
         .catch((error) => {
-          console.log('failed to vote', error);
+          alertService.sendError({
+            message: 'Failed to Vote',
+            detail: error.message || error
+          });
           this.mutationLoading = false;
         });
     }
@@ -257,6 +267,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/_variables';
+
 .versus-creator {
   flex-direction: column;
 
@@ -268,6 +280,15 @@ export default {
     display: flex;
     flex-direction: column;
     flex: 1;
+
+    &--adjusted {
+      justify-content: space-evenly;
+      margin-left: $app--margin-standard;
+    }
+  }
+  &__label {
+    padding: 0 $app--padding-standard;
+    opacity: 0.5;
   }
 }
 </style>

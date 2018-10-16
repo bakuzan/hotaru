@@ -30,10 +30,19 @@ module.exports = {
     if (args.rules && args.rules.hasNoVersusOnly) {
       return db.transaction(async (transaction) => {
         return db
-          .query(SQL['get_unblooded_characters'], { transaction })
+          .query(SQL['get_unblooded_characters'], {
+            type: db.QueryTypes.SELECT,
+            transaction
+          })
           .then(async (randomCharacters) => {
-            const needAnotherCharacter = randomCharacters.length < 2;
+            const characterCount = randomCharacters.length;
+            const needAnotherCharacter = characterCount < 2;
+            const notEnoughCharacters = characterCount === 0;
             let otherCharacter = [];
+
+            if (notEnoughCharacters) {
+              throw Error('Unable to create any character pairs.');
+            }
 
             if (needAnotherCharacter) {
               otherCharacter = await Character.findAll({
@@ -52,10 +61,11 @@ module.exports = {
                 transaction
               }
             ).then(async (singleVersus) => {
-              await singleVersus.setCharacters(
-                [...randomCharacters, ...otherCharacter],
-                { transaction }
-              );
+              const characterIds = [...randomCharacters, ...otherCharacter]
+                .slice(0, 2)
+                .map((x) => x.id);
+
+              await singleVersus.setCharacters(characterIds, { transaction });
               return singleVersus.reload({ transaction });
             });
           });

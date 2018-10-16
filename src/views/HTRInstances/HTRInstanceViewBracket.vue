@@ -1,5 +1,5 @@
 <template>
-  <div class="instance-view bracket" :ref="bracketRef">
+  <div class="bracket" :ref="bracketRef">
    <canvas class="bracket__canvas" :ref="canvasRef"></canvas>
     <div 
       v-for="(round, i) in customBracketLayout" 
