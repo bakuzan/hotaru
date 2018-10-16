@@ -13,6 +13,10 @@ export default {
   props: {
     src: {
       type: String
+    },
+    forceLoad: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -21,22 +25,32 @@ export default {
       observer: null
     };
   },
-  mounted() {
-    this.observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting) {
-          if (this.src) {
-            this.$el.setAttribute('src', this.src);
-          }
-          this.observer.disconnect();
-        }
-      },
-      {
-        rootMargin: '50px 0px'
+  watch: {
+    src: function(nv, ov) {
+      if (this.forceLoad && nv && nv !== ov) {
+        this.$el.setAttribute('src', nv);
       }
-    );
+    }
+  },
+  mounted() {
+    if (!this.forceLoad) {
+      this.observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry && entry.isIntersecting) {
+            console.log(entry, this.src);
+            if (this.src) {
+              this.$el.setAttribute('src', this.src);
+              this.observer.disconnect();
+            }
+          }
+        },
+        {
+          rootMargin: '50px 0px'
+        }
+      );
 
-    this.observer.observe(this.$el);
+      this.observer.observe(this.$el);
+    }
   },
   methods: {
     onError: function(event) {

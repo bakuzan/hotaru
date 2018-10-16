@@ -5,6 +5,7 @@
       <div class="page-view__left-column htr-column">
         <div class="htr-column__inner">
           <HTRImage 
+            force-load
             :src="editCharacter.displayImage" 
             class="page-view__image" 
           />
