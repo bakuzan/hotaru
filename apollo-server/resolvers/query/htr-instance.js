@@ -36,12 +36,8 @@ module.exports = {
       include: [
         {
           model: Versus,
-          include: [
-            {
-              model: Character,
-              include: [Ranking]
-            }
-          ]
+          include: [Character],
+          separate: true
         }
       ]
     });

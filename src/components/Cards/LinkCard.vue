@@ -41,6 +41,10 @@ export default {
     createdAt: {
       type: String
     },
+    htrTemplate: {
+      type: Object,
+      default: null
+    },
     settings: {
       type: Object,
       default: () => {}
@@ -59,7 +63,14 @@ export default {
   },
   computed: {
     itemUrl: function() {
-      return Urls.build(this.urlSource, { id: this.id });
+      const resolveType = this.htrTemplate
+        ? { type: this.htrTemplate.type }
+        : {};
+
+      return Urls.build(this.urlSource, {
+        id: this.id,
+        ...resolveType
+      });
     },
     linkTarget: function() {
       return this.openNewTab ? '_blank' : '';

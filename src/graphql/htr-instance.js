@@ -32,7 +32,7 @@ const instanceAndAssociationFields = gql`
   ${instanceFields}
   fragment InstanceAndAssociationFields on HTRInstance {
     ...InstanceFields
-    characters {
+    characters @include(if: $withCharacters) {
       id
       name
       displayImage
@@ -40,15 +40,12 @@ const instanceAndAssociationFields = gql`
         rank
       }
     }
-    versus {
+    versus @skip(if: $withCharacters) {
       id
       characters {
         id
         name
         displayImage
-        ranking {
-          rank
-        }
       }
       winnerId
     }
@@ -66,6 +63,9 @@ const getHTRInstancesByType = gql`
         id
         name
         description
+        htrTemplate {
+          type
+        }
         settings {
           rules {
             isSeeded
@@ -81,7 +81,7 @@ const getHTRInstancesByType = gql`
 `;
 
 const getHTRInstanceById = gql`
-  query getHTRInstanceById($id: Int!) {
+  query getHTRInstanceById($id: Int!, $withCharacters: Boolean!) {
     htrInstanceById(id: $id) {
       ...InstanceAndAssociationFields
     }
@@ -90,7 +90,10 @@ const getHTRInstanceById = gql`
 `;
 
 const updateHTRInstance = gql`
-  mutation updateHTRInstance($instance: HTRInstanceInput) {
+  mutation updateHTRInstance(
+    $instance: HTRInstanceInput
+    $withCharacters: Boolean!
+  ) {
     htrInstanceUpdate(instance: $instance) {
       ...InstanceAndAssociationFields
     }
@@ -99,7 +102,10 @@ const updateHTRInstance = gql`
 `;
 
 const createHTRInstance = gql`
-  mutation createHTRInstance($instance: HTRInstanceInput) {
+  mutation createHTRInstance(
+    $instance: HTRInstanceInput
+    $withCharacters: Boolean!
+  ) {
     htrInstanceCreate(instance: $instance) {
       ...InstanceAndAssociationFields
     }
@@ -112,6 +118,7 @@ const castVoteInBracket = gql`
     $htrInstanceId: Int!
     $versusId: Int!
     $winnerId: Int!
+    $withCharacters: Boolean!
   ) {
     htrInstanceVersusVote(
       htrInstanceId: $htrInstanceId
