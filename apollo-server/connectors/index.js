@@ -71,14 +71,8 @@ CharacterModel.HTRInstance = CharacterModel.belongsToMany(HTRInstanceModel, {
   foreignKey: 'characterId'
 });
 
-HTRInstanceModel.Versus = HTRInstanceModel.belongsToMany(VersusModel, {
-  through: 'HTRInstanceVersus',
-  foreignKey: 'htrInstanceId'
-});
-VersusModel.HTRInstance = VersusModel.belongsToMany(HTRInstanceModel, {
-  through: 'HTRInstanceVersus',
-  foreignKey: 'versusId'
-});
+HTRInstanceModel.Versus = HTRInstanceModel.hasMany(VersusModel);
+VersusModel.HTRInstance = VersusModel.belongsTo(HTRInstanceModel);
 
 // Sync and Migrate db
 // Only add test data if sync is forced

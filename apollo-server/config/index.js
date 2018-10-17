@@ -94,6 +94,7 @@ module.exports = function cmdMigrate(sequelize) {
       console.log('='.repeat(errorStr.length));
       console.log(err);
       console.log('='.repeat(errorStr.length));
+      return umzug.down();
     })
     .then(() => cmdStatus(umzug));
 };

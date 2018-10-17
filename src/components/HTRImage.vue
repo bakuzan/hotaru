@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Strings from '@/constants/strings';
+import Urls from '@/constants/urls';
 
 export default {
   name: 'HTRImage',
@@ -21,14 +21,15 @@ export default {
   },
   data: function() {
     return {
-      fallback: Strings.deadImage,
+      fallback: Urls.images.deadImage,
+      placeholder: Urls.images.characterPlaceholder,
       observer: null
     };
   },
   watch: {
     src: function(nv, ov) {
-      if (nv && nv !== ov) {
-        this.$el.setAttribute('src', nv);
+      if (nv !== ov) {
+        this.$el.setAttribute('src', nv || this.placeholder);
       }
     }
   },

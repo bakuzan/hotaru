@@ -6,12 +6,14 @@ const character = require('./character');
 const series = require('./series');
 const versus = require('./versus');
 const htrtemplate = require('./htr-template');
+const htrinstance = require('./htr-instance');
 
 module.exports = {
   ...character,
   ...series,
   ...versus,
   ...htrtemplate,
+  ...htrinstance,
   tags(_, { search = '', ...args }) {
     return Tag.findAll({
       where: {

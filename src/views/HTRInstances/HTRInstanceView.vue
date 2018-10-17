@@ -246,7 +246,9 @@ export default {
       },
       variables() {
         const id = Number(Routing.getParam(this.$router, 'id'));
-        return { id };
+        const isListType =
+          Routing.getParam(this.$router, 'type') === HTRTemplateTypes.list;
+        return { id, withCharacters: isListType };
       },
       update(data) {
         const instance = data.htrInstanceById || defaultInstanceModel();
@@ -467,7 +469,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.createHTRInstance,
-          variables: { instance },
+          variables: { instance, withCharacters: this.isListType },
           update: (store) => {
             store.deleteQueryHTR('htrInstance');
           }
@@ -491,7 +493,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.updateHTRInstance,
-          variables: { instance },
+          variables: { instance, withCharacters: this.isListType },
           update: (store, { data: { htrInstanceUpdate } }) => {
             const data = { ...htrInstanceUpdate };
 
