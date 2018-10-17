@@ -33,34 +33,36 @@ module.exports = {
   },
   down: (queryInterface) => {
     return queryInterface
-      .removeIndex('characters', { fields: ['seriesId'] })
+      .removeIndex('characters', 'characters_series_id')
       .then(() =>
-        queryInterface.removeIndex('rankings', { fields: ['characterId'] })
+        queryInterface.removeIndex('rankings', 'rankings_character_id')
       )
       .then(() =>
-        queryInterface.removeIndex('htrInstanceVersus', {
-          fields: ['htrInstanceId']
-        })
+        queryInterface.removeIndex(
+          'htrInstanceVersus',
+          'htr_instance_versus_htr_instance_id'
+        )
       )
       .then(() =>
-        queryInterface.removeIndex('htrInstanceCharacter', {
-          fields: ['htrInstanceId']
-        })
+        queryInterface.removeIndex(
+          'htrInstanceCharacter',
+          'htr_instance_character_htr_instance_id'
+        )
       )
       .then(() =>
-        queryInterface.removeIndex('htrInstances', {
-          fields: ['htrTemplateId']
-        })
+        queryInterface.removeIndex(
+          'htrInstances',
+          'htr_instances_htr_template_id'
+        )
       )
       .then(() =>
-        queryInterface.removeIndex('VersusCharacter', {
-          fields: ['versusId']
-        })
+        queryInterface.removeIndex(
+          'VersusCharacter',
+          'versus_character_versus_id'
+        )
       )
       .then(() =>
-        queryInterface.removeIndex('CharacterTag', {
-          fields: ['characterId']
-        })
+        queryInterface.removeIndex('CharacterTag', 'Character_tag_character_id')
       );
   }
 };
