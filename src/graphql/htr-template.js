@@ -30,6 +30,9 @@ const getHTRTemplatesByType = gql`
         id
         name
         type
+        rules {
+          isSeeded
+        }
       }
       total
       hasMore

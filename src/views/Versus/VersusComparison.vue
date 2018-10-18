@@ -38,7 +38,6 @@
           figureClass="comparison-card__figure"
           v-bind="c"
           :url-source="cardUrl"
-          open-new-tab
         />
       </div>
       <div class="comparison-summary">
