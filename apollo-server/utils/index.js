@@ -102,6 +102,13 @@ function formatDateDisplay(date) {
   return `${dPart} @ ${tPart.slice(0, 5)}`;
 }
 
+function getDaysAgoX(num) {
+  const d = new Date();
+  d.setDate(d.getDate() - num);
+  const [dPart] = d.toISOString().split('T');
+  return dPart;
+}
+
 module.exports = {
   compose,
   enumArrayToObject,
@@ -116,5 +123,6 @@ module.exports = {
   orderBy,
   setHasMoreFlag,
   formatDateISO,
-  formatDateDisplay
+  formatDateDisplay,
+  getDaysAgoX
 };

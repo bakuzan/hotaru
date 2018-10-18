@@ -49,6 +49,8 @@ const Query = gql`
       paging: Paging
     ): HTRInstancePage
     htrInstanceById(id: Int!): HTRInstance
+
+    honours: Honours
   }
 `;
 

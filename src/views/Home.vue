@@ -63,6 +63,7 @@
         View Random Character
         </Button>
       </div>
+      <HonoursWidget />
     </div>
   </div>
 </template>
@@ -75,6 +76,7 @@ import { RankingCard } from '@/components/Cards';
 import { Button } from '@/components/Buttons';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import CharacterOfTheDayWidget from '@/components/CharacterOfTheDayWidget';
+import HonoursWidget from '@/components/HonoursWidget';
 
 import Urls from '@/constants/urls';
 import { Query, Mutation } from '@/graphql';
@@ -88,7 +90,8 @@ export default {
     RankingCard,
     CharacterOfTheDayWidget,
     Button,
-    LoadingBouncer
+    LoadingBouncer,
+    HonoursWidget
   },
   data: function() {
     return {
@@ -99,8 +102,7 @@ export default {
       ),
       blockCreateVersus: true,
       versusDailyActive: [],
-      rankingsTopTen: [],
-      characterOfTheDay: {}
+      rankingsTopTen: []
     };
   },
   apollo: {
