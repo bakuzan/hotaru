@@ -121,10 +121,6 @@ export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
     );
   }
 
-  const parentNode = canvas.parentNode;
-  canvas.width = parentNode.offsetWidth;
-  canvas.height = parentNode.offsetHeight;
-
   const ctx = canvas.getContext('2d');
   const nodes = Array.from(parent.getElementsByClassName('versus'));
 

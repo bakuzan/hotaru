@@ -49,6 +49,10 @@ export default {
       type: Object,
       default: () => {}
     },
+    rules: {
+      type: Object,
+      default: () => {}
+    },
     urlSource: {
       type: String,
       required: true
@@ -79,7 +83,7 @@ export default {
       return !!(this.settings && this.settings.winnerId);
     },
     isSeeded: function() {
-      const { rules } = this.settings || {};
+      const rules = this.rules || (this.settings && this.settings.rules);
       return rules && rules.isSeeded;
     }
   }

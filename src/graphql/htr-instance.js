@@ -28,27 +28,26 @@ const instanceFields = gql`
   }
 `;
 
-const instanceAndAssociationFields = gql`
-  ${instanceFields}
-  fragment InstanceAndAssociationFields on HTRInstance {
-    ...InstanceFields
-    characters @include(if: $withCharacters) {
+const instanceCharacterFields = gql`
+  fragment InstanceCharacterFields on Character {
+    id
+    name
+    displayImage
+    ranking {
+      rank
+    }
+  }
+`;
+
+const instanceVersusFields = gql`
+  fragment InstanceVersusFields on Versus {
+    id
+    characters {
       id
       name
       displayImage
-      ranking {
-        rank
-      }
     }
-    versus @skip(if: $withCharacters) {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
-    }
+    winnerId
   }
 `;
 
@@ -64,6 +63,7 @@ const getHTRInstancesByType = gql`
         name
         description
         htrTemplate {
+          id
           type
         }
         settings {
@@ -83,10 +83,18 @@ const getHTRInstancesByType = gql`
 const getHTRInstanceById = gql`
   query getHTRInstanceById($id: Int!, $withCharacters: Boolean!) {
     htrInstanceById(id: $id) {
-      ...InstanceAndAssociationFields
+      ...InstanceFields
+      characters @include(if: $withCharacters) {
+        ...InstanceCharacterFields
+      }
+      versus @skip(if: $withCharacters) {
+        ...InstanceVersusFields
+      }
     }
   }
-  ${instanceAndAssociationFields}
+  ${instanceFields}
+  ${instanceCharacterFields}
+  ${instanceVersusFields}
 `;
 
 const updateHTRInstance = gql`
@@ -95,10 +103,18 @@ const updateHTRInstance = gql`
     $withCharacters: Boolean!
   ) {
     htrInstanceUpdate(instance: $instance) {
-      ...InstanceAndAssociationFields
+      ...InstanceFields
+      characters @include(if: $withCharacters) {
+        ...InstanceCharacterFields
+      }
+      versus @skip(if: $withCharacters) {
+        ...InstanceVersusFields
+      }
     }
   }
-  ${instanceAndAssociationFields}
+  ${instanceFields}
+  ${instanceCharacterFields}
+  ${instanceVersusFields}
 `;
 
 const createHTRInstance = gql`
@@ -107,10 +123,18 @@ const createHTRInstance = gql`
     $withCharacters: Boolean!
   ) {
     htrInstanceCreate(instance: $instance) {
-      ...InstanceAndAssociationFields
+      ...InstanceFields
+      characters @include(if: $withCharacters) {
+        ...InstanceCharacterFields
+      }
+      versus @skip(if: $withCharacters) {
+        ...InstanceVersusFields
+      }
     }
   }
-  ${instanceAndAssociationFields}
+  ${instanceFields}
+  ${instanceCharacterFields}
+  ${instanceVersusFields}
 `;
 
 const castVoteInBracket = gql`
@@ -118,17 +142,20 @@ const castVoteInBracket = gql`
     $htrInstanceId: Int!
     $versusId: Int!
     $winnerId: Int!
-    $withCharacters: Boolean!
   ) {
     htrInstanceVersusVote(
       htrInstanceId: $htrInstanceId
       versusId: $versusId
       winnerId: $winnerId
     ) {
-      ...InstanceAndAssociationFields
+      ...InstanceFields
+      versus {
+        ...InstanceVersusFields
+      }
     }
   }
-  ${instanceAndAssociationFields}
+  ${instanceFields}
+  ${instanceVersusFields}
 `;
 
 export default {

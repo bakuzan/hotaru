@@ -1,6 +1,6 @@
 <template>
   <div class="bracket" :ref="bracketRef">
-   <canvas class="bracket__canvas" :ref="canvasRef"></canvas>
+   <canvas class="bracket__canvas" :ref="canvasRef" width="6500" height="8400"></canvas>
     <div 
       v-for="(round, i) in customBracketLayout" 
       :key="i"
@@ -232,7 +232,7 @@ export default {
 
             store.writeQuery({
               query: Query.getHTRInstanceById,
-              variables: { id: data.id },
+              variables: { id: data.id, withCharacters: false },
               data: { htrInstanceById: mapHTRInstanceToStore(data) }
             });
           }
@@ -248,12 +248,13 @@ export default {
 <style lang="scss" scoped>
 @import '../../styles/_variables';
 
-$bracket-width: 350px;
+$bracket-width: 6500px;
+$bracket-round-width: 350px;
 
 .bracket {
   position: relative;
   display: flex;
-  width: 20000px;
+  width: $bracket-width;
   outline: none;
 
   &__round {
@@ -261,9 +262,9 @@ $bracket-width: 350px;
     flex-direction: column;
     justify-content: space-around;
     flex: 0;
-    min-width: $bracket-width;
+    min-width: $bracket-round-width;
     padding: $app--padding-standard;
-    margin: 0 #{$bracket-width / 3};
+    margin: 0 #{$bracket-round-width / 3};
   }
 
   &__versus {
@@ -278,8 +279,6 @@ $bracket-width: 350px;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    height: 100%;
   }
 }
 </style>
