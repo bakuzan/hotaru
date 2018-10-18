@@ -499,7 +499,7 @@ export default {
 
             store.writeQuery({
               query: Query.getHTRInstanceById,
-              variables: { id: data.id },
+              variables: { id: data.id, withCharacters: this.isListType },
               data: { htrInstanceById: mapHTRInstanceToStore(data) }
             });
           },
