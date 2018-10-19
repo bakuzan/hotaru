@@ -119,7 +119,7 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/_variables';
+@import '../../styles/_variables';
 
 .versus {
   position: relative;

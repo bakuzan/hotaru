@@ -1,4 +1,4 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 
 function makeSafe(query, options) {
   try {
@@ -26,5 +26,14 @@ export default () => {
   InMemoryCache.prototype.readQuerySafeHTR = readQuerySafe;
   InMemoryCache.prototype.deleteQueryHTR = deleteQuery;
 
-  return new InMemoryCache();
+  return new InMemoryCache({
+    dataIdFromObject: (object) => {
+      switch (object.__typename) {
+        case 'HonoursCharacter':
+          return `HonoursCharacter:${object.id}:${object.key}`;
+        default:
+          return defaultDataIdFromObject(object);
+      }
+    }
+  });
 };

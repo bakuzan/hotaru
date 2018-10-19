@@ -93,6 +93,16 @@ main {
   }
 }
 
+.margin {
+  margin: $app--margin-standard * 2;
+  &--standard {
+    margin: $app--margin-standard;
+  }
+  &--small {
+    margin: $app--margin-small;
+  }
+}
+
 .button-group {
   display: flex;
   &--shrink {

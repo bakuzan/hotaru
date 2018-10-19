@@ -95,6 +95,7 @@ db.sync({ force: FORCE_DB_REBUILD })
     db.transaction((transaction) =>
       db
         .query(SQL['delete_from_rankings'], { transaction })
+        .then(() => db.query(SQL['delete_rankings_sequence'], { transaction }))
         .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
         .then(() => db.query(SQL['generate_rankings'], { transaction }))
         .then(() => db.query(SQL['populate_rankings'], { transaction }))

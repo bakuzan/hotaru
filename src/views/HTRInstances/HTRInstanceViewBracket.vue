@@ -24,7 +24,7 @@
 <script>
 import classNames from 'classnames';
 import panzoom from 'panzoom';
-import VersusWidget from '@/components/VersusWidget';
+import VersusWidget from '@/components/Widgets/VersusWidget';
 
 import Urls from '@/constants/urls';
 import { generateUniqueId, bracketProgression, orderBy } from '@/utils';

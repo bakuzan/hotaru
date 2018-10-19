@@ -5,9 +5,9 @@
       </header>
       <LoadingBouncer v-show="isLoading" local />
       <ListFigureCard
-          v-show="!isLoading"
-          v-bind="characterOfTheDay"
-          :url-source="cardUrl"
+        v-show="!isLoading"
+        v-bind="characterOfTheDay"
+        :url-source="cardUrl"
       />
     </section>
 </template>
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/_variables';
+@import '../../styles/_variables';
 
 .character-of-the-day {
   position: relative;

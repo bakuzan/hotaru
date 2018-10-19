@@ -1,13 +1,13 @@
 const Op = require('sequelize').Op;
 
 const { Tag, Ranking, Character } = require('../../connectors');
-const Utils = require('../../utils');
 
 const character = require('./character');
 const series = require('./series');
 const versus = require('./versus');
 const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
+const honours = require('./honours');
 
 module.exports = {
   ...character,
@@ -15,6 +15,7 @@ module.exports = {
   ...versus,
   ...htrtemplate,
   ...htrinstance,
+  ...honours,
   tags(_, { search = '', ...args }) {
     return Tag.findAll({
       where: {
@@ -32,17 +33,5 @@ module.exports = {
       limit: 10,
       include: [Character]
     });
-  },
-  async honours(_, __, context) {
-    const weekAgo = Utils.getDaysAgoX(7);
-    const monthAgo = Utils.getDaysAgoX(30);
-
-    const [mostWinsInLast7] = await context.Honours.mostWinsForDate(weekAgo);
-    const [mostWinsInLast30] = await context.Honours.mostWinsForDate(monthAgo);
-
-    return {
-      mostWinsInLast7,
-      mostWinsInLast30
-    };
   }
 };

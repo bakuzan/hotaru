@@ -2,10 +2,11 @@ const gql = require('graphql-tag');
 
 module.exports = gql`
   type Honours {
-    mostWinsInLast7: HonoursCharacter
-    mostWinsInLast30: HonoursCharacter
+    mostWinsInLast7Days: HonoursCharacter
+    mostWinsInLast30Days: HonoursCharacter
   }
   type HonoursCharacter {
+    key: Int
     id: Int
     name: String
     displayImage: String

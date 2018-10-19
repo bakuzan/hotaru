@@ -55,7 +55,7 @@
     </div>
     <div :class="columnClasses">
       <CharacterOfTheDayWidget />
-      <div class="center-contents padded padded--standard">
+      <div class="random-container padded padded--standard">
         <Button
           theme="primary"
           @click="onRandom"
@@ -71,12 +71,12 @@
 <script>
 import classNames from 'classnames';
 import List from '@/components/List';
-import VersusWidget from '@/components/VersusWidget';
+import VersusWidget from '@/components/Widgets/VersusWidget';
 import { RankingCard } from '@/components/Cards';
 import { Button } from '@/components/Buttons';
 import LoadingBouncer from '@/components/LoadingBouncer';
-import CharacterOfTheDayWidget from '@/components/CharacterOfTheDayWidget';
-import HonoursWidget from '@/components/HonoursWidget';
+import CharacterOfTheDayWidget from '@/components/Widgets/CharacterOfTheDayWidget';
+import HonoursWidget from '@/components/Widgets/HonoursWidget';
 
 import Urls from '@/constants/urls';
 import { Query, Mutation } from '@/graphql';
@@ -202,6 +202,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/_variables';
+@import '../styles/_extensions';
 
 .home-content-column {
   flex-basis: unset;
@@ -230,6 +231,11 @@ export default {
   justify-content: center;
   width: 100%;
   height: 26px;
+}
+
+.random-container {
+  @extend %center-contents;
+  margin-bottom: $app--margin-large;
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

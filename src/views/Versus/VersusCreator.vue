@@ -122,7 +122,7 @@ import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import List from '@/components/List';
 import TickboxOnOff from '@/components/TickboxOnOff';
 import LoadingBouncer from '@/components/LoadingBouncer';
-import VersusWidget from '@/components/VersusWidget';
+import VersusWidget from '@/components/Widgets/VersusWidget';
 import { SeriesCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
