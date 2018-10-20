@@ -13,7 +13,7 @@ with
 	v.winnerId is not null and
 			v.updatedAt > :daysAgo1
 		group by v.winnerId
-		order by count desc, v.updatedAt asc
+		order by count desc, v.updatedAt desc
 limit 1
 ),
 last_thirty
@@ -30,7 +30,7 @@ where
 	v.winnerId is not null and
 	v.updatedAt > :daysAgo2
 group by v.winnerId
-order by count desc, v.updatedAt asc
+order by count desc, v.updatedAt desc
 limit 1
 )
 select *
