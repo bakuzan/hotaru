@@ -18,7 +18,6 @@
           <ListFigureCard
             v-show="!isLoading"
             v-bind="slotProps.item.character"
-            figure-size="small"
             :url-source="cardUrl"
           />
         </template>
@@ -104,6 +103,8 @@ export default {
 }
 </style>
 <style lang="scss">
+@import '../../styles/_variables';
+
 .honours-list {
   &__item {
     display: flex;
@@ -112,10 +113,12 @@ export default {
 }
 .honour {
   &__title {
+    display: flex;
+    justify-content: center;
     font-style: italic;
-    font-size: 0.8em;
   }
   &__count {
+    margin: 0 $app--margin-standard;
     font-style: normal;
   }
 }
