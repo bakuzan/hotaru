@@ -1,3 +1,5 @@
+const Op = require('sequelize').Op;
+
 const { db, Versus, Character } = require('../../connectors');
 const Constants = require('../../constants');
 const SQL = require('../../db-scripts');
@@ -47,7 +49,7 @@ module.exports = {
             if (needAnotherCharacter) {
               otherCharacter = await Character.findAll({
                 where: {
-                  id: { [Op.nin]: randomCharacters.map((x) => x.id) }
+                  id: { [Op.notIn]: randomCharacters.map((x) => x.id) }
                 },
                 order: db.literal('RANDOM()'),
                 limit: 1,
