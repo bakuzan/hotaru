@@ -17,6 +17,7 @@
     </ListFilterBar>
     <List 
       wrap
+      fixed-width
       columns="four"
       className="series"
       itemClassName="series__item"

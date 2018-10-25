@@ -11,15 +11,28 @@ with v_cte as (
 	where
 		vc1.characterId <> vc2.characterId
 	group by vc1.versusId
+), rival_cte as (
+	select 
+		count(*) as fights,
+		count(case when winnerId = cId1 then 1 else null end) as c1Wins,
+		count(case when winnerId = cId2 then 1 else null end) as c2Wins,
+		cast(count(case when winnerId = cId1 then 1 else null end) as float) / cast(count(*) as float) as ratio,
+		v2.*
+	from v_cte as v2
+	group by cId1, cId2
+	having count(*) > 1
+), by_fights as (
+	select *
+	from rival_cte
+	order by fights desc, updatedAt desc
+	limit 1
+), by_ratio as (
+	select *
+	from rival_cte
+	where ratio <> 1 and ratio <> 0
+	order by abs(ratio - 0.5), fights desc, updatedAt desc
+	limit 1
 )
-select 
-	count(*) as count,
-	count(case when winnerId = cId1 then 1 else null end) as c1Wins,
-	count(case when winnerId = cId2 then 1 else null end) as c2Wins,
-	count(case when winnerId = cId1 then 1 else null end) / count(*) as ratio,
-	cId1,
-	cId2
-from v_cte
-group by cId1, cId2
-having count(*) > 1
-order by count(*) desc, updatedAt desc
+select * from by_fights
+union all
+select * from by_ratio

@@ -148,3 +148,10 @@ export const bracketProgression = (end, start = 1, step = 2) =>
   })
     .map((v, i) => start * step ** i)
     .reverse();
+
+export const diffInDaysAndHours = (num) => {
+  const inDays = `${num / 60 / 60 / 24}`;
+  const [days, rem] = inDays.split('.');
+  const hours = Math.round(Number(`0.${rem}`) * 60);
+  return `${days}d ${hours}h`;
+};

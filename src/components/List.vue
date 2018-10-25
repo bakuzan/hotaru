@@ -8,13 +8,13 @@
       :options="sortableOptions"
       @update="onUpdate"
     >
-        <li v-for="item in items" :class="listItemClasses" :key="item.id">
-            <div class="sort-handle" v-if="isSortable">+</div>
-            <slot v-bind:item="item">
-            <!-- Fallback content -->
-            {{ item.id }}
-            </slot>
-        </li>
+      <li v-for="item in items" :class="listItemClasses" :key="item.id">
+        <div class="sort-handle" v-if="isSortable">+</div>
+        <slot v-bind:item="item">
+        <!-- Fallback content -->
+        {{ item.id }}
+        </slot>
+      </li>
     </draggable>
     <div 
       ref="observedDiv"

@@ -18,6 +18,7 @@
     <List 
       id="character-list"
       wrap
+      fixed-width
       columns="four"
       className="characters"
       itemClassName="characters__item"
