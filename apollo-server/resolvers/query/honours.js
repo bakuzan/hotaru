@@ -27,15 +27,19 @@ module.exports = {
       (x) => x.rbnkey === Keys.mostWinsInLast7Days
     );
     const mostWinsInLast30Days = mostWinsInLast.find(
-      (x) => x.rbnkey === Keys.mostWinsInLast7Days
+      (x) => x.rbnkey === Keys.mostWinsInLast30Days
     );
 
-    const [mostCommonVersus, closestRivalry] = await db.query(
-      SQL['get_most_frequent_versus'],
-      {
-        type: db.QueryTypes.SELECT
-      }
+    const frequentVersus = await db.query(SQL['get_most_frequent_versus'], {
+      type: db.QueryTypes.SELECT
+    });
+    const mostCommonVersus = frequentVersus.find(
+      (x) => x.rbnkey === Keys.mostCommonVersus
     );
+    const closestRivalry = frequentVersus.find(
+      (x) => x.rbnkey === Keys.closestRivalry
+    );
+
     const [longestVersus] = await db.query(SQL['get_longest_versus'], {
       type: db.QueryTypes.SELECT
     });
@@ -89,13 +93,18 @@ module.exports = {
             }
           }
         : {}),
-      longestVersus: {
-        ...longestVersus,
-        key: Keys.longestVersus,
-        characters: versusCharacters.filter(
-          (x) => x.id === longestVersus.cId1 || x.id === longestVersus.cId2
-        )
-      }
+      ...(longestVersus
+        ? {
+            longestVersus: {
+              ...longestVersus,
+              key: Keys.longestVersus,
+              characters: versusCharacters.filter(
+                (x) =>
+                  x.id === longestVersus.cId1 || x.id === longestVersus.cId2
+              )
+            }
+          }
+        : {})
     };
   }
 };

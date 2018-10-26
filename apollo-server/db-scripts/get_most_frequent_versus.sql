@@ -33,6 +33,12 @@ with v_cte as (
 	order by abs(ratio - 0.5), fights desc, updatedAt desc
 	limit 1
 )
-select * from by_fights
+select
+	3 as rbnkey,
+	by_fights.* 
+from by_fights
 union all
-select * from by_ratio
+select
+	4 as rbnkey,
+	by_ratio.* 
+from by_ratio

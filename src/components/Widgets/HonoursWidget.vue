@@ -98,30 +98,47 @@ export default {
     },
     versusList: function() {
       console.log('versus list', this.honours);
-      const { mostCommonVersus, longestVersus } = this.honours;
-      return [
-        {
+      const results = [];
+      const { mostCommonVersus, longestVersus, closestRivalry } = this.honours;
+
+      if (mostCommonVersus) {
+        results.push({
           id: generateUniqueId(),
           title: 'Most Common Versus',
           contextLabel: `(${mostCommonVersus.c1Wins} - ${
             mostCommonVersus.c2Wins
           })`,
           characters: this.setVersusOrder(mostCommonVersus),
-          winnerId: 'DUMMY'
-        },
-        {
+          winnerId: -1
+        });
+      }
+
+      if (closestRivalry) {
+        results.push({
+          id: generateUniqueId(),
+          title: 'Closest Rivalry',
+          contextLabel: '',
+          characters: this.setVersusOrder(closestRivalry),
+          winnerId: -1
+        });
+      }
+
+      if (longestVersus) {
+        results.push({
           id: generateUniqueId(),
           title: 'Hardest Decision',
           contextLabel: diffInDaysAndHours(longestVersus.diff),
           characters: this.setVersusOrder(longestVersus),
           winnerId: longestVersus.winnerId
-        }
-      ];
+        });
+      }
+
+      return results;
     }
   },
   methods: {
     setVersusOrder: function(versus) {
-      return versus.characters.map((c) => ({
+      return (versus.characters || []).map((c) => ({
         ...c,
         order: c.id === versus.cId1 ? 1 : 2
       }));
