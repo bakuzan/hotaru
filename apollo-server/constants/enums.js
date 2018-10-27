@@ -24,7 +24,7 @@ const Order = Object.freeze([
   { id: 4, name: 'Custom' }
 ]);
 
-const BracketSizes = Object.freeze([64, 32, 16, 8]);
+const BracketSizes = Object.freeze([128, 64, 32, 16, 8]);
 
 module.exports = {
   GenderType,

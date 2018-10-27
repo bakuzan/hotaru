@@ -12,8 +12,12 @@
       >
         <template slot-scope="slotProps">
           <div class="honour__title">
-            {{slotProps.item.title}}
-            <span class="honour__count">- {{slotProps.item.contextLabel}}</span>
+            <div class="honour__text">{{slotProps.item.title}}</div>
+            <div class="honour__context">
+              <div class="honour__context-label">
+                {{slotProps.item.contextLabel}}
+              </div>
+            </div>
           </div>
           <ListFigureCard
             v-if="slotProps.item.character"
@@ -76,8 +80,8 @@ export default {
       const list = ['mostWinsInLast7Days', 'mostWinsInLast30Days']
         .map((key) => {
           const data = this.honours[key];
-          console.log(key);
           if (!data) return null;
+
           const { count } = data;
           const tempTitle = separateAndCapitalise(key);
           const [old, word, num] = tempTitle.match(/([A-Za-z]+)([0-9]+)/);
@@ -93,11 +97,10 @@ export default {
           };
         })
         .filter((x) => x !== null);
-      console.log(list);
+
       return list;
     },
     versusList: function() {
-      console.log('versus list', this.honours);
       const results = [];
       const { mostCommonVersus, longestVersus, closestRivalry } = this.honours;
 
@@ -105,9 +108,9 @@ export default {
         results.push({
           id: generateUniqueId(),
           title: 'Most Common Versus',
-          contextLabel: `(${mostCommonVersus.c1Wins} - ${
-            mostCommonVersus.c2Wins
-          })`,
+          contextLabel: `${mostCommonVersus.fights} fights\n(${
+            mostCommonVersus.c1Wins
+          } - ${mostCommonVersus.c2Wins})`,
           characters: this.setVersusOrder(mostCommonVersus),
           winnerId: -1
         });
@@ -117,7 +120,9 @@ export default {
         results.push({
           id: generateUniqueId(),
           title: 'Closest Rivalry',
-          contextLabel: '',
+          contextLabel: `${closestRivalry.fights} fights\n(${
+            closestRivalry.c1Wins
+          } - ${closestRivalry.c2Wins})`,
           characters: this.setVersusOrder(closestRivalry),
           winnerId: -1
         });
@@ -175,12 +180,21 @@ export default {
 .honour {
   &__title {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+  }
+  &__text {
     font-style: italic;
   }
-  &__count {
-    margin: 0 $app--margin-standard;
-    font-style: normal;
+  &__context,
+  &__text {
+    display: flex;
+    justify-content: center;
+    margin: #{$app--margin-standard / 2} $app--margin-standard;
+  }
+  &__context-label {
+    padding: $app--padding-small;
+    border: 1px solid transparent;
+    border-radius: 5px;
   }
 }
 </style>

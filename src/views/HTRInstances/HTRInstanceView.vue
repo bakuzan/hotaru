@@ -481,7 +481,8 @@ export default {
           this.mutationLoading = false;
 
           const redirectToUrl = Urls.build(Urls.htrInstanceView, {
-            id: item.id
+            id: item.id,
+            type: item.htrTemplate && item.htrTemplate.type
           });
           this.$router.push(redirectToUrl);
         });

@@ -120,5 +120,11 @@
         display: block !important;
       }
     }
+
+    // Honour styles
+    .honour__context-label {
+      background-color: $primary-background;
+      color: $primary-colour;
+    }
   }
 }

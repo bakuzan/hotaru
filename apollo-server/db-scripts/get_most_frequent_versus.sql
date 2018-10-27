@@ -9,6 +9,7 @@ with v_cte as (
 	join versus as v on vc1.versusId = v.id
 	join VersusCharacter as vc2 on vc1.versusId = vc2.versusId
 	where
+		v.winnerId not null and
 		vc1.characterId <> vc2.characterId
 	group by vc1.versusId
 ), rival_cte as (

@@ -1,6 +1,6 @@
 export const Limit = Object.freeze({
   List: [3, 5, 10],
-  Bracket: [8, 16, 32, 64]
+  Bracket: [8, 16, 32, 64, 128]
 });
 
 export const Order = Object.freeze([

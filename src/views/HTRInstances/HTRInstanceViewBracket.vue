@@ -1,6 +1,11 @@
 <template>
   <div class="bracket" :ref="bracketRef">
-   <canvas class="bracket__canvas" :ref="canvasRef" width="6500" height="8400"></canvas>
+    <canvas 
+      class="bracket__canvas" 
+      :ref="canvasRef" 
+      width="7600" 
+      height="16800">
+    </canvas>
     <div 
       v-for="(round, i) in customBracketLayout" 
       :key="i"
@@ -248,7 +253,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../styles/_variables';
 
-$bracket-width: 6500px;
+$bracket-width: 7450px;
 $bracket-round-width: 350px;
 
 .bracket {

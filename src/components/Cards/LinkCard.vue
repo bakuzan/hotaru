@@ -1,7 +1,11 @@
 <template>
   <div class="link-card">
     <SeedIcon v-if="isSeeded" right />
-    <div v-if="hasWinner" class="trohpy-icon" :icon="trophyIcon"></div>
+    <div 
+      v-if="hasWinner" 
+      class="trohpy-icon" 
+      :icon="trophyIcon"
+      title="Has Winner"></div>
     <NavLink 
       :to="itemUrl"
       :target="linkTarget"
