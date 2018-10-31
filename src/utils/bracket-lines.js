@@ -1,5 +1,3 @@
-import { isString } from './index';
-
 const LINE_WIDTH = 2;
 const NORMAL_LINE_COLOUR = '#000';
 const WINNER_LINE_COLOUR = '#b22222';
@@ -24,7 +22,7 @@ function positionRelativeToParent(element) {
   return relativePos;
 }
 
-function drawCharacterMidPointLine(ctx, { parentRect, parentData }, isLHS) {
+function drawCharacterMidPointLine(drawing, { parentRect, parentData }, isLHS) {
   return (_, index) => {
     const direction = isLHS ? 1 : -1;
     const cOffset = index ? 0.75 : 0.25;
@@ -38,18 +36,17 @@ function drawCharacterMidPointLine(ctx, { parentRect, parentData }, isLHS) {
       (x) => x.id === parentData.winnerId
     );
 
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, startY);
-    ctx.lineTo(endX, endY);
-    ctx.lineWidth = LINE_WIDTH;
-    ctx.strokeStyle =
+    const moveTo = [startX, startY];
+    const lines = [[endX, startY], [endX, endY]];
+    const strokeStyle =
       winnerIndex !== index ? NORMAL_LINE_COLOUR : WINNER_LINE_COLOUR;
-    ctx.stroke();
+
+    drawing.push({ moveTo, lines, strokeStyle, dataId: parentData.id, index });
   };
 }
 
-function processLayout(ctx, nodes, layout, isLHS = true) {
+function processLayout(nodes, layout, isLHS = true) {
+  const drawing = [];
   const nodeRects = new Map(
     nodes.map((x) => [x.id, positionRelativeToParent(x)])
   );
@@ -68,7 +65,7 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
         const startY = nodeRect.top + nodeRect.height * 0.5;
 
         const drawCharacterLines = drawCharacterMidPointLine(
-          ctx,
+          drawing,
           { parentRect: nodeRect, parentData: versus },
           isLHS
         );
@@ -84,31 +81,60 @@ function processLayout(ctx, nodes, layout, isLHS = true) {
         const nextNodeRect = nodeRects.get(nextVersus.id.toString());
         const isOneToOne = round.length === 1 && nextRound.length === 1;
 
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
+        let lines;
+        const moveTo = [startX, startY];
 
         if (isOneToOne) {
           const endX = isLHS ? nextNodeRect.left : nextNodeRect.right;
           const endY = nextNodeRect.top + nextNodeRect.height * 0.5;
 
-          ctx.lineTo(endX, endY);
+          lines = [[endX, endY]];
         } else {
           const endX = nextNodeRect.left + nextNodeRect.width * 0.5;
           const endY =
             vIndex % 2 === 0 ? nextNodeRect.top : nextNodeRect.bottom;
 
-          ctx.lineTo(endX, startY);
-          ctx.lineTo(endX, endY);
+          lines = [[endX, startY], [endX, endY]];
         }
 
-        ctx.lineWidth = LINE_WIDTH;
-        ctx.strokeStyle = nextVersus.characters.some((x) => isString(x.id))
-          ? NORMAL_LINE_COLOUR
-          : WINNER_LINE_COLOUR;
-        ctx.stroke();
+        const strokeStyle = nextVersus.characters.some((x) =>
+          versus.characters.some((y) => x.id === y.id)
+        )
+          ? WINNER_LINE_COLOUR
+          : NORMAL_LINE_COLOUR;
+
+        drawing.push({
+          moveTo,
+          lines,
+          strokeStyle,
+          dataIds: [nextVersus.id, versus.id]
+        });
       }
     });
   });
+
+  return drawing;
+}
+
+function plotLines(ctx) {
+  return (p) => {
+    ctx.moveTo(...p.moveTo);
+    p.lines.forEach((l) => ctx.lineTo(...l));
+  };
+}
+
+function drawPointsToCanvas(ctx, points) {
+  const normals = points.filter((x) => x.strokeStyle === NORMAL_LINE_COLOUR);
+  ctx.beginPath();
+  ctx.strokeStyle = NORMAL_LINE_COLOUR;
+  normals.forEach(plotLines(ctx));
+  ctx.stroke();
+
+  const winners = points.filter((x) => x.strokeStyle === WINNER_LINE_COLOUR);
+  ctx.beginPath();
+  ctx.strokeStyle = WINNER_LINE_COLOUR;
+  winners.forEach(plotLines(ctx));
+  ctx.stroke();
 }
 
 export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
@@ -122,6 +148,7 @@ export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
   }
 
   const ctx = canvas.getContext('2d');
+  ctx.lineWidth = LINE_WIDTH;
   const nodes = Array.from(parent.getElementsByClassName('versus'));
 
   if (!nodes.length) {
@@ -137,6 +164,16 @@ export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
   const layoutLeft = layout.slice(0, midRoundIndex + 1);
   const layoutRight = layout.slice(midRoundIndex).reverse();
 
-  processLayout(ctx, nodes, layoutLeft);
-  processLayout(ctx, nodes, layoutRight, false);
+  const lhs = processLayout(nodes, layoutLeft);
+  const rhs = processLayout(nodes, layoutRight, false);
+
+  const points = lhs.concat(rhs);
+
+  drawPointsToCanvas(ctx, points);
+
+  return points;
+}
+
+export function bracketWinnersUpdate(ctx, layout, points) {
+  console.log(layout, points);
 }
