@@ -107,7 +107,7 @@ function processLayout(nodes, layout, isLHS = true) {
           moveTo,
           lines,
           strokeStyle,
-          dataIds: [nextVersus.id, versus.id]
+          dataId2: versus.id
         });
       }
     });
@@ -125,16 +125,20 @@ function plotLines(ctx) {
 
 function drawPointsToCanvas(ctx, points) {
   const normals = points.filter((x) => x.strokeStyle === NORMAL_LINE_COLOUR);
-  ctx.beginPath();
-  ctx.strokeStyle = NORMAL_LINE_COLOUR;
-  normals.forEach(plotLines(ctx));
-  ctx.stroke();
+  if (normals.length) {
+    ctx.beginPath();
+    ctx.strokeStyle = NORMAL_LINE_COLOUR;
+    normals.forEach(plotLines(ctx));
+    ctx.stroke();
+  }
 
   const winners = points.filter((x) => x.strokeStyle === WINNER_LINE_COLOUR);
-  ctx.beginPath();
-  ctx.strokeStyle = WINNER_LINE_COLOUR;
-  winners.forEach(plotLines(ctx));
-  ctx.stroke();
+  if (winners.length) {
+    ctx.beginPath();
+    ctx.strokeStyle = WINNER_LINE_COLOUR;
+    winners.forEach(plotLines(ctx));
+    ctx.stroke();
+  }
 }
 
 export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
@@ -174,6 +178,34 @@ export default function bracketCanvasDrawer(canvas, parent, rawLayout) {
   return points;
 }
 
-export function bracketWinnersUpdate(ctx, layout, points) {
-  console.log(layout, points);
+export function bracketWinnersUpdate(canvas, layout, points) {
+  const matches = layout.reduce((p, round) => [...p, ...round], []);
+  const winners = points.filter((x) => x.strokeStyle === WINNER_LINE_COLOUR);
+  const normals = points.filter((x) => x.strokeStyle === NORMAL_LINE_COLOUR);
+
+  const updatedPoints = normals.map((point) => {
+    let strokeStyle = point.strokeStyle;
+
+    if (point.dataId) {
+      const match = matches.find((x) => x.id === point.dataId);
+      const winnerIndex =
+        match && match.characters.findIndex((x) => x.id === match.winnerId);
+
+      strokeStyle =
+        winnerIndex !== point.index ? NORMAL_LINE_COLOUR : WINNER_LINE_COLOUR;
+    } else if (point.dataId2) {
+      const match = matches.find((x) => x.id === point.dataId2);
+
+      strokeStyle =
+        match && match.winnerId ? WINNER_LINE_COLOUR : NORMAL_LINE_COLOUR;
+    }
+
+    return { ...point, strokeStyle };
+  });
+
+  const newPoints = winners.concat(updatedPoints);
+  const ctx = canvas.getContext('2d');
+  drawPointsToCanvas(ctx, newPoints);
+
+  return newPoints;
 }
