@@ -232,7 +232,7 @@ export default {
           this.mutationLoading = false;
           const canvas = this.$refs[this.canvasRef];
           const layout = this.customBracketLayout;
-          bracketWinnersUpdate(canvas, layout, this.points);
+          this.points = bracketWinnersUpdate(canvas, layout, this.points);
         });
     }
   }
