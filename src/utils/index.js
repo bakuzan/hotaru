@@ -155,3 +155,23 @@ export const diffInDaysAndHours = (num) => {
   const hours = Math.round(Number(`0.${rem}`) * 24);
   return `${days}d ${hours}h`;
 };
+
+export function positionRelativeToParent(element) {
+  const parent = element.offsetParent;
+  const parentRect = parent.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
+
+  const top = rect.top - parentRect.top;
+  const left = rect.left - parentRect.left;
+  const relativePos = {
+    top,
+    left,
+    // the real right/bottom are not what I actually want.
+    bottom: top + rect.height,
+    right: left + rect.width,
+    width: rect.width,
+    height: rect.height
+  };
+
+  return relativePos;
+}

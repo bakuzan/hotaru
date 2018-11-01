@@ -35,7 +35,7 @@ import Urls from '@/constants/urls';
 import { generateUniqueId, bracketProgression, orderBy } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
-import bracketLineDrawer, { bracketWinnersUpdate } from '@/utils/bracket-lines';
+import BracketLineDrawer from '@/utils/bracket-line-drawer';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -63,7 +63,7 @@ export default {
       canvasRef: `canvas-${id}`,
       zoomController: null,
       resizeListeners: null,
-      points: []
+      bracketService: null
     };
   },
   watch: {
@@ -75,6 +75,8 @@ export default {
     }
   },
   mounted() {
+    const canvas = this.$refs[this.canvasRef];
+    this.bracketService = new BracketLineDrawer(canvas, this.$el);
     this.zoomController = panzoom(this.$refs[this.bracketRef], {
       zoomSpeed: 0.1,
       maxZoom: 2,
@@ -169,9 +171,8 @@ export default {
       });
     },
     updateCanvas: function() {
-      const canvas = this.$refs[this.canvasRef];
       const layout = this.customBracketLayout;
-      this.points = bracketLineDrawer(canvas, this.$el, layout);
+      this.bracketService.draw(layout);
     },
     getDummyCharacter: function() {
       return {
@@ -228,11 +229,16 @@ export default {
             });
           }
         })
-        .then(() => {
+        .then(({ data }) => {
           this.mutationLoading = false;
-          const canvas = this.$refs[this.canvasRef];
-          const layout = this.customBracketLayout;
-          this.points = bracketWinnersUpdate(canvas, layout, this.points);
+
+          const layout =
+            (data &&
+              data.htrInstanceVersusVote &&
+              data.htrInstanceVersusVote.versus) ||
+            [];
+
+          this.bracketService.update(layout);
         });
     }
   }
