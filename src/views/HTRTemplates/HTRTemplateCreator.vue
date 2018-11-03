@@ -4,23 +4,23 @@
       <LoadingBouncer v-show="isLoading" />
 
       <div class="template-creator__group">
-          <h4 class="tempalte-creator__title">Details</h4>
+        <h4 class="tempalte-creator__title">Details</h4>
         <InputBox
-            id="name"
-            name="name"
-            label="Name"
-            :value="editTemplate.name"
-            @input="onInput"
+          id="name"
+          name="name"
+          label="Name"
+          :value="editTemplate.name"
+          @input="onInput"
         />
         <SelectBox
-            id="type"
-            name="type"
-            text="Type"
-            :options="mappedTemplateTypes"
-            :value="editTemplate.type"
-            :disabled="!isCreate"
-            @on-select="onInput"
-            required
+          id="type"
+          name="type"
+          text="Type"
+          :options="mappedTemplateTypes"
+          :value="editTemplate.type"
+          :disabled="!isCreate"
+          @on-select="onInput"
+          required
         />
         <SelectBox
           id="limit"
@@ -39,49 +39,49 @@
           @change="onRulesInput"
         />
       </div>
-        <div class="template-creator__group">
-            <h4 class="tempalte-creator__title">Rules</h4>
-            <MultiSelect 
-                id="gender"
-                name="genders"
-                label="genders"
-                :values="editTemplate.rules.genders"
-                :options="mappedGenders"
-                @update="onRulesInput"
-            />
-            <MultiSelect 
-                id="source"
-                name="sources"
-                label="sources"
-                :values="editTemplate.rules.sources"
-                :options="mappedSources"
-                @update="onRulesInput"
-            />
-            <div>
-            <InputBoxAutocomplete
-                id="seriesFilter"
-                name="seriesFilter"
-                label="Series"
-                attr="name"
-                :options="series"
-                :filter="seriesFilter"
-                @input="onSearchSeries"
-                @on-select="onSelectSeries"
-                disable-local-filter
-            />
-            <List
-                columns="one"
-                :items="editTemplate.rules.series"
-            >
-                <template slot-scope="slotProps">
-                  <SeriesCard
-                    v-bind="slotProps.item"
-                    @remove="onRemoveSeries"
-                  />
-                </template>
-            </List>
-            </div>
+      <div class="template-creator__group">
+        <h4 class="tempalte-creator__title">Rules</h4>
+        <MultiSelect 
+          id="gender"
+          name="genders"
+          label="genders"
+          :values="editTemplate.rules.genders"
+          :options="mappedGenders"
+          @update="onRulesInput"
+        />
+        <MultiSelect 
+            id="source"
+            name="sources"
+            label="sources"
+            :values="editTemplate.rules.sources"
+            :options="mappedSources"
+            @update="onRulesInput"
+        />
+        <div>
+        <InputBoxAutocomplete
+            id="seriesFilter"
+            name="seriesFilter"
+            label="Series"
+            attr="name"
+            :options="series"
+            :filter="seriesFilter"
+            @input="onSearchSeries"
+            @on-select="onSelectSeries"
+            disable-local-filter
+        />
+        <List
+            columns="one"
+            :items="editTemplate.rules.series"
+        >
+            <template slot-scope="slotProps">
+              <SeriesCard
+                v-bind="slotProps.item"
+                @remove="onRemoveSeries"
+              />
+            </template>
+        </List>
         </div>
+      </div>
 
       <template v-if="showButtons">
         <portal :to="portalTarget">

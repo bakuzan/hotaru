@@ -57,6 +57,10 @@ const queryFilterOptions = {
   queryParam: 'type',
   queryDefault: HTRTemplateTypes.bracket
 };
+const defaultPage = {
+  page: 0,
+  size: LP.size
+};
 
 export default {
   name: 'HTRTemplateList',
@@ -72,11 +76,6 @@ export default {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrTemplateEditor,
       mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
-      filterHandler: LP.updateFilterAndRefetch(
-        this,
-        'htrTemplatesPaged',
-        queryFilterOptions
-      ),
       searchTimer: null,
       filters: {
         search: ''
@@ -85,20 +84,25 @@ export default {
       htrTemplatesPaged: defaultPagedResponse()
     };
   },
+  watch: {
+    $route: function() {
+      LP.refetchForFilter(this, 'htrTemplatesPaged', queryFilterOptions);
+    }
+  },
   apollo: {
-    htrTemplatesPaged: {
-      query: Query.getHTRTemplatesByType,
-      variables: {
-        search: '',
-        type: Routing.getQueryFromLocation(
-          'type',
-          queryFilterOptions.queryDefault
-        ),
-        paging: {
-          page: 0,
-          size: LP.size
+    htrTemplatesPaged() {
+      const queryType = Routing.getQueryFromLocation(
+        'type',
+        queryFilterOptions.queryDefault
+      );
+      return {
+        query: Query.getHTRTemplatesByType,
+        variables: {
+          search: '',
+          type: queryType,
+          paging: defaultPage
         }
-      }
+      };
     }
   },
   computed: {
@@ -115,7 +119,7 @@ export default {
       this.$router.push(Urls.htrTemplateCreator);
     },
     onInput: function(value, name) {
-      this.filterHandler(value, name);
+      LP.updateFilter(this, value, name, queryFilterOptions);
     },
     showMore: function() {
       LP.showMore(

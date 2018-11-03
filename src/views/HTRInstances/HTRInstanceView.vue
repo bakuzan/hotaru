@@ -360,7 +360,7 @@ export default {
     },
     isSeeded: function() {
       const { settings } = this.editInstance;
-      return settings && settings.rules.isSeeded;
+      return settings && settings.rules && settings.rules.isSeeded;
     }
   },
   methods: {

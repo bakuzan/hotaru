@@ -57,6 +57,10 @@ const queryFilterOptions = {
   queryParam: 'type',
   queryDefault: HTRTemplateTypes.bracket
 };
+const defaultPage = {
+  page: 0,
+  size: LP.size
+};
 
 export default {
   name: 'HTRInstanceList',
@@ -72,11 +76,6 @@ export default {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrInstanceView,
       mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
-      filterHandler: LP.updateFilterAndRefetch(
-        this,
-        'htrInstancesPaged',
-        queryFilterOptions
-      ),
       searchTimer: null,
       filters: {
         search: ''
@@ -85,20 +84,26 @@ export default {
       htrInstancesPaged: defaultPagedResponse()
     };
   },
+  watch: {
+    $route: function() {
+      LP.refetchForFilter(this, 'htrInstancesPaged', queryFilterOptions);
+    }
+  },
   apollo: {
-    htrInstancesPaged: {
-      query: Query.getHTRInstancesByType,
-      variables: {
-        search: '',
-        type: Routing.getQueryFromLocation(
-          'type',
-          queryFilterOptions.queryDefault
-        ),
-        paging: {
-          page: 0,
-          size: LP.size
+    htrInstancesPaged() {
+      const queryType = Routing.getQueryFromLocation(
+        'type',
+        queryFilterOptions.queryDefault
+      );
+
+      return {
+        query: Query.getHTRInstancesByType,
+        variables: {
+          search: '',
+          type: queryType,
+          paging: defaultPage
         }
-      }
+      };
     }
   },
   computed: {
@@ -112,12 +117,17 @@ export default {
   },
   methods: {
     onAdd: function() {
+      const queryType = Routing.getQueryArg(
+        this.$router,
+        'type',
+        queryFilterOptions.queryDefault
+      );
       this.$router.push(
-        Urls.build(Urls.htrInstanceCreate, { type: this.queryType })
+        Urls.build(Urls.htrInstanceCreate, { type: queryType })
       );
     },
     onInput: function(value, name) {
-      this.filterHandler(value, name);
+      LP.updateFilter(this, value, name, queryFilterOptions);
     },
     showMore: function() {
       LP.showMore(

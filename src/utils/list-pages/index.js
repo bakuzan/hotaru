@@ -19,6 +19,11 @@ export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
   value,
   name
 ) => {
+  updateFilter(ctrl, value, name, options);
+  refetchForFilter(ctrl, attr, options);
+};
+
+export const updateFilter = (ctrl, value, name, options = {}) => {
   if (options.queryParam !== name) {
     ctrl.filters[name] = value;
   } else {
@@ -27,7 +32,9 @@ export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
       query: { [name]: value }
     });
   }
+};
 
+export const refetchForFilter = (ctrl, attr, options = {}) => {
   const resolvedQueryParam = getResolvedQueryParam(ctrl, options);
 
   clearTimeout(ctrl.searchTimer);
