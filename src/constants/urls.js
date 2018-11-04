@@ -53,6 +53,9 @@ const Urls = {
   },
   get htrInstanceCreate() {
     return `${this.htrInstanceList}/create/:type`;
+  },
+  get htrInstanceLeagueCenter() {
+    return `${this.htrInstanceList}/leagues`;
   }
 };
 

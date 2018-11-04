@@ -111,6 +111,12 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "instance-view" */ './views/HTRInstances/HTRInstanceView.vue'),
       props: { isCreate: false }
+    },
+    {
+      path: Urls.htrInstanceLeagueCenter,
+      name: Strings.route.htrInstanceLeagueCenter,
+      component: () =>
+        import(/* webpackChunkName: "instance-league-center" */ './views/HTRInstances/HTRInstanceLeagueCenter.vue')
     }
   ]
 });

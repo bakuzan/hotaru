@@ -36,7 +36,8 @@ export default Object.freeze({
     htrTemplateEditor: 'htr template editor',
     htrInstanceList: 'htr instance list',
     htrInstanceView: 'htr instance view',
-    htrInstanceCreate: 'htr instance create'
+    htrInstanceCreate: 'htr instance create',
+    htrInstanceLeagueCenter: 'htr instance league center'
   },
   slot: {
     viewBlock: 'view-block__read-only',
