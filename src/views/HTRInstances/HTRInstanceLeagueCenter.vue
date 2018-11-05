@@ -1,26 +1,45 @@
 <template>
-  <div class="page">
-    <LoadingBouncer v-show="isLoading" />
-
-    <div>
+  <div class="page page-view page-view--column league-center">
+    <div class="page-view__row page-view__row--right league-center__actions">
+      <LoadingBouncer v-show="isLoading" local />
       <Button 
+        theme="primary"
         :disabled="!canCreate"
         @click="onCreateNew">
         Create
       </Button>
     </div>
-    <List 
-      align-left
-      fixed-width
-      columns="one"
-      :items="pastHTRInstanceLeaguesPaged.nodes"
-      :paged-total="pastHTRInstanceLeaguesPaged.total"
-      @intersect="showMore"
-    >
-      <template slot-scope="slotProps">
-        {{slotProps.item}}
-      </template>
-    </List>
+    <div class="page-view__row league-center__content">
+      <div class="league-center__section">
+        <div>
+          {{ongoingHTRInstanceLeagues ? ongoingHTRInstanceLeagues.name : 'No ongoing leagues.'}}
+        </div>
+        <List 
+          align-left
+          fixed-width
+          columns="one"
+          :items="ongoingInstances"
+        >
+          <template slot-scope="slotProps">
+            {{slotProps.item}}
+          </template>
+        </List>
+      </div>
+      <div class="league-center__section">
+        <List 
+          align-left
+          fixed-width
+          columns="one"
+          :items="pastHTRInstanceLeaguesPaged.nodes"
+          :paged-total="pastHTRInstanceLeaguesPaged.total"
+          @intersect="showMore"
+        >
+          <template slot-scope="slotProps">
+            {{slotProps.item}}
+          </template>
+        </List>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,6 +96,13 @@ export default {
     },
     canCreate: function() {
       return !this.ongoingHTRInstanceLeagues;
+    },
+    ongoingInstances: function() {
+      return (
+        (this.ongoingHTRInstanceLeagues &&
+          this.ongoingHTRInstanceLeagues.instances) ||
+        []
+      );
     }
   },
   methods: {
@@ -112,3 +138,19 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../../styles/_variables';
+
+.league-center {
+  &__actions {
+    position: relative;
+  }
+
+  &__section {
+    display: flex;
+    flex: 1;
+    padding: $app--padding-small;
+  }
+}
+</style>

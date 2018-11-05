@@ -13,10 +13,7 @@ async function checkForActiveLeague(options = {}) {
       type: db.where(db.col('htrtemplate.type'), {
         [Op.eq]: HTRTemplateTypes.League
       }),
-      settings: db.where(
-        db.fn('JSON_VALUE', db.col('settings'), '$.isComplete'),
-        'false'
-      ),
+      'settings.isComplete': 'false',
       ...where
     },
     include: [HTRTemplate],

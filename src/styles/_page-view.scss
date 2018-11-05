@@ -28,6 +28,9 @@
     &--grow {
       flex: 1;
     }
+    &--right {
+      justify-content: flex-end;
+    }
   }
 
   &__left-column {
