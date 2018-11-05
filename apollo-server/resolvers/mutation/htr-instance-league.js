@@ -9,6 +9,7 @@ const {
 } = require('../../connectors');
 
 const { HTRTemplateTypes, VersusTypes } = require('../../constants/enums');
+const Utils = require('../../utils');
 
 module.exports = {
   htrInstanceLeagueCreate(_, __, context) {
@@ -60,7 +61,7 @@ module.exports = {
         const leagueOrdinal = Utils.getOrdinalNum(leagueNumber);
 
         return {
-          name: `${seasonName} - League ${leagueNumber}`,
+          name: `League ${leagueNumber}`,
           description: `The ${leagueNumber}${leagueOrdinal} league of the ${seasonNumber}${seasonOrdinal} season.`,
           settings: {
             isComplete: false,
@@ -73,15 +74,14 @@ module.exports = {
 
       await HTRInstance.bulkCreate(newInstances, { transaction });
       const createdInstances = await HTRInstance.findAll({
-        where: {
-          where: { createdAt: { [Op.gte]: createdAt } },
-          transaction
-        }
+        where: { createdAt: { [Op.gte]: createdAt } },
+        transaction
       });
 
       const associations = [];
       createdInstances.map((instance, i) => {
-        const characterIds = chunkedCharacters[i];
+        const chara = chunkedCharacters[i];
+        const characterIds = chara.map((x) => x.id);
         associations.push(
           instance.setCharacters(characterIds, { transaction })
         );

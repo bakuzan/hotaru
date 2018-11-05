@@ -21,7 +21,12 @@
           :items="ongoingInstances"
         >
           <template slot-scope="slotProps">
-            {{slotProps.item}}
+            <div>
+              <div>{{statusIcon(slotProps.item)}}</div>
+              <NavLink :to="leagueLink(slotProps.item)">
+                {{slotProps.item.name}}
+              </NavLink>
+            </div>
           </template>
         </List>
       </div>
@@ -35,7 +40,9 @@
           @intersect="showMore"
         >
           <template slot-scope="slotProps">
-            {{slotProps.item}}
+            <Button @click="onSeasonClick(slotProps.item)">
+              {{slotProps.item.name}}
+            </Button>
           </template>
         </List>
       </div>
@@ -47,9 +54,12 @@
 import List from '@/components/List';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import { Button } from '@/components/Buttons';
+import NavLink from '@/components/NavLink';
 
 import { Query, Mutation } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
+import Urls from '@/constants/urls';
+import Icons from '@/constants/icons';
 import * as LP from '@/utils/list-pages';
 import * as CacheUpdate from '@/utils/cache';
 import alertService from '@/utils/alert-service';
@@ -64,7 +74,8 @@ export default {
   components: {
     List,
     LoadingBouncer,
-    Button
+    Button,
+    NavLink
   },
   data: function() {
     return {
@@ -106,6 +117,16 @@ export default {
     }
   },
   methods: {
+    statusIcon: function(item) {
+      return item.settings.isComplete ? Icons.tick : Icons.cross;
+    },
+    leagueLink: function(item) {
+      return Urls.build(Urls.htrInstanceLeagueView, { id: item.id });
+    },
+    onSeasonClick: function(item) {
+      // TODO, get season leagues as a sub item.
+      console.log('season click > ', item);
+    },
     showMore: function() {
       LP.showMore(this, 'pastHTRInstanceLeaguesPaged', 'HTRInstanceLeaguePage');
     },
@@ -149,6 +170,7 @@ export default {
 
   &__section {
     display: flex;
+    flex-direction: column;
     flex: 1;
     padding: $app--padding-small;
   }
