@@ -28,9 +28,15 @@ const getCharactersPaged = gql`
   query getCharactersPaged(
     $search: String
     $genders: [GenderType]
+    $sources: [SourceType]
     $paging: Paging
   ) {
-    charactersPaged(search: $search, genders: $genders, paging: $paging) {
+    charactersPaged(
+      search: $search
+      genders: $genders
+      sources: $sources
+      paging: $paging
+    ) {
       nodes {
         ...CharactersQueryFields
       }

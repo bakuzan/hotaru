@@ -1,17 +1,22 @@
 const Op = require('sequelize').Op;
 
-const { db, Character } = require('../../connectors');
+const { db, Character, Series } = require('../../connectors');
 const Utils = require('../../utils');
 
 module.exports = {
-  charactersPaged(_, { search = '', genders, paging = {} }) {
-    const resolvedArgs = genders
-      ? {
-          gender: {
-            [Op.in]: genders
-          }
+  charactersPaged(_, { search = '', genders, sources, paging = {} }) {
+    const resolvedArgs = {
+      ...Utils.ifArrayThenIn(genders, {
+        gender: {
+          [Op.in]: genders
         }
-      : {};
+      }),
+      ...Utils.ifArrayThenIn(sources, {
+        source: db.where(db.col('series.source'), {
+          [Op.in]: sources
+        })
+      })
+    };
 
     return Character.findAndCountAll({
       where: {
@@ -22,7 +27,8 @@ module.exports = {
       },
       order: [['name', 'ASC']],
       limit: paging.size,
-      offset: paging.size * paging.page
+      offset: paging.size * paging.page,
+      include: [Series]
     }).then((result) => ({
       nodes: result.rows,
       total: result.count,

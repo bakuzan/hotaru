@@ -5,6 +5,7 @@ const Query = gql`
     charactersPaged(
       search: String
       genders: [GenderType]
+      sources: [SourceType]
       paging: Paging
     ): CharacterPage
     characters(search: String, genders: [GenderType]): [Character]

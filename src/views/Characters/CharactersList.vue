@@ -14,6 +14,15 @@
         :options="mappedGenders"
         @update="onInput"
       />
+      <MultiSelect 
+        :slot="typeSlotName"
+        id="source"
+        name="sources"
+        label="sources"
+        :values="filters.sources"
+        :options="mappedSources"
+        @update="onInput"
+      />
     </ListFilterBar>
     <List 
       id="character-list"
@@ -45,6 +54,7 @@ import MultiSelect from '@/components/MultiSelect';
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/gender-type';
+import SourceType from '@/constants/source-type';
 import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
@@ -63,11 +73,13 @@ export default {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.characterView,
       mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+      mappedSources: mapEnumToSelectBoxOptions(SourceType),
       filterHandler: LP.updateFilterAndRefetch(this, 'charactersPaged'),
       searchTimer: null,
       filters: {
         search: '',
-        genders: [...GenderType]
+        genders: [...GenderType],
+        sources: [...SourceType]
       },
       charactersPaged: defaultPagedResponse()
     };
@@ -78,6 +90,7 @@ export default {
       variables: {
         search: '',
         genders: [...GenderType],
+        sources: [...SourceType],
         paging: {
           page: 0,
           size: LP.size

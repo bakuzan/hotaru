@@ -109,6 +109,10 @@ function getDaysAgoX(num) {
   return dPart;
 }
 
+function ifArrayThenIn(arr, value) {
+  return arr ? value : {};
+}
+
 module.exports = {
   compose,
   enumArrayToObject,
@@ -124,5 +128,6 @@ module.exports = {
   setHasMoreFlag,
   formatDateISO,
   formatDateDisplay,
-  getDaysAgoX
+  getDaysAgoX,
+  ifArrayThenIn
 };
