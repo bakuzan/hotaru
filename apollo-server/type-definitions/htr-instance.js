@@ -29,8 +29,6 @@ module.exports = gql`
     customOrder: [Int]
     "Is Complete - League type only"
     isComplete: Boolean
-    "Expected number of final versus - League type only"
-    finalMatchDayCount: Int
   }
   type HTRInstancePage {
     nodes: [HTRInstance]
@@ -61,7 +59,5 @@ module.exports = gql`
     customOrder: [Int]
     "Is Complete - League type only"
     isComplete: Boolean
-    "Expected number of final versus - League type only"
-    finalMatchDayCount: Int
   }
 `;

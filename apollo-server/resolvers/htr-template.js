@@ -8,5 +8,9 @@ module.exports = {
     if (!series.length) return [];
 
     return Series.findAll({ where: { id: { [Op.in]: series } } });
+  },
+  instances(template) {
+    console.log(template);
+    return template.getHTRInstances();
   }
 };

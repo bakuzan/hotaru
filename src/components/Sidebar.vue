@@ -47,6 +47,12 @@ export default {
           to: Urls.htrInstanceList,
           title: 'Lists and Brackets',
           text: 'LB'
+        },
+        {
+          id: 8,
+          to: Urls.htrInstanceLeagueCenter,
+          title: 'League Center',
+          text: 'LC'
         }
       ]
     };

@@ -51,6 +51,9 @@ const Query = gql`
     htrInstanceById(id: Int!): HTRInstance
 
     honours: Honours
+
+    ongoingHTRInstanceLeagues: HTRTemplate
+    pastHTRInstanceLeaguesPaged(paging: Paging): HTRTemplatePage
   }
 `;
 
@@ -84,6 +87,8 @@ const Mutation = gql`
       versusId: Int!
       winnerId: Int!
     ): HTRInstance
+
+    htrInstanceLeagueCreate: [HTRInstance]
   }
 `;
 

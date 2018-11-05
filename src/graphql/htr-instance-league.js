@@ -6,25 +6,29 @@ const instanceFields = gql`
     name
     settings {
       isComplete
-      finalMatchDayCount
+      limit
       layout
     }
   }
+`;
+const ongoingLeagueFields = gql`
+  fragment OngoingLeagueFields on HTRTemplate {
+    id
+    name
+    instances {
+      ...LeagueFields
+    }
+  }
+  ${instanceFields}
 `;
 
 const getOngoingHTRInstanceLeagues = gql`
   query getOngoingHTRInstanceLeagues {
     ongoingHTRInstanceLeagues {
-      nodes {
-        id
-        name
-        htrInstances {
-          ...LeagueFields
-        }
-      }
+      ...OngoingLeagueFields
     }
   }
-  ${instanceFields}
+  ${ongoingLeagueFields}
 `;
 
 const getPastHTRInstanceLeaguesPaged = gql`
@@ -33,15 +37,20 @@ const getPastHTRInstanceLeaguesPaged = gql`
       nodes {
         id
         name
-        htrInstances {
-          ...LeagueFields
-        }
       }
       total
       hasMore
     }
   }
-  ${instanceFields}
+`;
+
+const createHTRInstanceLeague = gql`
+  mutation createHTRInstanceLeague {
+    htrInstanceLeagueCreate {
+      ...OngoingLeagueFields
+    }
+  }
+  ${ongoingLeagueFields}
 `;
 
 export default {
@@ -49,5 +58,7 @@ export default {
     getPastHTRInstanceLeaguesPaged,
     getOngoingHTRInstanceLeagues
   },
-  mutation: {}
+  mutation: {
+    createHTRInstanceLeague
+  }
 };
