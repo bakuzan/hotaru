@@ -44,28 +44,43 @@
         <div class="comparison-summary__text">{{comparisonSummaryTotal}}</div>
         <div class="comparison-summary__text">{{comparisonSummaryWinSplit}}</div>
       </div>
-      <List 
-        class="comparison-list"
-        columns="one"
-        :items="versusHistoryComparison"
-      >
-        <template slot-scope="slotProps">
-          <VoteButton 
-            class="versus-comparison__button"
-            :has-winner="!!slotProps.item.winnerId"
-            :is-winner="isWinner(slotProps.item, 0)"
-          />
-          <div class="versus-comparison__text">
-            <div>{{formatDate(slotProps.item.updatedAt)}}</div>
-            <div>{{slotProps.item.type}}</div>
-          </div>
-          <VoteButton 
-            class="versus-comparison__button"
-            :has-winner="!!slotProps.item.winnerId"
-            :is-winner="isWinner(slotProps.item, 1)"
-          />
-        </template>
-      </List>
+      <Tabs>
+        <Tab name="HeadToHead">
+          <List 
+            class="comparison-list"
+            columns="one"
+            :items="versusHistoryComparison"
+          >
+            <template slot-scope="slotProps">
+              <VoteButton 
+                class="versus-comparison__button"
+                :has-winner="!!slotProps.item.winnerId"
+                :is-winner="isWinner(slotProps.item, 0)"
+              />
+              <div class="versus-comparison__text">
+                <div>{{formatDate(slotProps.item.updatedAt)}}</div>
+                <div>{{slotProps.item.type}}</div>
+              </div>
+              <VoteButton 
+                class="versus-comparison__button"
+                :has-winner="!!slotProps.item.winnerId"
+                :is-winner="isWinner(slotProps.item, 1)"
+              />
+            </template>
+          </List>
+        </Tab>
+        <Tab name="OpponentsInCommon">
+          <List 
+            class="comparison-list"
+            columns="one"
+            :items="versusHistoryComparison"
+          >
+            <template slot-scope="slotProps">
+              {{slotProps.item}}
+            </template>
+          </List>
+        </Tab>
+      </Tabs>
     </div>
   </div>
 </template>
@@ -201,6 +216,7 @@ export default {
           if (!loading) {
             const { versusHistoryComparison } = data;
             const [c1, c2] = this.characterIds;
+
             this.versusHistoryComparison = versusHistoryComparison;
             this.comparisonSummary = {
               total: versusHistoryComparison.length,
