@@ -87,7 +87,7 @@ module.exports = {
         );
       });
 
-      return await Promise.all(associations).then(() => template);
+      return Promise.all(associations).then(() => template);
     });
   }
 };

@@ -88,7 +88,7 @@ const Mutation = gql`
       winnerId: Int!
     ): HTRInstance
 
-    htrInstanceLeagueCreate: [HTRInstance]
+    htrInstanceLeagueCreate: HTRTemplate
   }
 `;
 

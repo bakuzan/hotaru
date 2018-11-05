@@ -10,7 +10,8 @@ module.exports = {
     return Series.findAll({ where: { id: { [Op.in]: series } } });
   },
   instances(template) {
-    console.log(template);
-    return template.getHTRInstances();
+    if (template.htrInstances) return instance.htrInstances;
+
+    return template.getHtrInstances();
   }
 };
