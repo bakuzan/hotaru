@@ -10,6 +10,7 @@ module.exports = {
     const activeInstance = await context.HTRInstanceLeague.checkForActiveLeague();
 
     if (!activeInstance) {
+      console.log('No ongoing instances.', activeInstance);
       return null;
     }
 
@@ -25,7 +26,9 @@ module.exports = {
         type: db.where(db.col('htrtemplate.type'), {
           [Op.eq]: HTRTemplateTypes.League
         }),
-        'settings.isComplete': 'false'
+        'settings.isComplete': {
+          [Op.eq]: false
+        }
       },
       include: [HTRTemplate]
     });

@@ -117,6 +117,18 @@ export default new Router({
       name: Strings.route.htrInstanceLeagueCenter,
       component: () =>
         import(/* webpackChunkName: "instance-league-center" */ './views/HTRInstances/HTRInstanceLeagueCenter.vue')
+    },
+    {
+      path: Urls.htrInstanceLeagueView,
+      name: Strings.route.htrInstanceLeagueView,
+      component: () =>
+        import(/* webpackChunkName: "instance-league-view" */ './views/HTRInstances/HTRInstanceLeagueView.vue')
+    },
+    {
+      path: '*',
+      name: Strings.route.pageNotFound,
+      component: () =>
+        import(/* webpackChunkName: "page-not-found" */ './views/PageNotFound.vue')
     }
   ]
 });

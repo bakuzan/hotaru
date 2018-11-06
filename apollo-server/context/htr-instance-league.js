@@ -13,7 +13,9 @@ async function checkForActiveLeague(options = {}) {
       type: db.where(db.col('htrtemplate.type'), {
         [Op.eq]: HTRTemplateTypes.League
       }),
-      'settings.isComplete': 'false',
+      'settings.isComplete': {
+        [Op.eq]: false
+      },
       ...where
     },
     include: [HTRTemplate],
