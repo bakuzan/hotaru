@@ -37,18 +37,27 @@ export default {
   data: function() {
     return {
       mutationLoading: false,
-      htrTemplateSeason: {}
+      htrTemplateSeason: {},
+      htrInstanceLeague: {}
     };
   },
   apollo: {
     htrTemplateSeason: {
       query: Query.getHTRTemplateSeasonById,
       variables() {
-        const seasonId = Number(Routing.getParam(this.$router, 'seasonId'));
-        const leagueId = Routing.getQueryFromLocation('leagueId', null);
         return {
-          seasonId,
-          leagueId
+          id: this.seasonId
+        };
+      }
+    },
+    htrInstanceLeague: {
+      query: Query.getHTRInstanceLeagueById,
+      skip() {
+        return !this.currentLeagueId;
+      },
+      variables() {
+        return {
+          id: this.currentLeagueId
         };
       }
     }
@@ -59,6 +68,12 @@ export default {
     },
     canCreate: function() {
       return false;
+    },
+    seasonId: function() {
+      return Number(Routing.getParam(this.$router, 'seasonId'));
+    },
+    currentLeagueId: function() {
+      return Routing.getQueryFromLocation('leagueId', null);
     }
   },
   methods: {

@@ -54,6 +54,8 @@ const Query = gql`
 
     ongoingHTRInstanceLeagues: HTRTemplate
     pastHTRInstanceLeaguesPaged(paging: Paging): HTRTemplatePage
+    htrTemplateSeasonById(id: Int!): HTRTemplate
+    htrInstanceLeagueById(id: Int!): HTRInstance
   }
 `;
 

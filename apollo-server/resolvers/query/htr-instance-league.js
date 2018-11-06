@@ -52,5 +52,15 @@ module.exports = {
       total: result.count,
       hasMore: Utils.setHasMoreFlag(result.count, paging)
     }));
+  },
+  htrTemplateSeasonById(_, { id }) {
+    return HTRTemplate.findById(id, {
+      include: [HTRInstance]
+    });
+  },
+  htrInstanceLeagueById(_, { id }) {
+    return HTRInstance.findById(id, {
+      include: [Characters]
+    });
   }
 };

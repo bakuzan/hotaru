@@ -54,12 +54,17 @@ const createHTRInstanceLeague = gql`
 `;
 
 const getHTRTemplateSeasonById = gql`
-  query getHTRTemplateSeasonById($seasonId: Int!, $leagueIds: [Int]) {
-    htrTemplateSeasonById(seasonId: $seasonId) {
-      id
-      name
+  query getHTRTemplateSeasonById($id: Int!) {
+    htrTemplateSeasonById(id: $id) {
+      ...OngoingLeagueFields
     }
-    htrInstanceLeagues(filter: { leagueIds: $leagueIds }) {
+  }
+  ${ongoingLeagueFields}
+`;
+
+const getHTRInstanceLeagueById = gql`
+  query getHTRInstanceLeagueById($id: Int!) {
+    htrInstanceLeagueById(id: $id) {
       ...LeagueFields
       characters {
         id
@@ -75,7 +80,8 @@ export default {
   query: {
     getPastHTRInstanceLeaguesPaged,
     getOngoingHTRInstanceLeagues,
-    getHTRTemplateSeasonById
+    getHTRTemplateSeasonById,
+    getHTRInstanceLeagueById
   },
   mutation: {
     createHTRInstanceLeague
