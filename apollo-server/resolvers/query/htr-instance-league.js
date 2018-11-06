@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { db, HTRTemplate, HTRInstance } = require('../../connectors');
+const { db, HTRTemplate, HTRInstance, Character } = require('../../connectors');
 
 const { HTRTemplateTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
@@ -60,7 +60,7 @@ module.exports = {
   },
   htrInstanceLeagueById(_, { id }) {
     return HTRInstance.findById(id, {
-      include: [Characters]
+      include: [Character]
     });
   }
 };
