@@ -22,6 +22,7 @@
           <NavLink 
             class="rank-card__link"
             :to="cardUrl"
+            :title="character.name"
           >
           {{character.name}}
           </NavLink>

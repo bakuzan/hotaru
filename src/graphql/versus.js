@@ -1,59 +1,41 @@
 import gql from 'graphql-tag';
 
+import Fragments from './fragments';
+
 const getActiveDailyVersus = gql`
   query getActiveDailyVersus {
     versusDailyActive {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
+      ...VersusBase
     }
   }
+  ${Fragments.versusBase}
 `;
 
 const createDailyVersus = gql`
   mutation createDailyVersus {
     versusCreateDaily {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
+      ...VersusBase
     }
   }
+  ${Fragments.versusBase}
 `;
 
 const createVersusFromRules = gql`
   mutation createVersusFromRules($rules: VersusRules) {
     versusFromRules(rules: $rules) {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
+      ...VersusBase
     }
   }
+  ${Fragments.versusBase}
 `;
 
 const castVote = gql`
   mutation voteForCharacter($versusId: Int!, $winnerId: Int!) {
     versusVote(versusId: $versusId, winnerId: $winnerId) {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
+      ...VersusBase
     }
   }
+  ${Fragments.versusBase}
 `;
 
 const getVersusHistoryComparison = gql`
@@ -70,35 +52,25 @@ const getVersusHistoryComparison = gql`
 const getVersusSingles = gql`
   query versusSinglesNotWon {
     versusSinglesNotWon {
-      id
-      characters {
-        id
-        name
-        displayImage
-      }
-      winnerId
+      ...VersusBase
     }
   }
+  ${Fragments.versusBase}
 `;
 
 const getVersusHistory = gql`
   query getVersusHistory($characterId: Int!, $paging: Paging) {
     versusHistoryPaged(characterId: $characterId, paging: $paging) {
       nodes {
-        id
+        ...VersusBase
         type
-        characters {
-          id
-          name
-          displayImage
-        }
-        winnerId
         updatedAt
       }
       total
       hasMore
     }
   }
+  ${Fragments.versusBase}
 `;
 
 export default {

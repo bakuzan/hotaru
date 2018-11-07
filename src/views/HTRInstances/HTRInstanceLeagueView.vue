@@ -4,7 +4,9 @@
       <LoadingBouncer v-show="isLoading" local />
       <h4 class="league-view__title">
         {{htrTemplateSeasonById && htrTemplateSeasonById.name}}
+        <span class="status-badge themed-background">
         {{isSeasonComplete ? 'Complete' : 'Ongoing'}}
+        </span>
       </h4>
       <Button 
         theme="primary"
@@ -23,10 +25,10 @@
           :value="currentLeagueId"
           @on-select="onLeagueChange"
         />
-        <table class="table">
+        <table class="table league-table">
           <thead>
             <tr>
-              <th></th>
+              <th class="name-column"></th>
               <th>P</th>
               <th>W</th>
               <th>L</th>
@@ -34,19 +36,26 @@
           </thead>
           <tbody>
             <tr 
-              v-for="row in leagueCharacters" 
+              v-for="(row, i) in leagueCharacters" 
               :key="row.id"
+              class="league-table__row"
             >
-              <td>
-                {{row.name}}
-                <!-- TODO: Add display image -->
+              <td class="name-column">
+                <RankingCard 
+                  size="small"
+                  :rank="i+1"
+                  :character="row"
+                />
               </td>
-              <td>{{row.played}}</td>
-              <td>{{row.won}}</td>
-              <td>{{row.lost}}</td>
+              <td class="text--top text--right padded">{{row.played}}</td>
+              <td class="text--top text--right padded">{{row.won}}</td>
+              <td class="text--top text--right padded">{{row.lost}}</td>
             </tr>
           </tbody>
         </table>
+      </section>
+      <section class="league-view-section">
+        versus to appear here
       </section>
     </div>
   </div>
@@ -57,12 +66,13 @@ import List from '@/components/List';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import { Button } from '@/components/Buttons';
 import SelectBox from '@/components/SelectBox';
+import { RankingCard } from '@/components/Cards';
 
-import { Query } from '@/graphql';
+import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import * as CacheUpdate from '@/utils/cache';
 import * as Routing from '@/utils/routing';
-import { mapToSelectBoxOptions } from '@/utils/mappers';
+import alertService from '@/utils/alert-service';
 
 export default {
   name: 'HTRInstanceLeagueView',
@@ -70,7 +80,8 @@ export default {
     List,
     LoadingBouncer,
     Button,
-    SelectBox
+    SelectBox,
+    RankingCard
   },
   data: function() {
     return {
@@ -105,7 +116,7 @@ export default {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
     canCreate: function() {
-      return false;
+      return this.currentLeagueId && !this.isSeasonComplete;
     },
     seasonId: function() {
       return Number(Routing.getParam(this.$router, 'seasonId'));
@@ -122,7 +133,10 @@ export default {
       return leagues;
     },
     leagueOptions: function() {
-      return mapToSelectBoxOptions(this.leagues);
+      return this.leagues.map((x) => ({
+        value: x.id,
+        text: `${x.name} (${x.settings.isComplete ? 'Complete' : 'Ongoing'})`
+      }));
     },
     isSeasonComplete: function() {
       return (
@@ -138,7 +152,41 @@ export default {
   },
   methods: {
     onMatchCreate: function() {
-      console.log('%c NOT IMPLEMENTED', 'color: firebrick');
+      this.mutationLoading = true;
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.createLeagueMatchUps,
+          variables: { id: this.currentLeagueId },
+          update: (
+            store,
+            { data: { htrInstanceLeagueVersusCreate: versus } }
+          ) => {
+            console.log('created versus', versus);
+            const league = store.readQuery({
+              query: Query.getHTRInstanceLeagueById,
+              variables: { id: this.currentLeagueId }
+            });
+
+            league.versus.unshift(...versus);
+
+            store.writeQuery({
+              query: Query.getHTRInstanceLeagueById,
+              variables: { id: this.currentLeagueId },
+              data: { htrInstanceLeagueById: league }
+            });
+          }
+        })
+        .then(() => {
+          this.mutationLoading = false;
+        })
+        .catch((error) => {
+          alertService.sendError({
+            message: 'Failed to Create',
+            detail: error.message || error
+          });
+          this.mutationLoading = false;
+        });
     },
     onLeagueChange: function(value) {
       const leagueId = Number(value);
@@ -153,6 +201,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../styles/_variables';
+
+.status-badge {
+  padding: $app--padding-standard;
+  border-radius: 1em;
+}
 
 .league-view {
   &__header {
@@ -169,5 +222,11 @@ export default {
 .league-view-section {
   display: flex;
   flex-direction: column;
+}
+
+.name-column {
+  min-width: 100px;
+  max-width: 40vw;
+  overflow: hidden;
 }
 </style>

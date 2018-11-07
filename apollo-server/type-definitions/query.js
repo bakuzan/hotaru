@@ -91,6 +91,7 @@ const Mutation = gql`
     ): HTRInstance
 
     htrInstanceLeagueCreate: HTRTemplate
+    htrInstanceLeagueVersusCreate(id: Int!): [Versus]
   }
 `;
 

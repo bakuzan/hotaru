@@ -89,5 +89,31 @@ module.exports = {
 
       return Promise.all(associations).then(() => template);
     });
+  },
+  htrInstanceLeagueVersusCreate(_, { id }) {
+    return db.transaction(async (transaction) => {
+      const league = HTRInstance.findById(id, {
+        raw: true,
+        attributes: ['id', 'settings'],
+        include: [
+          { model: HTRTemplate, attributes: ['type'] },
+          Characters,
+          Versus
+        ],
+        transaction
+      });
+
+      if (!league) {
+        throw Error('No instance found.');
+      } else if (league.htrTemplate.type !== HTRTemplateTypes.League) {
+        throw Error('Invalid instance type.');
+      }
+
+      // TODO
+      // Create pairs that don't exist yet
+      // Create versus from them
+      // Update layout
+      // Return new versus
+    });
   }
 };

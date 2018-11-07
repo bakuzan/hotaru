@@ -89,15 +89,13 @@ const getCharactersForTemplateRules = gql`
 const getCharacterById = gql`
   query getCharacterById($id: Int!) {
     characterById(id: $id) {
-      id
-      name
-      displayImage
-      isWaifu
+      ...CharactersQueryFields
       gender
       seriesId
       tagIds
     }
   }
+  ${charactersQueryFields}
 `;
 
 const getCharactersByIds = gql`

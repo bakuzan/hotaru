@@ -1,26 +1,6 @@
 import gql from 'graphql-tag';
 
-const instanceFields = gql`
-  fragment LeagueFields on HTRInstance {
-    id
-    name
-    settings {
-      isComplete
-      limit
-      layout
-    }
-  }
-`;
-const ongoingLeagueFields = gql`
-  fragment OngoingLeagueFields on HTRTemplate {
-    id
-    name
-    instances {
-      ...LeagueFields
-    }
-  }
-  ${instanceFields}
-`;
+import Fragments from './fragments';
 
 const getOngoingHTRInstanceLeagues = gql`
   query getOngoingHTRInstanceLeagues {
@@ -28,7 +8,7 @@ const getOngoingHTRInstanceLeagues = gql`
       ...OngoingLeagueFields
     }
   }
-  ${ongoingLeagueFields}
+  ${Fragments.ongoingLeagueFields}
 `;
 
 const getPastHTRInstanceLeaguesPaged = gql`
@@ -50,7 +30,7 @@ const createHTRInstanceLeague = gql`
       ...OngoingLeagueFields
     }
   }
-  ${ongoingLeagueFields}
+  ${Fragments.ongoingLeagueFields}
 `;
 
 const getHTRTemplateSeasonById = gql`
@@ -59,7 +39,7 @@ const getHTRTemplateSeasonById = gql`
       ...OngoingLeagueFields
     }
   }
-  ${ongoingLeagueFields}
+  ${Fragments.ongoingLeagueFields}
 `;
 
 const getHTRInstanceLeagueById = gql`
@@ -67,13 +47,29 @@ const getHTRInstanceLeagueById = gql`
     htrInstanceLeagueById(id: $id) {
       ...LeagueFields
       characters {
-        id
-        name
-        displayImage
+        ...CharacterBase
+      }
+      versus {
+        ...VersusBase
       }
     }
   }
-  ${instanceFields}
+  ${Fragments.leagueInstanceFields}
+  ${Fragments.characterBase}
+  ${Fragments.versusBase}
+`;
+
+const createLeagueMatchUps = gql`
+  mutation createLeagueMatchUps($id: Int!) {
+    htrInstanceLeagueVersusCreate(id: $id) {
+      id
+      characters {
+        ...CharacterBase
+      }
+      winnerId
+    }
+  }
+  ${Fragments.characterBase}
 `;
 
 export default {
@@ -84,6 +80,7 @@ export default {
     getHTRInstanceLeagueById
   },
   mutation: {
-    createHTRInstanceLeague
+    createHTRInstanceLeague,
+    createLeagueMatchUps
   }
 };
