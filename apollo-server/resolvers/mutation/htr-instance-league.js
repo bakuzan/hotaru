@@ -92,28 +92,28 @@ module.exports = {
   },
   htrInstanceLeagueVersusCreate(_, { id }) {
     return db.transaction(async (transaction) => {
-      const league = HTRInstance.findById(id, {
+      const league = await HTRInstance.findById(id, {
         raw: true,
         attributes: ['id', 'settings'],
-        include: [
-          { model: HTRTemplate, attributes: ['type'] },
-          Characters,
-          Versus
-        ],
+        include: [{ model: HTRTemplate, attributes: ['type'] }],
         transaction
       });
 
+      console.log(league);
+
       if (!league) {
         throw Error('No instance found.');
-      } else if (league.htrTemplate.type !== HTRTemplateTypes.League) {
+      } else if (league['htrTemplate.type'] !== HTRTemplateTypes.League) {
         throw Error('Invalid instance type.');
       }
 
       // TODO
+      // Get Characters and Versus
       // Create pairs that don't exist yet
       // Create versus from them
       // Update layout
       // Return new versus
+      throw Error('Not Finished.');
     });
   }
 };
