@@ -10,6 +10,7 @@ const {
 
 const { HTRTemplateTypes, VersusTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
+const generateLeagueMatches = require('../../utils/league-matches');
 
 module.exports = {
   htrInstanceLeagueCreate(_, __, context) {
@@ -66,7 +67,7 @@ module.exports = {
           settings: {
             isComplete: false,
             limit: cArr.map((_, i) => n - 1 - i).reduce((p, c) => p + c, 0),
-            layout: []
+            layout: generateLeagueMatches(cArr)
           },
           htrTemplateId: template.id
         };
@@ -99,17 +100,44 @@ module.exports = {
         transaction
       });
 
-      console.log(league);
-
       if (!league) {
         throw Error('No instance found.');
-      } else if (league['htrTemplate.type'] !== HTRTemplateTypes.League) {
+      }
+
+      if (league['htrTemplate.type'] !== HTRTemplateTypes.League) {
         throw Error('Invalid instance type.');
       }
 
+      const matchCounts = await Versus.findAll({
+        raw: true,
+        where: { htrInstanceId: { [Op.eq]: id } },
+        attributes: [
+          'id',
+          [sequelize.fn('COUNT', db.col('id')), 'total'],
+          [sequelize.fn('COUNT', db.col('winnerId')), 'completed']
+        ],
+        transaction
+      });
+
+      if (matchCounts.total !== matchCounts.completed) {
+        throw Error('Some matches are still ongoing.');
+      }
+
+      if (matchCounts.total === league.settings.limit) {
+        throw Error('Match count reached.');
+      }
+
+      const layout = league.settings.layout;
+      const matchSet = layout.find((x, i) => {
+        const xCount = x.length;
+        return xCount * i + xCount > matchCounts.total;
+      });
+
+      const newVersus = matchSet.map((x) => ({
+        type: VersusTypes.League
+      }));
+
       // TODO
-      // Get Characters and Versus
-      // Create pairs that don't exist yet
       // Create versus from them
       // Update layout
       // Return new versus
