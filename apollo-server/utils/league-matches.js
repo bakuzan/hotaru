@@ -21,12 +21,35 @@ var inputs = [
   { id: 20 }
 ];
 
-module.exports = function leagueMatchPairs(characters) {
-  const pairs = [];
-  const n = characters.length - 1;
+// https://stackoverflow.com/questions/1293058/round-robin-tournament-algorithm-in-c-sharp?rq=1
 
-  characters.forEach((c, i) =>
-    inputs.forEach((k, j) => (i < j ? pairs.push([c.id, k.id]) : null))
-  );
-  console.log(n, 'pairings > ', pairs);
+module.exports = function leagueMatchPairs(characters) {
+  const characterCount = characters.length;
+  if (characterCount % 2 !== 0) {
+    throw Error('Odd count of characters not handled yet.');
+  }
+
+  const n = characterCount - 1;
+  const half = characterCount / 2;
+  const staged = [];
+
+  staged.push(...characters.slice(half));
+  staged.push(...characters.slice(1, half).reverse());
+
+  const output = [];
+  for (let i = 1; i < n; i++) {
+    const charaIdx = i % n;
+    const chara = staged[charaIdx];
+    output.push(chara, staged[0]);
+    for (let j = 1; j < half; j++) {
+      const first = (i + j) % n;
+      const second = (i + n - j) % n;
+      output.push([staged[first], staged[second]]);
+    }
+  }
+
+  //   characters.forEach((c, i) =>
+  //     inputs.forEach((k, j) => (i < j ? pairs.push([c.id, k.id]) : null))
+  //   );
+  //   console.log(n, 'pairings > ', pairs);
 };
