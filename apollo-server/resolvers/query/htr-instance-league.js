@@ -64,16 +64,18 @@ module.exports = {
       include: [HTRInstance]
     });
   },
-  async htrInstanceLeagueById(_, { id }) {
+  async htrInstanceLeagueById(_, { id, page = 0 }) {
     const league = await HTRInstance.findById(id);
 
     const leagueData = league.dataValues;
     const { limit } = leagueData.settings;
+    const pageSize = Number(limit) / 2;
 
-    const matches = await Versus.findAll({
+    const matchesResult = await Versus.findAndCountAll({
       where: { htrInstanceId: id },
       order: [['createdAt', 'desc']],
-      limit: Number(limit) / 2,
+      limit: pageSize,
+      offset: pageSize * page,
       include: [Character]
     });
 
@@ -84,7 +86,14 @@ module.exports = {
 
     return {
       ...leagueData,
-      versus: matches,
+      matches: {
+        nodes: matchesResult.rows,
+        total: matchesResult.count,
+        hasMore: Utils.setHasMoreFlag(matchesResult.count, {
+          size: pageSize,
+          page
+        })
+      },
       leagueTable
     };
   }

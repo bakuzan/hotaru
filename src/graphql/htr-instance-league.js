@@ -43,8 +43,8 @@ const getHTRTemplateSeasonById = gql`
 `;
 
 const getHTRInstanceLeagueById = gql`
-  query getHTRInstanceLeagueById($id: Int!) {
-    htrInstanceLeagueById(id: $id) {
+  query getHTRInstanceLeagueById($id: Int!, $page: Int!) {
+    htrInstanceLeagueById(id: $id, page: $page) {
       ...LeagueFields
       leagueTable {
         ...LeagueTableBase
@@ -52,8 +52,12 @@ const getHTRInstanceLeagueById = gql`
         won
         lost
       }
-      versus {
-        ...VersusBase
+      matches {
+        nodes {
+          ...VersusBase
+        }
+        total
+        hasMore
       }
     }
   }

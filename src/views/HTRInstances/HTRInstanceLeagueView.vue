@@ -57,8 +57,8 @@
       <section class="league-view-section">
         <List 
           columns="one"
-          :items="leagueMatches"
-          :paged-total="100"
+          :items="leagueMatches.nodes"
+          :paged-total="leagueMatches.total"
           @intersect="showMoreMatches"
         >
           <template slot-scope="slotProps">
@@ -88,6 +88,7 @@ import Strings from '@/constants/strings';
 import * as CacheUpdate from '@/utils/cache';
 import * as Routing from '@/utils/routing';
 import alertService from '@/utils/alert-service';
+import { defaultPagedResponse } from '@/utils/models';
 
 export default {
   name: 'HTRInstanceLeagueView',
@@ -102,6 +103,7 @@ export default {
   data: function() {
     return {
       mutationLoading: false,
+      page: 0,
       htrTemplateSeasonById: {},
       htrInstanceLeagueById: {}
     };
@@ -121,8 +123,10 @@ export default {
         return !this.currentLeagueId;
       },
       variables() {
+        this.page = 0;
         return {
-          id: this.currentLeagueId
+          id: this.currentLeagueId,
+          page: 0
         };
       }
     }
@@ -135,8 +139,8 @@ export default {
       return (
         this.currentLeagueId &&
         !this.isSeasonComplete &&
-        (!this.leagueMatches.length ||
-          this.leagueMatches.every((x) => x.winnerId))
+        (!this.leagueMatches.nodes.length ||
+          this.leagueMatches.nodes.every((x) => x.winnerId))
       );
     },
     seasonId: function() {
@@ -173,7 +177,10 @@ export default {
     },
     leagueMatches: function() {
       return (
-        (this.htrInstanceLeagueById && this.htrInstanceLeagueById.versus) || []
+        (this.htrInstanceLeagueById &&
+          this.htrInstanceLeagueById.matches &&
+          this.htrInstanceLeagueById.matches) ||
+        defaultPagedResponse()
       );
     }
   },
@@ -194,7 +201,7 @@ export default {
               variables: { id: this.currentLeagueId }
             });
             console.log('created versus', versus, league);
-            league.versus.unshift(...versus);
+            league.matches.nodes.unshift(...versus);
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,
@@ -241,9 +248,12 @@ export default {
             const data = {
               ...league,
               ...htrInstanceLeagueVersusVote,
-              versus: league.versus.map(
-                (x) => (x.id === versusId ? { ...x, winnerId } : x)
-              )
+              matches: {
+                ...league.matches,
+                nodes: league.matches.nodes.map(
+                  (x) => (x.id === versusId ? { ...x, winnerId } : x)
+                )
+              }
             };
 
             store.writeQuery({
@@ -265,10 +275,34 @@ export default {
         });
     },
     showMoreMatches: function() {
-      console.log(
-        '%c showMoreMatches: not implemented yet.',
-        'color: firebrick'
-      );
+      const { matches } = this.htrInstanceLeagueById;
+      const query = this.$apollo.queries.htrInstanceLeagueById;
+      if (!matches || !matches.hasMore || query.loading) {
+        return;
+      }
+
+      this.page += 1;
+      query.fetchMore({
+        variables: {
+          id: this.currentLeagueId,
+          page: this.page
+        },
+        updateQuery: (prevResult, { fetchMoreResult }) => {
+          const prevData = prevResult.htrInstanceLeagueById;
+          const nextData = fetchMoreResult.htrInstanceLeagueById;
+
+          return {
+            htrInstanceLeagueById: {
+              __typename: 'HTRInstance',
+              ...nextData,
+              matches: {
+                ...nextData.matches,
+                nodes: [...prevData.matches.nodes, ...nextData.matches.nodes]
+              }
+            }
+          };
+        }
+      });
     }
   }
 };

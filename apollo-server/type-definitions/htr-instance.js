@@ -11,6 +11,7 @@ module.exports = gql`
     characters: [Character]
     leagueTable: [LeagueCharacter]
     versus: [Versus]
+    matches: VersusPage
     type: HTRTemplateType
     createdAt: String
   }
