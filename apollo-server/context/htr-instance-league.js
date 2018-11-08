@@ -23,6 +23,27 @@ async function checkForActiveLeague(options = {}) {
   });
 }
 
+async function getInstanceAndCheckIfLeague({ id, transaction }) {
+  const league = await HTRInstance.findById(id, {
+    attributes: ['id', 'settings'],
+    include: [{ model: HTRTemplate, attributes: ['type'] }],
+    transaction
+  });
+
+  console.log('league', league);
+  if (!league) {
+    throw Error('No instance found.');
+  }
+
+  const { htrTemplate } = league.dataValues;
+  if (htrTemplate && htrTemplate.dataValues.type !== HTRTemplateTypes.League) {
+    throw Error('Invalid instance type.');
+  }
+
+  return league;
+}
+
 module.exports = {
-  checkForActiveLeague
+  checkForActiveLeague,
+  getInstanceAndCheckIfLeague
 };

@@ -220,12 +220,47 @@ export default {
       });
     },
     handleVote: function(versusId, winnerId) {
-      console.log(
-        '%c Not yet implemented',
-        'color: firebrick',
-        versusId,
-        winnerId
-      );
+      this.mutationLoading = true;
+
+      this.$apollo
+        .mutate({
+          mutation: Mutation.castVoteInLeague,
+          variables: {
+            htrInstanceId: this.currentLeagueId,
+            versusId,
+            winnerId
+          },
+          update: (store, { data: { htrInstanceLeagueVersusVote } }) => {
+            const league = store.readQuery({
+              query: Query.getHTRInstanceLeagueById,
+              variables: { id: this.currentLeagueId }
+            });
+
+            const data = {
+              ...league,
+              ...htrInstanceLeagueVersusVote,
+              versus: league.versus.map(
+                (x) => (x.id === versusId ? { ...x, winnerId } : x)
+              )
+            };
+
+            store.writeQuery({
+              query: Query.getHTRInstanceLeagueById,
+              variables: { id: this.currentLeagueId },
+              data: { htrInstanceLeagueById: data }
+            });
+          }
+        })
+        .then(() => {
+          this.mutationLoading = false;
+        })
+        .catch((error) => {
+          alertService.sendError({
+            message: 'Failed to Vote',
+            detail: error.message || error
+          });
+          this.mutationLoading = false;
+        });
     }
   }
 };

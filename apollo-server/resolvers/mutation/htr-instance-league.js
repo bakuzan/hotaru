@@ -93,24 +93,9 @@ module.exports = {
   },
   htrInstanceLeagueVersusCreate(_, { id }, context) {
     return db.transaction(async (transaction) => {
-      const league = await HTRInstance.findById(id, {
-        attributes: ['id', 'settings'],
-        include: [{ model: HTRTemplate, attributes: ['type'] }],
-        transaction
-      });
-
-      console.log('league', league);
-      if (!league) {
-        throw Error('No instance found.');
-      }
-
-      const { settings, htrTemplate } = league.dataValues;
-      if (
-        htrTemplate &&
-        htrTemplate.dataValues.type !== HTRTemplateTypes.League
-      ) {
-        throw Error('Invalid instance type.');
-      }
+      const league = await context.HTRInstanceLeague.getInstanceAndCheckIfLeague(
+        { id, transaction }
+      );
 
       const [matchCounts] = await Versus.findAll({
         raw: true,
@@ -131,6 +116,7 @@ module.exports = {
         throw Error('Some matches are still ongoing.');
       }
 
+      const { settings } = league.dataValues;
       const { layout, limit } = settings;
       if (matchCounts.total === layout.length) {
         throw Error('Match count reached.');
@@ -151,6 +137,50 @@ module.exports = {
 
       await league.addVersus(newVersus, { transaction });
       return newVersus;
+    });
+  },
+  htrInstanceLeagueVersusVote(
+    _,
+    { htrInstanceId, versusId, winnerId },
+    context
+  ) {
+    return db.transaction(async (transaction) => {
+      const league = await context.HTRInstanceLeague.getInstanceAndCheckIfLeague(
+        { id: htrInstanceId, transaction }
+      );
+
+      await Versus.update(
+        { winnerId },
+        { where: { id: versusId, htrInstanceId }, transaction }
+      );
+
+      const completedMatches = await Versus.count({
+        where: { htrInstanceId, winnerId: { [Op.ne]: null } },
+        transaction
+      });
+
+      const { settings: currentSettings } = league.dataValues;
+      const { layout } = settings;
+      const isComplete = completedMatches === layout.length;
+      const settings = { ...currentSettings, isComplete };
+
+      if (isComplete) {
+        await HTRInstance.update(
+          { settings },
+          { where: { id: htrInstanceId }, transaction }
+        );
+      }
+
+      const leagueTable = await db.query(SQL['get_league_table'], {
+        type: db.QueryTypes.SELECT,
+        replacements: { leagueId: htrInstanceId }
+      });
+
+      return {
+        ...leagueData,
+        settings,
+        leagueTable
+      };
     });
   }
 };

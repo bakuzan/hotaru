@@ -75,6 +75,30 @@ const createLeagueMatchUps = gql`
   ${Fragments.characterBase}
 `;
 
+const castVoteInLeague = gql`
+  mutation castVoteInLeague(
+    $htrInstanceId: Int!
+    $versusId: Int!
+    $winnerId: Int!
+  ) {
+    htrInstanceLeagueVersusVote(
+      htrInstanceId: $htrInstanceId
+      versusId: $versusId
+      winnerId: $winnerId
+    ) {
+      ...LeagueFields
+      leagueTable {
+        ...LeagueTableBase
+        played
+        won
+        lost
+      }
+    }
+  }
+  ${Fragments.leagueInstanceFields}
+  ${Fragments.leagueTableBase}
+`;
+
 export default {
   query: {
     getPastHTRInstanceLeaguesPaged,
@@ -84,6 +108,7 @@ export default {
   },
   mutation: {
     createHTRInstanceLeague,
-    createLeagueMatchUps
+    createLeagueMatchUps,
+    castVoteInLeague
   }
 };
