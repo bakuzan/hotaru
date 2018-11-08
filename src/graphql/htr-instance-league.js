@@ -46,8 +46,11 @@ const getHTRInstanceLeagueById = gql`
   query getHTRInstanceLeagueById($id: Int!) {
     htrInstanceLeagueById(id: $id) {
       ...LeagueFields
-      characters {
-        ...CharacterBase
+      leagueTable {
+        ...LeagueTableBase
+        played
+        won
+        lost
       }
       versus {
         ...VersusBase
@@ -55,7 +58,7 @@ const getHTRInstanceLeagueById = gql`
     }
   }
   ${Fragments.leagueInstanceFields}
-  ${Fragments.characterBase}
+  ${Fragments.leagueTableBase}
   ${Fragments.versusBase}
 `;
 

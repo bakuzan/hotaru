@@ -1,6 +1,12 @@
 const Op = require('sequelize').Op;
 
-const { db, HTRTemplate, HTRInstance, Character } = require('../../connectors');
+const {
+  db,
+  HTRTemplate,
+  HTRInstance,
+  Character,
+  Versus
+} = require('../../connectors');
 
 const { HTRTemplateTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
@@ -58,10 +64,25 @@ module.exports = {
       include: [HTRInstance]
     });
   },
-  htrInstanceLeagueById(_, { id }) {
-    return HTRInstance.findById(id, {
-      include: [Character],
-      order: [[Character, 'name', 'asc']]
+  async htrInstanceLeagueById(_, { id }) {
+    const league = await HTRInstance.findById(id);
+
+    const leagueData = league.dataValues;
+    const { limit } = leagueData.settings;
+
+    const matches = await Versus.findAll({
+      where: { htrInstanceId: id },
+      order: [['createdAt', 'desc']],
+      limit: Number(limit) / 2,
+      include: [Character]
     });
+
+    const leagueTable = [];
+
+    return {
+      ...leagueData,
+      versus: matches,
+      leagueTable
+    };
   }
 };

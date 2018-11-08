@@ -9,6 +9,7 @@ module.exports = gql`
     htrTemplateId: Int
     htrTemplate: HTRTemplate
     characters: [Character]
+    leagueTable: [LeagueCharacter]
     versus: [Versus]
     type: HTRTemplateType
     createdAt: String

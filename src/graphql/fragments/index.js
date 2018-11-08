@@ -16,6 +16,14 @@ const characterBase = gql`
   }
 `;
 
+const leagueTableBase = gql`
+  fragment LeagueTableBase on LeagueCharacter {
+    id
+    name
+    displayImage
+  }
+`;
+
 const versusBase = gql`
   fragment VersusBase on Versus {
     id
@@ -55,5 +63,6 @@ export default {
   characterBase,
   versusBase,
   leagueInstanceFields,
-  ongoingLeagueFields
+  ongoingLeagueFields,
+  leagueTableBase
 };

@@ -10,6 +10,7 @@ const versus = require('./versus');
 const ranking = require('./ranking');
 const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
+const htrinstanceleague = require('./htr-instance-league');
 const honours = require('./honours');
 
 module.exports = [
@@ -23,6 +24,7 @@ module.exports = [
   ranking,
   htrtemplate,
   htrinstance,
+  htrinstanceleague,
   honours,
   gql`
     input Paging {
