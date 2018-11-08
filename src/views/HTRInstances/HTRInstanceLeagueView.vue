@@ -55,7 +55,19 @@
         </table>
       </section>
       <section class="league-view-section">
-        versus to appear here
+        <List 
+          columns="one"
+          :items="leagueMatches"
+        >
+          <template slot-scope="slotProps">
+            <VersusWidget
+              v-bind="slotProps.item"
+              enable-compare
+              :figure-size="null"
+              @vote="handleVote"
+            />
+          </template>
+        </List>
       </section>
     </div>
   </div>
@@ -67,6 +79,7 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 import { Button } from '@/components/Buttons';
 import SelectBox from '@/components/SelectBox';
 import { RankingCard } from '@/components/Cards';
+import VersusWidget from '@/components/Widgets/VersusWidget';
 
 import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
@@ -81,7 +94,8 @@ export default {
     LoadingBouncer,
     Button,
     SelectBox,
-    RankingCard
+    RankingCard,
+    VersusWidget
   },
   data: function() {
     return {
@@ -116,7 +130,12 @@ export default {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
     canCreate: function() {
-      return this.currentLeagueId && !this.isSeasonComplete;
+      return (
+        this.currentLeagueId &&
+        !this.isSeasonComplete &&
+        (!this.leagueMatches.length ||
+          this.leagueMatches.every((x) => x.winnerId))
+      );
     },
     seasonId: function() {
       return Number(Routing.getParam(this.$router, 'seasonId'));
@@ -148,6 +167,11 @@ export default {
         (this.htrInstanceLeagueById && this.htrInstanceLeagueById.characters) ||
         []
       );
+    },
+    leagueMatches: function() {
+      return (
+        (this.htrInstanceLeagueById && this.htrInstanceLeagueById.versus) || []
+      );
     }
   },
   methods: {
@@ -162,12 +186,11 @@ export default {
             store,
             { data: { htrInstanceLeagueVersusCreate: versus } }
           ) => {
-            console.log('created versus', versus);
             const league = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
               variables: { id: this.currentLeagueId }
             });
-
+            console.log('created versus', versus, league);
             league.versus.unshift(...versus);
 
             store.writeQuery({
@@ -194,6 +217,14 @@ export default {
         name: Strings.route.htrInstanceLeagueView,
         query: { leagueId }
       });
+    },
+    handleVote: function(versusId, winnerId) {
+      console.log(
+        '%c Not yet implemented',
+        'color: firebrick',
+        versusId,
+        winnerId
+      );
     }
   }
 };
@@ -222,6 +253,7 @@ export default {
 .league-view-section {
   display: flex;
   flex-direction: column;
+  width: 50%;
 }
 
 .name-column {

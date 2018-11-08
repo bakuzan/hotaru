@@ -66,7 +66,7 @@ module.exports = {
           description: `The ${leagueNumber}${leagueOrdinal} league of the ${seasonNumber}${seasonOrdinal} season.`,
           settings: {
             isComplete: false,
-            limit: cArr.map((_, i) => n - 1 - i).reduce((p, c) => p + c, 0),
+            limit: n,
             layout: generateLeagueMatches(cArr)
           },
           htrTemplateId: template.id
@@ -91,57 +91,66 @@ module.exports = {
       return Promise.all(associations).then(() => template);
     });
   },
-  htrInstanceLeagueVersusCreate(_, { id }) {
+  htrInstanceLeagueVersusCreate(_, { id }, context) {
     return db.transaction(async (transaction) => {
       const league = await HTRInstance.findById(id, {
-        raw: true,
         attributes: ['id', 'settings'],
         include: [{ model: HTRTemplate, attributes: ['type'] }],
         transaction
       });
 
+      console.log('league', league);
       if (!league) {
         throw Error('No instance found.');
       }
 
-      if (league['htrTemplate.type'] !== HTRTemplateTypes.League) {
+      const { settings, htrTemplate } = league.dataValues;
+      if (
+        htrTemplate &&
+        htrTemplate.dataValues.type !== HTRTemplateTypes.League
+      ) {
         throw Error('Invalid instance type.');
       }
 
-      const matchCounts = await Versus.findAll({
+      const [matchCounts] = await Versus.findAll({
         raw: true,
         where: { htrInstanceId: { [Op.eq]: id } },
         attributes: [
-          'id',
-          [sequelize.fn('COUNT', db.col('id')), 'total'],
-          [sequelize.fn('COUNT', db.col('winnerId')), 'completed']
+          [db.fn('COUNT', db.col('id')), 'total'],
+          [db.fn('COUNT', db.col('winnerId')), 'completed']
         ],
         transaction
       });
+
+      console.log('match counts', matchCounts);
+      if (!matchCounts) {
+        throw Error('Unable to check match progress.');
+      }
 
       if (matchCounts.total !== matchCounts.completed) {
         throw Error('Some matches are still ongoing.');
       }
 
-      if (matchCounts.total === league.settings.limit) {
+      const { layout, limit } = settings;
+      if (matchCounts.total === layout.length) {
         throw Error('Match count reached.');
       }
 
-      const layout = league.settings.layout;
-      const matchSet = layout.find((x, i) => {
-        const xCount = x.length;
-        return xCount * i + xCount > matchCounts.total;
-      });
+      const half = limit / 2;
+      const offset = matchCounts.total;
+      const matchSet = layout.slice(offset, offset + half);
+      if (!matchSet.length) {
+        throw Error('Unable to find next match set.');
+      }
 
-      const newVersus = matchSet.map((x) => ({
-        type: VersusTypes.League
-      }));
+      const newVersus = await context.Versus.createForCharacters(
+        VersusTypes.League,
+        matchSet.reduce((p, c) => [...p, ...c], []),
+        { transaction }
+      );
 
-      // TODO
-      // Create versus from them
-      // Update layout
-      // Return new versus
-      throw Error('Not Finished.');
+      await league.addVersus(newVersus, { transaction });
+      return newVersus;
     });
   }
 };

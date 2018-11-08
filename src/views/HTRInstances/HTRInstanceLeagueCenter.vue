@@ -12,11 +12,17 @@
     <div class="page-view__row league-center__content">
       <section class="league-center__section league-section">
         <h4 class="league-section__header">Ongoing</h4>
-        <p class="league-section__sub-header">
-          <NavLink class="league-section__season-link" :to="leagueLink(null)">
-            {{ongoingHTRInstanceLeagues ? ongoingHTRInstanceLeagues.name : 'No ongoing leagues.'}}
+        <div class="league-section__sub-header">
+          <NavLink 
+            v-if="ongoingHTRInstanceLeagues"
+            class="league-section__season-link" 
+            :to="leagueLink(null)">
+            {{ongoingHTRInstanceLeagues.name}}
           </NavLink>
-        </p>
+          <div v-if="!ongoingHTRInstanceLeagues">
+            No ongoing leagues.
+          </div>
+        </div>
         <List 
           align-left
           fixed-width

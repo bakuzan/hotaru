@@ -27,5 +27,5 @@ module.exports = function leagueMatchPairs(characters) {
     }
   }
 
-  return chunk(output, half);
+  return output;
 };

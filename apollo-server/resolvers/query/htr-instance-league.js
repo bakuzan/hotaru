@@ -60,7 +60,8 @@ module.exports = {
   },
   htrInstanceLeagueById(_, { id }) {
     return HTRInstance.findById(id, {
-      include: [Character]
+      include: [Character],
+      order: [[Character, 'name', 'asc']]
     });
   }
 };
