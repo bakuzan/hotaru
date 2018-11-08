@@ -7,7 +7,7 @@ const {
   Versus,
   Character
 } = require('../../connectors');
-
+const SQL = require('../../db-scripts');
 const { HTRTemplateTypes, VersusTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
 const generateLeagueMatches = require('../../utils/league-matches');
@@ -159,9 +159,9 @@ module.exports = {
         transaction
       });
 
-      const { settings: currentSettings } = league.dataValues;
-      const { layout } = settings;
-      const isComplete = completedMatches === layout.length;
+      const leagueData = league.dataValues;
+      const currentSettings = leagueData.settings;
+      const isComplete = completedMatches === currentSettings.layout.length;
       const settings = { ...currentSettings, isComplete };
 
       if (isComplete) {

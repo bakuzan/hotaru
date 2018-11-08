@@ -231,7 +231,7 @@ export default {
             winnerId
           },
           update: (store, { data: { htrInstanceLeagueVersusVote } }) => {
-            const league = store.readQuery({
+            const { htrInstanceLeagueById: league } = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
               variables: { id: this.currentLeagueId }
             });
