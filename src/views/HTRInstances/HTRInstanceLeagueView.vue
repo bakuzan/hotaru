@@ -58,6 +58,8 @@
         <List 
           columns="one"
           :items="leagueMatches"
+          :paged-total="100"
+          @intersect="showMoreMatches"
         >
           <template slot-scope="slotProps">
             <VersusWidget
@@ -187,7 +189,7 @@ export default {
             store,
             { data: { htrInstanceLeagueVersusCreate: versus } }
           ) => {
-            const league = store.readQuery({
+            const { htrInstanceLeagueById: league } = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
               variables: { id: this.currentLeagueId }
             });
@@ -261,6 +263,12 @@ export default {
           });
           this.mutationLoading = false;
         });
+    },
+    showMoreMatches: function() {
+      console.log(
+        '%c showMoreMatches: not implemented yet.',
+        'color: firebrick'
+      );
     }
   }
 };

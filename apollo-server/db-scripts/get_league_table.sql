@@ -10,4 +10,4 @@ from versus as v
     join characters as c on vc.characterId = c.id
 where v.htrInstanceId = :leagueId
 group by vc.characterId
-order by played desc, name asc
+order by won desc, played asc, name asc
