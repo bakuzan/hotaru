@@ -7,7 +7,7 @@ const {
   Character,
   Versus
 } = require('../../connectors');
-
+const SQL = require('../../db-scripts');
 const { HTRTemplateTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
 
@@ -77,7 +77,10 @@ module.exports = {
       include: [Character]
     });
 
-    const leagueTable = [];
+    const leagueTable = await db.query(SQL['get_league_table'], {
+      type: db.QueryTypes.SELECT,
+      replacements: { leagueId: id }
+    });
 
     return {
       ...leagueData,

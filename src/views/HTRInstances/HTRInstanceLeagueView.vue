@@ -36,7 +36,7 @@
           </thead>
           <tbody>
             <tr 
-              v-for="(row, i) in leagueCharacters" 
+              v-for="(row, i) in leagueTable" 
               :key="row.id"
               class="league-table__row"
             >
@@ -162,9 +162,10 @@ export default {
         this.leagues.length && this.leagues.every((x) => x.settings.isComplete)
       );
     },
-    leagueCharacters: function() {
+    leagueTable: function() {
       return (
-        (this.htrInstanceLeagueById && this.htrInstanceLeagueById.characters) ||
+        (this.htrInstanceLeagueById &&
+          this.htrInstanceLeagueById.leagueTable) ||
         []
       );
     },
