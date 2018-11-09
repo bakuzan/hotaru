@@ -49,7 +49,7 @@
           <List 
             class="comparison-list"
             columns="one"
-            :items="versusHistoryComparison"
+            :items="versusHistoryComparison.headToHead"
           >
             <template slot-scope="slotProps">
               <VoteButton 
@@ -73,10 +73,12 @@
           <List 
             class="comparison-list"
             columns="one"
-            :items="versusHistoryComparison"
+            :items="opponentsInCommon"
           >
             <template slot-scope="slotProps">
-              {{slotProps.item}}
+              <VersusSharedOpponentCard
+                v-bind="slotProps.item"
+              />
             </template>
           </List>
         </Tab>
@@ -87,9 +89,10 @@
 
 <script>
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
-import { ListFigureCard } from '@/components/Cards';
+import { ListFigureCard, VersusSharedOpponentCard } from '@/components/Cards';
 import { Button, VoteButton } from '@/components/Buttons';
 import List from '@/components/List';
+import HTRTabs from '@/components/Tabs';
 
 import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
@@ -97,15 +100,28 @@ import Strings from '@/constants/strings';
 import { Query } from '@/graphql';
 import { createDummyCharacterCompare } from '@/utils/models';
 import { formatDateTimeForDisplay } from '@/utils/date';
+import { groupBy } from '@/utils';
+
+function getTotalAndWins(versus, id) {
+  const filtered = versus.filter((x) => x.keyCharacterId === id);
+  const filteredWins = filtered.filter((x) => x.winnerId === id);
+  return {
+    total: filtered.length,
+    wins: filteredWins.length
+  };
+}
 
 export default {
   name: 'VersusComparison',
   components: {
     InputBoxAutocomplete,
     ListFigureCard,
+    VersusSharedOpponentCard,
     Button,
     VoteButton,
-    List
+    List,
+    Tabs: HTRTabs.Tabs,
+    Tab: HTRTabs.Tab
   },
   data: function() {
     return {
@@ -118,7 +134,7 @@ export default {
         createDummyCharacterCompare()
       ],
       compareCharacters: [],
-      versusHistoryComparison: [],
+      versusHistoryComparison: {},
       comparisonSummary: null
     };
   },
@@ -185,6 +201,28 @@ export default {
       if (!this.comparisonSummary) return;
       const { leftWinner, rightWinner } = this.comparisonSummary;
       return `${leftWinner} - ${rightWinner}`;
+    },
+    opponentsInCommon: function() {
+      const [c1, c2] = this.characterIds;
+      const { sharedOpponents = [] } = this.versusHistoryComparison;
+      const groups = groupBy(sharedOpponents, 'characterId');
+
+      return Object.keys(groups).map((k) => {
+        const versus = groups[k];
+        const first = versus[0];
+        const left = getTotalAndWins(versus, c1);
+        const right = getTotalAndWins(versus, c2);
+
+        return {
+          opponent: {
+            id: first.characterId,
+            name: first.name,
+            displayImage: first.displayImage
+          },
+          left,
+          right
+        };
+      });
     }
   },
   methods: {
@@ -217,15 +255,12 @@ export default {
             const { versusHistoryComparison } = data;
             const [c1, c2] = this.characterIds;
 
+            const { headToHead } = versusHistoryComparison;
             this.versusHistoryComparison = versusHistoryComparison;
             this.comparisonSummary = {
-              total: versusHistoryComparison.length,
-              leftWinner: versusHistoryComparison.filter(
-                (x) => x.winnerId === c1
-              ).length,
-              rightWinner: versusHistoryComparison.filter(
-                (x) => x.winnerId === c2
-              ).length
+              total: headToHead.length,
+              leftWinner: headToHead.filter((x) => x.winnerId === c1).length,
+              rightWinner: headToHead.filter((x) => x.winnerId === c2).length
             };
           }
         });

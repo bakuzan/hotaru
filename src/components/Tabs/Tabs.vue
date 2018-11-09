@@ -1,33 +1,35 @@
 <template>
-    <div :class="tabsClasses">
-        <ul class="tabs__controls" role="tablist">
-            <li
-                v-for="(tab, i) in tabs"
-                :key="i"
-                :class="getTabClasses(tab)"
-                role="presentation"
-                v-show="tab.isVisible"
-            >
-                <a 
-                   :aria-controls="tab.tabHash"
-                   :aria-selected="tab.isActive"
-                   :href="tab.tabHash"
-                   class="tab__option"
-                   role="tab"
-                   @click="selectTab(tab.tabHash, $event)"
-                >
-                {{tab.text}}
-                </a>
-            </li>
-        </ul>
-        <div class="tabs__container">
-            <slot></slot>
-        </div>
+  <div :class="tabsClasses">
+    <ul class="tabs__controls" role="tablist">
+      <li
+        v-for="(tab, i) in tabs"
+        :key="i"
+        :class="getTabClasses(tab)"
+        role="presentation"
+        v-show="tab.isVisible"
+      >
+        <a 
+          :aria-controls="tab.tabHash"
+          :aria-selected="tab.isActive"
+          :href="tab.tabHash"
+          class="tab__option"
+          role="tab"
+          @click="selectTab(tab.tabHash, $event)"
+        >
+        {{displayName(tab.text)}}
+        </a>
+      </li>
+    </ul>
+    <div class="tabs__container">
+      <slot></slot>
     </div>
+</div>
 </template>
 
 <script>
 import classNames from 'classnames';
+
+import { separateAndCapitalise } from '@/utils';
 
 export default {
   name: 'Tabs',
@@ -94,6 +96,9 @@ export default {
 
       this.$emit('updated', tab.tabHash);
       this.activeTab = tab.tabHash;
+    },
+    displayName: function(text) {
+      return separateAndCapitalise(text);
     }
   }
 };

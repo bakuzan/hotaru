@@ -14,6 +14,17 @@ module.exports = gql`
     total: Int
     hasMore: Boolean
   }
+  type VersusComparison {
+    headToHead: [Versus]
+    sharedOpponents: [SharedOpponentsVersus]
+  }
+  type SharedOpponentsVersus {
+    keyCharacterId: Int
+    characterId: Int
+    name: String
+    displayImage: String
+    winnerId: Int
+  }
   input VersusRules {
     genders: [GenderType]
     isIncludeOnlyGender: Boolean

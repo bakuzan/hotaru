@@ -31,7 +31,7 @@ const Query = gql`
 
     versusDailyActive: [Versus]
     versusHistoryPaged(characterId: Int!, paging: Paging): VersusPage
-    versusHistoryComparison(characterIds: [Int]): [Versus]
+    versusHistoryComparison(characterIds: [Int]): VersusComparison
     versusSinglesNotWon: [Versus]
 
     rankingsTopTen: [Ranking]

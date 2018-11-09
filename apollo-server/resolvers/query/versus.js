@@ -29,12 +29,25 @@ module.exports = {
       include: [Character]
     });
   },
-  versusHistoryComparison(_, { characterIds }) {
+  async versusHistoryComparison(_, { characterIds }) {
     const [c1, c2] = characterIds;
-    return db.query(SQL['get_versus_history_for_characters'], {
+    const headToHead = await db.query(
+      SQL['get_versus_history_for_characters'],
+      {
+        type: db.QueryTypes.SELECT,
+        replacements: { c1, c2 }
+      }
+    );
+
+    const sharedOpponents = await db.query(SQL['get_shared_opponent_history'], {
       type: db.QueryTypes.SELECT,
       replacements: { c1, c2 }
     });
+
+    return {
+      headToHead,
+      sharedOpponents
+    };
   },
   versusSinglesNotWon() {
     return Versus.findAll({

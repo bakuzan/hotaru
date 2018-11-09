@@ -59,10 +59,19 @@ const castVote = gql`
 const getVersusHistoryComparison = gql`
   query getVersusHistoryComparison($characterIds: [Int]) {
     versusHistoryComparison(characterIds: $characterIds) {
-      id
-      type
-      winnerId
-      updatedAt
+      headToHead {
+        id
+        type
+        winnerId
+        updatedAt
+      }
+      sharedOpponents {
+        keyCharacterId
+        characterId
+        name
+        displayImage
+        winnerId
+      }
     }
   }
 `;
