@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ListFigureCard } from '@/components/Cards';
+import ListFigureCard from '@/components/Cards/ListFigureCard';
 
 import Urls from '@/constants/urls';
 
@@ -49,8 +49,14 @@ export default {
 
 .shared-opponent-card {
   display: flex;
+  flex: 1;
 
   &__results {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
