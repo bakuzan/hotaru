@@ -108,6 +108,20 @@ export default {
       htrInstanceLeagueById: {}
     };
   },
+  watch: {
+    $route: function() {
+      const id = Routing.getQueryArg(this.$router, 'leagueId');
+      if (!id) {
+        return;
+      }
+
+      this.page = 0;
+      this.$apollo.queries.htrInstanceLeagueById.refetch({
+        id,
+        page: 0
+      });
+    }
+  },
   apollo: {
     htrTemplateSeasonById: {
       query: Query.getHTRTemplateSeasonById,
@@ -147,7 +161,13 @@ export default {
       return Number(Routing.getParam(this.$router, 'seasonId'));
     },
     currentLeagueId: function() {
-      return Routing.getQueryFromLocation('leagueId', null);
+      const defaultLeague = this.leagues.length && this.leagues[0].id;
+      const current = Routing.getQueryArg(
+        this.$router,
+        'leagueId',
+        defaultLeague
+      );
+      return Number(current);
     },
     leagues: function() {
       const leagues =
@@ -248,6 +268,7 @@ export default {
             const data = {
               ...league,
               ...htrInstanceLeagueVersusVote,
+              leagueTable: [...htrInstanceLeagueVersusVote.leagueTable],
               matches: {
                 ...league.matches,
                 nodes: league.matches.nodes.map(

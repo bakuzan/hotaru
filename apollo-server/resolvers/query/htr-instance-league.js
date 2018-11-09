@@ -76,6 +76,7 @@ module.exports = {
       order: [['createdAt', 'desc']],
       limit: pageSize,
       offset: pageSize * page,
+      distinct: true,
       include: [Character]
     });
 

@@ -31,7 +31,9 @@ export default {
     id: String,
     name: String,
     text: String,
-    value: {},
+    value: {
+      type: [String, Number]
+    },
     options: {
       type: Array,
       default: () => []
