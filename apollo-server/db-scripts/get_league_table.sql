@@ -7,8 +7,8 @@ select
     sum(case when v.winnerId <> c.id then 1 else 0 end) as 'lost'
 from characters as c
 	join HTRInstanceCharacter as ic on c.id = ic.characterId
-	left join versus as v on ic.htrInstanceId = v.htrInstanceId
-    left join VersusCharacter as vc on v.id = vc.versusId and c.id = vc.characterId
+    left join VersusCharacter as vc on c.id = vc.characterId
+	left join versus as v on vc.versusId = v.id and ic.htrInstanceId = v.htrInstanceId
 where 
 	ic.htrInstanceId = :leagueId
 group by c.id

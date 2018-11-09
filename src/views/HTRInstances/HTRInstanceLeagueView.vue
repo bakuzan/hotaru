@@ -131,18 +131,15 @@ export default {
         };
       }
     },
-    htrInstanceLeagueById: {
-      query: Query.getHTRInstanceLeagueById,
-      skip() {
-        return !this.currentLeagueId;
-      },
-      variables() {
-        this.page = 0;
-        return {
-          id: this.currentLeagueId,
+    htrInstanceLeagueById() {
+      const id = Routing.getQueryFromLocation('leagueId', 0);
+      return {
+        query: Query.getHTRInstanceLeagueById,
+        variables: {
+          id,
           page: 0
-        };
-      }
+        }
+      };
     }
   },
   computed: {
@@ -161,13 +158,8 @@ export default {
       return Number(Routing.getParam(this.$router, 'seasonId'));
     },
     currentLeagueId: function() {
-      const defaultLeague = this.leagues.length && this.leagues[0].id;
-      const current = Routing.getQueryArg(
-        this.$router,
-        'leagueId',
-        defaultLeague
-      );
-      return Number(current);
+      const current = Routing.getQueryArg(this.$router, 'leagueId', 0);
+      return current;
     },
     leagues: function() {
       const leagues =
@@ -218,14 +210,18 @@ export default {
           ) => {
             const { htrInstanceLeagueById: league } = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId }
+              variables: { id: this.currentLeagueId, page: this.page }
             });
-            console.log('created versus', versus, league);
+
+            const currentMatchCount = league.matches.nodes.length;
+            const newPage =
+              this.page === 0 && currentMatchCount === 0 ? 0 : this.page + 1;
+
             league.matches.nodes.unshift(...versus);
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId },
+              variables: { id: this.currentLeagueId, page: newPage },
               data: { htrInstanceLeagueById: league }
             });
           }
@@ -262,13 +258,12 @@ export default {
           update: (store, { data: { htrInstanceLeagueVersusVote } }) => {
             const { htrInstanceLeagueById: league } = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId }
+              variables: { id: this.currentLeagueId, page: this.page }
             });
 
             const data = {
               ...league,
               ...htrInstanceLeagueVersusVote,
-              leagueTable: [...htrInstanceLeagueVersusVote.leagueTable],
               matches: {
                 ...league.matches,
                 nodes: league.matches.nodes.map(
@@ -279,7 +274,7 @@ export default {
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId },
+              variables: { id: this.currentLeagueId, page: this.page },
               data: { htrInstanceLeagueById: data }
             });
           }

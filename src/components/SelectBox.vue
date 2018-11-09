@@ -1,6 +1,7 @@
 <template>
   <div :class="selectClasses">
     <select 
+      v-if="options.length"
       class="select-box__input"
       :id="id"
       :name="name"
@@ -8,15 +9,19 @@
       :disabled="disabled"
       @change="handleChange"
     >
-        <option v-if="allowNulls" :value="null" class="select-box__option">
-          None
-        </option>
-        <option v-if="isRequiredWithNoValue" :value="null" class="select-box__option">
-          Please select a {{text}}
-        </option>
-        <option v-for="item in options" :key="item.value" :value="item.value" class="select-box__option">
-            {{item.text}}
-        </option>
+      <option v-if="allowNulls" :value="null" class="select-box__option">
+        None
+      </option>
+      <option v-if="isRequiredWithNoValue" :value="null" class="select-box__option">
+        Please select a {{text}}
+      </option>
+      <option 
+        v-for="item in options" 
+        :key="item.value" 
+        :value="item.value" 
+        class="select-box__option">
+          {{item.text}}
+      </option>
     </select>
     <label :for="id">{{text}}</label>
   </div>

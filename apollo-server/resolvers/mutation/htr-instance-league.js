@@ -173,7 +173,8 @@ module.exports = {
 
       const leagueTable = await db.query(SQL['get_league_table'], {
         type: db.QueryTypes.SELECT,
-        replacements: { leagueId: htrInstanceId }
+        replacements: { leagueId: htrInstanceId },
+        transaction
       });
 
       return {
