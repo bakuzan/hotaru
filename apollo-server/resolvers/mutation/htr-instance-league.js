@@ -54,7 +54,6 @@ module.exports = {
       });
 
       const chunkedCharacters = Utils.chunk(allCharacters, 20);
-
       const newInstances = chunkedCharacters.map((cArr, i) => {
         const n = cArr.length;
         const leagueNumber = i + 1;

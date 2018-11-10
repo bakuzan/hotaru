@@ -22,7 +22,7 @@
           name="league"
           text="League"
           :options="leagueOptions"
-          :value="currentLeagueId"
+          :value="currentLeagueId()"
           @on-select="onLeagueChange"
         />
         <table class="table league-table">
@@ -148,18 +148,16 @@ export default {
     },
     canCreate: function() {
       return (
-        this.currentLeagueId &&
         !this.isSeasonComplete &&
+        this.htrInstanceLeagueById &&
+        this.htrInstanceLeagueById.settings &&
+        !this.htrInstanceLeagueById.settings.isComplete &&
         (!this.leagueMatches.nodes.length ||
           this.leagueMatches.nodes.every((x) => x.winnerId))
       );
     },
     seasonId: function() {
       return Number(Routing.getParam(this.$router, 'seasonId'));
-    },
-    currentLeagueId: function() {
-      const current = Routing.getQueryArg(this.$router, 'leagueId', 0);
-      return current;
     },
     leagues: function() {
       const leagues =
@@ -197,31 +195,34 @@ export default {
     }
   },
   methods: {
+    currentLeagueId: function() {
+      return Number(Routing.getQueryArg(this.$router, 'leagueId', 0));
+    },
     onMatchCreate: function() {
       this.mutationLoading = true;
+
+      const currentLeagueId = Number(
+        Routing.getQueryArg(this.$router, 'leagueId', 0)
+      );
 
       this.$apollo
         .mutate({
           mutation: Mutation.createLeagueMatchUps,
-          variables: { id: this.currentLeagueId },
+          variables: { id: currentLeagueId },
           update: (
             store,
             { data: { htrInstanceLeagueVersusCreate: versus } }
           ) => {
             const { htrInstanceLeagueById: league } = store.readQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId, page: this.page }
+              variables: { id: currentLeagueId, page: 0 }
             });
-
-            const currentMatchCount = league.matches.nodes.length;
-            const newPage =
-              this.page === 0 && currentMatchCount === 0 ? 0 : this.page + 1;
 
             league.matches.nodes.unshift(...versus);
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId, page: newPage },
+              variables: { id: currentLeagueId, page: 0 },
               data: { htrInstanceLeagueById: league }
             });
           }
@@ -247,18 +248,22 @@ export default {
     handleVote: function(versusId, winnerId) {
       this.mutationLoading = true;
 
+      const currentLeagueId = Number(
+        Routing.getQueryArg(this.$router, 'leagueId', 0)
+      );
+
       this.$apollo
         .mutate({
           mutation: Mutation.castVoteInLeague,
           variables: {
-            htrInstanceId: this.currentLeagueId,
+            htrInstanceId: currentLeagueId,
             versusId,
             winnerId
           },
           update: (store, { data: { htrInstanceLeagueVersusVote } }) => {
-            const { htrInstanceLeagueById: league } = store.readQuery({
+            const { htrInstanceLeagueById: league } = store.readQuerySafeHTR({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId, page: this.page }
+              variables: { id: currentLeagueId, page: 0 }
             });
 
             const data = {
@@ -274,7 +279,7 @@ export default {
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,
-              variables: { id: this.currentLeagueId, page: this.page },
+              variables: { id: currentLeagueId, page: 0 },
               data: { htrInstanceLeagueById: data }
             });
           }
@@ -297,10 +302,13 @@ export default {
         return;
       }
 
+      const currentLeagueId = Number(
+        Routing.getQueryArg(this.$router, 'leagueId', 0)
+      );
       this.page += 1;
       query.fetchMore({
         variables: {
-          id: this.currentLeagueId,
+          id: currentLeagueId,
           page: this.page
         },
         updateQuery: (prevResult, { fetchMoreResult }) => {

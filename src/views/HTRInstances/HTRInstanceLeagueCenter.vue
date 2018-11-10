@@ -53,9 +53,11 @@
           @intersect="showMore"
         >
           <template slot-scope="slotProps">
-            <Button @click="onSeasonClick(slotProps.item)">
+            <NavLink 
+              class="league-section__season-link" 
+              :to="seasonLink(slotProps.item.id)">
               {{slotProps.item.name}}
-            </Button>
+            </NavLink>
           </template>
         </List>
       </section>
@@ -147,10 +149,6 @@ export default {
 
       const url = this.seasonLink(seasonId);
       return item ? `${url}?leagueId=${item.id}` : url;
-    },
-    onSeasonClick: function(item) {
-      // TODO, get season leagues as a sub item.
-      console.log('season click > ', item);
     },
     showMore: function() {
       LP.showMore(this, 'pastHTRInstanceLeaguesPaged', 'HTRInstanceLeaguePage');

@@ -162,8 +162,8 @@ export default {
   }
 
   &__link {
-    display: flex;
-    align-items: flex-start;
+    display: inline-block;
+    vertical-align: text-top;
     overflow: hidden;
     text-overflow: ellipsis;
   }

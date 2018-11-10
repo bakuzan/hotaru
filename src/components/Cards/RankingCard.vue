@@ -136,7 +136,8 @@ export default {
   }
 
   &__link {
-    justify-content: flex-start;
+    display: inline-block;
+    width: auto;
     height: auto;
     padding: $app--padding-small 0;
     border: none;

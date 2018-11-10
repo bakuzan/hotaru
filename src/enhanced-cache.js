@@ -1,15 +1,11 @@
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 
-function makeSafe(query, options) {
+function readQuerySafe(options) {
   try {
-    return query(options);
+    return this.readQuery(options);
   } catch (e) {
     return {};
   }
-}
-
-function readQuerySafe(options) {
-  return makeSafe(this.readQuery, options);
 }
 
 function deleteQuery(name) {

@@ -60,12 +60,14 @@ module.exports = {
     }));
   },
   htrTemplateSeasonById(_, { id }) {
-    return HTRTemplate.findById(id, {
-      include: [HTRInstance]
-    });
+    return HTRTemplate.findById(id);
   },
   async htrInstanceLeagueById(_, { id, page = 0 }) {
     const league = await HTRInstance.findById(id);
+
+    if (!league) {
+      return null;
+    }
 
     const leagueData = league.dataValues;
     const { limit } = leagueData.settings;
