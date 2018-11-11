@@ -106,7 +106,6 @@ module.exports = {
         transaction
       });
 
-      console.log('match counts', matchCounts);
       if (!matchCounts) {
         throw Error('Unable to check match progress.');
       }

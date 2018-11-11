@@ -22,7 +22,7 @@ module.exports = {
       type: db.QueryTypes.SELECT,
       replacements: { daysAgo1: weekAgo, daysAgo2: monthAgo }
     });
-    console.log('WINS IN LAST', mostWinsInLast, 'END');
+
     const mostWinsInLast7Days = mostWinsInLast.find(
       (x) => x.rbnkey === Keys.mostWinsInLast7Days
     );
@@ -57,13 +57,6 @@ module.exports = {
       attributes: ['id', 'name', 'displayImage']
     });
 
-    console.log(
-      mostWinsInLast7Days,
-      mostWinsInLast30Days,
-      mostCommonVersus,
-      closestRivalry,
-      longestVersus
-    );
     return {
       mostWinsInLast7Days: {
         ...mostWinsInLast7Days,

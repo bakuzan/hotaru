@@ -218,7 +218,11 @@ export default {
               variables: { id: currentLeagueId, page: 0 }
             });
 
-            league.matches.nodes.unshift(...versus);
+            const nodes = league.matches.nodes;
+            if (nodes.length) {
+              this.page = this.page + 1;
+            }
+            nodes.unshift(...versus);
 
             store.writeQuery({
               query: Query.getHTRInstanceLeagueById,

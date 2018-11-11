@@ -51,8 +51,7 @@ module.exports = {
       },
       order: [['createdAt', 'DESC']],
       limit: paging.size,
-      offset: paging.size * paging.page,
-      include: [HTRInstance]
+      offset: paging.size * paging.page
     }).then((result) => ({
       nodes: result.rows,
       total: result.count,

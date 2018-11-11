@@ -75,11 +75,16 @@ export default {
     };
   },
   mounted() {
-    this.observer = new IntersectionObserver(([entry]) => {
-      if (entry && entry.isIntersecting) {
-        this.$emit('intersect');
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting) {
+          this.$emit('intersect');
+        }
+      },
+      {
+        rootMargin: '50px'
       }
-    });
+    );
     this.observer.observe(this.$refs.observedDiv);
 
     this.$watch(

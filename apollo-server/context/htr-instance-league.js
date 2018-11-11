@@ -30,7 +30,6 @@ async function getInstanceAndCheckIfLeague({ id, transaction }) {
     transaction
   });
 
-  console.log('league', league);
   if (!league) {
     throw Error('No instance found.');
   }
