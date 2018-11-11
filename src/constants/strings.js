@@ -23,6 +23,7 @@ export default Object.freeze({
   },
   route: {
     base: 'home',
+    pageNotFound: 'page not found',
     characterList: 'characters',
     characterView: 'character view',
     characterCreate: 'character create',
@@ -36,7 +37,9 @@ export default Object.freeze({
     htrTemplateEditor: 'htr template editor',
     htrInstanceList: 'htr instance list',
     htrInstanceView: 'htr instance view',
-    htrInstanceCreate: 'htr instance create'
+    htrInstanceCreate: 'htr instance create',
+    htrInstanceLeagueCenter: 'htr instance league center',
+    htrInstanceLeagueView: 'htr instance league view'
   },
   slot: {
     viewBlock: 'view-block__read-only',

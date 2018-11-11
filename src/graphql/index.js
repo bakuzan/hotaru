@@ -6,6 +6,7 @@ import versus from './versus';
 import ranking from './ranking';
 import htrTemplate from './htr-template';
 import htrInstance from './htr-instance';
+import htrInstanceLeague from './htr-instance-league';
 import honours from './honours';
 
 export const Query = {
@@ -17,7 +18,8 @@ export const Query = {
   ...htrTemplate.query,
   ...htrInstance.query,
   ...image.query,
-  ...honours.query
+  ...honours.query,
+  ...htrInstanceLeague.query
 };
 
 export const Mutation = {
@@ -27,7 +29,8 @@ export const Mutation = {
   ...versus.mutation,
   ...ranking.mutation,
   ...htrTemplate.mutation,
-  ...htrInstance.mutation
+  ...htrInstance.mutation,
+  ...htrInstanceLeague.mutation
 };
 
 export const Fragment = {

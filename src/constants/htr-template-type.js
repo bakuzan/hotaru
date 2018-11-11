@@ -6,3 +6,5 @@ export default HTRTemplateType;
 export const HTRTemplateTypes = Object.freeze(
   mapEnumArrayToObject(HTRTemplateType)
 );
+
+export const HTRTemplateTypeLeague = 'League';

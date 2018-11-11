@@ -22,6 +22,8 @@ import KeyCodes from '@/constants/key-codes';
 import HTRTemplateType from '@/constants/htr-template-type';
 import { generateUniqueId, createListeners } from '@/utils';
 
+const excludes = ['pageNotFound'];
+
 function mapToNaviOption(name, url) {
   return {
     id: generateUniqueId(),
@@ -31,20 +33,22 @@ function mapToNaviOption(name, url) {
 }
 
 function buildOptions() {
-  return Object.keys(Strings.route).reduce((p, k) => {
-    const name = Strings.route[k];
-    const url = Urls[k];
+  return Object.keys(Strings.route)
+    .filter((x) => !excludes.includes(x))
+    .reduce((p, k) => {
+      const name = Strings.route[k];
+      const url = Urls[k];
 
-    if (url.includes(':id')) return p;
+      if (url.includes(':id')) return p;
 
-    const newOptions = !url.includes(':type')
-      ? [mapToNaviOption(name, url)]
-      : HTRTemplateType.map((t) =>
-          mapToNaviOption(`${name} - ${t}`, url.replace(':type', t))
-        );
+      const newOptions = !url.includes(':type')
+        ? [mapToNaviOption(name, url)]
+        : HTRTemplateType.map((t) =>
+            mapToNaviOption(`${name} - ${t}`, url.replace(':type', t))
+          );
 
-    return [...p, ...newOptions];
-  }, []);
+      return [...p, ...newOptions];
+    }, []);
 }
 
 export default {

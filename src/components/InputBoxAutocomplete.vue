@@ -223,7 +223,9 @@ export default {
     },
     highlightMatchingText: function(value = '') {
       const match = value.match(new RegExp(this.filter, 'i'));
-      if (!match) return value;
+      if (!match) {
+        return { pre: value };
+      }
 
       const length = this.filter.length;
       const breakdown = {

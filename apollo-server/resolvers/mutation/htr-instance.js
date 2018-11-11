@@ -15,8 +15,19 @@ const {
 } = require('../../constants/enums');
 const createSeeding = require('../../utils/seeder');
 
+function typeProtection(instance) {
+  if (
+    instance.type !== HTRTemplateTypes.bracket &&
+    instance.type !== HTRTemplateTypes.list
+  ) {
+    throw Error('Invalid instance type.');
+  }
+}
+
 module.exports = {
   htrInstanceCreate(_, { instance }, context) {
+    typeProtection(instance);
+
     return db.transaction((transaction) =>
       HTRTemplate.findById(instance.htrTemplateId, { transaction }).then(
         (template) => {
@@ -105,6 +116,8 @@ module.exports = {
     );
   },
   htrInstanceUpdate(_, { instance }) {
+    typeProtection(instance);
+
     return db.transaction((transaction) =>
       HTRTemplate.findById(instance.htrTemplateId, { transaction }).then(
         (template) => {

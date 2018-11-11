@@ -7,6 +7,7 @@ const series = require('./series');
 const versus = require('./versus');
 const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
+const htrinstanceleague = require('./htr-instance-league');
 const honours = require('./honours');
 
 module.exports = {
@@ -16,6 +17,7 @@ module.exports = {
   ...htrtemplate,
   ...htrinstance,
   ...honours,
+  ...htrinstanceleague,
   tags(_, { search = '', ...args }) {
     return Tag.findAll({
       where: {

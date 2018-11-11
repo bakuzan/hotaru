@@ -22,6 +22,7 @@
           <NavLink 
             class="rank-card__link"
             :to="cardUrl"
+            :title="character.name"
           >
           {{character.name}}
           </NavLink>
@@ -135,7 +136,8 @@ export default {
   }
 
   &__link {
-    justify-content: flex-start;
+    display: inline-block;
+    width: auto;
     height: auto;
     padding: $app--padding-small 0;
     border: none;

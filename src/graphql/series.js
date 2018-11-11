@@ -1,12 +1,6 @@
 import gql from 'graphql-tag';
 
-const seriesQueryFields = gql`
-  fragment SeriesQueryFields on Series {
-    id
-    name
-    displayImage
-  }
-`;
+import Fragments from './fragments';
 
 const allSeries = gql`
   query allSeries {
@@ -25,71 +19,65 @@ const getSeriesPaged = gql`
   ) {
     seriesPaged(search: $search, sources: $sources, paging: $paging) {
       nodes {
-        ...SeriesQueryFields
+        ...SeriesBase
       }
       total
       hasMore
     }
   }
-  ${seriesQueryFields}
+  ${Fragments.seriesBase}
 `;
 
 const getSeries = gql`
   query getSeries($search: String, $sources: [SourceType]) {
     series(search: $search, sources: $sources) {
-      ...SeriesQueryFields
+      ...SeriesBase
     }
   }
-  ${seriesQueryFields}
+  ${Fragments.seriesBase}
 `;
 
 const getSeriesById = gql`
   query getSeriesById($id: Int!) {
     seriesById(id: $id) {
-      id
-      name
-      displayImage
+      ...SeriesBase
       source
       characters {
-        id
-        name
-        displayImage
+        ...CharacterBase
         seriesId
       }
     }
   }
+  ${Fragments.seriesBase}
+  ${Fragments.characterBase}
 `;
 
 const updateSeries = gql`
   mutation updateSeries($series: SeriesInput) {
     seriesUpdate(series: $series) {
-      id
-      name
+      ...SeriesBase
       source
-      displayImage
       characters {
-        id
-        name
-        displayImage
+        ...CharacterBase
       }
     }
   }
+  ${Fragments.seriesBase}
+  ${Fragments.characterBase}
 `;
 
 const createSeries = gql`
   mutation createSeries($series: SeriesInput) {
     seriesCreate(series: $series) {
-      id
-      name
+      ...SeriesBase
       source
-      displayImage
       characters {
-        id
-        name
-        displayImage
+        ...CharacterBase
       }
     }
   }
+  ${Fragments.seriesBase}
+  ${Fragments.characterBase}
 `;
 
 const seriesCore = gql`

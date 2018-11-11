@@ -9,7 +9,9 @@ module.exports = gql`
     htrTemplateId: Int
     htrTemplate: HTRTemplate
     characters: [Character]
+    leagueTable: [LeagueCharacter]
     versus: [Versus]
+    matches: VersusPage
     type: HTRTemplateType
     createdAt: String
   }
@@ -20,13 +22,15 @@ module.exports = gql`
     status: BracketStatus
     "Bracket Winner - Bracket type only"
     winnerId: Int
-    "Bracket Layout - Bracket type only"
+    "Bracket/League Layout - Bracket and League type only"
     layout: [[Int]]
     "Bracket Seed Order - Seeded bracket only"
     seedOrder: [Int]
     "Character sort order - List type only"
     order: Int
     customOrder: [Int]
+    "Is Complete - League type only"
+    isComplete: Boolean
   }
   type HTRInstancePage {
     nodes: [HTRInstance]
@@ -48,12 +52,14 @@ module.exports = gql`
     status: BracketStatus
     "Bracket Winner - Bracket type only"
     winnerId: Int
-    "Bracket Layout - Bracket type only"
+    "Bracket/League Layout - Bracket and League type only"
     layout: [[Int]]
     "Bracket Seed Order - Seeded bracket only"
     seedOrder: [Int]
     "Character sort order - List type only"
     order: Int
     customOrder: [Int]
+    "Is Complete - League type only"
+    isComplete: Boolean
   }
 `;

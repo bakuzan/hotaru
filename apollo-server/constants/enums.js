@@ -11,9 +11,15 @@ const SourceType = Object.freeze([
   'Other'
 ]);
 
-const VersusType = Object.freeze(['Daily', 'Single', 'List', 'Bracket']);
+const VersusType = Object.freeze([
+  'Daily',
+  'Single',
+  'List',
+  'Bracket',
+  'League'
+]);
 
-const HTRTemplateType = Object.freeze(['Bracket', 'List']);
+const HTRTemplateType = Object.freeze(['Bracket', 'List', 'League']);
 
 const BracketStatus = Object.freeze(['NotStarted', 'InProgress', 'Complete']);
 

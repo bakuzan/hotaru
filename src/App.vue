@@ -109,5 +109,14 @@ main {
     flex: 0 1;
   }
 }
+
+.text {
+  &--top {
+    vertical-align: text-top;
+  }
+  &--right {
+    text-align: right;
+  }
+}
 </style>
 <style lang="scss" src="./styles/_themes.scss" />

@@ -29,6 +29,7 @@
           :options="mappedLimits"
           :value="editTemplate.rules.limit"
           @on-select="onRulesInput"
+          allow-nulls
         />
         <Tickbox 
           v-show="isBracket"
@@ -272,6 +273,8 @@ export default {
         TemplateValidator.isValidExisting(this.editTemplate)
       ) {
         this.handleUpdate(template);
+      } else {
+        this.mutationLoading = false;
       }
     },
     handleCreate: function(template) {

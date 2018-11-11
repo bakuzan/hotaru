@@ -109,7 +109,9 @@ export default {
 
   // don't do styling like this!!
   .nav-link {
-    justify-content: flex-start;
+    display: inline-block;
+    width: auto;
+    margin-right: auto;
     padding-left: 0;
     border-left: 0;
     margin-left: 0;

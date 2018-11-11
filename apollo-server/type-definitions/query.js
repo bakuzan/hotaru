@@ -52,6 +52,11 @@ const Query = gql`
     htrInstanceById(id: Int!): HTRInstance
 
     honours: Honours
+
+    ongoingHTRInstanceLeagues: HTRTemplate
+    pastHTRInstanceLeaguesPaged(paging: Paging): HTRTemplatePage
+    htrTemplateSeasonById(id: Int!): HTRTemplate
+    htrInstanceLeagueById(id: Int!, page: Int): HTRInstance
   }
 `;
 
@@ -81,6 +86,14 @@ const Mutation = gql`
     htrInstanceCreate(instance: HTRInstanceInput): HTRInstance
     htrInstanceUpdate(instance: HTRInstanceInput): HTRInstance
     htrInstanceVersusVote(
+      htrInstanceId: Int!
+      versusId: Int!
+      winnerId: Int!
+    ): HTRInstance
+
+    htrInstanceLeagueCreate: HTRTemplate
+    htrInstanceLeagueVersusCreate(id: Int!): [Versus]
+    htrInstanceLeagueVersusVote(
       htrInstanceId: Int!
       versusId: Int!
       winnerId: Int!
