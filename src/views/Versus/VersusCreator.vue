@@ -3,7 +3,7 @@
     <div class="page page-view versus-creator">
       <div class="versus-creator__rules">
         <div class="versus-creator__group">
-          <MultiSelect 
+          <MultiSelect
             id="gender"
             name="genders"
             label="genders"
@@ -23,7 +23,7 @@
           />
         </div>
         <div class="versus-creator__group">
-          <MultiSelect 
+          <MultiSelect
             id="source"
             name="sources"
             label="sources"
@@ -47,7 +47,7 @@
             <InputBoxAutocomplete
               id="seriesFilter"
               name="seriesFilter"
-              text="Series"
+              label="Series"
               attr="name"
               :options="series"
               :filter="seriesFilter"
@@ -66,15 +66,9 @@
               align-left
             />
           </div>
-          <List
-            columns="one"
-            :items="rules.series"
-          >
+          <List columns="one" :items="rules.series">
             <template slot-scope="slotProps">
-              <SeriesCard
-                v-bind="slotProps.item"
-                @remove="onRemoveSeries"
-              />
+              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries"/>
             </template>
           </List>
         </div>
@@ -91,23 +85,14 @@
       </div>
 
       <div>
-        <LoadingBouncer v-show="mutationLoading" />
-        <VersusWidget
-          v-if="versus"
-          v-bind="versus"
-          @vote="handleVote"
-        />
+        <LoadingBouncer v-show="mutationLoading"/>
+        <VersusWidget v-if="versus" v-bind="versus" @vote="handleVote"/>
       </div>
 
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button
-              theme="secondary"
-              @click="submit"
-            >
-              Create
-            </Button>
+            <Button theme="secondary" @click="submit">Create</Button>
           </div>
         </portal>
       </template>

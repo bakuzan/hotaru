@@ -110,7 +110,7 @@ function getDaysAgoX(num) {
 }
 
 function ifArrayThenIn(arr, value) {
-  return arr ? value : {};
+  return arr && arr.length ? value : {};
 }
 
 function getOrdinalNum(n) {

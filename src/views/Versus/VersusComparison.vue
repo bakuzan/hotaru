@@ -4,7 +4,6 @@
       <InputBoxAutocomplete
         id="characterFilter"
         name="characterFilter"
-        text="Characters"
         label="search characters"
         attr="name"
         :options="characterSearchResults"
@@ -13,20 +12,10 @@
         @on-select="onSelectCharacter"
         disable-local-filter
       />
-      <Button
-        theme="primary"
-        :disabled="!hasTwoCharacters"
-        @click="onTriggerQuery"
-      >
-        Compare
-      </Button>
+      <Button theme="primary" :disabled="!hasTwoCharacters" @click="onTriggerQuery">Compare</Button>
     </div>
     <div class="versus-comparison__content">
-      <div
-        class="versus-comparison__item"
-        v-for="c in activeCharacters"
-        :key="c.id"
-      >
+      <div class="versus-comparison__item" v-for="c in activeCharacters" :key="c.id">
         <Button
           v-show="c.isActive"
           class="versus-comparison__remove"
@@ -46,13 +35,9 @@
       </div>
       <Tabs>
         <Tab name="HeadToHead">
-          <List 
-            class="comparison-list"
-            columns="one"
-            :items="versusHistoryComparison.headToHead"
-          >
+          <List class="comparison-list" columns="one" :items="versusHistoryComparison.headToHead">
             <template slot-scope="slotProps">
-              <VoteButton 
+              <VoteButton
                 class="versus-comparison__button"
                 :has-winner="!!slotProps.item.winnerId"
                 :is-winner="isWinner(slotProps.item, 0)"
@@ -61,7 +46,7 @@
                 <div>{{formatDate(slotProps.item.updatedAt)}}</div>
                 <div>{{slotProps.item.type}}</div>
               </div>
-              <VoteButton 
+              <VoteButton
                 class="versus-comparison__button"
                 :has-winner="!!slotProps.item.winnerId"
                 :is-winner="isWinner(slotProps.item, 1)"
@@ -70,15 +55,9 @@
           </List>
         </Tab>
         <Tab name="OpponentsInCommon">
-          <List 
-            class="comparison-list"
-            columns="one"
-            :items="opponentsInCommon"
-          >
+          <List class="comparison-list" columns="one" :items="opponentsInCommon">
             <template slot-scope="slotProps">
-              <VersusSharedOpponentCard
-                v-bind="slotProps.item"
-              />
+              <VersusSharedOpponentCard v-bind="slotProps.item"/>
             </template>
           </List>
         </Tab>

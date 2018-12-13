@@ -1,24 +1,19 @@
 <template>
-    <div class="list-filter">
-        <InputBox 
-            class="list-filter__search"
-            label="search"
-            :value="search" 
-            @input="onInput" 
-        />
-        <slot :name="typeSlotName"></slot>
-        <Button
-            class-name="list-filter__add-button"
-            theme="primary"
-            size="small"
-            @click="onClick"
-        >
-            Add
-        </Button>
-    </div>
+  <div :class="classes">
+    <InputBox class="list-filter__search" label="search" :value="search" @input="onInput"/>
+    <slot :name="typeSlotName"></slot>
+    <Button
+      v-if="!hideAdd"
+      class-name="list-filter__add-button"
+      theme="primary"
+      size="small"
+      @click="onClick"
+    >Add</Button>
+  </div>
 </template>
 
 <script>
+import classNames from 'classnames';
 import { Button } from '@/components/Buttons';
 import InputBox from '@/components/InputBox';
 
@@ -34,6 +29,14 @@ export default {
     search: {
       type: String,
       required: true
+    },
+    hideAdd: {
+      type: Boolean,
+      default: false
+    },
+    column: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -41,7 +44,13 @@ export default {
       typeSlotName: Strings.slot.listFilterType
     };
   },
-  computed: {},
+  computed: {
+    classes: function() {
+      return classNames('list-filter', {
+        'list-filter--column': this.column
+      });
+    }
+  },
   methods: {
     onInput: function(value, name) {
       this.$emit('input', value, name);
@@ -60,6 +69,14 @@ export default {
 
 .list-filter {
   display: flex;
+
+  &--column {
+    flex-direction: column;
+
+    > * {
+      margin: 5px 0;
+    }
+  }
 
   &__add-button {
     margin: $app--margin-standard;

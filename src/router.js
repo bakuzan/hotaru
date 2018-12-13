@@ -125,6 +125,12 @@ export default new Router({
         import(/* webpackChunkName: "instance-league-view" */ './views/HTRInstances/HTRInstanceLeagueView.vue')
     },
     {
+      path: Urls.rankingList,
+      name: Strings.route.rankingList,
+      component: () =>
+        import(/* webpackChunkName: "ranking-list" */ './views/Rankings/RankingsList.vue')
+    },
+    {
       path: '*',
       name: Strings.route.pageNotFound,
       component: () =>

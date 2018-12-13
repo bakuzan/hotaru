@@ -32,7 +32,6 @@
     "register-service-worker": "^1.0.0",
     "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0",
-    "serve-favicon": "^2.5.0",
     "sqlite": "^2.9.2",
     "umzug": "^2.1.0",
     "vue": "^2.5.17",

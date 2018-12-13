@@ -59,6 +59,9 @@ const Urls = {
   },
   get htrInstanceLeagueView() {
     return `${this.htrInstanceLeagueCenter}/:seasonId`;
+  },
+  get rankingList() {
+    return `${this.base}/rankings`;
   }
 };
 

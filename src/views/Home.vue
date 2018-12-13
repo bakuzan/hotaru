@@ -5,17 +5,14 @@
         <header class="htr-section__header">
           <h4 class="htr-section__title">Top Ten</h4>
         </header>
-        <List 
-          className="top-ten-list"
+        <List
+          class="top-ten-list"
           itemClassName="top-ten__item"
           columns="one"
           :items="rankingsTopTen"
         >
           <template slot-scope="slotProps">
-            <RankingCard
-              v-bind="slotProps.item"
-              :figure-size="null"
-            />
+            <RankingCard v-bind="slotProps.item" :figure-size="null"/>
           </template>
         </List>
       </section>
@@ -25,18 +22,16 @@
         <header class="htr-section__header">
           <h4 class="htr-section__title">Daily Versus</h4>
           <div class="daily-verus__create">
-            <Button 
+            <Button
               v-show="allowCreateCall"
               theme="primary"
               @click="handleCreateDaily"
-            >
-              Create versus
-            </Button>
-            <LoadingBouncer v-show="blockCreateVersus" local />
+            >Create versus</Button>
+            <LoadingBouncer v-show="blockCreateVersus" local/>
           </div>
         </header>
-        <List 
-          className="daily-versus-list"
+        <List
+          class="daily-versus-list"
           itemClassName="daily-versus-list__item"
           columns="one"
           :items="dailyVersus"
@@ -54,16 +49,11 @@
       </section>
     </div>
     <div :class="columnClasses">
-      <CharacterOfTheDayWidget />
+      <CharacterOfTheDayWidget/>
       <div class="random-container padded padded--standard">
-        <Button
-          theme="primary"
-          @click="onRandom"
-        >
-        View Random Character
-        </Button>
+        <Button theme="primary" @click="onRandom">View Random Character</Button>
       </div>
-      <HonoursWidget />
+      <HonoursWidget/>
     </div>
   </div>
 </template>
@@ -178,10 +168,11 @@ export default {
           variables: { versusId, winnerId },
           update: (store, { data: { versusVote } }) => {
             const data = store.readQuery({ query: Query.getActiveDailyVersus });
-            const versusDailyActive = data.versusDailyActive.map(
-              (x) =>
-                x.id !== versusId ? x : { ...x, winnerId: versusVote.winnerId }
-            );
+            const versusDailyActive = data.versusDailyActive.map((x) => {
+              return x.id !== versusId
+                ? x
+                : { ...x, winnerId: versusVote.winnerId };
+            });
             store.writeQuery({
               query: Query.getActiveDailyVersus,
               data: { versusDailyActive }

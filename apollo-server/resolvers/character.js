@@ -1,5 +1,7 @@
 module.exports = {
   series(character) {
+    if (character.series) return character.series;
+
     return character.getSeries();
   },
   tags(character) {

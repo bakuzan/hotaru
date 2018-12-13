@@ -48,10 +48,6 @@ app.use(function(req, _, next) {
   next();
 });
 
-app.use(
-  `/${Constants.appName}/favicon.ico`,
-  favicon(path.join(__dirname, '..', 'dist', 'favicon.ico'))
-);
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use('/graphql', cors(corsOptions), bodyParser.json());
 

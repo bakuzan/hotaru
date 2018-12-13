@@ -35,6 +35,13 @@ const Query = gql`
     versusSinglesNotWon: [Versus]
 
     rankingsTopTen: [Ranking]
+    rankingsPaged(
+      search: String
+      genders: [GenderType]
+      sources: [SourceType]
+      series: [Int]
+      paging: Paging
+    ): RankingPage
 
     htrTemplatesPaged(
       search: String

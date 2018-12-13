@@ -1,17 +1,15 @@
 <template>
   <div id="app" class="app">
-    <Header />
+    <Header/>
     <Sidebar/>
     <main>
       <div class="padded">
-        <router-view />
+        <router-view/>
       </div>
     </main>
-    <Alert />
-    <portal-target :name="portalName">
-    </portal-target>
-    <portal-target :name="naviPortalName">
-    </portal-target>
+    <Alert/>
+    <portal-target :name="portalName"></portal-target>
+    <portal-target :name="naviPortalName"></portal-target>
   </div>
 </template>
 
@@ -72,7 +70,9 @@ main {
 }
 
 // App helpers
-
+.flex {
+  display: flex;
+}
 .center-contents {
   display: flex;
   justify-content: center;

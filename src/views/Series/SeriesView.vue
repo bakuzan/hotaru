@@ -1,14 +1,10 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
-      <LoadingBouncer v-show="isLoading" />
+      <LoadingBouncer v-show="isLoading"/>
       <div class="page-view__left-column htr-column">
         <div class="htr-column__inner">
-          <HTRImage 
-            force-load
-            :src="editSeries.displayImage" 
-            class="page-view__image" 
-          />
+          <HTRImage force-load :src="editSeries.displayImage" class="page-view__image"/>
           <ViewBlockToggler
             id="displayImage"
             class="span-column"
@@ -16,10 +12,7 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-            <ImageUploader
-              name="displayImage"
-              @on-upload="handleUserChanges"
-            />
+            <ImageUploader name="displayImage" @on-upload="handleUserChanges"/>
           </ViewBlockToggler>
         </div>
       </div>
@@ -69,29 +62,29 @@
                 :lockEdit="isCreate"
                 :forceReadOnly="readOnly"
               >
-              <InputBoxAutocomplete
-                id="characterFilter"
-                name="characterFilter"
-                text="Characters"
-                attr="name"
-                :options="characterSearchResults"
-                :filter="characterFilter"
-                @input="onSearchCharacters"
-                @on-select="onSelectCharacter"
-                disable-local-filter
-              />
+                <InputBoxAutocomplete
+                  id="characterFilter"
+                  name="characterFilter"
+                  label="Characters"
+                  attr="name"
+                  :options="characterSearchResults"
+                  :filter="characterFilter"
+                  @input="onSearchCharacters"
+                  @on-select="onSelectCharacter"
+                  disable-local-filter
+                />
               </ViewBlockToggler>
-              <List 
+              <List
                 wrap
                 align-left
                 fixed-width
-                className="characters"
+                class="characters"
                 itemClassName="characters__item"
                 :items="editSeries.characters"
               >
                 <template slot-scope="slotProps">
-                  <ListFigureCard 
-                    v-bind="slotProps.item" 
+                  <ListFigureCard
+                    v-bind="slotProps.item"
                     :remove="onRemoveCharacter"
                     :url-source="characterCardUrl"
                   />
@@ -105,17 +98,8 @@
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button
-              @click="cancel"
-            >
-              Cancel
-            </Button>
-            <Button
-              theme="secondary"
-              @click="submit"
-            >
-              {{ isCreate ? "Create" : "Save" }}
-            </Button>
+            <Button @click="cancel">Cancel</Button>
+            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
           </div>
         </portal>
       </template>

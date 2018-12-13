@@ -1,16 +1,14 @@
 <template>
-    <nav class="sidebar themed-background">
-      <!-- toggle button? -->
-      <NavLink 
-        v-for="link in links"
-        :key="link.id"
-        :to="link.to" 
-        :class="sideNavLinkClass" 
-        :title="link.title"
-      >
-        {{link.text}}
-      </NavLink>
-    </nav>
+  <nav class="sidebar themed-background">
+    <!-- toggle button? -->
+    <NavLink
+      v-for="link in links"
+      :key="link.id"
+      :to="link.to"
+      :class="sideNavLinkClass"
+      :title="link.title"
+    >{{link.text}}</NavLink>
+  </nav>
 </template>
 
 <script>
@@ -53,6 +51,12 @@ export default {
           to: Urls.htrInstanceLeagueCenter,
           title: 'League Center',
           text: 'LC'
+        },
+        {
+          id: 9,
+          to: Urls.rankingList,
+          title: 'Rankings',
+          text: 'R'
         }
       ]
     };

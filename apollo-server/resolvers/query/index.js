@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Tag, Ranking, Character } = require('../../connectors');
+const { Tag } = require('../../connectors');
 
 const character = require('./character');
 const series = require('./series');
@@ -9,6 +9,7 @@ const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
 const htrinstanceleague = require('./htr-instance-league');
 const honours = require('./honours');
+const rankings = require('./rankings');
 
 module.exports = {
   ...character,
@@ -18,6 +19,7 @@ module.exports = {
   ...htrinstance,
   ...honours,
   ...htrinstanceleague,
+  ...rankings,
   tags(_, { search = '', ...args }) {
     return Tag.findAll({
       where: {
@@ -27,13 +29,6 @@ module.exports = {
         }
       },
       order: [['name', 'ASC']]
-    });
-  },
-  rankingsTopTen() {
-    return Ranking.findAll({
-      order: [['rank', 'asc']],
-      limit: 10,
-      include: [Character]
     });
   }
 };
