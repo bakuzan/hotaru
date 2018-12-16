@@ -11,13 +11,24 @@ w_cte as (
 	from characters as c
 	left join versus as v on c.id = v.winnerId
 	group by c.id
+),
+ratio_cte as (
+	select
+	m_cte.id as characterId,
+	m_cte.name,
+	m_cte.total,
+	w_cte.wins,
+	cast(w_cte.wins as float) / cast(m_cte.total as float) as ratio
+	from m_cte
+	left join w_cte
+	on m_cte.id = w_cte.id
+),
+avg_cte as (
+	select avg(r.ratio) as avgRatio
+	from ratio_cte as r
 )
-select
-  m_cte.id as characterId,
-  m_cte.name,
-  m_cte.total,
-  w_cte.wins
-from m_cte
-left join w_cte
-on m_cte.id = w_cte.id
-order by w_cte.wins desc, m_cte.total asc, m_cte.name asc;
+select 
+	*,
+	(r.wins + 5 + (select avgRatio from avg_cte) / (r.total + 5)) as rankOrder
+from ratio_cte as r
+order by rankOrder desc, r.wins desc, r.total asc, r.name asc;
