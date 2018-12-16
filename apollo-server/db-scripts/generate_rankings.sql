@@ -29,6 +29,6 @@ avg_cte as (
 )
 select 
 	*,
-	(r.wins + 5 + (select avgRatio from avg_cte) / (r.total + 5)) as rankOrder
+	((r.wins + 10 * (select avgRatio from avg_cte)) / (r.total + 10)) as rankOrder
 from ratio_cte as r
 order by rankOrder desc, r.wins desc, r.total asc, r.name asc;
