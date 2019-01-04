@@ -6,7 +6,7 @@
     "start": "npm-run-all -p serve apollo-server",
     "apollo-server": "nodemon apollo-server --harmony",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node ./move_index_template.js",
+    "build": "vue-cli-service build && node ./tools/move_index_template.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

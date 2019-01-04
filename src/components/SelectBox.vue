@@ -1,27 +1,26 @@
 <template>
   <div :class="selectClasses">
-    <select 
+    <select
       v-if="options.length"
       class="select-box__input"
       :id="id"
       :name="name"
-      :value="value" 
+      :value="value"
       :disabled="disabled"
       @change="handleChange"
     >
-      <option v-if="allowNulls" :value="null" class="select-box__option">
-        None
-      </option>
-      <option v-if="isRequiredWithNoValue" :value="null" class="select-box__option">
-        Please select a {{text}}
-      </option>
-      <option 
-        v-for="item in options" 
-        :key="item.value" 
-        :value="item.value" 
-        class="select-box__option">
-          {{item.text}}
-      </option>
+      <option v-if="allowNulls" :value="null" class="select-box__option">None</option>
+      <option
+        v-if="isRequiredWithNoValue"
+        :value="null"
+        class="select-box__option"
+      >Please select a {{text}}</option>
+      <option
+        v-for="item in options"
+        :key="item.value"
+        :value="item.value"
+        class="select-box__option"
+      >{{item.text}}</option>
     </select>
     <label :for="id">{{text}}</label>
   </div>
@@ -73,6 +72,8 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '../styles/_extensions';
+
 .select-box {
   flex: 1;
   padding: 5px;
@@ -80,13 +81,7 @@ export default {
   box-sizing: content-box;
 
   &::after {
-    content: '\2335';
-    position: absolute;
-    top: 50%;
-    right: 5px;
-    transform: translateY(-50%);
-    font-weight: bold;
-    pointer-events: none;
+    @extend %down-caret-rhs;
   }
 
   &__input {

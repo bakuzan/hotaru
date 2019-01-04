@@ -1,46 +1,44 @@
 <template>
-    <div class="multi-select">
-        <div class="multi-select__display display has-float-label">
-          <input
-            type="text"
-            autoComplete="off"
-            class="display__input"
-            :id="id"
-            :name="name"
-            :placeholder="placeholder"
-            :value="displayValue"
-            tabIndex="0"
-            readOnly
-            @click="handleToggleOpen"
-            @keydown="handleToggleOpen"
+  <div class="multi-select">
+    <div class="multi-select__display display has-float-label">
+      <input
+        type="text"
+        autocomplete="off"
+        class="display__input"
+        :id="id"
+        :name="name"
+        :placeholder="placeholder"
+        :value="displayValue"
+        tabindex="0"
+        readonly
+        @click="handleToggleOpen"
+        @keydown="handleToggleOpen"
+      >
+      <label :for="id">{{label}}</label>
+    </div>
+    <div :class="dropdownClasses">
+      <ul class="multi-select__list">
+        <li>
+          <Tickbox
+            :name="selectAllName"
+            text="Select All"
+            :checked="hasAllSelected"
+            @change="handleSelectAll"
           />
-          <label :for="id">{{label}}</label>
-        </div>
-        <div :class="dropdownClasses">
-          <ul class="multi-select__list">
-            <li>
-              <Tickbox
-                :name="selectAllName"
-                text="Select All"
-                :checked="hasAllSelected"
-                @change="handleSelectAll"
-              />
-            </li>
-            <li
-              class="multi-select__separator"
-            />
-            <li v-for="(op, i) in options" :key="op.value">
-              <Tickbox
-                :name="getName(i)"
-                :text="op.text"
-                :checked="values.includes(op.value)"
-                @change="handleOptionChange"
-              />
-            </li>
-          </ul>
-          <Backdrop :id="id" @close="handleToggleClose" />
-        </div>
-      </div>
+        </li>
+        <li class="multi-select__separator"/>
+        <li v-for="(op, i) in options" :key="op.value">
+          <Tickbox
+            :name="getName(i)"
+            :text="op.text"
+            :checked="values.includes(op.value)"
+            @change="handleOptionChange"
+          />
+        </li>
+      </ul>
+      <Backdrop :id="id" @close="handleToggleClose"/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -185,6 +183,10 @@ $full-size-minus-padding: calc(100% - 10px);
     margin-bottom: -3px; // dont know why it doesnt line up
     box-sizing: content-box;
     cursor: pointer;
+
+    &::after {
+      @extend %down-caret-rhs;
+    }
   }
 
   &__list {

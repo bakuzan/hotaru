@@ -3,31 +3,29 @@
     <DropdownMenu
       ignore-position
       :id="id"
-      className="app-settings"
+      class="app-settings"
       :portal-target="target"
       :align="alignment"
       :title="title"
       :icon="icon"
     >
-        <li class="app-settings__item">
-            <SelectBox
-                id="appTheme"
-                name="appTheme"
-                text="App Theme"
-                :options="appThemes"
-                :value="theme"
-                @on-select="onChange"
-            />
-        </li>
-        <li class="app-settings__item">
-          <ButtonWithFeedback
-            theme="primary"
-            :update-state="getFeedbackUpdater"
-            @click="updateRankings"
-          >
-            Update Rankings
-          </ButtonWithFeedback>
-        </li>
+      <li class="app-settings__item">
+        <SelectBox
+          id="appTheme"
+          name="appTheme"
+          text="App Theme"
+          :options="appThemes"
+          :value="theme"
+          @on-select="onChange"
+        />
+      </li>
+      <li class="app-settings__item">
+        <ButtonWithFeedback
+          theme="primary"
+          :update-state="getFeedbackUpdater"
+          @click="updateRankings"
+        >Update Rankings</ButtonWithFeedback>
+      </li>
     </DropdownMenu>
     <portal :to="backPortalTarget">
       <Button
@@ -37,7 +35,7 @@
         size="small"
         @click="goBack"
       >
-        <img :src="backIcon" alt="back arrow" />
+        <img :src="backIcon" alt="back arrow">
       </Button>
     </portal>
   </div>
@@ -55,7 +53,9 @@ import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
 import appThemes from '@/constants/app-themes';
-
+import GenderType from '@/constants/gender-type';
+import SourceType from '@/constants/source-type';
+import * as LP from '@/utils/list-pages';
 import * as htrLocal from '@/utils/storage';
 
 export default {
@@ -116,7 +116,22 @@ export default {
       this.$apollo
         .mutate({
           mutation: Mutation.populateRankings,
-          refetchQueries: [{ query: Query.getTopTen }]
+          refetchQueries: [
+            { query: Query.getTopTen },
+            {
+              query: Query.getRankingsPaged,
+              variables: {
+                search: '',
+                genders: [...GenderType],
+                sources: [...SourceType],
+                series: [],
+                paging: {
+                  page: 0,
+                  size: LP.size
+                }
+              }
+            }
+          ]
         })
         .then(() => this.setFeedbackButtonState({ isSuccess: true }))
         .catch(() => this.setFeedbackButtonState({ isFailure: true }));
