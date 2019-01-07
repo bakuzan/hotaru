@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="hasPaging" class="paged-total">{{totalText}}</div>
-    <draggable 
+    <draggable
       :class="listClasses"
       element="ul"
       :list="items"
@@ -11,16 +11,12 @@
       <li v-for="item in items" :class="listItemClasses" :key="item.id">
         <div class="sort-handle" v-if="isSortable">+</div>
         <slot v-bind:item="item">
-        <!-- Fallback content -->
-        {{ item.id }}
+          <!-- Fallback content -->
+          {{ item.id }}
         </slot>
       </li>
     </draggable>
-    <div 
-      ref="observedDiv"
-      v-show="showObserver"
-      class="observer">
-    </div>
+    <div ref="observedDiv" v-show="showObserver" class="observer"></div>
   </div>
 </template>
 
@@ -65,6 +61,12 @@ export default {
     fixedWidth: {
       type: Boolean,
       default: false
+    },
+    isGrid: {
+      default: false,
+      validator: function(value) {
+        return value === 'standard' || value === true || value === false;
+      }
     }
   },
   data: function() {
@@ -109,20 +111,29 @@ export default {
   computed: {
     listClasses: function() {
       return classNames(
-        'list',
-        {
+        !this.isGrid && {
+          list: true,
           'list--wrap': this.wrap,
           'list--column': this.columns,
           [`list--column_${this.columns}`]: this.columns
+        },
+        this.isGrid && {
+          grid: true,
+          'grid--standard': this.isGrid === 'standard'
         },
         this.className
       );
     },
     listItemClasses: function() {
-      return classNames('list__item', this.itemClassName, {
-        'list__item--align_left': this.alignLeft,
-        'list__item--fixed-width': this.fixedWidth
-      });
+      return classNames(
+        this.itemClassName,
+        !this.isGrid && {
+          list__item: true,
+          'list__item--align_left': this.alignLeft,
+          'list__item--fixed-width': this.fixedWidth
+        },
+        this.isGrid && { grid__item: true }
+      );
     },
     sortableOptions: function() {
       return {
@@ -148,6 +159,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import '../styles/_variables.scss';
+@import '../styles/_mixins.scss';
 @import '../styles/_extensions.scss';
 
 $columns: (
@@ -216,5 +228,26 @@ $columns: (
   align-items: center;
   padding: 0.33rem;
   font-size: 0.6em;
+}
+// Grid styles
+.grid {
+  display: grid;
+  padding: 5px;
+  margin: 5px 0;
+  list-style-type: none;
+  &--standard {
+    @include respond-to(xs) {
+      @include gridColumnsForPercentage(50);
+    }
+    @include respond-to(sm) {
+      @include gridColumnsForPercentage(33);
+    }
+    @include respond-to(md) {
+      @include gridColumnsForPercentage(25);
+    }
+    @include respond-to(lg) {
+      @include gridColumnsForPercentage(20);
+    }
+  }
 }
 </style>

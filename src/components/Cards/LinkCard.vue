@@ -1,17 +1,8 @@
 <template>
   <div class="link-card">
-    <SeedIcon v-if="isSeeded" right />
-    <div 
-      v-if="hasWinner" 
-      class="trohpy-icon" 
-      :icon="trophyIcon"
-      title="Has Winner"></div>
-    <NavLink 
-      :to="itemUrl"
-      :target="linkTarget"
-    >
-    {{name}}
-    </NavLink>
+    <SeedIcon v-if="isSeeded" right/>
+    <div v-if="hasWinner" class="trohpy-icon" :icon="trophyIcon" title="Has Winner"></div>
+    <NavLink :to="itemUrl" :target="linkTarget">{{name}}</NavLink>
     <div>{{description}}</div>
     <div v-if="createdAt" class="link-card__date">{{createdAt}}</div>
   </div>
@@ -101,6 +92,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  padding: 5px 0;
   margin-right: $app--margin-standard;
 
   &__date {

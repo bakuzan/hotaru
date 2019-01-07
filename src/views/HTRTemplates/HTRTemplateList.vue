@@ -1,10 +1,6 @@
 <template>
   <div class="page">
-    <ListFilterBar 
-      v-bind="filters"
-      @input="onInput"
-      @add="onAdd"
-    >
+    <ListFilterBar v-bind="filters" @input="onInput" @add="onAdd">
       <div :slot="typeSlotName">
         <RadioButtonGroup
           id="type"
@@ -16,20 +12,14 @@
         />
       </div>
     </ListFilterBar>
-    <List 
-      wrap
-      align-left
-      fixed-width
-      columns="three"
+    <List
+      is-grid="standard"
       :items="htrTemplatesPaged.nodes"
       :paged-total="htrTemplatesPaged.total"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <LinkCard 
-          v-bind="slotProps.item" 
-          :url-source="cardUrl" 
-        />
+        <LinkCard v-bind="slotProps.item" :url-source="cardUrl"/>
       </template>
     </List>
   </div>

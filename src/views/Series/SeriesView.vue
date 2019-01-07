@@ -75,11 +75,9 @@
                 />
               </ViewBlockToggler>
               <List
-                wrap
-                align-left
-                fixed-width
                 class="characters"
                 itemClassName="characters__item"
+                is-grid="standard"
                 :items="editSeries.characters"
               >
                 <template slot-scope="slotProps">

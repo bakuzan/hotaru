@@ -1,0 +1,45 @@
+@mixin gridColumnsForPercentage($value) {
+  $percentage: $value * 1%;
+  grid-template-columns: repeat(auto-fit, $percentage);
+  grid-auto-rows: 1fr;
+}
+
+@mixin gridColumnGenerator($grid-values) {
+  $xs-grid: map-get($grid-values, xs);
+  $sm-grid: map-get($grid-values, sm);
+  $md-grid: map-get($grid-values, md);
+  $lg-grid: map-get($grid-values, lg);
+
+  @include respond-to(xs) {
+    @include gridColumnsForPercentage($xs-grid);
+  }
+  @include respond-to(sm) {
+    @include gridColumnsForPercentage($sm-grid);
+  }
+  @include respond-to(md) {
+    @include gridColumnsForPercentage($md-grid);
+  }
+  @include respond-to(lg) {
+    @include gridColumnsForPercentage($lg-grid);
+  }
+}
+
+@mixin respond-to($media) {
+  @if $media == xs {
+    @media (max-width: $screen-xs-max) {
+      @content;
+    }
+  } @else if $media == sm {
+    @media (min-width: $screen-sm) and (max-width: $screen-sm-max) {
+      @content;
+    }
+  } @else if $media == md {
+    @media (min-width: $screen-md) and (max-width: $screen-md-max) {
+      @content;
+    }
+  } @else if $media == lg {
+    @media (min-width: $screen-lg) {
+      @content;
+    }
+  }
+}

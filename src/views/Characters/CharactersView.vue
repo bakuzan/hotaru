@@ -1,14 +1,10 @@
 <template>
   <form novalidate @submit.prevent="submit">
-    <div class="page page-view">  
-      <LoadingBouncer v-show="isLoading" />
+    <div class="page page-view">
+      <LoadingBouncer v-show="isLoading"/>
       <div class="page-view__left-column htr-column">
         <div class="htr-column__inner">
-          <HTRImage 
-            force-load
-            :src="editCharacter.displayImage" 
-            class="page-view__image" 
-          />
+          <HTRImage force-load :src="editCharacter.displayImage" class="page-view__image"/>
           <ViewBlockToggler
             id="displayImage"
             class="span-column"
@@ -16,12 +12,9 @@
             :lockEdit="isCreate"
             :forceReadOnly="readOnly"
           >
-            <ImageUploader
-              name="displayImage"
-              @on-upload="handleUserChanges"
-            />
+            <ImageUploader name="displayImage" @on-upload="handleUserChanges"/>
           </ViewBlockToggler>
-          <TickboxHeart 
+          <TickboxHeart
             class="span-column"
             id="isWaifu"
             name="isWaifu"
@@ -90,7 +83,7 @@
                 </ViewBlockToggler>
                 <div class="character-toggler-wrapper__icon" v-show="editCharacter.seriesId">
                   <NavLink :to="seriesUrl">
-                    <LinkImages />
+                    <LinkImages/>
                   </NavLink>
                 </div>
               </div>
@@ -111,14 +104,14 @@
                   />
                 </div>
                 <InputBoxChipList
-                    id="tags"
-                    name="tagIds"
-                    text="Tags"
-                    :options="combinedTags"
-                    :values="editCharacterTags"
-                    @update="onUpdate"
-                    @create="onCreate"
-                    allowNulls
+                  id="tags"
+                  name="tagIds"
+                  text="Tags"
+                  :options="combinedTags"
+                  :values="editCharacterTags"
+                  @update="onUpdate"
+                  @create="onCreate"
+                  allowNulls
                 />
               </ViewBlockToggler>
             </div>
@@ -126,38 +119,29 @@
         </Tab>
         <Tab name="Gallery">
           <div class="page-view__content view-info">
-            <ImageUploader
-              name="galleryImage"
-              @on-upload="onGalleryImageUpload"
-            />
-            <List 
-              className="gallery"
+            <ImageUploader name="galleryImage" @on-upload="onGalleryImageUpload"/>
+            <List
+              class="gallery"
               itemClassName="gallery__item"
+              is-grid="standard"
               :items="characterImages"
             >
               <template slot-scope="slotProps">
-                <ImageCard 
-                  v-bind="slotProps.item"
-                  :remove="onRemoveImage"
-                  hide-caption
-                />
+                <ImageCard v-bind="slotProps.item" :remove="onRemoveImage" hide-caption/>
               </template>
             </List>
           </div>
         </Tab>
         <Tab name="Versus" :is-disabled="isCreate">
           <div class="page-view__content view-info">
-            <List 
+            <List
               columns="one"
               :items="versusHistoryPaged.nodes"
               :paged-total="versusHistoryPaged.total"
               @intersect="showMore"
             >
               <template slot-scope="slotProps">
-                <VersusHistoryCard
-                  :characterId="editCharacter.id"
-                  :item="slotProps.item"
-                />
+                <VersusHistoryCard :characterId="editCharacter.id" :item="slotProps.item"/>
               </template>
             </List>
           </div>
@@ -167,17 +151,8 @@
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button
-              @click="cancel"
-            >
-              Cancel
-            </Button>
-            <Button
-              theme="secondary"
-              @click="submit"
-            >
-              {{ isCreate ? "Create" : "Save" }}
-            </Button>
+            <Button @click="cancel">Cancel</Button>
+            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
           </div>
         </portal>
       </template>

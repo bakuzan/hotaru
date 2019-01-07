@@ -1,11 +1,7 @@
 <template>
   <div class="page">
-    <ListFilterBar 
-      v-bind="filters"
-      @input="onInput"
-      @add="onAdd"
-    >
-      <MultiSelect 
+    <ListFilterBar v-bind="filters" @input="onInput" @add="onAdd">
+      <MultiSelect
         :slot="typeSlotName"
         id="gender"
         name="genders"
@@ -14,7 +10,7 @@
         :options="mappedGenders"
         @update="onInput"
       />
-      <MultiSelect 
+      <MultiSelect
         :slot="typeSlotName"
         id="source"
         name="sources"
@@ -24,22 +20,17 @@
         @update="onInput"
       />
     </ListFilterBar>
-    <List 
+    <List
       id="character-list"
-      wrap
-      fixed-width
-      columns="four"
-      className="characters"
+      class="characters"
       itemClassName="characters__item"
+      is-grid="standard"
       :items="charactersPaged.nodes"
       :paged-total="charactersPaged.total"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <ListFigureCard 
-          v-bind="slotProps.item" 
-          :url-source="cardUrl" 
-        />
+        <ListFigureCard v-bind="slotProps.item" :url-source="cardUrl"/>
       </template>
     </List>
   </div>
