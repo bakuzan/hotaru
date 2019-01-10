@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="listContainer">
     <div v-if="hasPaging" class="paged-total">{{totalText}}</div>
     <draggable
       :class="listClasses"
@@ -77,24 +77,18 @@ export default {
     };
   },
   mounted() {
-    this.observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting) {
-          this.$emit('intersect');
-        }
-      },
-      {
-        rootMargin: '50px'
-      }
-    );
-    this.observer.observe(this.$refs.observedDiv);
-
     this.$watch(
       function() {
-        return this.items.length === this.pagedTotal;
+        return this.items.length;
       },
       function(curr, prev) {
-        if (prev && !curr) {
+        if (!this.observer && prev === 0 && curr > 0) {
+          this.setIntersectionObserver();
+        }
+
+        const currMatchesTotal = curr === this.pagedTotal;
+        const prevMatchesTotal = prev === this.pagedTotal;
+        if (prevMatchesTotal && !currMatchesTotal) {
           this.showObserver = false;
 
           clearTimeout(this.timer);
@@ -106,7 +100,9 @@ export default {
     );
   },
   destroyed() {
-    this.observer.disconnect();
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   },
   computed: {
     listClasses: function() {
@@ -149,6 +145,25 @@ export default {
     }
   },
   methods: {
+    setIntersectionObserver: function() {
+      const container = this.$refs.listContainer;
+      const itemClass = this.isGrid ? '.grid__item' : '.list__item';
+      const element = container.querySelector(itemClass);
+      const offset = element ? element.clientHeight / 2 : 50;
+      const rootMargin = offset >= 50 ? `${offset}px` : '50px';
+
+      this.observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry && entry.isIntersecting) {
+            this.$emit('intersect');
+          }
+        },
+        {
+          rootMargin
+        }
+      );
+      this.observer.observe(this.$refs.observedDiv);
+    },
     onUpdate: function(...stuff) {
       this.$emit('update', ...stuff);
     }
