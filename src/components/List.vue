@@ -149,8 +149,8 @@ export default {
       const container = this.$refs.listContainer;
       const itemClass = this.isGrid ? '.grid__item' : '.list__item';
       const element = container.querySelector(itemClass);
-      const offset = element ? element.clientHeight / 2 : 50;
-      const rootMargin = offset >= 50 ? `${offset}px` : '50px';
+      const offset = element ? element.clientHeight : 75;
+      const rootMargin = offset >= 75 ? `${offset}px` : '75px';
 
       this.observer = new IntersectionObserver(
         ([entry]) => {
@@ -251,18 +251,13 @@ $columns: (
   margin: 5px 0;
   list-style-type: none;
   &--standard {
-    @include respond-to(xs) {
-      @include gridColumnsForPercentage(50);
-    }
-    @include respond-to(sm) {
-      @include gridColumnsForPercentage(33);
-    }
-    @include respond-to(md) {
-      @include gridColumnsForPercentage(25);
-    }
-    @include respond-to(lg) {
-      @include gridColumnsForPercentage(20);
-    }
+    $grid-values: (
+      xs: 50,
+      sm: 33,
+      md: 25,
+      lg: 20
+    );
+    @include gridColumnGenerator($grid-values);
   }
 }
 </style>

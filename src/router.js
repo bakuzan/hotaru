@@ -4,10 +4,11 @@ import Home from './views/Home.vue';
 
 import Urls from '@/constants/urls';
 import Strings from '@/constants/strings';
+import { capitaliseEachWord } from '@/utils';
 
 Vue.use(Router);
 
-export default new Router({
+const htrRouter = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -138,3 +139,38 @@ export default new Router({
     }
   ]
 });
+
+htrRouter.afterEach((to) => {
+  Vue.nextTick(() => {
+    const routeName = to.name;
+    const isInstance = routeName.includes('instance');
+    const isTemplate = routeName.includes('template');
+    const isLeague = routeName.includes('league');
+    const useQuery = isInstance || isTemplate;
+    let pageName = 'HOTARU';
+
+    if (useQuery) {
+      const type = isLeague
+        ? 'League'
+        : to.query.type || to.params.type || 'Bracket';
+      const category = routeName.includes('view')
+        ? 'View'
+        : isLeague
+          ? 'Center'
+          : isInstance
+            ? 'Instances'
+            : isTemplate
+              ? 'Templates'
+              : '';
+      pageName = `${type} ${category}`;
+      pageName = `Hotaru - ${pageName}`;
+    } else if (routeName !== Strings.route.base) {
+      pageName = capitaliseEachWord(to.name).replace(/^Htr /, '');
+      pageName = `Hotaru - ${pageName}`;
+    }
+
+    document.title = pageName;
+  });
+});
+
+export default htrRouter;
