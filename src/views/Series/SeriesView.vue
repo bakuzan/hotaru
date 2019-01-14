@@ -175,6 +175,16 @@ export default {
   data: function() {
     return getInitialState();
   },
+  metaInfo() {
+    if (this.isCreate) {
+      return { title: 'Hotaru - Create Series' };
+    }
+
+    return {
+      title: this.series && this.series.name,
+      titleTemplate: 'Hotaru - View Series - %s'
+    };
+  },
   watch: {
     $route: function(newRoute) {
       if (newRoute.path === Urls.seriesCreate) {

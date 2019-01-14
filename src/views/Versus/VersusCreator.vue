@@ -148,6 +148,9 @@ export default {
       mappedSources: mapEnumToSelectBoxOptions(SourceType)
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Versus Creator'
+  },
   apollo: {
     series: {
       query: Query.getSeries,

@@ -4,7 +4,6 @@ dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const favicon = require('serve-favicon');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 

@@ -1,50 +1,37 @@
 <template>
   <div class="page page-view page-view--column league-center">
     <div class="page-view__row page-view__row--right league-center__actions">
-      <LoadingBouncer v-show="isLoading" local />
-      <Button 
-        theme="primary"
-        :disabled="!canCreate"
-        @click="onCreateNew">
-        Create
-      </Button>
+      <LoadingBouncer v-show="isLoading" local/>
+      <Button theme="primary" :disabled="!canCreate" @click="onCreateNew">Create</Button>
     </div>
     <div class="page-view__row league-center__content">
       <section class="league-center__section league-section">
         <h4 class="league-section__header">Ongoing</h4>
         <div class="league-section__sub-header">
-          <NavLink 
+          <NavLink
             v-if="ongoingHTRInstanceLeagues"
-            class="league-section__season-link" 
-            :to="leagueLink(null)">
-            {{ongoingHTRInstanceLeagues.name}}
-          </NavLink>
-          <div v-if="!ongoingHTRInstanceLeagues">
-            No ongoing leagues.
-          </div>
+            class="league-section__season-link"
+            :to="leagueLink(null)"
+          >{{ongoingHTRInstanceLeagues.name}}</NavLink>
+          <div v-if="!ongoingHTRInstanceLeagues">No ongoing leagues.</div>
         </div>
-        <List 
-          align-left
-          fixed-width
-          columns="one"
-          :items="ongoingInstances"
-        >
+        <List align-left fixed-width columns="one" :items="ongoingInstances">
           <template slot-scope="slotProps">
             <div class="league-card">
-              <div 
-                :class="iconClasses(slotProps.item)" 
+              <div
+                :class="iconClasses(slotProps.item)"
                 :title="`Is ${slotProps.item.settings.isComplete ? 'Complete' : 'Ongoing'}`"
-              >
-              </div>
-              <NavLink class="league-card__text" :to="leagueLink(slotProps.item)">
-                {{slotProps.item.name}}
-              </NavLink>
+              ></div>
+              <NavLink
+                class="league-card__text"
+                :to="leagueLink(slotProps.item)"
+              >{{slotProps.item.name}}</NavLink>
             </div>
           </template>
         </List>
       </section>
       <section class="league-center__section">
-        <List 
+        <List
           align-left
           fixed-width
           columns="one"
@@ -53,11 +40,10 @@
           @intersect="showMore"
         >
           <template slot-scope="slotProps">
-            <NavLink 
-              class="league-section__season-link" 
-              :to="seasonLink(slotProps.item.id)">
-              {{slotProps.item.name}}
-            </NavLink>
+            <NavLink
+              class="league-section__season-link"
+              :to="seasonLink(slotProps.item.id)"
+            >{{slotProps.item.name}}</NavLink>
           </template>
         </List>
       </section>
@@ -99,6 +85,9 @@ export default {
       ongoingHTRInstanceLeagues: {},
       pastHTRInstanceLeaguesPaged: defaultPagedResponse()
     };
+  },
+  metaInfo: {
+    title: 'Hotaru - League Center'
   },
   watch: {
     $route: function() {

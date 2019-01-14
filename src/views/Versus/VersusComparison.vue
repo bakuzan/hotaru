@@ -117,6 +117,9 @@ export default {
       comparisonSummary: null
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Versus Comparison'
+  },
   apollo: {
     characters: {
       query: Query.getCharactersForVersusCompare,

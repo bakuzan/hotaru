@@ -1,17 +1,11 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view template-creator">
-      <LoadingBouncer v-show="isLoading" />
+      <LoadingBouncer v-show="isLoading"/>
 
       <div class="template-creator__group">
         <h4 class="tempalte-creator__title">Details</h4>
-        <InputBox
-          id="name"
-          name="name"
-          label="Name"
-          :value="editTemplate.name"
-          @input="onInput"
-        />
+        <InputBox id="name" name="name" label="Name" :value="editTemplate.name" @input="onInput"/>
         <SelectBox
           id="type"
           name="type"
@@ -31,7 +25,7 @@
           @on-select="onRulesInput"
           allow-nulls
         />
-        <Tickbox 
+        <Tickbox
           v-show="isBracket"
           id="isSeeded"
           name="isSeeded"
@@ -42,7 +36,7 @@
       </div>
       <div class="template-creator__group">
         <h4 class="tempalte-creator__title">Rules</h4>
-        <MultiSelect 
+        <MultiSelect
           id="gender"
           name="genders"
           label="genders"
@@ -50,16 +44,16 @@
           :options="mappedGenders"
           @update="onRulesInput"
         />
-        <MultiSelect 
-            id="source"
-            name="sources"
-            label="sources"
-            :values="editTemplate.rules.sources"
-            :options="mappedSources"
-            @update="onRulesInput"
+        <MultiSelect
+          id="source"
+          name="sources"
+          label="sources"
+          :values="editTemplate.rules.sources"
+          :options="mappedSources"
+          @update="onRulesInput"
         />
         <div>
-        <InputBoxAutocomplete
+          <InputBoxAutocomplete
             id="seriesFilter"
             name="seriesFilter"
             label="Series"
@@ -69,35 +63,20 @@
             @input="onSearchSeries"
             @on-select="onSelectSeries"
             disable-local-filter
-        />
-        <List
-            columns="one"
-            :items="editTemplate.rules.series"
-        >
+          />
+          <List columns="one" :items="editTemplate.rules.series">
             <template slot-scope="slotProps">
-              <SeriesCard
-                v-bind="slotProps.item"
-                @remove="onRemoveSeries"
-              />
+              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries"/>
             </template>
-        </List>
+          </List>
         </div>
       </div>
 
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button
-              @click="cancel"
-            >
-              Cancel
-            </Button>
-            <Button
-              theme="secondary"
-              @click="submit"
-            >
-              {{ isCreate ? "Create" : "Save" }}
-            </Button>
+            <Button @click="cancel">Cancel</Button>
+            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
           </div>
         </portal>
       </template>
@@ -170,6 +149,17 @@ export default {
   },
   data: function() {
     return getInitialState();
+  },
+  metaInfo() {
+    if (this.isCreate) {
+      return { title: `Hotaru - Create Template` };
+    }
+
+    const type = this.template && this.template.type;
+    return {
+      title: this.template && this.template.name,
+      titleTemplate: `Hotaru - View ${type} Template - %s`
+    };
   },
   watch: {
     $route: function(newRoute) {

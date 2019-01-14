@@ -75,6 +75,9 @@ export default {
       charactersPaged: defaultPagedResponse()
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Character List'
+  },
   apollo: {
     charactersPaged: {
       query: Query.getCharactersPaged,

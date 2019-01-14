@@ -253,6 +253,16 @@ export default {
       ...getInitialState()
     };
   },
+  metaInfo() {
+    if (this.isCreate) {
+      return { title: 'Hotaru - Create Character' };
+    }
+
+    return {
+      title: this.character && this.character.name,
+      titleTemplate: 'Hotaru - View Character - %s'
+    };
+  },
   watch: {
     $route: function(newRoute, oldRoute) {
       if (newRoute.path === Urls.characterCreate) {

@@ -63,6 +63,7 @@ export default {
   },
   data: function() {
     return {
+      title: queryFilterOptions.queryDefault,
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.htrInstanceView,
       mappedTypes: mapEnumToRadioButtonGroup(HTRTemplateType),
@@ -74,8 +75,18 @@ export default {
       htrInstancesPaged: defaultPagedResponse()
     };
   },
+  metaInfo() {
+    return {
+      title: this.title,
+      titleTemplate: 'Hotaru - %s Instance List'
+    };
+  },
   watch: {
     $route: function() {
+      this.title = Routing.getQueryFromLocation(
+        'type',
+        queryFilterOptions.queryDefault
+      );
       LP.refetchForFilter(this, 'htrInstancesPaged', queryFilterOptions);
     }
   },

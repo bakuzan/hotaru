@@ -95,6 +95,9 @@ export default {
       rankingsTopTen: []
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Dashboard'
+  },
   apollo: {
     versusDailyActive: {
       query: Query.getActiveDailyVersus,

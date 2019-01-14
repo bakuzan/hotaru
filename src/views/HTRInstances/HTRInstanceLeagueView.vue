@@ -1,19 +1,14 @@
 <template>
   <div class="page page-view page-view--column league-view">
     <div class="page-view__row page-view__row--right league-view__header">
-      <LoadingBouncer v-show="isLoading" local />
+      <LoadingBouncer v-show="isLoading" local/>
       <h4 class="league-view__title">
         {{htrTemplateSeasonById && htrTemplateSeasonById.name}}
-        <span class="status-badge themed-background">
-        {{isSeasonComplete ? 'Complete' : 'Ongoing'}}
-        </span>
+        <span
+          class="status-badge themed-background"
+        >{{isSeasonComplete ? 'Complete' : 'Ongoing'}}</span>
       </h4>
-      <Button 
-        theme="primary"
-        :disabled="!canCreate"
-        @click="onMatchCreate">
-        Create Matches
-      </Button>
+      <Button theme="primary" :disabled="!canCreate" @click="onMatchCreate">Create Matches</Button>
     </div>
     <div class="page-view__row">
       <section class="league-view-section">
@@ -35,17 +30,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr 
-              v-for="(row, i) in leagueTable" 
-              :key="row.id"
-              class="league-table__row"
-            >
+            <tr v-for="(row, i) in leagueTable" :key="row.id" class="league-table__row">
               <td class="name-column">
-                <RankingCard 
-                  size="small"
-                  :rank="i+1"
-                  :character="row"
-                />
+                <RankingCard size="small" :rank="i+1" :character="row"/>
               </td>
               <td class="text--top text--right padded">{{row.played}}</td>
               <td class="text--top text--right padded">{{row.won}}</td>
@@ -55,7 +42,7 @@
         </table>
       </section>
       <section class="league-view-section">
-        <List 
+        <List
           columns="one"
           :items="leagueMatches.nodes"
           :paged-total="leagueMatches.total"
@@ -106,6 +93,12 @@ export default {
       page: 0,
       htrTemplateSeasonById: {},
       htrInstanceLeagueById: {}
+    };
+  },
+  metaInfo() {
+    return {
+      title: this.htrTemplateSeasonById && this.htrTemplateSeasonById.name,
+      titleTemplate: `Hotaru - View League - %s`
     };
   },
   watch: {

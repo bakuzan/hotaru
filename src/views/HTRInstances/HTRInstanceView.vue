@@ -1,7 +1,7 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page">
-      <LoadingBouncer v-show="isLoading" />
+      <LoadingBouncer v-show="isLoading"/>
       <div :class="instanceViewClasses">
         <div class="page-view__row page-view__row--grow">
           <div class="page-view__left-column">
@@ -81,9 +81,7 @@
               :forceReadOnly="lockedReadOnly"
               @toggle="onRemoveTemplate"
             >
-              <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
-                {{ value && value.name }}
-              </div>
+              <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">{{ value && value.name }}</div>
               <InputBoxAutocomplete
                 id="templateFilter"
                 name="templateFilter"
@@ -120,7 +118,7 @@
           </div>
         </div>
         <div :class="instanceContentClasses">
-          <SeedIcon v-if="isSeeded" />
+          <SeedIcon v-if="isSeeded"/>
           <HTRInstanceViewList
             v-if="isListType"
             :items="editInstance.characters"
@@ -140,17 +138,8 @@
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button
-              @click="cancel"
-            >
-              Cancel
-            </Button>
-            <Button
-              theme="secondary"
-              @click="submit"
-            >
-              {{ isCreate ? "Create" : "Save" }}
-            </Button>
+            <Button @click="cancel">Cancel</Button>
+            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
           </div>
         </portal>
       </template>
@@ -227,6 +216,17 @@ export default {
   data: function() {
     const type = Routing.getParam(this.$router, 'type');
     return getInitialState(type);
+  },
+  metaInfo() {
+    const type = Routing.getParam(this.$router, 'type');
+    if (this.isCreate) {
+      return { title: `Hotaru - Create ${type} Instance` };
+    }
+
+    return {
+      title: this.instance && this.instance.name,
+      titleTemplate: `Hotaru - View ${type} Instance - %s`
+    };
   },
   watch: {
     $route: function(newRoute) {

@@ -62,6 +62,9 @@ export default {
       seriesPaged: defaultPagedResponse()
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Series List'
+  },
   apollo: {
     seriesPaged: {
       query: Query.getSeriesPaged,

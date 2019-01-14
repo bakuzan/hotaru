@@ -102,6 +102,9 @@ export default {
       selectedSeries: []
     };
   },
+  metaInfo: {
+    title: 'Hotaru - Ranking List'
+  },
   apollo: {
     rankingsPaged: {
       query: Query.getRankingsPaged,
