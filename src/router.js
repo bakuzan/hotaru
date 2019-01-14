@@ -4,7 +4,6 @@ import Home from './views/Home.vue';
 
 import Urls from '@/constants/urls';
 import Strings from '@/constants/strings';
-import { capitaliseEachWord } from '@/utils';
 
 Vue.use(Router);
 
