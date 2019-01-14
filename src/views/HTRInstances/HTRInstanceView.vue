@@ -117,6 +117,10 @@
             </ViewBlockToggler>
           </div>
         </div>
+        <div v-if="isCreate" class="template-available-character-count">
+          <div>Available characters for current template:</div>
+          <div>{{availableCharacterCount}}</div>
+        </div>
         <div :class="instanceContentClasses">
           <SeedIcon v-if="isSeeded"/>
           <HTRInstanceViewList
@@ -190,7 +194,8 @@ function getInitialState(type) {
     templateFilter: '',
     characters: [],
     characterFilter: '',
-    mappedOrders: mapToSelectBoxOptions(Order)
+    mappedOrders: mapToSelectBoxOptions(Order),
+    availableCharacterCount: 0
   };
 }
 
@@ -291,6 +296,29 @@ export default {
       },
       update(data) {
         return data.charactersForTemplateRules;
+      }
+    },
+    availableCharacterCount: {
+      query: Query.getCharacterCountForTemplateRules,
+      fetchPolicy: 'network-only',
+      skip() {
+        return !this.isCreate || !this.editInstance.htrTemplate;
+      },
+      variables() {
+        const { genders = [], sources = [], series = [] } =
+          this.editInstance.htrTemplate.rules || {};
+
+        return {
+          search: '',
+          rules: {
+            genders,
+            sources,
+            series
+          }
+        };
+      },
+      update(data) {
+        return data.characterCountForTemplateRules;
       }
     }
   },
@@ -518,6 +546,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/_variables.scss';
+
 #characterFilter {
   margin-top: -2px;
 }
@@ -531,6 +561,13 @@ export default {
   &--wider {
     flex-basis: 33%;
   }
+}
+
+.template-available-character-count {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: $app--padding-standard;
 }
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

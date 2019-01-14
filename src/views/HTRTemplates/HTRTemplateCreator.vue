@@ -33,6 +33,10 @@
           :checked="!!editTemplate.rules.isSeeded"
           @change="onRulesInput"
         />
+        <div class="template-creator__available-count">
+          <div>Available characters for current rules:</div>
+          <div>{{availableCharacterCount}}</div>
+        </div>
       </div>
       <div class="template-creator__group">
         <h4 class="tempalte-creator__title">Rules</h4>
@@ -124,7 +128,8 @@ function getInitialState() {
     template: {},
     editTemplate: defaultHTRTemplate(),
     series: [],
-    seriesFilter: ''
+    seriesFilter: '',
+    availableCharacterCount: 0
   };
 }
 
@@ -198,6 +203,27 @@ export default {
       },
       variables() {
         return { search: this.seriesFilter };
+      }
+    },
+    availableCharacterCount: {
+      query: Query.getCharacterCountForTemplateRules,
+      fetchPolicy: 'network-only',
+      variables() {
+        const { genders = [], sources = [], series = [] } = this.editTemplate
+          ? this.editTemplate.rules
+          : this.template.rules || {};
+
+        return {
+          search: '',
+          rules: {
+            genders,
+            sources,
+            series: series.map((x) => (x instanceof Object ? x.id : x))
+          }
+        };
+      },
+      update(data) {
+        return data.characterCountForTemplateRules;
       }
     }
   },
@@ -334,6 +360,13 @@ export default {
 
   &__title {
     margin: $app--margin-standard;
+  }
+
+  &__available-count {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: $app--padding-standard;
   }
 }
 </style>

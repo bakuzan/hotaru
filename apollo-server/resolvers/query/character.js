@@ -92,5 +92,8 @@ module.exports = {
   },
   charactersForTemplateRules(_, args, context) {
     return context.Character.findFromRules(args);
+  },
+  async characterCountForTemplateRules(_, args, context) {
+    return context.Character.countFromRules(args);
   }
 };

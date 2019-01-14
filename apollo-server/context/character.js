@@ -3,7 +3,7 @@ const Op = require('sequelize').Op;
 const { db, Character, Series } = require('../connectors');
 const Utils = require('../utils');
 
-function findFromRules({ rules, search = '' }, options = {}) {
+function buildQueryRules({ rules, search = '' }, options = {}) {
   const {
     isIncludeOnlyGender = true,
     isIncludeOnlySource = true,
@@ -44,7 +44,7 @@ function findFromRules({ rules, search = '' }, options = {}) {
     };
   }
 
-  return Character.findAll({
+  return {
     where: {
       name: {
         [Op.like]: `%${search}%`
@@ -56,9 +56,20 @@ function findFromRules({ rules, search = '' }, options = {}) {
     },
     ...options,
     include: options.include ? [Series, ...options.include] : [Series]
-  });
+  };
+}
+
+function findFromRules(filters, options) {
+  const queryRules = buildQueryRules(filters, options);
+  return Character.findAll(queryRules);
+}
+
+function countFromRules(filters, options) {
+  const queryRules = buildQueryRules(filters, options);
+  return Character.count(queryRules);
 }
 
 module.exports = {
-  findFromRules
+  findFromRules,
+  countFromRules
 };

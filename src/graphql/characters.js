@@ -92,6 +92,15 @@ const getCharactersForTemplateRules = gql`
   }
 `;
 
+const getCharacterCountForTemplateRules = gql`
+  query getCharacterCountForTemplateRules(
+    $search: String
+    $rules: HTRTemplateRulesInput
+  ) {
+    characterCountForTemplateRules(search: $search, rules: $rules)
+  }
+`;
+
 const getCharacterById = gql`
   query getCharacterById($id: Int!) {
     characterById(id: $id) {
@@ -175,6 +184,7 @@ export default {
     getCharactersForVersusCompare,
     getCharactersWithoutSeries,
     getCharactersForTemplateRules,
+    getCharacterCountForTemplateRules,
     getCharacterById,
     getCharactersByIds,
     getRandomCharacterId

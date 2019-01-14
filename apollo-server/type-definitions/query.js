@@ -18,6 +18,10 @@ const Query = gql`
       search: String
       rules: HTRTemplateRulesInput
     ): [Character]
+    characterCountForTemplateRules(
+      search: String
+      rules: HTRTemplateRulesInput
+    ): Int
 
     seriesPaged(
       search: String
