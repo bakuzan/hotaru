@@ -187,5 +187,5 @@ export const groupBy = (arr, fn) =>
 export function createErrorStringFromGraphql(response) {
   const strArr = response && response.errors;
   const arr = strArr || [];
-  return arr.reduce((p, s) => [...p, ...s], []).join('\n');
+  return arr.map((err) => err.message).join('\n');
 }
