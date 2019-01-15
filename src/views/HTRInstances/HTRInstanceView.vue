@@ -478,7 +478,7 @@ export default {
     },
     submit: function() {
       this.readOnly = true; // set back to read only.
-      console.log('submitted!');
+
       if (this.isCreate && InstanceValidator.isValidNew(this.editInstance)) {
         this.handleCreate();
       } else if (

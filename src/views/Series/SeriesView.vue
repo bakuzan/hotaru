@@ -273,7 +273,7 @@ export default {
     },
     submit: function() {
       this.readOnly = true; // set back to read only.
-      console.log('submitted series!');
+
       if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
         this.handleCreate();
       } else if (
@@ -302,8 +302,6 @@ export default {
               variables: { id: series.id },
               data: { seriesById: mapSeriesToStore(series) }
             });
-
-            CacheUpdate.refreshCharacterSeriesFragment(store, series);
           },
           optimisticResponse: mapSeriesToOptimisticCreate(this.editSeries)
         })
@@ -335,7 +333,6 @@ export default {
             });
 
             CacheUpdate.refreshSeries(store, series);
-            CacheUpdate.refreshCharacterSeriesFragment(store, series);
           },
           optimisticResponse: mapSeriesToOptimisticUpdate(this.editSeries)
         })

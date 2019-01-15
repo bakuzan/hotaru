@@ -459,7 +459,7 @@ export default {
     },
     submit: function() {
       this.readOnly = true; // set back to read only.
-      console.log('submitted character!');
+
       if (this.isCreate && CharacterValidator.isValidNew(this.editCharacter)) {
         this.handleCreate();
       } else if (

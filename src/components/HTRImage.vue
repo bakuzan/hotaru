@@ -1,8 +1,5 @@
 <template>
-  <img 
-    class="image" 
-    @error="onError"
-  />
+  <img class="image" @error="onError">
 </template>
 
 <script>
@@ -55,7 +52,7 @@ export default {
     onError: function(event) {
       event.target.onerror = null;
       event.target.src = this.fallback;
-      console.log('error', this);
+      console.error('Image Load Error', this);
     }
   }
 };

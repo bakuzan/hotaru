@@ -28,6 +28,7 @@
         <Tickbox
           v-show="isBracket"
           id="isSeeded"
+          class="template-creator__input"
           name="isSeeded"
           text="Is Seeded"
           :checked="!!editTemplate.rules.isSeeded"
@@ -208,6 +209,9 @@ export default {
     availableCharacterCount: {
       query: Query.getCharacterCountForTemplateRules,
       fetchPolicy: 'network-only',
+      skip() {
+        return this.$apollo.queries.template.loading;
+      },
       variables() {
         const { genders = [], sources = [], series = [] } = this.editTemplate
           ? this.editTemplate.rules
@@ -362,10 +366,13 @@ export default {
     margin: $app--margin-standard;
   }
 
+  &__input {
+    flex: 0;
+  }
+
   &__available-count {
     display: flex;
     flex-direction: column;
-    flex: 1;
     padding: $app--padding-standard;
   }
 }

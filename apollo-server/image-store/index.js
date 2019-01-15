@@ -17,7 +17,6 @@ function uploadBase64(payload) {
 }
 
 function returnImgurUrl(json) {
-  console.log('IMGUR > ', json.data);
   return {
     success: true,
     url: json.data.link

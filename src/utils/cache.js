@@ -41,13 +41,3 @@ export const refreshAllTags = (store, rawCharacter) => {
     data: { tags }
   });
 };
-
-export const refreshCharacterSeriesFragment = (store, rawSeries) => {
-  // TODO - Might not need
-  console.log(
-    '%c refresh character state post series mutation: not yet implemented',
-    'color: red',
-    store,
-    rawSeries
-  );
-};

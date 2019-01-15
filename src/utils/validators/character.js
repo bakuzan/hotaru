@@ -9,6 +9,7 @@ const instance = new Validator((character) => {
     'Name is required'
   );
   response.updateResponse(character.gender, 'Gender is required');
+  response.updateResponse(character.seriesId, 'Series is required');
 
   return response;
 });

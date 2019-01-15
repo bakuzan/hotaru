@@ -89,6 +89,7 @@ export default {
   },
   data: function() {
     return {
+      title: '',
       mutationLoading: false,
       page: 0,
       htrTemplateSeasonById: {},
@@ -96,14 +97,16 @@ export default {
     };
   },
   metaInfo() {
+    this.updateTitle();
     return {
-      title: this.htrTemplateSeasonById && this.htrTemplateSeasonById.name,
+      title: this.title,
       titleTemplate: `Hotaru - View League - %s`
     };
   },
   watch: {
     $route: function() {
       const id = Routing.getQueryArg(this.$router, 'leagueId');
+      this.updateTitle();
       if (!id) {
         return;
       }
@@ -191,6 +194,14 @@ export default {
     currentLeagueId: function() {
       return Number(Routing.getQueryArg(this.$router, 'leagueId', 0));
     },
+    updateTitle: function() {
+      const id = this.currentLeagueId();
+      const league = this.leagues.find((x) => x.id === id);
+      const seasonName =
+        this.htrTemplateSeasonById && this.htrTemplateSeasonById.name;
+      const leagueName = league && league.name;
+      this.title = seasonName + (leagueName ? `, ${leagueName}` : '');
+    },
     onMatchCreate: function() {
       this.mutationLoading = true;
 
@@ -268,9 +279,9 @@ export default {
               ...htrInstanceLeagueVersusVote,
               matches: {
                 ...league.matches,
-                nodes: league.matches.nodes.map(
-                  (x) => (x.id === versusId ? { ...x, winnerId } : x)
-                )
+                nodes: league.matches.nodes.map((x) => {
+                  return x.id === versusId ? { ...x, winnerId } : x;
+                })
               }
             };
 

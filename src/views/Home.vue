@@ -68,9 +68,11 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 import CharacterOfTheDayWidget from '@/components/Widgets/CharacterOfTheDayWidget';
 import HonoursWidget from '@/components/Widgets/HonoursWidget';
 
+import alertService from '@/utils/alert-service';
 import Urls from '@/constants/urls';
 import { Query, Mutation } from '@/graphql';
 import { mapVersusToVotedVersus } from '@/utils/mappers';
+import { createErrorStringFromGraphql } from '@/utils';
 
 export default {
   name: 'Home',
@@ -136,9 +138,12 @@ export default {
             Urls.build(Urls.characterView, { id: data.characterRandom.id })
           );
         })
-        .catch((error) => {
-          console.log('get random failed', error);
-        });
+        .catch((error) =>
+          alertService.sendError({
+            message: 'Failed to fetch random character',
+            detail: createErrorStringFromGraphql(error)
+          })
+        );
     },
     handleCreateDaily: function() {
       if (!this.allowCreateCall) return;
@@ -153,13 +158,13 @@ export default {
             store.writeQuery({ query: Query.getActiveDailyVersus, data });
           }
         })
-        .then((data) => {
-          console.log(data);
-          this.blockCreateVersus = false;
-        })
-        .catch((error) => {
-          console.log('failed to create', error);
-        });
+        .then(() => (this.blockCreateVersus = false))
+        .catch((error) =>
+          alertService.sendError({
+            message: 'Failed to create daily versus',
+            detail: createErrorStringFromGraphql(error)
+          })
+        );
     },
     handleVote: function(versusId, winnerId) {
       const versus = this.versusDailyActive.find((x) => x.id === versusId);
@@ -183,12 +188,13 @@ export default {
           },
           optimisticUpdate: mapVersusToVotedVersus(versusResult)
         })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log('failed to create', error);
-        });
+        .then(() => null)
+        .catch((error) =>
+          alertService.sendError({
+            message: 'Failed to process vote',
+            detail: createErrorStringFromGraphql(error)
+          })
+        );
     }
   }
 };

@@ -183,3 +183,9 @@ export const groupBy = (arr, fn) =>
       acc[val] = (acc[val] || []).concat(arr[i]);
       return acc;
     }, {});
+
+export function createErrorStringFromGraphql(response) {
+  const strArr = response && response.errors;
+  const arr = strArr || [];
+  return arr.reduce((p, s) => [...p, ...s], []).join('\n');
+}

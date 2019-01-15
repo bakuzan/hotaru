@@ -39,7 +39,6 @@ class AlertService {
   }
   sendError(obj) {
     this.send(obj, ERROR);
-    console.log('%c Alert Service Error Sent >', 'color: brickred', obj);
   }
 }
 

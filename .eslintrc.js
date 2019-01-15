@@ -10,7 +10,8 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-debugger': 'off',
-    'graphql/template-strings': 'off'
+    'graphql/template-strings': 'off',
+    indent: 'off'
   },
 
   parserOptions: {

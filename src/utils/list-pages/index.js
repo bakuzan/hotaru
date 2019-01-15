@@ -1,7 +1,7 @@
 import * as Routing from '../routing';
 import { mapPagedResponseToUpdate } from '@/utils/mappers';
 
-export const size = 5; //10;
+export const size = 10;
 
 function getResolvedQueryParam(ctrl, options) {
   if (!options.queryParam) return {};
