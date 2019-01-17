@@ -14,6 +14,7 @@ export default Object.freeze({
   calendar: '\uD83D\uDCC5',
   info: '\uD83D\uDEC8',
   trophy: '\uD83C\uDFC6',
+  seed: '\uD83C\uDF42',
   emptyBox: '\u2610',
   tickbox: '\u2611'
 });

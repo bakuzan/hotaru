@@ -162,7 +162,7 @@ import InputBox from '@/components/InputBox';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import SelectBox from '@/components/SelectBox';
 import LoadingBouncer from '@/components/LoadingBouncer';
-import SeedIcon from '@/components/SeedIcon';
+import SeedIcon from '@/components/Icons/SeedIcon';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';

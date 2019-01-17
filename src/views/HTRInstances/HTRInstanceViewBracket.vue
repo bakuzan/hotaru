@@ -1,17 +1,8 @@
 <template>
   <div class="bracket" :ref="bracketRef">
-    <canvas 
-      class="bracket__canvas" 
-      :ref="canvasRef" 
-      width="7600" 
-      height="16800">
-    </canvas>
-    <div 
-      v-for="(round, i) in customBracketLayout" 
-      :key="i"
-      class="bracket__round"
-    >
-      <VersusWidget 
+    <canvas class="bracket__canvas" :ref="canvasRef" width="7600" height="16800"></canvas>
+    <div v-for="(round, i) in customBracketLayout" :key="i" class="bracket__round">
+      <VersusWidget
         v-for="match in round"
         v-bind="match"
         :key="match.id"
@@ -255,6 +246,7 @@ $bracket-round-width: 350px;
   position: relative;
   display: flex;
   width: $bracket-width;
+  margin-top: -1em;
   outline: none;
 
   &__round {
