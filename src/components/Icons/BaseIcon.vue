@@ -1,26 +1,22 @@
 <template>
-  <div :class="classes" :icon="icon"></div>
+  <div class="htr-icon">
+    <div v-if="visible" class="htr-icon__display" :title="title" :icon="icon"></div>
+  </div>
 </template>
 
 <script>
-import classNames from 'classnames';
-
 export default {
   name: 'BaseIcon',
   props: {
     icon: {
       type: String
     },
+    title: {
+      type: String
+    },
     visible: {
       type: Boolean,
       default: true
-    }
-  },
-  computed: {
-    classes: function() {
-      return classNames('htr-icon', {
-        'htr-icon--visible': this.visible
-      });
     }
   }
 };
@@ -35,7 +31,7 @@ export default {
   width: 1.1em;
   height: 1.1em;
 
-  &--visible::before {
+  &__display::before {
     content: attr(icon);
   }
 }
