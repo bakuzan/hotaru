@@ -24,12 +24,14 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '../../styles/_variables.scss';
 @import '../../styles/_extensions.scss';
 
 .htr-icon {
   @extend %center-contents;
   width: 1.1em;
   height: 1.1em;
+  z-index: map-get($z-index, above-siblings);
 
   &__display::before {
     content: attr(icon);

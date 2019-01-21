@@ -1,7 +1,8 @@
 <template>
-  <div ref="listContainer">
+  <div>
     <div v-if="hasPaging" class="paged-total">{{totalText}}</div>
     <draggable
+      ref="listContainer"
       :class="listClasses"
       element="ul"
       :list="items"
@@ -70,22 +71,18 @@ export default {
   },
   data: function() {
     return {
-      observer: null
+      observer: null,
+      listObserver: null
     };
   },
   mounted() {
-    this.$watch(
-      function() {
-        return this.items.length;
-      },
-      function(curr, prev) {
-        if (curr !== prev) {
-          this.setIntersectionObserver();
-        }
-      }
-    );
+    this.setMutationOberver();
   },
   destroyed() {
+    if (this.listObserver) {
+      this.listObserver.disconnect();
+    }
+
     if (this.observer) {
       this.observer.disconnect();
     }
@@ -131,21 +128,37 @@ export default {
     }
   },
   methods: {
-    setIntersectionObserver: function() {
+    setMutationOberver: function() {
+      const targetNode = this.$refs.listContainer.$el;
+      this.listObserver = new MutationObserver((mutations) => {
+        const record = mutations.filter((x) => x.addedNodes.length).pop();
+        if (record) {
+          const element = Array.from(record.addedNodes).pop();
+          this.setIntersectionObserver(element);
+        }
+      });
+
+      this.listObserver.observe(targetNode, {
+        attributes: false,
+        childList: true,
+        subtree: false
+      });
+    },
+    setIntersectionObserver: function(targetNode) {
       if (this.observer) {
         this.observer.disconnect();
       }
-
-      const container = this.$refs.listContainer;
-      const itemClass = this.isGrid ? '.grid__item' : '.list__item';
-      const element = Array.from(container.querySelectorAll(itemClass)).pop();
+      if (!targetNode) {
+        return;
+      }
 
       this.observer = new IntersectionObserver(([entry]) => {
         if (entry && entry.isIntersecting) {
           this.$emit('intersect');
         }
       });
-      this.observer.observe(element);
+
+      this.observer.observe(targetNode);
     },
     onUpdate: function(...stuff) {
       this.$emit('update', ...stuff);
