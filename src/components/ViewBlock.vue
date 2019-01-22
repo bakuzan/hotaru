@@ -1,21 +1,13 @@
 <template>
-    <div :class="classes">
-      <label 
-        v-if="label"
-        class="view-block__label"
-      >
-      {{ label }}
-      </label>
-      <Button
-          className="view-block__button"
-          @click="$emit('toggle')"
-      >
-        <slot>
-          <!-- placeholder -->
-          {{value || noDataText}}
-        </slot>
-      </Button>
-    </div>
+  <div :class="classes">
+    <label v-if="label" class="view-block__label">{{ label }}</label>
+    <Button class="view-block__button" @click="$emit('toggle')">
+      <slot>
+        <!-- placeholder -->
+        {{value || noDataText}}
+      </slot>
+    </Button>
+  </div>
 </template>
 
 <script>
@@ -69,6 +61,7 @@ export default {
     @extend %standard-border;
     min-width: 0;
     text-align: left;
+    white-space: initial;
 
     &:hover {
       border-color: darken($white, 33%);

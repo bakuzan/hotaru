@@ -2,7 +2,7 @@
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
       <LoadingBouncer v-show="isLoading"/>
-      <div class="page-view__left-column htr-column">
+      <div class="page-view__left-column htr-column htr-column--image">
         <div class="htr-column__inner">
           <HTRImage force-load :src="editSeries.displayImage" class="page-view__image"/>
           <ViewBlockToggler
@@ -16,7 +16,7 @@
           </ViewBlockToggler>
         </div>
       </div>
-      <Tabs is-locked>
+      <Tabs class="page-view__tabs" is-locked>
         <Tab name="Detail">
           <div class="page-view__content view-info">
             <header class="view-info__header">

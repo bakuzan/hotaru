@@ -50,16 +50,27 @@
     flex-direction: column;
     outline: none;
   }
+
+  &__tabs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 }
 
 .view-info__header {
   margin: $app--margin-standard 0;
 }
 
-.htr-column__inner {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.htr-column {
+  &--image {
+    flex-basis: 25%;
+  }
+  &__inner {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 }
 
 .span-column {
