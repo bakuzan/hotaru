@@ -1,6 +1,6 @@
 {
   "name": "hotaru",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "private": true,
   "scripts": {
     "start": "npm-run-all -p serve apollo-server",
