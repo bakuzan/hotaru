@@ -77,6 +77,12 @@ export default {
   },
   mounted() {
     this.setMutationOberver();
+    if (this.items.length) {
+      // When Items loaded from cache
+      const listNode = this.getListRef();
+      const lastItem = Array.from(listNode.children).pop();
+      this.setIntersectionObserver(lastItem);
+    }
   },
   destroyed() {
     if (this.listObserver) {
@@ -128,8 +134,15 @@ export default {
     }
   },
   methods: {
+    getListRef: function() {
+      return this.$refs.listContainer.$el;
+    },
     setMutationOberver: function() {
-      const targetNode = this.$refs.listContainer.$el;
+      if (this.listObserver) {
+        this.listObserver.disconnect();
+      }
+
+      const targetNode = this.getListRef();
       this.listObserver = new MutationObserver((mutations) => {
         const record = mutations.filter((x) => x.addedNodes.length).pop();
         if (record) {
