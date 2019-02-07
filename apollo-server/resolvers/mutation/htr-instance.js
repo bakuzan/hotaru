@@ -29,7 +29,7 @@ module.exports = {
     typeProtection(instance);
 
     return db.transaction((transaction) =>
-      HTRTemplate.findById(instance.htrTemplateId, { transaction }).then(
+      HTRTemplate.findByPk(instance.htrTemplateId, { transaction }).then(
         (template) => {
           const { characterIds, versus, ...data } = instance;
 
@@ -119,7 +119,7 @@ module.exports = {
     typeProtection(instance);
 
     return db.transaction((transaction) =>
-      HTRTemplate.findById(instance.htrTemplateId, { transaction }).then(
+      HTRTemplate.findByPk(instance.htrTemplateId, { transaction }).then(
         (template) => {
           const { id, characterIds, versus, ...data } = instance;
 
@@ -136,7 +136,7 @@ module.exports = {
             },
             { where: { id }, transaction }
           ).then(() =>
-            HTRInstance.findById(id, { transaction }).then(
+            HTRInstance.findByPk(id, { transaction }).then(
               async (updatedInstance) => {
                 if (template.type === HTRTemplateTypes.List) {
                   return await updatedInstance
@@ -161,7 +161,7 @@ module.exports = {
         { where: { id: versusId }, transaction }
       )
         .then(() =>
-          HTRInstance.findById(htrInstanceId, {
+          HTRInstance.findByPk(htrInstanceId, {
             transaction,
             include: [{ model: Versus, include: [Character] }]
           })
@@ -221,7 +221,7 @@ module.exports = {
           )
         )
         .then(() =>
-          HTRInstance.findById(htrInstanceId, {
+          HTRInstance.findByPk(htrInstanceId, {
             transaction,
             include: [
               {

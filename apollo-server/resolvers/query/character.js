@@ -69,7 +69,7 @@ module.exports = {
   },
   characterById(_, args) {
     const { id } = args;
-    return Character.findById(id);
+    return Character.findByPk(id);
   },
   charactersByIds(_, { characterIds = [] }) {
     return Character.findAll({
@@ -81,7 +81,7 @@ module.exports = {
     });
   },
   characterImages(_, { characterId, ...args }) {
-    return Character.findById(characterId).then((character) =>
+    return Character.findByPk(characterId).then((character) =>
       character.getImages({ where: args })
     );
   },
@@ -95,5 +95,16 @@ module.exports = {
   },
   async characterCountForTemplateRules(_, args, context) {
     return context.Character.countFromRules(args);
+  },
+  async checkCharacterAlreadyExists(_, { id = null, name, seriesId }) {
+    const count = await Character.count({
+      where: {
+        id: { [Op.ne]: id },
+        name: { [Op.eq]: name.trim() },
+        seriesId
+      }
+    });
+
+    return count !== 0;
   }
 };

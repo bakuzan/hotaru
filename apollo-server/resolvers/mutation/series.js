@@ -12,7 +12,7 @@ module.exports = {
   seriesUpdate(_, { series }) {
     const { id, characterIds = [], ...args } = series;
 
-    return Series.findById(id).then(async (series) => {
+    return Series.findByPk(id).then(async (series) => {
       return db
         .transaction(async (transaction) => {
           await series.setCharacters(characterIds, { transaction });

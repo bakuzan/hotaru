@@ -20,7 +20,7 @@ module.exports = {
       return null;
     }
 
-    return await HTRTemplate.findById(activeInstance.htrTemplateId, {
+    return await HTRTemplate.findByPk(activeInstance.htrTemplateId, {
       include: [HTRInstance]
     });
   },
@@ -59,10 +59,10 @@ module.exports = {
     }));
   },
   htrTemplateSeasonById(_, { id }) {
-    return HTRTemplate.findById(id);
+    return HTRTemplate.findByPk(id);
   },
   async htrInstanceLeagueById(_, { id, page = 0 }) {
-    const league = await HTRInstance.findById(id);
+    const league = await HTRInstance.findByPk(id);
 
     if (!league) {
       return null;

@@ -44,7 +44,7 @@ module.exports = {
       existingItemIds: existingImageIds
     } = Utils.separateArrIntoNewAndExisting(images);
 
-    return Character.findById(id).then(async (character) => {
+    return Character.findByPk(id).then(async (character) => {
       return db
         .transaction(async (transaction) => {
           await character.setSeries(seriesId, { transaction });

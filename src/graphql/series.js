@@ -87,12 +87,19 @@ const seriesCore = gql`
   }
 `;
 
+const checkSeriesAlreadyExists = gql`
+  query CheckSeriesAlreadyExists($id: Int, $name: String!) {
+    checkSeriesAlreadyExists(id: $id, name: $name)
+  }
+`;
+
 export default {
   query: {
     allSeries,
     getSeriesPaged,
     getSeries,
-    getSeriesById
+    getSeriesById,
+    checkSeriesAlreadyExists
   },
   mutation: {
     updateSeries,

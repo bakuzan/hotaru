@@ -7,7 +7,7 @@ module.exports = {
   htrTemplateUpdate(_, { template }) {
     const { id, ...args } = template;
     return HTRTemplate.update({ ...args }, { where: { id } }).then(() =>
-      HTRTemplate.findById(id)
+      HTRTemplate.findByPk(id)
     );
   }
 };

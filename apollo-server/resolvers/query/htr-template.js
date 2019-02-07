@@ -33,6 +33,6 @@ module.exports = {
     });
   },
   htrTemplateById(_, { id }) {
-    return HTRTemplate.findById(id);
+    return HTRTemplate.findByPk(id);
   }
 };

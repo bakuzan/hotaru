@@ -25,7 +25,7 @@ module.exports = {
   },
   versusVote(_, { versusId, winnerId }) {
     return Versus.update({ winnerId }, { where: { id: versusId } }).then(() =>
-      Versus.findById(versusId)
+      Versus.findByPk(versusId)
     );
   },
   versusFromRules(_, args, context) {

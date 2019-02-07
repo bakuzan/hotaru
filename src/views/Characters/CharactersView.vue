@@ -42,6 +42,10 @@
                   :value="editCharacter.name"
                   @input="handleUserChanges"
                 />
+                <div
+                  v-if="checkCharacterAlreadyExists"
+                  class="page-view__error-message"
+                >A character with this name was already exists.</div>
               </ViewBlockToggler>
             </header>
             <div class="view-info__content">
@@ -214,7 +218,8 @@ function getInitialState() {
     versusHistoryPaged: {
       ...defaultPagedResponse(),
       hasMore: false
-    }
+    },
+    checkCharacterAlreadyExists: false
   };
 }
 
@@ -305,6 +310,19 @@ export default {
           tagIds: [...character.tagIds]
         };
         return { ...character };
+      }
+    },
+    checkCharacterAlreadyExists: {
+      query: Query.checkCharacterAlreadyExists,
+      fetchPolicy: 'network-only',
+      debounce: 1000,
+      skip() {
+        const { name, seriesId } = this.editCharacter;
+        return !(name && seriesId);
+      },
+      variables() {
+        const { id, name, seriesId } = this.editCharacter;
+        return { id, name, seriesId };
       }
     },
     series: {
@@ -402,7 +420,8 @@ export default {
       return notEqual || imageChange;
     },
     showButtons: function() {
-      return (!this.isCreate && this.hasEdits) || this.isCreate;
+      const canShow = (!this.isCreate && this.hasEdits) || this.isCreate;
+      return canShow && !this.checkCharacterAlreadyExists;
     },
     isLoading: function() {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;

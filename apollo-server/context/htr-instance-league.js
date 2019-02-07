@@ -24,7 +24,7 @@ async function checkForActiveLeague(options = {}) {
 }
 
 async function getInstanceAndCheckIfLeague({ id, transaction }) {
-  const league = await HTRInstance.findById(id, {
+  const league = await HTRInstance.findByPk(id, {
     attributes: ['id', 'name', 'settings'],
     include: [{ model: HTRTemplate, attributes: ['type'] }],
     transaction

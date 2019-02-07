@@ -50,8 +50,18 @@ module.exports = {
   },
   seriesById(_, args) {
     const { id } = args;
-    return Series.findById(id, {
+    return Series.findByPk(id, {
       include: [Character]
     });
+  },
+  async checkSeriesAlreadyExists(_, { id = null, name }) {
+    const count = await Series.count({
+      where: {
+        id: { [Op.ne]: id },
+        name: { [Op.eq]: name.trim() }
+      }
+    });
+
+    return count !== 0;
   }
 };

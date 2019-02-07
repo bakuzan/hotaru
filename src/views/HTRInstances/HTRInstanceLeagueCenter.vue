@@ -40,10 +40,13 @@
           @intersect="showMore"
         >
           <template slot-scope="slotProps">
-            <NavLink
-              class="league-section__season-link"
-              :to="seasonLink(slotProps.item.id)"
-            >{{slotProps.item.name}}</NavLink>
+            <div>
+              <NavLink
+                class="league-section__season-link"
+                :to="seasonLink(slotProps.item.id)"
+              >{{slotProps.item.name}}</NavLink>
+              <div>Finished: {{slotProps.item.updatedAt}}</div>
+            </div>
           </template>
         </List>
       </section>
@@ -199,7 +202,9 @@ export default {
     justify-content: flex-start;
     width: min-content;
     height: auto;
-    font-size: 1em;
+    padding: 0;
+    border: 0;
+    font-size: 1.2em;
     white-space: nowrap;
   }
 }

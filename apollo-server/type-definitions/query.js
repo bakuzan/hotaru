@@ -22,6 +22,7 @@ const Query = gql`
       search: String
       rules: HTRTemplateRulesInput
     ): Int
+    checkCharacterAlreadyExists(id: Int, name: String!, seriesId: Int!): Boolean
 
     seriesPaged(
       search: String
@@ -30,6 +31,7 @@ const Query = gql`
     ): SeriesPage
     series(search: String, sources: [SourceType]): [Series]
     seriesById(id: Int!): Series
+    checkSeriesAlreadyExists(id: Int, name: String!): Boolean
 
     tags(search: String): [Tag]
 

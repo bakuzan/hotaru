@@ -34,6 +34,10 @@
                   :value="editSeries.name"
                   @input="handleUserChanges"
                 />
+                <div
+                  v-if="checkSeriesAlreadyExists"
+                  class="page-view__error-message"
+                >A series with this name was already exists.</div>
               </ViewBlockToggler>
             </header>
             <div class="view-info__content">
@@ -146,7 +150,8 @@ function getInitialState() {
     editSeries: defaultSeriesModel(),
     characters: [],
     characterFilter: '',
-    mappedSources: mapEnumToSelectBoxOptions(SourceType)
+    mappedSources: mapEnumToSelectBoxOptions(SourceType),
+    checkSeriesAlreadyExists: false
   };
 }
 
@@ -209,6 +214,19 @@ export default {
           ...series
         };
         return series;
+      }
+    },
+    checkSeriesAlreadyExists: {
+      query: Query.checkSeriesAlreadyExists,
+      fetchPolicy: 'network-only',
+      debounce: 1000,
+      skip() {
+        const { name } = this.editSeries;
+        return !name;
+      },
+      variables() {
+        const { id, name } = this.editSeries;
+        return { id, name };
       }
     },
     characters: {

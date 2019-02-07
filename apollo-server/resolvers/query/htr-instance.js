@@ -32,7 +32,7 @@ module.exports = {
     }));
   },
   htrInstanceById(_, { id }) {
-    return HTRInstance.findById(id, {
+    return HTRInstance.findByPk(id, {
       include: [
         {
           model: Versus,

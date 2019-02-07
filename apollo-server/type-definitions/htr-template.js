@@ -8,6 +8,7 @@ module.exports = gql`
     rules: HTRTemplateRules
     rulesSeries: [Series]
     instances: [HTRInstance]
+    updatedAt: String
   }
   type HTRTemplateRules {
     genders: [GenderType]

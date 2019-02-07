@@ -17,6 +17,7 @@ const getPastHTRInstanceLeaguesPaged = gql`
       nodes {
         id
         name
+        updatedAt
       }
       total
       hasMore

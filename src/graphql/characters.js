@@ -177,6 +177,12 @@ const getCharacterOfTheDay = gql`
   }
 `;
 
+const checkCharacterAlreadyExists = gql`
+  query CheckCharacterAlreadyExists($id: Int, $name: String!, $seriesId: Int!) {
+    checkCharacterAlreadyExists(id: $id, name: $name, seriesId: $seriesId)
+  }
+`;
+
 export default {
   query: {
     getCharactersPaged,
@@ -187,7 +193,8 @@ export default {
     getCharacterCountForTemplateRules,
     getCharacterById,
     getCharactersByIds,
-    getRandomCharacterId
+    getRandomCharacterId,
+    checkCharacterAlreadyExists
   },
   mutation: {
     updateCharacter,
