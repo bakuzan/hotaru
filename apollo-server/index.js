@@ -43,6 +43,7 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 if (process.env.NODE_ENV === Constants.environment.production) {
   app.get('*', (req, res, next) => {
     if (req.url.includes('graphql')) {
+      console.log(req.url);
       next();
     }
     res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));

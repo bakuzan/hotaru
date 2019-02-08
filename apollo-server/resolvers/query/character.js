@@ -97,10 +97,13 @@ module.exports = {
     return context.Character.countFromRules(args);
   },
   async checkCharacterAlreadyExists(_, { id = null, name, seriesId }) {
+    const lowerTrimmedName = name.trim().toLowerCase();
     const count = await Character.count({
       where: {
         id: { [Op.ne]: id },
-        name: { [Op.eq]: name.trim() },
+        name: db.where(db.fn('LOWER', db.col('name')), {
+          [Op.eq]: lowerTrimmedName
+        }),
         seriesId
       }
     });

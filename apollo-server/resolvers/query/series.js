@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op;
 
-const { Series, Character } = require('../../connectors');
+const { db, Series, Character } = require('../../connectors');
 const Utils = require('../../utils');
 
 module.exports = {
@@ -55,10 +55,13 @@ module.exports = {
     });
   },
   async checkSeriesAlreadyExists(_, { id = null, name }) {
+    const lowerTrimmedName = name.trim().toLowerCase();
     const count = await Series.count({
       where: {
         id: { [Op.ne]: id },
-        name: { [Op.eq]: name.trim() }
+        name: db.where(db.fn('LOWER', db.col('name')), {
+          [Op.eq]: lowerTrimmedName
+        })
       }
     });
 
