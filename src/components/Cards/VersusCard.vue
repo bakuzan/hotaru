@@ -6,21 +6,18 @@
       :figure-size="figureSize"
       :open-new-tab="openNewTab"
     />
-    <div 
+    <div
       v-if="item.seed"
       class="versus-card__seed themed-background"
-      title="Seed in bracket">
-      {{item.seed}}
-    </div>
+      title="Seed in bracket"
+    >{{item.seed}}</div>
     <VoteButton
       :has-winner="!!winnerId"
       :is-winner="isWinner"
       :is-champion="isWinner && isFinal"
       :disabled="isDummy"
       @click="handleVote"
-    >
-      Vote {{item.name}}
-    </VoteButton>
+    >Vote {{item.name}}</VoteButton>
   </div>
 </template>
 

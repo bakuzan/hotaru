@@ -1,30 +1,23 @@
 <template>
-    <div :id="id" class="dropdown">
-        <Button
-            :id="togglerId"
-            className="dropdown__toggler ripple"
-            :icon="icon"
-            :title="title"
-            @click="toggleDropdown"
-        />
-        <template v-if="isDropdownOpen">
-            <portal :to="portalTarget">
-                <ul
-                    :id="menuId"
-                    :class="dropdownMenuClasses"
-                    :style="menuStyle"
-                    role="menu"
-                >
-                    <li class="dropdown__arrow" />
-                    <slot></slot>
-                </ul>
-                <Backdrop 
-                    :id="id" 
-                    @close="toggleDropdown" 
-                />
-            </portal>
-        </template>
-    </div>
+  <div :id="id" class="dropdown">
+    <Button
+      :id="togglerId"
+      name="dropdownToggle"
+      class="dropdown__toggler ripple"
+      :icon="icon"
+      :title="title"
+      @click="toggleDropdown"
+    />
+    <template v-if="isDropdownOpen">
+      <portal :to="portalTarget">
+        <ul :id="menuId" :class="dropdownMenuClasses" :style="menuStyle" role="menu">
+          <li class="dropdown__arrow"/>
+          <slot></slot>
+        </ul>
+        <Backdrop :id="id" @close="toggleDropdown"/>
+      </portal>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -77,11 +70,13 @@ export default {
       if (this.ignorePosition) return {};
 
       const { top, left, right } = this.position;
-      return this.align === Strings.left
-        ? { top: `${top}px`, left: `${left}px` }
-        : this.align === Strings.right
-          ? { top: `${top}px`, right: `${right}px` }
-          : { top: `${top}px` };
+      if (this.align === Strings.left) {
+        return { top: `${top}px`, left: `${left}px` };
+      } else if (this.align === Strings.right) {
+        return { top: `${top}px`, right: `${right}px` };
+      } else {
+        return { top: `${top}px` };
+      }
     },
     dropdownMenuClasses: function() {
       return classNames(

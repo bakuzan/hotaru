@@ -1,5 +1,5 @@
 <template>
-  <img class="image" @error="onError">
+  <img class="image" :alt="alt" @error="onError">
 </template>
 
 <script>
@@ -11,9 +11,16 @@ export default {
     src: {
       type: String
     },
+    alt: {
+      type: String
+    },
     forceLoad: {
       type: Boolean,
       default: false
+    },
+    suffix: {
+      type: String,
+      default: 't'
     }
   },
   data: function() {
@@ -26,7 +33,8 @@ export default {
   watch: {
     src: function(nv, ov) {
       if (nv !== ov) {
-        this.$el.setAttribute('src', nv || this.placeholder);
+        const image = this.getImageWithSuffix(nv || this.placeholder);
+        this.$el.setAttribute('src', image);
       }
     }
   },
@@ -36,7 +44,7 @@ export default {
         this.observer = new IntersectionObserver(
           ([entry]) => {
             if (entry && entry.isIntersecting && this.src) {
-              this.$el.setAttribute('src', this.src);
+              this.$el.setAttribute('src', this.getImageWithSuffix(this.src));
               this.observer.disconnect();
             }
           },
@@ -49,9 +57,15 @@ export default {
     });
   },
   methods: {
+    getImageWithSuffix: function(url) {
+      const parts = url.split('.');
+      const img = parts.slice(0, -1).join('.');
+      const ext = parts.slice(-1).pop();
+      return `${img}${this.suffix}.${ext}`;
+    },
     onError: function(event) {
       event.target.onerror = null;
-      event.target.src = this.fallback;
+      event.target.src = this.getImageWithSuffix(this.fallback);
       console.error('Image Load Error', this);
     }
   }

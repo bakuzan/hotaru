@@ -41,7 +41,8 @@ export default {
 @import './styles/_extensions.scss';
 @import './styles/_ripple.scss';
 @import './styles/_float-label.scss';
-@import './styles/_transitions';
+@import './styles/_transitions.scss';
+@import './styles/_fonts.scss';
 
 html,
 body {

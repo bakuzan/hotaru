@@ -1,13 +1,8 @@
 <template>
-    <div class="series-card">
-        {{name}}
-        <Button
-            className="series-card__remove"
-            size="small"
-            :icon="removeIcon"
-            @click="onClick"
-        />
-    </div>
+  <div class="series-card">
+    {{name}}
+    <Button class="series-card__remove" size="small" :icon="removeIcon" @click="onClick"/>
+  </div>
 </template>
 
 <script>

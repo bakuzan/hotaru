@@ -4,10 +4,7 @@
       <div>{{left.total}} matches</div>
       <div>{{left.wins}} wins</div>
     </div>
-    <ListFigureCard
-      v-bind="opponent"
-      :url-source="cardUrl"
-    />
+    <ListFigureCard v-bind="opponent" :url-source="cardUrl"/>
     <div class="shared-opponent-card__results">
       <div>{{right.total}} matches</div>
       <div>{{right.wins}} wins</div>

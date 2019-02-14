@@ -1,8 +1,9 @@
 <template>
   <div :class="classes">
-    <InputBox 
+    <InputBox
       v-bind="$props"
       :class="inputProps.class"
+      :id="name"
       :value="filter"
       @input="onInput"
       @focus="onFocus"
@@ -10,10 +11,7 @@
       @keydown="onKeyDown"
     />
     <portal :to="portalTarget" v-if="portalMenu">
-      <ul
-        v-show="hasSuggestions"
-        :class="menuClasses"
-      >
+      <ul v-show="hasSuggestions" :class="menuClasses">
         <InputBoxAutocompleteSuggestion
           v-for="(item, index) in suggestions"
           :key="item.id"
@@ -25,44 +23,29 @@
           :highlight-match="highlightMatchingText"
         />
       </ul>
-      <ul
-        v-show="showNoSuggestionsText"
-        :class="menuClasses"
-      >
-        <li
-          class="suggestion suggestion--active"
-        >
+      <ul v-show="showNoSuggestionsText" :class="menuClasses">
+        <li class="suggestion suggestion--active">
           <div>No suggestions available</div>
         </li>
       </ul>
     </portal>
-      <ul
-        v-if="!portalMenu"
-        v-show="hasSuggestions"
-        :class="menuClasses"
-      >
-        <InputBoxAutocompleteSuggestion
-          v-for="(item, index) in suggestions"
-          :key="item.id"
-          :active-suggestion="activeSuggestion"
-          :index="index"
-          :attr="attr"
-          :item="item"
-          @on-select="onSelectAutocompleteSuggestion"
-          :highlight-match="highlightMatchingText"
-        />
-      </ul>
-      <ul
-        v-if="!portalMenu"
-        v-show="showNoSuggestionsText"
-        :class="menuClasses"
-      >
-        <li
-          class="suggestion suggestion--active"
-        >
-          <div>No suggestions available</div>
-        </li>
-      </ul>
+    <ul v-if="!portalMenu" v-show="hasSuggestions" :class="menuClasses">
+      <InputBoxAutocompleteSuggestion
+        v-for="(item, index) in suggestions"
+        :key="item.id"
+        :active-suggestion="activeSuggestion"
+        :index="index"
+        :attr="attr"
+        :item="item"
+        @on-select="onSelectAutocompleteSuggestion"
+        :highlight-match="highlightMatchingText"
+      />
+    </ul>
+    <ul v-if="!portalMenu" v-show="showNoSuggestionsText" :class="menuClasses">
+      <li class="suggestion suggestion--active">
+        <div>No suggestions available</div>
+      </li>
+    </ul>
   </div>
 </template>
 

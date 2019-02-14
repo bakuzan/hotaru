@@ -4,7 +4,13 @@
       <LoadingBouncer v-show="isLoading"/>
       <div class="page-view__left-column htr-column htr-column--image">
         <div class="htr-column__inner">
-          <HTRImage force-load :src="editSeries.displayImage" class="page-view__image"/>
+          <HTRImage
+            force-load
+            :src="editSeries.displayImage"
+            :alt="editSeries.name"
+            suffix="m"
+            class="page-view__image"
+          />
           <ViewBlockToggler
             id="displayImage"
             class="span-column"

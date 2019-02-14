@@ -1,10 +1,10 @@
 // Standard Hotaru
-$hotaru--hair: #cec2db;
-$hotaru--eyes: #b4c6e2;
+$hotaru--hair: #7d6ea5; // #cec2db; didn't pass contrast
+$hotaru--eyes: #b5c7e3; // #b4c6e2; didn't pass contrast
 
-$hotaru--shirt: #f9f9f9;
-$hotaru--ribbon: #c54a4c; // #cc3333;
-$hotaru--skirt: #423b43;
+$hotaru--shirt: #fff; // #f9f9f9; didn't pass contrast
+$hotaru--ribbon: #913131; // #c54a4c; didn't pass contrast // #cc3333;
+$hotaru--skirt: darken(#423b43, 2%);
 
 $hotaru--ribbon-alt: #9b7ca8;
 $hotaru--dress: #40473e;
@@ -18,6 +18,7 @@ $grey87: #dedede;
 $grey80: #ccc;
 $grey67: #aaa;
 $grey40: #666;
+$grey46: #757575;
 $onyx: #0f0f0f;
 $black-blue: #1c1f2b;
 $black-red: #420309;

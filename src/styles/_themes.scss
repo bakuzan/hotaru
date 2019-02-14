@@ -73,6 +73,7 @@
       &:hover,
       &--active_exact {
         color: $active-colour;
+        font-weight: bold;
       }
     }
 
@@ -91,7 +92,7 @@
       border-top: 1px solid $primary-background;
     }
     .tab:not(.tab--active):not(:hover) {
-      color: $faded-out;
+      background-color: $faded-out;
       border-color: $faded-out;
       border-bottom: none;
     }

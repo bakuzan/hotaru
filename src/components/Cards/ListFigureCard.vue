@@ -1,34 +1,28 @@
 <template>
-    <div :class="classes">
-        <Button
-          v-if="remove"
-          className="list-figure-card__remove"
-          size="small"
-          theme="secondary"
-          :icon="removeIcon"
-          @click="handleRemove"
-        />
-        <figure :class="figureClasses">
-          <div v-if="isWaifu" class="heart" title="Waifu"></div>
-            <HTRImage :src="displayImage" :class="imageClasses" />
-            <figcaption v-if="!hideCaption" class="list-figure-card__caption">
-                <NavLink 
-                  v-if="itemUrl && name"
-                  class="list-figure-card__link"
-                  :to="itemUrl"
-                  :target="linkTarget"
-                  :title="name"
-                >
-                {{name}}
-                </NavLink>
-                <div
-                  v-if="!itemUrl"
-                >
-                  {{name}}
-                </div>
-            </figcaption>
-        </figure>
-    </div>
+  <div :class="classes">
+    <Button
+      v-if="remove"
+      class="list-figure-card__remove"
+      size="small"
+      theme="secondary"
+      :icon="removeIcon"
+      @click="handleRemove"
+    />
+    <figure :class="figureClasses">
+      <div v-if="isWaifu" class="heart" title="Waifu"></div>
+      <HTRImage :src="displayImage" :class="imageClasses" :alt="'Image of ' + name"/>
+      <figcaption v-if="!hideCaption" class="list-figure-card__caption">
+        <NavLink
+          v-if="itemUrl && name"
+          class="list-figure-card__link"
+          :to="itemUrl"
+          :target="linkTarget"
+          :title="name"
+        >{{name}}</NavLink>
+        <div v-if="!itemUrl">{{name}}</div>
+      </figcaption>
+    </figure>
+  </div>
 </template>
 
 <script>
@@ -169,8 +163,8 @@ export default {
   }
 
   &__image {
-    width: 100px;
-    height: 150px;
+    width: 96px;
+    /* height: 150px; try without this so images can maintain their aspect ratios */
   }
 }
 
@@ -188,7 +182,7 @@ export default {
   &--size_small {
     & .list-figure-card__image {
       width: 50px;
-      height: 75px;
+      /* height: 75px; try without this so images can maintain their aspect ratios */
     }
   }
 }

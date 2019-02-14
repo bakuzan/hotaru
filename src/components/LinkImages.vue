@@ -1,7 +1,7 @@
 <template>
   <div class="link-images">
-    <img class="link-images__dark" :src="darkLink" />
-    <img class="link-images__light" :src="lightLink" />
+    <img class="link-images__dark" :src="darkLink" alt="Image signifying a link">
+    <img class="link-images__light" :src="lightLink" alt="Image signifying a link">
   </div>
 </template>
 

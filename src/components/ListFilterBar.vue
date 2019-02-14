@@ -1,6 +1,13 @@
 <template>
   <div :class="classes">
-    <InputBox class="list-filter__search" label="search" :value="search" @input="onInput"/>
+    <InputBox
+      class="list-filter__search"
+      id="search"
+      name="search"
+      label="search"
+      :value="search"
+      @input="onInput"
+    />
     <slot :name="typeSlotName"></slot>
     <Button
       v-if="!hideAdd"

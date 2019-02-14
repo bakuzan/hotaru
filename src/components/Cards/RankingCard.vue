@@ -1,36 +1,30 @@
 <template>
-    <div class="rank-card">
-      <Button
-        v-if="remove"
-        className="rank-card__remove"
-        size="small"
-        theme="secondary"
-        :icon="removeIcon"
-        @click="handleRemove"
-      />
-      <div class="rank-card__rank rank">
-        <div class="rank__bubble">{{rank}}</div>
+  <div class="rank-card">
+    <Button
+      v-if="remove"
+      class="rank-card__remove"
+      size="small"
+      theme="secondary"
+      :icon="removeIcon"
+      @click="handleRemove"
+    />
+    <div class="rank-card__rank rank">
+      <div class="rank__bubble">{{rank}}</div>
+    </div>
+    <ImageCard
+      v-bind="$props"
+      :url="character.displayImage"
+      :figure-size="figureSize"
+      hide-caption
+    />
+    <div class="rank-card__content">
+      <div class="rank-card__text">
+        <NavLink class="rank-card__link" :to="cardUrl" :title="character.name">{{character.name}}</NavLink>
       </div>
-      <ImageCard
-        v-bind="$props"
-        :url="character.displayImage"
-        :figure-size="figureSize"
-        hide-caption
-      />
-      <div class="rank-card__content">
-        <div class="rank-card__text">
-          <NavLink 
-            class="rank-card__link"
-            :to="cardUrl"
-            :title="character.name"
-          >
-          {{character.name}}
-          </NavLink>
-        </div>
-        <div class="rank-card__text">{{winsText}}</div>
-        <div class="rank-card__text">{{totalText}}</div>
-        <div class="rank-card__text">{{scoreText}}</div>
-      </div>
+      <div class="rank-card__text">{{winsText}}</div>
+      <div class="rank-card__text">{{totalText}}</div>
+      <div class="rank-card__text">{{scoreText}}</div>
+    </div>
   </div>
 </template>
 

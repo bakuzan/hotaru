@@ -1,13 +1,13 @@
 <template>
-    <router-link 
-        :class="classes"
-        active-class="nav-link--active"
-        exact-active-class="nav-link--active_exact"
-        :to="to"
-        rel="noopener noreferrer"
-    >
-        <slot></slot>
-    </router-link>
+  <router-link
+    v-bind="$props"
+    :class="classes"
+    active-class="nav-link--active"
+    exact-active-class="nav-link--active_exact"
+    rel="noopener noreferrer"
+  >
+    <slot></slot>
+  </router-link>
 </template>
 
 <script>
@@ -16,7 +16,8 @@ import classNames from 'classnames';
 export default {
   name: 'NavLink',
   props: {
-    to: String
+    to: String,
+    name: String
   },
   computed: {
     classes: function() {

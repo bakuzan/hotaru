@@ -4,7 +4,13 @@
       <LoadingBouncer v-show="isLoading"/>
       <div class="page-view__left-column htr-column htr-column--image">
         <div class="htr-column__inner">
-          <HTRImage force-load :src="editCharacter.displayImage" class="page-view__image"/>
+          <HTRImage
+            force-load
+            :src="editCharacter.displayImage"
+            :alt="editCharacter.name"
+            suffix="m"
+            class="page-view__image"
+          />
           <ViewBlockToggler
             id="displayImage"
             class="span-column"
@@ -86,7 +92,7 @@
                   />
                 </ViewBlockToggler>
                 <div class="character-toggler-wrapper__icon" v-show="editCharacter.seriesId">
-                  <NavLink :to="seriesUrl">
+                  <NavLink :to="seriesUrl" name="Link to series">
                     <LinkImages/>
                   </NavLink>
                 </div>

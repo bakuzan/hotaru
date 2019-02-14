@@ -1,31 +1,29 @@
 <template>
   <div :class="classes">
-    <input 
-        :type="type" 
-        :id="id"
-        class="input-box__input"
-        :name="name" 
-        :value="value" 
-        placeholder=" "
-        autoComplete="off"
-        :maxLength="maxLength"
-        :disabled="disabled"
-        @input="handleChange" 
-        @focus="onFocus"
-        @blur="onBlur"
-        @keydown="onKeyDown"
-    />
+    <input
+      :type="type"
+      :id="id"
+      class="input-box__input"
+      :name="name"
+      :value="value"
+      placeholder=" "
+      autocomplete="off"
+      :maxLength="maxLength"
+      :disabled="disabled"
+      @input="handleChange"
+      @focus="onFocus"
+      @blur="onBlur"
+      @keydown="onKeyDown"
+    >
     <label :for="id">{{label}}</label>
     <Button
-        v-show="showClearButton"
-        :className="clearClasses"
-        size="small"
-        :icon="icon"
-        @click="clearAndFocusInput"
+      v-show="showClearButton"
+      :className="clearClasses"
+      size="small"
+      :icon="icon"
+      @click="clearAndFocusInput"
     />
-    <span v-show="showCount" class="input-box__count">
-        {{countText}}
-    </span>
+    <span v-show="showCount" class="input-box__count">{{countText}}</span>
   </div>
 </template>
 

@@ -94,11 +94,11 @@ $theme-maps: (
   two: (
     base-background: $hotaru--dress,
     base-colour: $hotaru--shirt,
-    primary-background: $hotaru--dress-trim,
-    primary-colour: $hotaru--hair,
-    active-background: $hotaru--ribbon-alt,
-    active-colour: $hotaru--eyes,
-    faded-out: $grey80,
+    primary-background: darken($hotaru--dress-trim, 8.4%),
+    primary-colour: lighten($hotaru--hair, 31.5%),
+    active-background: darken($hotaru--ribbon-alt, 17.5%),
+    active-colour: lighten($hotaru--eyes, 6.25%),
+    faded-out: $grey46,
     link-image-class: 'light'
   )
 );
