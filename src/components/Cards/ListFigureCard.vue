@@ -10,7 +10,9 @@
     />
     <figure :class="figureClasses">
       <div v-if="isWaifu" class="heart" title="Waifu"></div>
-      <HTRImage :src="displayImage" :class="imageClasses" :alt="'Image of ' + name"/>
+      <div class="list-figure-card__image-wrapper">
+        <HTRImage :src="displayImage" :class="imageClasses" :alt="name"/>
+      </div>
       <figcaption v-if="!hideCaption" class="list-figure-card__caption">
         <NavLink
           v-if="itemUrl && name"
@@ -92,7 +94,9 @@ export default {
   },
   computed: {
     classes: function() {
-      return classNames('list-figure-card');
+      return classNames('list-figure-card', {
+        [`list-figure-card--${this.figureSize}`]: this.figureSize
+      });
     },
     figureClasses: function() {
       return classNames('list-figure-card__figure', this.figureClass, {
@@ -129,9 +133,19 @@ export default {
 @import '../../styles/_variables.scss';
 @import '../../styles/_extensions.scss';
 
+$image-width: 96px;
+$image-width--small: 50px;
+$preferred-image-height: $image-width / 0.64;
+$preferred-image-height--small: $image-width--small / 0.64;
+
 .list-figure-card {
   position: relative;
+  height: 100%;
   @extend %standard-border;
+
+  &--small {
+    height: auto;
+  }
 
   &__remove {
     display: none;
@@ -146,10 +160,13 @@ export default {
   &__figure {
     display: flex;
     flex-direction: column;
+    height: calc(100% - #{$app--margin-standard * 2});
     margin: $app--margin-standard;
   }
 
   &__caption {
+    display: flex;
+    justify-content: center;
     width: 100%;
     padding: $app--padding-standard 0;
     text-align: center;
@@ -157,13 +174,22 @@ export default {
 
   &__link {
     display: inline-block;
+    height: auto;
+    width: auto;
     vertical-align: text-top;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
   }
 
+  &__image-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: $preferred-image-height;
+    max-height: $preferred-image-height;
+    overflow: hidden;
+  }
   &__image {
-    width: 96px;
+    width: $image-width;
     /* height: 150px; try without this so images can maintain their aspect ratios */
   }
 }
@@ -180,8 +206,12 @@ export default {
   }
 
   &--size_small {
+    & .list-figure-card__image-wrapper {
+      min-height: $preferred-image-height--small;
+      max-height: $preferred-image-height--small;
+    }
     & .list-figure-card__image {
-      width: 50px;
+      width: $image-width--small;
       /* height: 75px; try without this so images can maintain their aspect ratios */
     }
   }

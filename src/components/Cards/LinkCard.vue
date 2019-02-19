@@ -108,6 +108,7 @@ export default {
   .nav-link {
     display: inline-block;
     width: auto;
+    height: auto;
     margin-right: auto;
     padding-left: 0;
     border-left: 0;

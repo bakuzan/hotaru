@@ -121,7 +121,7 @@
           <div>Available characters for current template:</div>
           <div>{{availableCharacterCount}}</div>
         </div>
-        <div :class="instanceContentClasses">
+        <div :class="instanceContentClasses" :tabindex="0">
           <SeedIcon v-if="isSeeded"/>
           <HTRInstanceViewList
             v-if="isListType"

@@ -161,7 +161,7 @@
       <template v-if="showButtons">
         <portal :to="portalTarget">
           <div class="button-group">
-            <Button @click="cancel">Cancel</Button>
+            <Button theme="primary" @click="cancel">Cancel</Button>
             <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
           </div>
         </portal>

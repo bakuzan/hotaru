@@ -86,13 +86,15 @@ export default {
       );
     },
     maybeIcon: function() {
-      return this.isChampion
-        ? Icons.trophy
-        : this.isWinner
-          ? Icons.tick
-          : this.hasWinner && this.showLostColour
-            ? Icons.cross
-            : null;
+      if (this.isChampion) {
+        return Icons.trophy;
+      } else if (this.isWinner) {
+        return Icons.tick;
+      } else if (this.hasWinner && this.showLostColour) {
+        return Icons.cross;
+      }
+
+      return null;
     }
   },
   methods: {
@@ -109,8 +111,11 @@ export default {
 @import '../../styles/_variables';
 @import '../../styles/_extensions';
 
-.vote-button {
+// this is a dirt hack to override the button css
+.vote-button.vote-button {
+  flex: unset;
   width: 100%;
+  padding: $app--padding-standard;
   margin: auto;
 
   &--has-winner .vote-button__vote-text,

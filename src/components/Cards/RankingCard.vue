@@ -13,6 +13,7 @@
     </div>
     <ImageCard
       v-bind="$props"
+      :name="character.name"
       :url="character.displayImage"
       :figure-size="figureSize"
       hide-caption

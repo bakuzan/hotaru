@@ -1,3 +1,4 @@
+@import './_mixins';
 @import './_variables';
 
 @each $theme, $values in $theme-maps {
@@ -84,6 +85,26 @@
       &.nav-link--active_exact {
         background-color: $active-background;
         color: $active-colour;
+      }
+    }
+
+    // Buttons
+    .button.themed-background {
+      &:focus,
+      &:hover {
+        background-color: darken($primary-background, 10%);
+      }
+    }
+    .button.themed-background--reversed {
+      &:focus,
+      &:hover {
+        @include lighten-or-darken('background-color', $primary-colour, 10%);
+      }
+    }
+    .dropdown__toggler {
+      &:focus,
+      &:hover {
+        @include lighten-or-darken('color', $primary-colour, 10%);
       }
     }
 

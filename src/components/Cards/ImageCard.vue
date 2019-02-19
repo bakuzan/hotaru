@@ -1,5 +1,5 @@
 <template>
-  <ListFigureCard v-bind="$props" :name="alt" :display-image="url" hide-caption/>
+  <ListFigureCard v-bind="$props" :name="name" :display-image="url" hide-caption/>
 </template>
 
 <script>
@@ -14,6 +14,9 @@ export default {
     id: {
       type: [String, Number]
     },
+    name: {
+      type: String
+    },
     url: {
       type: String
     },
@@ -27,11 +30,6 @@ export default {
     remove: {
       type: Function,
       default: null
-    }
-  },
-  computed: {
-    alt: function() {
-      return (this.character && this.character.name) || 'Unknown Image';
     }
   }
 };

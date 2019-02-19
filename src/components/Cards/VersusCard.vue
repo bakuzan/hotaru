@@ -11,6 +11,7 @@
       class="versus-card__seed themed-background"
       title="Seed in bracket"
     >{{item.seed}}</div>
+    <div class="flex-spacer"></div>
     <VoteButton
       :has-winner="!!winnerId"
       :is-winner="isWinner"
@@ -103,6 +104,8 @@ export default {
 @import '../../styles/_extensions.scss';
 
 .versus-card {
+  display: flex;
+  flex-direction: column;
   width: 50%;
   padding: $app--padding-small;
 

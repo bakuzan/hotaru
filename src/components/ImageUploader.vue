@@ -155,17 +155,18 @@ export default {
 
   &__input-box {
     padding: 0;
+    padding-top: 5px;
   }
   &__upload {
     position: absolute;
-    top: 15px;
+    top: 20px;
     right: 0px;
     padding: $app--padding-small;
   }
 
   &__label {
     width: calc(100% - 40px);
-    padding: #{$app--padding-standard * 2};
+    padding: 24px #{$app--padding-standard * 2};
   }
   &__file-selector {
     position: relative;
