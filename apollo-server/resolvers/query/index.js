@@ -10,6 +10,7 @@ const htrinstance = require('./htr-instance');
 const htrinstanceleague = require('./htr-instance-league');
 const honours = require('./honours');
 const rankings = require('./rankings');
+const gauntlet = require('./gauntlet');
 
 module.exports = {
   ...character,
@@ -20,6 +21,7 @@ module.exports = {
   ...honours,
   ...htrinstanceleague,
   ...rankings,
+  ...gauntlet,
   tags(_, { search = '', ...args }) {
     return Tag.findAll({
       where: {

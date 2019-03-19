@@ -2,21 +2,11 @@ const Op = require('sequelize').Op;
 
 const { db, Character, Series } = require('../../connectors');
 const Utils = require('../../utils');
+const resolveCharacterInQueryParams = require('../../utils/resolve-character-in-query-params');
 
 module.exports = {
   charactersPaged(_, { search = '', genders, sources, paging = {} }) {
-    const resolvedArgs = {
-      ...Utils.ifArrayThenIn(genders, {
-        gender: {
-          [Op.in]: genders
-        }
-      }),
-      ...Utils.ifArrayThenIn(sources, {
-        source: db.where(db.col('series.source'), {
-          [Op.in]: sources
-        })
-      })
-    };
+    const resolvedArgs = resolveCharacterInQueryParams({ genders, sources });
 
     return Character.findAndCountAll({
       where: {

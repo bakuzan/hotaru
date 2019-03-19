@@ -70,6 +70,14 @@ const Query = gql`
     pastHTRInstanceLeaguesPaged(paging: Paging): HTRTemplatePage
     htrTemplateSeasonById(id: Int!): HTRTemplate
     htrInstanceLeagueById(id: Int!, page: Int): HTRInstance
+
+    gauntletCharacters(
+      search: String
+      genders: [GenderType]
+      sources: [SourceType]
+      paging: Paging
+    ): CharacterPage
+    activeGauntlet: GauntletResponse
   }
 `;
 
@@ -111,6 +119,8 @@ const Mutation = gql`
       versusId: Int!
       winnerId: Int!
     ): HTRInstance
+
+    gauntletCreate(characterId: Int!): GauntletCreateResponse
   }
 `;
 

@@ -12,6 +12,7 @@ const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
 const htrinstanceleague = require('./htr-instance-league');
 const honours = require('./honours');
+const gauntlet = require('./gauntlet');
 
 module.exports = [
   ...query,
@@ -26,6 +27,7 @@ module.exports = [
   htrinstance,
   htrinstanceleague,
   honours,
+  gauntlet,
   gql`
     input Paging {
       size: Int

@@ -16,7 +16,8 @@ const VersusType = Object.freeze([
   'Single',
   'List',
   'Bracket',
-  'League'
+  'League',
+  'Gauntlet'
 ]);
 
 const HTRTemplateType = Object.freeze(['Bracket', 'List', 'League']);
