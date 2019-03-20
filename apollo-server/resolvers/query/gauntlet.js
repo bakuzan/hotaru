@@ -1,6 +1,5 @@
-const Op = require('sequelize').Op;
-
-const { db, Character, Series, Versus } = require('../../connectors');
+const { Character, Versus } = require('../../connectors');
+const { VersusTypes } = require('../../constants/enums');
 
 module.exports = {
   async gauntletCharacters(
@@ -16,16 +15,26 @@ module.exports = {
     });
   },
   async activeGauntlet() {
+    let character = null;
     const versus = await Versus.findAll({
       where: { type: VersusTypes.Gauntlet, winnerId: null },
-      include: [Character],
-      raw: true
+      include: [Character]
     });
 
-    // TODO
-    // Filter versus to find the most common characterId || 0
-    const characterId = 0;
-    const character = await Character.findByPk(characterId);
+    if (versus.length) {
+      const checkVersus = await Versus.findAll({
+        include: [Character],
+        where: { type: VersusTypes.Gauntlet },
+        order: [['createdAt', 'DESC']],
+        limit: 2
+      });
+
+      character = checkVersus.reduce((p, v) =>
+        p.characters
+          .filter((x) => v.characters.some((c) => c.id === x.id))
+          .pop()
+      );
+    }
 
     return {
       canContinue: false,

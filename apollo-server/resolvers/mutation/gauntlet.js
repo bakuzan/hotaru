@@ -18,23 +18,26 @@ module.exports = {
       };
     }
 
-    const countData = await Versus.findAll({
-      include: [Character],
-      attributes: [
-        [
-          db.fn('COUNT', db.col('versus->VersusCharacter.characterId')),
-          'versusCount'
+    const [{ versusCount: maxVersusCount }] = await Character.findAll({
+      attributes: {
+        include: [
+          [
+            db.literal(
+              '(SELECT COUNT(*) FROM VersusCharacter as vc WHERE vc.characterId = character.id)'
+            ),
+            'versusCount'
+          ]
         ]
-      ],
-      group: ['versus->VersusCharacter.characterId'],
-      order: [['versusCount', 'desc']],
-      limit: 1
+      },
+      order: [[db.literal('versusCount'), 'desc']],
+      limit: 1,
+      raw: true
     });
-    console.log('COUNTDATA > ', countData);
+    console.log('COUNTDATA > ', maxVersusCount);
 
     const numberOfVersusToCreate = Math.min(
       10,
-      countData.versusCount - character.versusCount
+      maxVersusCount - character.versusCount
     );
 
     if (!numberOfVersusToCreate) {
@@ -44,6 +47,16 @@ module.exports = {
           `No gauntlet versus could be created for ${
             character.name
           }. (CharacterId: ${characterId})`
+        ],
+        data: null
+      };
+    } else if (numberOfVersusToCreate === 1) {
+      return {
+        success: false,
+        errorMessages: [
+          `${
+            character.name
+          } is no longers a valid gauntlet contender. (CharacterId: ${characterId})`
         ],
         data: null
       };
@@ -78,25 +91,25 @@ module.exports = {
         promises.push(v.setCharacters(pairing, { transaction }));
       });
 
-      await Promise.all(promises);
+      return await Promise.all(promises).then(async () => {
+        const versusIds = createdVersus.map((x) => x.id);
+        const newVersusItems = await Versus.findAll({
+          where: { id: { [Op.in]: versusIds } },
+          include: [Character],
+          transaction
+        });
 
-      const versusIds = createdVersus.map((x) => x.id);
-      const newVersusItems = await Versus.findAll({
-        where: { id: { [Op.in]: versusIds } },
-        include: [Character],
-        transaction
+        const newVersusCount = character.versusCount + numberOfVersusToCreate;
+        return {
+          success: true,
+          errorMessages: [],
+          data: {
+            canContinue: maxVersusCount - newVersusCount > 1,
+            character,
+            versus: newVersusItems
+          }
+        };
       });
-
-      const newVersusCount = character.versusCount + numberOfVersusToCreate;
-      return {
-        success: true,
-        errorMessages: [],
-        data: {
-          canContinue: countData.versusCount - newVersusCount > 0,
-          character,
-          versus: newVersusItems
-        }
-      };
     });
   }
 };

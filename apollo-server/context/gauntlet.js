@@ -1,8 +1,13 @@
 const { db } = require('../connectors');
 const SQL = require('../db-scripts');
+const Utils = require('../utils');
 
-const GET_CHARACTERS = SQL['get_valid_gauntlet_characters'];
-const COUNT_CHARACTERS = SQL['get_valid_gauntlet_characters_count'];
+const GET_CHARACTERS = 'get_valid_gauntlet_characters';
+const COUNT_CHARACTERS = 'get_valid_gauntlet_characters_count';
+
+function processArray(arr) {
+  return arr.join(',') || null;
+}
 
 async function countGauntletCharacters({
   characterId = null,
@@ -10,10 +15,17 @@ async function countGauntletCharacters({
   genders = [],
   sources = []
 }) {
-  return await db.query(COUNT_CHARACTERS, {
+  const [result] = await db.query(SQL[COUNT_CHARACTERS], {
     type: db.QueryTypes.SELECT,
-    replacements: { characterId, search, genders, sources }
+    replacements: {
+      characterId,
+      search: `%${search}%`,
+      genders: processArray(genders),
+      sources: processArray(sources)
+    }
   });
+
+  return result && result.total ? result.total : 0;
 }
 
 async function getGauntletCharacters({
@@ -23,13 +35,13 @@ async function getGauntletCharacters({
   sources = [],
   paging = { page: 0, size: 10 }
 }) {
-  return await db.query(GET_CHARACTERS, {
+  return await db.query(SQL[GET_CHARACTERS], {
     type: db.QueryTypes.SELECT,
     replacements: {
       characterId,
-      search,
-      genders,
-      sources,
+      search: `%${search}%`,
+      genders: processArray(genders),
+      sources: processArray(sources),
       limit: paging.size,
       offset: paging.size * paging.page
     }
@@ -47,14 +59,6 @@ async function findGauntletCharactersAndCount({ paging, ...args }) {
   };
 }
 
-async function isValidGauntletCharacter(characterId) {
-  const count = await countGauntletCharacters({
-    characterId
-  });
-
-  return count > 0;
-}
-
 async function getGauntletCharacterIfValid(characterId) {
   const [character] = await getGauntletCharacters({
     characterId,
@@ -65,8 +69,6 @@ async function getGauntletCharacterIfValid(characterId) {
 }
 
 module.exports = {
-  getGauntletCharacters,
   findGauntletCharactersAndCount,
-  isValidGauntletCharacter,
   getGauntletCharacterIfValid
 };

@@ -8,6 +8,7 @@ const image = require('./image');
 const htrtemplate = require('./htr-template');
 const htrinstance = require('./htr-instance');
 const htrinstanceleague = require('./htr-instance-league');
+const gauntlet = require('./gauntlet');
 
 module.exports = {
   ...character,
@@ -17,6 +18,7 @@ module.exports = {
   ...htrtemplate,
   ...htrinstance,
   ...htrinstanceleague,
+  ...gauntlet,
   tagCreate(_, { tag }) {
     return Tag.create({ ...tag }).then((tag) => tag);
   },
