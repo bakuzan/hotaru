@@ -8,6 +8,7 @@ import htrTemplate from './htr-template';
 import htrInstance from './htr-instance';
 import htrInstanceLeague from './htr-instance-league';
 import honours from './honours';
+import gauntlet from './gauntlet';
 
 export const Query = {
   ...characters.query,
@@ -19,7 +20,8 @@ export const Query = {
   ...htrInstance.query,
   ...image.query,
   ...honours.query,
-  ...htrInstanceLeague.query
+  ...htrInstanceLeague.query,
+  ...gauntlet.query
 };
 
 export const Mutation = {
@@ -30,7 +32,8 @@ export const Mutation = {
   ...ranking.mutation,
   ...htrTemplate.mutation,
   ...htrInstance.mutation,
-  ...htrInstanceLeague.mutation
+  ...htrInstanceLeague.mutation,
+  ...gauntlet.mutation
 };
 
 export const Fragment = {

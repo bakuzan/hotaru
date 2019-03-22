@@ -31,9 +31,9 @@ export default {
           id: 4,
           to: Urls.versusComparison,
           title: 'Versus Comparison',
-          text: 'VCo'
+          text: 'VC'
         },
-        { id: 5, to: Urls.versusCreator, title: 'Versus Creator', text: 'VCr' },
+        { id: 5, to: Urls.gauntlet, title: 'Gauntlet', text: 'G' },
         {
           id: 6,
           to: Urls.htrTemplateList,

@@ -62,6 +62,9 @@ const Urls = {
   },
   get rankingList() {
     return `${this.base}/rankings`;
+  },
+  get gauntlet() {
+    return `${this.base}/gauntlet`;
   }
 };
 

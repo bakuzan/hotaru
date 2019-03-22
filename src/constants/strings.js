@@ -40,7 +40,8 @@ export default Object.freeze({
     htrInstanceCreate: 'htr instance create',
     htrInstanceLeagueCenter: 'htr instance league center',
     htrInstanceLeagueView: 'htr instance league view',
-    rankingList: 'ranking list'
+    rankingList: 'ranking list',
+    gauntlet: 'gauntlet'
   },
   slot: {
     viewBlock: 'view-block__read-only',

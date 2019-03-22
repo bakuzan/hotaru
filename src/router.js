@@ -131,6 +131,12 @@ const htrRouter = new Router({
         import(/* webpackChunkName: "ranking-list" */ './views/Rankings/RankingsList.vue')
     },
     {
+      path: Urls.gauntlet,
+      name: Strings.route.gauntlet,
+      component: () =>
+        import(/* webpackChunkName: "gauntlet" */ './views/Gauntlet.vue')
+    },
+    {
       path: '*',
       name: Strings.route.pageNotFound,
       component: () =>
