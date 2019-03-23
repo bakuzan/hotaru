@@ -22,6 +22,30 @@ const getActiveGauntlet = gql`
   }
 `;
 
+const getGauntletCharacters = gql`
+  query GauntletCharacters(
+    $search: String
+    $genders: [GenderType]
+    $sources: [SourceType]
+    $paging: Paging
+  ) {
+    gauntletCharacters(
+      search: $search
+      genders: $genders
+      sources: $sources
+      paging: $paging
+    ) {
+      nodes {
+        id
+        name
+        displayImage
+      }
+      total
+      hasMore
+    }
+  }
+`;
+
 const createGauntlet = gql`
   mutation GauntletCreate($characterId: Int!) {
     gauntletCreate(characterId: $characterId) {
@@ -50,7 +74,8 @@ const createGauntlet = gql`
 
 export default {
   query: {
-    getActiveGauntlet
+    getActiveGauntlet,
+    getGauntletCharacters
   },
   mutation: { createGauntlet }
 };

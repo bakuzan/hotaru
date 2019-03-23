@@ -1,23 +1,29 @@
 <template>
-  <div class="page page-view">
+  <div class="page page-view gauntlet">
     <LoadingBouncer v-if="isLoading"/>
-    <section v-if="activeGauntlet.versus.length">
-      <header>
-        <h4>Gauntlet</h4>
+    <section v-if="showView" class="gauntlet-view">
+      <header class="gauntlet-view__header">
+        <h4 class="gauntlet__title">Active Gauntlet</h4>
         <div>
           <Button
             v-if="activeGauntlet.canContinue"
             theme="primary"
-            :disabled="gauntletDisabled"
+            :disabled="gauntletCreateDisabled"
             @click="handleContinueGauntlet"
           >Continue Gauntlet</Button>
         </div>
       </header>
-      <ListFigureCard
-        v-bind="activeGauntlet.character"
-        :url-source="cardUrl"
-        figureDirection="row"
-      />
+      <div class="gauntlet-view__active-character">
+        <ListFigureCard
+          v-bind="activeGauntlet.character"
+          :url-source="cardUrl"
+          figure-direction="row"
+        />
+        <div class="gauntlet-view__count-summary">
+          <div>Total Versus: {{versusCounts.total}}</div>
+          <div>Remaining Versus: {{versusCounts.ongoing}}</div>
+        </div>
+      </div>
       <List columns="two" :items="activeGauntlet.versus">
         <template slot-scope="slotProps">
           <VersusWidget
@@ -30,21 +36,48 @@
         </template>
       </List>
     </section>
-    <section v-else-if="!isLoading && activeGauntlet.versus.length === 0">
+    <section v-else-if="showSelection" class="gauntlet-selection">
       <header>
-        <h4>Gauntlet Characters</h4>
-        <div>Select a character to run the gauntlet.</div>
+        <h4 class="gauntlet__title">Gauntlet Characters</h4>
+        <div class="gauntlet__subtitle">Select a character to run the gauntlet.</div>
       </header>
-      <div>FILTERS HERE</div>
+      <ListFilterBar v-bind="filters" :hideAdd="true" @input="onInput">
+        <MultiSelect
+          :slot="typeSlotName"
+          id="gender"
+          name="genders"
+          label="genders"
+          :values="filters.genders"
+          :options="mappedGenders"
+          @update="onInput"
+        />
+        <MultiSelect
+          :slot="typeSlotName"
+          id="source"
+          name="sources"
+          label="sources"
+          :values="filters.sources"
+          :options="mappedSources"
+          @update="onInput"
+        />
+      </ListFilterBar>
       <List
         is-grid="standard"
+        itemClassName="gauntlet-selection-item"
         :items="gauntletCharacters.nodes"
         :paged-total="gauntletCharacters.total"
         @intersect="showMore"
       >
         <template slot-scope="slotProps">
-          <ListFigureCard v-bind="slotProps.item" :url-source="cardUrl"/>
-          <Button theme="primary" @click="handleCreateGauntlet(slotProps.item.id)">Start Gauntlet</Button>
+          <ListFigureCard
+            class="gauntlet-selection-item__card"
+            v-bind="slotProps.item"
+            figure-direction="row"
+            :url-source="cardUrl"
+          />
+          <div class="gauntlet-selection-item__actions">
+            <Button theme="primary" @click="handleCreateGauntlet(slotProps.item.id)">Start Gauntlet</Button>
+          </div>
         </template>
       </List>
     </section>
@@ -52,18 +85,26 @@
 </template>
 
 <script>
-// import classNames from 'classnames';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import List from '@/components/List';
 import VersusWidget from '@/components/Widgets/VersusWidget';
 import { ListFigureCard } from '@/components/Cards';
 import { Button } from '@/components/Buttons';
+import ListFilterBar from '@/components/ListFilterBar';
+import MultiSelect from '@/components/MultiSelect';
 
 import alertService from '@/utils/alert-service';
 import { Query, Mutation } from '@/graphql';
+import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import { mapVersusToVotedVersus } from '@/utils/mappers';
+import GenderType from '@/constants/gender-type';
+import SourceType from '@/constants/source-type';
 import { createErrorStringFromGraphql } from '@/utils';
+import {
+  mapEnumToSelectBoxOptions,
+  mapVersusToVotedVersus
+} from '@/utils/mappers';
+import { defaultPagedResponse } from '@/utils/models';
 import * as LP from '@/utils/list-pages';
 
 export default {
@@ -73,14 +114,25 @@ export default {
     List,
     VersusWidget,
     ListFigureCard,
-    Button
+    Button,
+    ListFilterBar,
+    MultiSelect
   },
   data: function() {
     return {
+      typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.gauntlet,
+      mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+      mappedSources: mapEnumToSelectBoxOptions(SourceType),
+      filterHandler: LP.updateFilterAndRefetch(this, 'gauntletCharacters'),
       activeGauntlet: {},
-      gauntletCharacters: [],
-      isLoadingMutation: false
+      gauntletCharacters: defaultPagedResponse(),
+      isLoadingMutation: false,
+      filters: {
+        search: '',
+        genders: [...GenderType],
+        sources: [...SourceType]
+      }
     };
   },
   metaInfo: {
@@ -98,8 +150,8 @@ export default {
       },
       variables: {
         search: '',
-        genders: [],
-        sources: [],
+        genders: [...GenderType],
+        sources: [...SourceType],
         paging: {
           page: 0,
           size: LP.size
@@ -113,15 +165,49 @@ export default {
         this.$apollo.queries.activeGauntlet.loading || this.isLoadingMutation
       );
     },
-    gauntletDisabled: function() {
+    showView: function() {
+      return this.activeGauntlet.versus && this.activeGauntlet.versus.length;
+    },
+    showSelection: function() {
+      return (
+        !this.isLoading &&
+        this.activeGauntlet.versus &&
+        this.activeGauntlet.versus.length === 0
+      );
+    },
+    gauntletCreateDisabled: function() {
       return !(
         this.activeGauntlet.canContinue &&
         this.activeGauntlet.character &&
+        this.activeGauntlet.versus &&
         this.activeGauntlet.versus.some((x) => !x.winnerId)
       );
+    },
+    versusCounts: function() {
+      if (!this.activeGauntlet.versus) {
+        return {
+          ongoing: 0,
+          total: 0
+        };
+      }
+
+      const total = this.activeGauntlet.versus.length;
+      const ongoing = this.activeGauntlet.versus.filter((x) => !x.winnerId)
+        .length;
+
+      return {
+        ongoing,
+        total
+      };
     }
   },
   methods: {
+    onInput: function(value, name) {
+      this.filterHandler(value, name);
+    },
+    showMore: function() {
+      LP.showMore(this, 'gauntletCharacters', 'CharacterPage');
+    },
     handleContinueGauntlet: function() {
       this.handleCreateGauntlet(this.activeGauntlet.character.id);
     },
@@ -188,5 +274,51 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/_variables';
 @import '../styles/_extensions';
+
+.gauntlet {
+  &__title {
+    margin: 0;
+  }
+  &__subtitle {
+    font-size: 0.8em;
+  }
+
+  &-view {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__active-character {
+      display: flex;
+    }
+    &__count-summary {
+      padding: 15px 0;
+    }
+  }
+  &-selection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.gauntlet-selection-item {
+  &__card {
+    height: auto;
+  }
+  &__actions {
+    margin: 0 8px;
+  }
+}
+</style>
+<style lang="scss">
+.gauntlet-selection-item__card {
+  // Dont do this
+  .list-figure-card__caption {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

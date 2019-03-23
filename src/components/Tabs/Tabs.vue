@@ -8,22 +8,20 @@
         role="presentation"
         v-show="tab.isVisible"
       >
-        <a 
+        <a
           :aria-controls="tab.tabHash"
           :aria-selected="tab.isActive"
           :href="tab.tabHash"
           class="tab__option"
           role="tab"
           @click="selectTab(tab.tabHash, $event)"
-        >
-        {{displayName(tab.text)}}
-        </a>
+        >{{displayName(tab.text)}}</a>
       </li>
     </ul>
     <div class="tabs__container">
       <slot></slot>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -127,7 +125,7 @@ $tab-controls-height: 35px;
     display: flex;
     height: $tab-controls-height;
     padding: 0;
-    margin: -1px;
+    margin: 0;
     white-space: nowrap;
     list-style-type: none;
   }
@@ -152,6 +150,9 @@ $tab-controls-height: 35px;
     padding: $app--padding-standard;
     color: inherit;
     text-decoration: none;
+  }
+  &--active {
+    margin-bottom: -1px;
   }
 }
 </style>
