@@ -1,6 +1,8 @@
 const { Character, Versus } = require('../../connectors');
 const { VersusTypes } = require('../../constants/enums');
 
+const canContinueGauntlet = require('../../utils/can-continue-gauntlet');
+
 module.exports = {
   async gauntletCharacters(
     _,
@@ -14,8 +16,9 @@ module.exports = {
       paging
     });
   },
-  async activeGauntlet() {
+  async activeGauntlet(_, __, context) {
     let character = null;
+    let canContinue = false;
     const versus = await Versus.findAll({
       where: { type: VersusTypes.Gauntlet, winnerId: null },
       include: [Character]
@@ -34,10 +37,16 @@ module.exports = {
           .filter((x) => v.characters.some((c) => c.id === x.id))
           .pop()
       );
+
+      const maxVersusCount = await context.Gauntlet.getMaxVersusCount();
+      const ch = await context.Gauntlet.getGauntletCharacterIfValid(
+        character.id
+      );
+      canContinue = !!ch && canContinueGauntlet(maxVersusCount, ch.versusCount);
     }
 
     return {
-      canContinue: false,
+      canContinue,
       character,
       versus
     };

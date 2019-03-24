@@ -2,6 +2,8 @@ const Op = require('sequelize').Op;
 const { db, Versus, Character } = require('../../connectors');
 const { VersusTypes } = require('../../constants/enums');
 
+const canContinueGauntlet = require('../../utils/can-continue-gauntlet');
+
 module.exports = {
   async gauntletCreate(_, { characterId }, context) {
     const character = await context.Gauntlet.getGauntletCharacterIfValid(
@@ -18,22 +20,7 @@ module.exports = {
       };
     }
 
-    const [{ versusCount: maxVersusCount }] = await Character.findAll({
-      attributes: {
-        include: [
-          [
-            db.literal(
-              '(SELECT COUNT(*) FROM VersusCharacter as vc WHERE vc.characterId = character.id)'
-            ),
-            'versusCount'
-          ]
-        ]
-      },
-      order: [[db.literal('versusCount'), 'desc']],
-      limit: 1,
-      raw: true
-    });
-    console.log('COUNTDATA > ', maxVersusCount);
+    const maxVersusCount = await context.Gauntlet.getMaxVersusCount();
 
     const numberOfVersusToCreate = Math.min(
       10,
@@ -61,7 +48,6 @@ module.exports = {
         data: null
       };
     }
-    console.log('TO CREATE > ', numberOfVersusToCreate);
 
     return await db.transaction(async (transaction) => {
       const opponents = await Character.findAll({
@@ -104,7 +90,7 @@ module.exports = {
           success: true,
           errorMessages: [],
           data: {
-            canContinue: maxVersusCount - newVersusCount > 1,
+            canContinue: canContinueGauntlet(maxVersusCount, newVersusCount),
             character,
             versus: newVersusItems
           }

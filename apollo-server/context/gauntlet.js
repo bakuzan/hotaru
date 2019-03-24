@@ -1,4 +1,4 @@
-const { db } = require('../connectors');
+const { db, Character } = require('../connectors');
 const SQL = require('../db-scripts');
 const Utils = require('../utils');
 
@@ -68,7 +68,28 @@ async function getGauntletCharacterIfValid(characterId) {
   return character || null;
 }
 
+async function getMaxVersusCount() {
+  const [{ versusCount: maxVersusCount }] = await Character.findAll({
+    attributes: {
+      include: [
+        [
+          db.literal(
+            '(SELECT COUNT(*) FROM VersusCharacter as vc WHERE vc.characterId = character.id)'
+          ),
+          'versusCount'
+        ]
+      ]
+    },
+    order: [[db.literal('versusCount'), 'desc']],
+    limit: 1,
+    raw: true
+  });
+
+  return maxVersusCount;
+}
+
 module.exports = {
   findGauntletCharactersAndCount,
-  getGauntletCharacterIfValid
+  getGauntletCharacterIfValid,
+  getMaxVersusCount
 };

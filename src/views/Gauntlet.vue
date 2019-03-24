@@ -1,16 +1,21 @@
 <template>
   <div class="page page-view gauntlet">
-    <LoadingBouncer v-if="isLoading"/>
+    <LoadingBouncer v-show="isLoading"/>
     <section v-if="showView" class="gauntlet-view">
       <header class="gauntlet-view__header">
         <h4 class="gauntlet__title">Active Gauntlet</h4>
-        <div>
+        <div class="gauntlet-view__actions">
           <Button
             v-if="activeGauntlet.canContinue"
             theme="primary"
             :disabled="gauntletCreateDisabled"
             @click="handleContinueGauntlet"
           >Continue Gauntlet</Button>
+          <Button
+            theme="primary"
+            :disabled="gauntletSelectionDisabled"
+            @click="handleReturnToSelection"
+          >Go to Gauntlet Selection</Button>
         </div>
       </header>
       <div class="gauntlet-view__active-character">
@@ -24,7 +29,12 @@
           <div>Remaining Versus: {{versusCounts.ongoing}}</div>
         </div>
       </div>
-      <List columns="two" :items="activeGauntlet.versus">
+      <List
+        :className="'gauntlet-versus-grid'"
+        itemClassName="gauntlet-versus-grid__item"
+        :is-grid="true"
+        :items="activeGauntlet.versus"
+      >
         <template slot-scope="slotProps">
           <VersusWidget
             v-bind="slotProps.item"
@@ -121,7 +131,7 @@ export default {
   data: function() {
     return {
       typeSlotName: Strings.slot.listFilterType,
-      cardUrl: Urls.gauntlet,
+      cardUrl: Urls.characterView,
       mappedGenders: mapEnumToSelectBoxOptions(GenderType),
       mappedSources: mapEnumToSelectBoxOptions(SourceType),
       filterHandler: LP.updateFilterAndRefetch(this, 'gauntletCharacters'),
@@ -146,7 +156,10 @@ export default {
     gauntletCharacters: {
       query: Query.getGauntletCharacters,
       skip() {
-        return this.isLoading || this.activeGauntlet.versus.length;
+        return (
+          this.isLoading ||
+          (this.activeGauntlet && this.activeGauntlet.versus.length)
+        );
       },
       variables: {
         search: '',
@@ -166,19 +179,33 @@ export default {
       );
     },
     showView: function() {
-      return this.activeGauntlet.versus && this.activeGauntlet.versus.length;
+      return (
+        this.activeGauntlet &&
+        this.activeGauntlet.versus &&
+        this.activeGauntlet.versus.length
+      );
     },
     showSelection: function() {
       return (
         !this.isLoading &&
+        this.activeGauntlet &&
         this.activeGauntlet.versus &&
         this.activeGauntlet.versus.length === 0
       );
     },
     gauntletCreateDisabled: function() {
-      return !(
-        this.activeGauntlet.canContinue &&
-        this.activeGauntlet.character &&
+      if (!this.activeGauntlet.canContinue) {
+        return false;
+      }
+
+      return (
+        !this.activeGauntlet.character ||
+        (this.activeGauntlet.versus &&
+          this.activeGauntlet.versus.some((x) => !x.winnerId))
+      );
+    },
+    gauntletSelectionDisabled: function() {
+      return (
         this.activeGauntlet.versus &&
         this.activeGauntlet.versus.some((x) => !x.winnerId)
       );
@@ -208,11 +235,28 @@ export default {
     showMore: function() {
       LP.showMore(this, 'gauntletCharacters', 'CharacterPage');
     },
+    handleReturnToSelection: function() {
+      this.$apollo.queries.activeGauntlet.refetch();
+      this.$apollo.queries.gauntletCharacters.refetch({
+        paging: {
+          page: 0,
+          size: LP.size
+        }
+      });
+    },
     handleContinueGauntlet: function() {
-      this.handleCreateGauntlet(this.activeGauntlet.character.id);
+      const character = this.activeGauntlet.character;
+      if (!character) {
+        console.error(
+          'handleContinueGauntlet: Character is not defined, cannot create gauntlet.'
+        );
+        return;
+      }
+
+      this.handleCreateGauntlet(character.id);
     },
     handleCreateGauntlet: function(characterId) {
-      if (!this.isLoadingMutation) {
+      if (this.isLoadingMutation) {
         return;
       }
 
@@ -223,8 +267,11 @@ export default {
           mutation: Mutation.createGauntlet,
           variables: { characterId },
           update: (store, { data: { gauntletCreate } }) => {
-            const data = { ...gauntletCreate.data };
-            store.writeQuery({ query: Query.getActiveGauntlet, data });
+            const activeGauntlet = { ...gauntletCreate.data };
+            store.writeQuery({
+              query: Query.getActiveGauntlet,
+              data: { activeGauntlet }
+            });
           }
         })
         .then(() => (this.isLoadingMutation = false))
@@ -236,7 +283,7 @@ export default {
         );
     },
     handleVote: function(versusId, winnerId) {
-      const versus = this.gauntlet.versus.find((x) => x.id === versusId);
+      const versus = this.activeGauntlet.versus.find((x) => x.id === versusId);
       const versusResult = { ...versus, winnerId };
 
       this.$apollo
@@ -253,8 +300,10 @@ export default {
             });
 
             store.writeQuery({
-              query: Query.getActiveDailyVersus,
-              data: { ...gauntletData, versus: gauntletVersus }
+              query: Query.getActiveGauntlet,
+              data: {
+                activeGauntlet: { ...gauntletData, versus: gauntletVersus }
+              }
             });
           },
           optimisticUpdate: mapVersusToVotedVersus(versusResult)
@@ -284,6 +333,8 @@ export default {
   }
 
   &-view {
+    width: 100%;
+
     &__header {
       display: flex;
       justify-content: space-between;
@@ -294,6 +345,15 @@ export default {
     }
     &__count-summary {
       padding: 15px 0;
+    }
+
+    &__actions {
+      display: flex;
+
+      // Dont do this!
+      > .button {
+        margin: 0 5px;
+      }
     }
   }
   &-selection {
@@ -313,6 +373,32 @@ export default {
 }
 </style>
 <style lang="scss">
+@import '../styles/_variables';
+@import '../styles/_mixins';
+
+.gauntlet-view__active-character {
+  .list-figure-card__link {
+    height: min-content;
+  }
+}
+.gauntlet-versus-grid {
+  justify-content: space-between;
+  grid-gap: 1px;
+  grid-auto-rows: auto !important;
+  $grid-values: (
+    xs: 100,
+    sm: 49,
+    md: 32,
+    lg: 24
+  );
+  @include gridColumnGenerator($grid-values);
+  &__item {
+    min-width: 200px;
+    .versus {
+      height: 100%;
+    }
+  }
+}
 .gauntlet-selection-item__card {
   // Dont do this
   .list-figure-card__caption {

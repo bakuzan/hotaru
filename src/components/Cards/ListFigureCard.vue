@@ -205,6 +205,7 @@ $preferred-image-height--small: $image-width--small / 0.64;
     flex-direction: row;
     & .list-figure-card__image-wrapper {
       width: auto;
+      min-width: min-content;
     }
   }
 
