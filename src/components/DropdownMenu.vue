@@ -10,11 +10,16 @@
     />
     <template v-if="isDropdownOpen">
       <portal :to="portalTarget">
-        <ul :id="menuId" :class="dropdownMenuClasses" :style="menuStyle" role="menu">
+        <ul
+          v-htr-outside-click="toggleDropdown"
+          :id="menuId"
+          :class="dropdownMenuClasses"
+          :style="menuStyle"
+          role="menu"
+        >
           <li class="dropdown__arrow"/>
           <slot></slot>
         </ul>
-        <Backdrop :id="id" @close="toggleDropdown"/>
       </portal>
     </template>
   </div>
@@ -23,17 +28,19 @@
 <script>
 import classNames from 'classnames';
 
-import Backdrop from '@/components/Backdrop';
 import { Button } from '@/components/Buttons';
 
+import { OutsideClick } from '@/directives/OutsideClick';
 import Strings from '@/constants/strings';
 import { getElementCoordinates } from '@/utils';
 
 export default {
   name: 'DropdownMenu',
   components: {
-    Backdrop,
     Button
+  },
+  directives: {
+    OutsideClick
   },
   props: {
     id: String,
@@ -55,6 +62,7 @@ export default {
   },
   data: function() {
     return {
+      removeOutsideClick: null,
       position: {},
       isDropdownOpen: false
     };

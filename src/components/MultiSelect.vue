@@ -16,7 +16,7 @@
       >
       <label :for="id">{{label}}</label>
     </div>
-    <div :class="dropdownClasses">
+    <div v-if="isOpen" :class="dropdownClasses" v-htr-outside-click="handleToggleClose">
       <ul class="multi-select__list">
         <li>
           <Tickbox
@@ -36,7 +36,6 @@
           />
         </li>
       </ul>
-      <Backdrop :id="id" @close="handleToggleClose"/>
     </div>
   </div>
 </template>
@@ -45,8 +44,8 @@
 import classNames from 'classnames';
 
 import Tickbox from '@/components/Tickbox';
-import Backdrop from '@/components/Backdrop';
 
+import { OutsideClick } from '@/directives/OutsideClick';
 import Strings from '@/constants/strings';
 import { OPEN_KEYS } from '@/constants/key-codes';
 
@@ -57,8 +56,10 @@ const ALL_SELECTED_TEXT = 'All Selected';
 export default {
   name: 'MultiSelect',
   components: {
-    Tickbox,
-    Backdrop
+    Tickbox
+  },
+  directives: {
+    OutsideClick
   },
   props: {
     id: {
@@ -94,6 +95,7 @@ export default {
   },
   data: function() {
     return {
+      removeOutsideClick: null,
       selectAllName: `${this.id}--selectAll`,
       isOpen: false
     };
