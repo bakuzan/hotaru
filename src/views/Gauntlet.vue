@@ -155,6 +155,7 @@ export default {
     },
     gauntletCharacters: {
       query: Query.getGauntletCharacters,
+      fetchPolicy: 'network-only',
       skip() {
         return (
           this.isLoading ||
