@@ -6,13 +6,13 @@
           <h4 class="htr-section__title">Top Ten</h4>
         </header>
         <List
-          class="top-ten-list"
-          itemClassName="top-ten__item"
-          columns="one"
           :items="rankingsTopTen"
+          class="top-ten-list"
+          item-class-name="top-ten__item"
+          columns="one"
         >
           <template slot-scope="slotProps">
-            <RankingCard v-bind="slotProps.item" :figure-size="null"/>
+            <RankingCard v-bind="slotProps.item" :figure-size="null" />
           </template>
         </List>
       </section>
@@ -26,22 +26,23 @@
               v-show="allowCreateCall"
               theme="primary"
               @click="handleCreateDaily"
-            >Create versus</Button>
-            <LoadingBouncer v-show="blockCreateVersus" local/>
+              >Create versus</Button
+            >
+            <LoadingBouncer v-show="blockCreateVersus" local />
           </div>
         </header>
         <List
-          class="daily-versus-list"
-          itemClassName="daily-versus-list__item"
-          columns="one"
           :items="dailyVersus"
+          class="daily-versus-list"
+          item-class-name="daily-versus-list__item"
+          columns="one"
         >
           <template slot-scope="slotProps">
             <VersusWidget
               v-bind="slotProps.item"
+              :figure-size="null"
               enable-compare
               grow
-              :figure-size="null"
               @vote="handleVote"
             />
           </template>
@@ -49,11 +50,11 @@
       </section>
     </div>
     <div :class="columnClasses">
-      <CharacterOfTheDayWidget/>
+      <CharacterOfTheDayWidget />
       <div class="random-container padded padded--standard">
         <Button theme="primary" @click="onRandom">View Random Character</Button>
       </div>
-      <HonoursWidget/>
+      <HonoursWidget />
     </div>
   </div>
 </template>

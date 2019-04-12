@@ -1,6 +1,11 @@
 <template>
   <div class="htr-icon">
-    <div v-if="visible" class="htr-icon__display" :title="title" :icon="icon"></div>
+    <div
+      v-if="visible"
+      :icon="icon"
+      :title="title"
+      class="htr-icon__display"
+    ></div>
   </div>
 </template>
 
@@ -9,10 +14,12 @@ export default {
   name: 'BaseIcon',
   props: {
     icon: {
-      type: String
+      type: String,
+      default: undefined
     },
     title: {
-      type: String
+      type: String,
+      default: undefined
     },
     visible: {
       type: Boolean,
@@ -21,7 +28,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../styles/_variables.scss';

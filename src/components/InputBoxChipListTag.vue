@@ -1,19 +1,15 @@
 <template>
-    <span
-      :class="classes"
-      v-bind="tagAccessiblityIfClickable"
-      @click="onClick"
-    >
-        <span class="chip-tag__text">{{data.name}}</span>
-        <Button
-            v-if="hasRemove"
-            class-name="chip-tag__delete"
-            size="small"
-            title="remove"
-            :icon="removeIcon"
-            @click="onRemove"
-        />
-    </span>
+  <span :class="classes" v-bind="tagAccessiblityIfClickable" @click="onClick">
+    <span class="chip-tag__text">{{ data.name }}</span>
+    <Button
+      v-if="hasRemove"
+      :icon="removeIcon"
+      class-name="chip-tag__delete"
+      size="small"
+      title="remove"
+      @click="onRemove"
+    />
+  </span>
 </template>
 
 <script>

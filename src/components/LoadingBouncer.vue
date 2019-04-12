@@ -1,10 +1,6 @@
 <template>
   <div :class="classes">
-    <div 
-        v-for="i in range" 
-        :key="i" 
-        :class="bouncerClasses" 
-    />
+    <div v-for="i in range" :key="i" :class="bouncerClasses" />
   </div>
 </template>
 
@@ -19,7 +15,8 @@ export default {
       default: false
     },
     cirlceClass: {
-      type: String
+      type: String,
+      default: undefined
     }
   },
   data: function() {
@@ -42,7 +39,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

@@ -1,26 +1,23 @@
 <template>
-  <div :id="id" class="dropdown">
+  <div v-htr-outside-click="closeDropdown" :id="id" class="dropdown">
     <Button
       :id="togglerId"
-      name="dropdownToggle"
-      class="dropdown__toggler ripple"
       :icon="icon"
       :title="title"
+      name="dropdownToggle"
+      class="dropdown__toggler ripple"
       @click="toggleDropdown"
     />
     <template v-if="isDropdownOpen">
-      <portal :to="portalTarget">
-        <ul
-          v-htr-outside-click="toggleDropdown"
-          :id="menuId"
-          :class="dropdownMenuClasses"
-          :style="menuStyle"
-          role="menu"
-        >
-          <li class="dropdown__arrow"/>
-          <slot></slot>
-        </ul>
-      </portal>
+      <ul
+        :id="menuId"
+        :class="dropdownMenuClasses"
+        :style="menuStyle"
+        role="menu"
+      >
+        <li class="dropdown__arrow" />
+        <slot></slot>
+      </ul>
     </template>
   </div>
 </template>
@@ -43,9 +40,9 @@ export default {
     OutsideClick
   },
   props: {
-    id: String,
-    className: String,
-    icon: String,
+    id: { type: String, default: undefined },
+    className: { type: String, default: undefined },
+    icon: { type: String, default: undefined },
     align: {
       type: String,
       default: Strings.center,
@@ -53,8 +50,8 @@ export default {
         return [Strings.left, Strings.right, Strings.center].includes(value);
       }
     },
-    portalTarget: String,
-    title: String,
+    portalTarget: { type: String, default: undefined },
+    title: { type: String, default: undefined },
     ignorePosition: {
       type: Boolean,
       default: false
@@ -97,13 +94,18 @@ export default {
   methods: {
     toggleDropdown: function(event) {
       const position = getElementCoordinates(event.target);
+
       this.position = position;
       this.isDropdownOpen = !this.isDropdownOpen;
+    },
+    closeDropdown: function() {
+      if (this.isDropdownOpen) {
+        this.isDropdownOpen = false;
+      }
     }
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_extensions';

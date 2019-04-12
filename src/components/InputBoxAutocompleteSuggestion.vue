@@ -1,19 +1,13 @@
 <template>
-    <li
-        :class="classes"
-    >
-      <Button
-        className="suggestion__button"
-        :title="itemText"
-        @click="onClick"
-      >
-        <span class="suggestion__text">
-          <span>{{textPart.pre}}</span>
-          <span class="highlight">{{textPart.highlight}}</span>
-          <span>{{textPart.post}}</span>
-        </span>
-      </Button>
-    </li>
+  <li :class="classes">
+    <Button :title="itemText" class="suggestion__button" @click="onClick">
+      <span class="suggestion__text">
+        <span>{{ textPart.pre }}</span>
+        <span class="highlight">{{ textPart.highlight }}</span>
+        <span>{{ textPart.post }}</span>
+      </span>
+    </Button>
+  </li>
 </template>
 
 <script>

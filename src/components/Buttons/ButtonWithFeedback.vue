@@ -1,15 +1,8 @@
 <template>
-    <Button
-      v-bind="$props"
-      :class="buttonClasses"
-      @click="handleClick"
-    >
-      <LoadingBouncer 
-        local 
-        cirlceClass="feedback__bouncer" 
-      />
-      <slot></slot>
-    </Button>
+  <Button v-bind="$props" :class="buttonClasses" @click="handleClick">
+    <LoadingBouncer local cirlce-class="feedback__bouncer" />
+    <slot></slot>
+  </Button>
 </template>
 
 <script>
@@ -25,13 +18,22 @@ export default {
     LoadingBouncer
   },
   props: {
-    id: String,
-    className: String,
+    id: {
+      type: String,
+      default: undefined
+    },
+    className: {
+      type: String,
+      default: undefined
+    },
     type: {
       type: String,
       default: 'button'
     },
-    icon: String,
+    icon: {
+      type: String,
+      default: undefined
+    },
     theme: {
       type: String,
       default: 'default',
@@ -46,8 +48,8 @@ export default {
         return ['small'].includes(value);
       }
     },
-    rounded: Boolean,
-    depress: Boolean,
+    rounded: { type: Boolean, default: false },
+    depress: { type: Boolean, default: false },
     updateState: {
       type: Function,
       required: true
@@ -55,9 +57,6 @@ export default {
   },
   data: function() {
     return { isLoading: false, isSuccess: false, isFailure: false };
-  },
-  created() {
-    this.updateState(this.handleState);
   },
   computed: {
     buttonClasses: function() {
@@ -67,6 +66,9 @@ export default {
         'feedback--state_failure': this.isFailure
       });
     }
+  },
+  created() {
+    this.updateState(this.handleState);
   },
   methods: {
     handleClick: function(...things) {
@@ -92,7 +94,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../styles/_variables';

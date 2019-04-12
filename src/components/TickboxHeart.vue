@@ -1,9 +1,5 @@
 <template>
-    <Tickbox 
-    v-bind="$props"
-        customTickbox="tickbox--heart" 
-        @change="onChange" 
-    />
+  <Tickbox v-bind="$props" custom-tickbox="tickbox--heart" @change="onChange" />
 </template>
 
 <script>
@@ -16,21 +12,24 @@ export default {
   },
   props: {
     id: {
-      type: [String, Number]
+      type: [String, Number],
+      default: undefined
     },
     name: {
       type: String,
       required: true
     },
     text: {
-      type: String
+      type: String,
+      default: undefined
     },
     checked: {
       type: Boolean,
       required: true
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -40,7 +39,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss">
 @import '../styles/_variables';

@@ -1,15 +1,15 @@
 <template>
-    <section 
-      v-show="isActive"
-      :aria-hidden="!isActive"
-      :id="tabHash"
-      :class="panelClasses"
-      role="tabpanel"
-    >
-      <transition name="fade">
-        <slot v-if="isActive"></slot>
-      </transition>
-    </section>
+  <section
+    v-show="isActive"
+    :aria-hidden="!isActive"
+    :id="tabHash"
+    :class="panelClasses"
+    role="tabpanel"
+  >
+    <transition name="fade">
+      <slot v-if="isActive"></slot>
+    </transition>
+  </section>
 </template>
 
 <script>

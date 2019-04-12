@@ -2,16 +2,23 @@ module.exports = {
   root: true,
 
   env: {
-    node: true
+    node: true,
+    browser: true
   },
 
-  extends: ['plugin:vue/essential', '@vue/prettier'],
+  extends: ['plugin:vue/recommended', '@vue/prettier'],
 
   rules: {
+    indent: 'off',
     'no-console': 'off',
     'no-debugger': 'off',
     'graphql/template-strings': 'off',
-    indent: 'off'
+    'vue/html-closing-bracket-spacing': [
+      'error',
+      {
+        selfClosingTag: 'always'
+      }
+    ]
   },
 
   parserOptions: {

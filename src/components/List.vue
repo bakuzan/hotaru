@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div v-if="hasPaging" class="paged-total">{{totalText}}</div>
+    <div v-if="hasPaging" class="paged-total">{{ totalText }}</div>
     <draggable
       ref="listContainer"
+      v-bind="sortableOptions"
       :class="listClasses"
-      element="ul"
       :list="items"
-      :options="sortableOptions"
+      tag="ul"
       @update="onUpdate"
     >
       <li v-for="item in items" :class="listItemClasses" :key="item.id">
-        <div class="sort-handle" v-if="isSortable">+</div>
-        <slot v-bind:item="item">
+        <div v-if="isSortable" class="sort-handle">+</div>
+        <slot :item="item">
           <!-- Fallback content -->
           {{ item.id }}
         </slot>
@@ -30,8 +30,14 @@ export default {
     draggable
   },
   props: {
-    className: String,
-    itemClassName: String,
+    className: {
+      type: String,
+      default: ''
+    },
+    itemClassName: {
+      type: String,
+      default: ''
+    },
     columns: {
       type: String,
       default: '',
@@ -52,7 +58,8 @@ export default {
       default: false
     },
     pagedTotal: {
-      type: Number
+      type: Number,
+      default: null
     },
     alignLeft: {
       type: Boolean,
@@ -75,24 +82,7 @@ export default {
       listObserver: null
     };
   },
-  mounted() {
-    this.setMutationOberver();
-    if (this.items.length) {
-      // When Items loaded from cache
-      const listNode = this.getListRef();
-      const lastItem = Array.from(listNode.children).pop();
-      this.setIntersectionObserver(lastItem);
-    }
-  },
-  destroyed() {
-    if (this.listObserver) {
-      this.listObserver.disconnect();
-    }
 
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-  },
   computed: {
     listClasses: function() {
       return classNames(
@@ -131,6 +121,24 @@ export default {
     },
     totalText: function() {
       return `Displaying ${this.items.length} of ${this.pagedTotal}`;
+    }
+  },
+  mounted() {
+    this.setMutationOberver();
+    if (this.items.length) {
+      // When Items loaded from cache
+      const listNode = this.getListRef();
+      const lastItem = Array.from(listNode.children).pop();
+      this.setIntersectionObserver(lastItem);
+    }
+  },
+  destroyed() {
+    if (this.listObserver) {
+      this.listObserver.disconnect();
+    }
+
+    if (this.observer) {
+      this.observer.disconnect();
     }
   },
   methods: {

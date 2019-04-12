@@ -13,6 +13,6 @@ Vue.use(Meta);
 
 new Vue({
   router,
-  provide: createProvider().provide(),
+  apolloProvider: createProvider(),
   render: (h) => h(App)
 }).$mount('#app');
