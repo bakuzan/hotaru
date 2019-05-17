@@ -4,22 +4,22 @@
       <div :slot="typeSlotName">
         <RadioButtonGroup
           id="type"
-          name="type"
-          column
           :value="queryType"
           :options="mappedTypes"
+          name="type"
+          column
           @change="onInput"
         />
       </div>
     </ListFilterBar>
     <List
-      is-grid="standard"
       :items="htrTemplatesPaged.nodes"
       :paged-total="htrTemplatesPaged.total"
+      is-grid="standard"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <LinkCard v-bind="slotProps.item" :url-source="cardUrl"/>
+        <LinkCard v-bind="slotProps.item" :url-source="cardUrl" />
       </template>
     </List>
   </div>
@@ -47,10 +47,6 @@ const queryFilterOptions = {
   queryParam: 'type',
   queryDefault: HTRTemplateTypes.bracket
 };
-const defaultPage = {
-  page: 0,
-  size: LP.size
-};
 
 export default {
   name: 'HTRTemplateList',
@@ -70,9 +66,14 @@ export default {
       searchTimer: null,
       filters: {
         search: ''
-        // type: GET FROM QUERY ARG
+        // type -> From query params
       },
-      htrTemplatesPaged: defaultPagedResponse()
+      htrTemplatesPaged: defaultPagedResponse(),
+      filterHandler: LP.updateFilterAndRefetch(
+        this,
+        'htrTemplatesPaged',
+        queryFilterOptions
+      )
     };
   },
   metaInfo() {
@@ -81,27 +82,23 @@ export default {
       titleTemplate: 'Hotaru - %s Template List'
     };
   },
-  watch: {
-    $route: function() {
-      this.title = Routing.getQueryFromLocation(
-        'type',
-        queryFilterOptions.queryDefault
-      );
-      LP.refetchForFilter(this, 'htrTemplatesPaged', queryFilterOptions);
-    }
-  },
+
   apollo: {
     htrTemplatesPaged() {
       const queryType = Routing.getQueryFromLocation(
         'type',
         queryFilterOptions.queryDefault
       );
+
       return {
         query: Query.getHTRTemplatesByType,
         variables: {
           search: '',
           type: queryType,
-          paging: defaultPage
+          paging: {
+            page: 0,
+            size: LP.size
+          }
         }
       };
     }
@@ -115,12 +112,22 @@ export default {
       );
     }
   },
+  watch: {
+    $route: function() {
+      this.title = Routing.getQueryFromLocation(
+        'type',
+        queryFilterOptions.queryDefault
+      );
+
+      LP.refetchForFilter(this, 'htrTemplatesPaged', queryFilterOptions);
+    }
+  },
   methods: {
     onAdd: function() {
       this.$router.push(Urls.htrTemplateCreator);
     },
     onInput: function(value, name) {
-      LP.updateFilter(this, value, name, queryFilterOptions);
+      this.filterHandler(value, name);
     },
     showMore: function() {
       LP.showMore(

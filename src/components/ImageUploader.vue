@@ -1,6 +1,6 @@
 <template>
   <div class="image-selector">
-    <LoadingBouncer v-show="isLoading" local/>
+    <LoadingBouncer v-show="isLoading" local />
     <InputBox
       class="image-selector__input-box"
       clearButtonClass="image-selector__clear"
@@ -17,10 +17,10 @@
       name="uploadImageUrl"
       @click="onUploadClick"
     >
-      <img :src="uploadIcon" alt="Image Upload icon">
+      <img :src="uploadIcon" alt="Image Upload icon" />
     </Button>
     <div class="image-selector__file-selector">
-      <div class="image-selector__label">{{imageFileName}}</div>
+      <div class="image-selector__label">{{ imageFileName }}</div>
       <Button
         class="image-selector__upload"
         size="small"
@@ -28,16 +28,16 @@
         name="uploadImageFile"
         @click="onFileClick"
       >
-        <img :src="uploadIcon" alt="Image Upload icon">
+        <img :src="uploadIcon" alt="Image Upload icon" />
       </Button>
       <input
+        :id="fileInputId"
+        :name="fileInputId"
         type="file"
         accept="image/*"
         class="image-selector__file-input"
-        :id="fileInputId"
-        :name="fileInputId"
         @change="onFileChange"
-      >
+      />
     </div>
   </div>
 </template>

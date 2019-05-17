@@ -1,5 +1,11 @@
 <template>
-  <button :class="buttonClasses" :type="type" :icon="icon" :disabled="disabled" @click="onClick">
+  <button
+    :class="buttonClasses"
+    :type="type"
+    :icon="icon"
+    :disabled="disabled"
+    @click="onClick"
+  >
     <slot></slot>
   </button>
 </template>
@@ -10,13 +16,13 @@ import classNames from 'classnames';
 export default {
   name: 'Button',
   props: {
-    className: String,
+    className: { type: String, default: '' },
     type: {
       type: String,
       default: 'button'
     },
-    icon: String,
-    link: Boolean,
+    icon: { type: String, default: '' },
+    link: { type: Boolean, default: false },
     theme: {
       type: String,
       default: 'default',
@@ -31,8 +37,8 @@ export default {
         return ['small'].includes(value);
       }
     },
-    rounded: Boolean,
-    depress: Boolean,
+    rounded: { type: Boolean, default: false },
+    depress: { type: Boolean, default: false },
     disabled: {
       type: Boolean,
       default: false
@@ -63,7 +69,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../styles/_variables';

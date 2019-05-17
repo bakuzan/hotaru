@@ -8,10 +8,14 @@
       :open-new-tab="openNewTab"
     />
     <div>
-      <div class="padded padded--standard">{{item.updatedAt}}</div>
-      <div class="padded padded--standard">{{item.type}}</div>
+      <div class="padded padded--standard">{{ item.updatedAt }}</div>
+      <div class="padded padded--standard">{{ item.type }}</div>
       <div>
-        <VoteButton :has-winner="!!item.winnerId" :is-winner="isWinner" show-lost-colour/>
+        <VoteButton
+          :has-winner="!!item.winnerId"
+          :is-winner="isWinner"
+          show-lost-colour
+        />
       </div>
     </div>
   </div>
@@ -33,10 +37,12 @@ export default {
   },
   props: {
     characterId: {
-      type: Number
+      type: Number,
+      required: true
     },
     item: {
-      type: Object
+      type: Object,
+      required: true
     },
     winnerId: {
       type: Number,
@@ -83,7 +89,6 @@ export default {
   }
 };
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>

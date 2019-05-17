@@ -4,7 +4,7 @@
     <Button class="view-block__button" @click="$emit('toggle')">
       <slot>
         <!-- placeholder -->
-        {{value || noDataText}}
+        {{ value || noDataText }}
       </slot>
     </Button>
   </div>
@@ -21,7 +21,7 @@ export default {
     Button
   },
   props: {
-    noDataText: String,
+    noDataText: { type: String, default: '' },
     label: {
       type: String,
       required: true

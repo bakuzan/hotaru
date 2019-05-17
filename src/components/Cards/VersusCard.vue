@@ -10,7 +10,9 @@
       v-if="item.seed"
       class="versus-card__seed themed-background"
       title="Seed in bracket"
-    >{{item.seed}}</div>
+    >
+      {{ item.seed }}
+    </div>
     <div class="flex-spacer"></div>
     <VoteButton
       :has-winner="!!winnerId"
@@ -18,7 +20,8 @@
       :is-champion="isWinner && isFinal"
       :disabled="isDummy"
       @click="handleVote"
-    >Vote {{item.name}}</VoteButton>
+      >Vote {{ item.name }}</VoteButton
+    >
   </div>
 </template>
 
@@ -40,7 +43,8 @@ export default {
   },
   props: {
     item: {
-      type: Object
+      type: Object,
+      required: true
     },
     winnerId: {
       type: Number,
@@ -96,7 +100,6 @@ export default {
   }
 };
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <BaseIcon v-bind="$props" :icon="seedIcon" title="Is Seeded"/>
+  <BaseIcon v-bind="$props" :icon="seedIcon" title="Is Seeded" />
 </template>
 
 <script>

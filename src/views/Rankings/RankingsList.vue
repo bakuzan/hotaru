@@ -3,39 +3,39 @@
     <div class="page-rankings__column">
       <ListFilterBar v-bind="filters" column hide-add @input="onInput">
         <MultiSelect
-          :slot="typeSlotName"
           id="gender"
-          name="genders"
-          label="genders"
+          :slot="typeSlotName"
           :values="filters.genders"
           :options="mappedGenders"
+          name="genders"
+          label="genders"
           @update="onInput"
         />
         <MultiSelect
-          :slot="typeSlotName"
           id="source"
-          name="sources"
-          label="sources"
+          :slot="typeSlotName"
           :values="filters.sources"
           :options="mappedSources"
+          name="sources"
+          label="sources"
           @update="onInput"
         />
         <div :slot="typeSlotName">
           <InputBoxAutocomplete
             id="seriesFilter"
+            :options="series"
+            :filter="seriesFilter"
             name="seriesFilter"
             label="Series"
             attr="name"
-            :options="series"
-            :filter="seriesFilter"
+            disable-local-filter
             @input="onSearchSeries"
             @on-select="onSelectSeries"
-            disable-local-filter
           />
 
-          <List columns="one" :items="selectedSeries">
+          <List :items="selectedSeries" columns="one">
             <template slot-scope="slotProps">
-              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries"/>
+              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries" />
             </template>
           </List>
         </div>
@@ -43,16 +43,16 @@
     </div>
     <List
       id="ranking-list"
+      :items="rankingsPaged.nodes"
+      :paged-total="rankingsPaged.total"
       fixed-width
       columns="one"
       class="ranked-characters page-rankings__column"
-      itemClassName="ranked-characters__item"
-      :items="rankingsPaged.nodes"
-      :paged-total="rankingsPaged.total"
+      item-class-name="ranked-characters__item"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <RankingCard v-bind="formatForRankingCard(slotProps.item)"/>
+        <RankingCard v-bind="formatForRankingCard(slotProps.item)" />
       </template>
     </List>
   </div>

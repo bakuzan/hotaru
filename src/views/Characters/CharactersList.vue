@@ -2,35 +2,35 @@
   <div class="page">
     <ListFilterBar v-bind="filters" @input="onInput" @add="onAdd">
       <MultiSelect
-        :slot="typeSlotName"
         id="gender"
-        name="genders"
-        label="genders"
+        :slot="typeSlotName"
         :values="filters.genders"
         :options="mappedGenders"
+        name="genders"
+        label="genders"
         @update="onInput"
       />
       <MultiSelect
-        :slot="typeSlotName"
         id="source"
-        name="sources"
-        label="sources"
+        :slot="typeSlotName"
         :values="filters.sources"
         :options="mappedSources"
+        name="sources"
+        label="sources"
         @update="onInput"
       />
     </ListFilterBar>
     <List
       id="character-list"
-      class="characters"
-      itemClassName="characters__item"
-      is-grid="standard"
       :items="charactersPaged.nodes"
       :paged-total="charactersPaged.total"
+      class="characters"
+      item-class-name="characters__item"
+      is-grid="standard"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <ListFigureCard v-bind="slotProps.item" :url-source="cardUrl"/>
+        <ListFigureCard v-bind="slotProps.item" :url-source="cardUrl" />
       </template>
     </List>
   </div>

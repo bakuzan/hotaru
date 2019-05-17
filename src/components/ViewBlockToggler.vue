@@ -1,17 +1,17 @@
 <template>
-    <div :class="classes">
-        <ViewBlock
-            v-if="readOnly"
-            :class="blockClass"
-            :label="label"
-            :value="value"
-            :noDataText="noDataText"
-            @toggle="onToggle"
-        >
-          <slot :name="childSlotName" :value="value"></slot>
-        </ViewBlock>
-        <slot v-if="!readOnly"></slot>
-    </div>
+  <div :class="classes">
+    <ViewBlock
+      v-if="readOnly"
+      :class="blockClass"
+      :label="label"
+      :value="value"
+      :no-data-text="noDataText"
+      @toggle="onToggle"
+    >
+      <slot :name="childSlotName" :value="value"></slot>
+    </ViewBlock>
+    <slot v-if="!readOnly"></slot>
+  </div>
 </template>
 
 <script>
@@ -62,6 +62,17 @@ export default {
       isEditing: false
     };
   },
+  computed: {
+    readOnly: function() {
+      return !this.lockEdit && !this.isEditing;
+    },
+    classes: function() {
+      return classNames('view-block-toggler', {
+        'view-block-toggler--read-only': this.readOnly,
+        'view-block-toggler--read-only_forced': this.forceReadOnly
+      });
+    }
+  },
   watch: {
     forceReadOnly: function(newV, oldV) {
       if (newV && newV !== oldV) {
@@ -72,17 +83,6 @@ export default {
       if (newV !== oldV) {
         this.isEditing = newV;
       }
-    }
-  },
-  computed: {
-    readOnly: function() {
-      return !this.lockEdit && !this.isEditing;
-    },
-    classes: function() {
-      return classNames('view-block-toggler', {
-        'view-block-toggler--read-only': this.readOnly,
-        'view-block-toggler--read-only_forced': this.forceReadOnly
-      });
     }
   },
   methods: {

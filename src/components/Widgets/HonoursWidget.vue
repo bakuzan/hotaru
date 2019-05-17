@@ -1,39 +1,39 @@
 <template>
-    <section class="honours">
-      <header class="honours__header">
-        <h4 class="honours__title">Honours</h4>
-      </header>
-      <LoadingBouncer v-show="isLoading" local />
-      <List
-        className="honours-list"
-        itemClassName="honours-list__item honour"
-        columns="one"
-        :items="honoursList"
-      >
-        <template slot-scope="slotProps">
-          <div class="honour__title">
-            <div class="honour__text">{{slotProps.item.title}}</div>
-            <div class="honour__context">
-              <div class="honour__context-label">
-                {{slotProps.item.contextLabel}}
-              </div>
+  <section class="honours">
+    <header class="honours__header">
+      <h4 class="honours__title">Honours</h4>
+    </header>
+    <LoadingBouncer v-show="isLoading" local />
+    <List
+      :items="honoursList"
+      class-name="honours-list"
+      item-class-name="honours-list__item honour"
+      columns="one"
+    >
+      <template slot-scope="slotProps">
+        <div class="honour__title">
+          <div class="honour__text">{{ slotProps.item.title }}</div>
+          <div class="honour__context">
+            <div class="honour__context-label">
+              {{ slotProps.item.contextLabel }}
             </div>
           </div>
-          <ListFigureCard
-            v-if="slotProps.item.character"
-            v-show="!isLoading"
-            v-bind="slotProps.item.character"
-            :url-source="cardUrl"
-          />
-          <VersusWidget
-            v-else-if="slotProps.item.characters"
-            v-show="!isLoading"
-            v-bind="slotProps.item"
-            enable-compare
-          />
-        </template>
-      </List>
-    </section>
+        </div>
+        <ListFigureCard
+          v-if="slotProps.item.character"
+          v-show="!isLoading"
+          v-bind="slotProps.item.character"
+          :url-source="cardUrl"
+        />
+        <VersusWidget
+          v-else-if="slotProps.item.characters"
+          v-show="!isLoading"
+          v-bind="slotProps.item"
+          enable-compare
+        />
+      </template>
+    </List>
+  </section>
 </template>
 
 <script>

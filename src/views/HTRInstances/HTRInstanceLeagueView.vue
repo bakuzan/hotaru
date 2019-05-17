@@ -1,23 +1,25 @@
 <template>
   <div class="page page-view page-view--column league-view">
     <div class="page-view__row page-view__row--right league-view__header">
-      <LoadingBouncer v-show="isLoading" local/>
+      <LoadingBouncer v-show="isLoading" local />
       <h4 class="league-view__title">
-        {{htrTemplateSeasonById && htrTemplateSeasonById.name}}
-        <span
-          class="status-badge themed-background"
-        >{{isSeasonComplete ? 'Complete' : 'Ongoing'}}</span>
+        {{ htrTemplateSeasonById && htrTemplateSeasonById.name }}
+        <span class="status-badge themed-background">{{
+          isSeasonComplete ? 'Complete' : 'Ongoing'
+        }}</span>
       </h4>
-      <Button theme="primary" :disabled="!canCreate" @click="onMatchCreate">Create Matches</Button>
+      <Button :disabled="!canCreate" theme="primary" @click="onMatchCreate"
+        >Create Matches</Button
+      >
     </div>
     <div class="page-view__row">
       <section class="league-view-section">
         <SelectBox
           id="league"
-          name="league"
-          text="League"
           :options="leagueOptions"
           :value="currentLeagueId()"
+          name="league"
+          text="League"
           @on-select="onLeagueChange"
         />
         <table class="table league-table">
@@ -30,29 +32,33 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(row, i) in leagueTable" :key="row.id" class="league-table__row">
+            <tr
+              v-for="(row, i) in leagueTable"
+              :key="row.id"
+              class="league-table__row"
+            >
               <td class="name-column">
-                <RankingCard size="small" :rank="i+1" :character="row"/>
+                <RankingCard :rank="i + 1" :character="row" size="small" />
               </td>
-              <td class="text--top text--right padded">{{row.played}}</td>
-              <td class="text--top text--right padded">{{row.won}}</td>
-              <td class="text--top text--right padded">{{row.lost}}</td>
+              <td class="text--top text--right padded">{{ row.played }}</td>
+              <td class="text--top text--right padded">{{ row.won }}</td>
+              <td class="text--top text--right padded">{{ row.lost }}</td>
             </tr>
           </tbody>
         </table>
       </section>
       <section class="league-view-section">
         <List
-          columns="one"
           :items="leagueMatches.nodes"
           :paged-total="leagueMatches.total"
+          columns="one"
           @intersect="showMoreMatches"
         >
           <template slot-scope="slotProps">
             <VersusWidget
               v-bind="slotProps.item"
-              enable-compare
               :figure-size="null"
+              enable-compare
               @vote="handleVote"
             />
           </template>
@@ -103,21 +109,7 @@ export default {
       titleTemplate: `Hotaru - View League - %s`
     };
   },
-  watch: {
-    $route: function() {
-      const id = Routing.getQueryArg(this.$router, 'leagueId');
-      this.updateTitle();
-      if (!id) {
-        return;
-      }
 
-      this.page = 0;
-      this.$apollo.queries.htrInstanceLeagueById.refetch({
-        id,
-        page: 0
-      });
-    }
-  },
   apollo: {
     htrTemplateSeasonById: {
       query: Query.getHTRTemplateSeasonById,
@@ -188,6 +180,21 @@ export default {
           this.htrInstanceLeagueById.matches) ||
         defaultPagedResponse()
       );
+    }
+  },
+  watch: {
+    $route: function() {
+      const id = Routing.getQueryArg(this.$router, 'leagueId');
+      this.updateTitle();
+      if (!id) {
+        return;
+      }
+
+      this.page = 0;
+      this.$apollo.queries.htrInstanceLeagueById.refetch({
+        id,
+        page: 0
+      });
     }
   },
   methods: {

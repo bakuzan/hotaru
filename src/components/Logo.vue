@@ -1,28 +1,28 @@
 <template>
-    <div :id="id" class="logo center-contents">
-        <svg class="logo__svg themed-background" xmlns="http://www.w3.org/2000/svg">
-            <text 
-                v-for="(item, i) in letters"
-                :key="i"
-                :class="item.classes" 
-                x="50%" 
-                y="50%" 
-                dy="0.3em"
-            >
-                {{item.text}}
-            </text>
-            <text
-                class="word diagonal"
-                x="50%"
-                y="50%"
-                dy="0.3em"
-                :textLength="sideLength"
-                lengthAdjust="spacingAndGlyphs"
-            >
-            {{upperText}}
-            </text>
-        </svg>
-    </div>
+  <div :id="id" class="logo center-contents">
+    <svg class="logo__svg themed-background" xmlns="http://www.w3.org/2000/svg">
+      <text
+        v-for="(item, i) in letters"
+        :key="i"
+        :class="item.classes"
+        x="50%"
+        y="50%"
+        dy="0.3em"
+      >
+        {{ item.text }}
+      </text>
+      <text
+        class="word diagonal"
+        x="50%"
+        y="50%"
+        dy="0.3em"
+        :textLength="sideLength"
+        lengthAdjust="spacingAndGlyphs"
+      >
+        {{ upperText }}
+      </text>
+    </svg>
+  </div>
 </template>
 
 <script>
@@ -82,7 +82,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

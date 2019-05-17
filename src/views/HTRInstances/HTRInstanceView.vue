@@ -1,138 +1,140 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page">
-      <LoadingBouncer v-show="isLoading"/>
+      <LoadingBouncer v-show="isLoading" />
       <div :class="instanceViewClasses">
         <div class="page-view__row page-view__row--grow">
           <div class="page-view__left-column">
             <ViewBlockToggler
               id="name"
-              label="Name"
               :value="editInstance.name"
-              :lockEdit="isCreate"
-              :forceReadOnly="readOnly"
+              :lock-edit="isCreate"
+              :force-read-only="readOnly"
+              label="Name"
             >
               <InputBox
                 id="name"
+                :value="editInstance.name"
                 name="name"
                 label="Name"
-                :value="editInstance.name"
                 @input="onInput"
               />
             </ViewBlockToggler>
             <ViewBlockToggler
               id="limit"
-              label="Limit"
               :value="editInstance.settings.limit"
-              :lockEdit="isCreate"
-              :forceReadOnly="lockedReadOnlyBracket"
+              :lock-edit="isCreate"
+              :force-read-only="lockedReadOnlyBracket"
+              label="Limit"
             >
               <SelectBox
                 id="limit"
-                name="limit"
-                text="Limit"
                 :options="mappedLimits"
                 :value="editInstance.settings.limit"
                 :disabled="!editInstance.htrTemplate"
-                @on-select="onSettingsInput"
+                name="limit"
+                text="Limit"
                 required
+                @on-select="onSettingsInput"
               />
             </ViewBlockToggler>
             <ViewBlockToggler
               v-if="isListType"
               id="order"
-              label="Order"
               :value="instanceOrder"
-              :lockEdit="isCreate"
-              :forceReadOnly="readOnly"
+              :lock-edit="isCreate"
+              :force-read-only="readOnly"
+              label="Order"
             >
               <SelectBox
                 id="order"
-                name="order"
-                text="Order"
                 :options="mappedOrders"
                 :value="editInstance.settings.order"
-                @on-select="onSettingsInput"
+                name="order"
+                text="Order"
                 required
+                @on-select="onSettingsInput"
               />
             </ViewBlockToggler>
           </div>
           <div class="page-view__content padded padded--standard">
             <ViewBlockToggler
               id="description"
-              label="Description"
               :value="editInstance.description"
-              :lockEdit="isCreate"
-              :forceReadOnly="readOnly"
+              :lock-edit="isCreate"
+              :force-read-only="readOnly"
+              label="Description"
             >
               <InputBox
                 id="description"
+                :value="editInstance.description"
                 name="description"
                 label="Description"
-                :value="editInstance.description"
                 @input="onInput"
               />
             </ViewBlockToggler>
             <ViewBlockToggler
               id="htrTemplate"
-              label="Template"
               :value="editInstance.htrTemplate"
-              :lockEdit="!editInstance.htrTemplate"
-              :forceReadOnly="lockedReadOnly"
+              :lock-edit="!editInstance.htrTemplate"
+              :force-read-only="lockedReadOnly"
+              label="Template"
               @toggle="onRemoveTemplate"
             >
-              <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">{{ value && value.name }}</div>
+              <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
+                {{ value && value.name }}
+              </div>
               <InputBoxAutocomplete
                 id="templateFilter"
+                :options="htrTemplates"
+                :filter="templateFilter"
                 name="templateFilter"
                 label="Template"
                 attr="name"
-                :options="htrTemplates"
-                :filter="templateFilter"
+                disable-local-filter
                 @input="onSearch"
                 @on-select="onSelectTemplate"
-                disable-local-filter
               />
             </ViewBlockToggler>
             <ViewBlockToggler
               v-if="isListType"
               id="characters"
+              :lock-edit="isCreate"
+              :force-read-only="readOnly"
               label="Characters"
               value="Change selection?"
-              :lockEdit="isCreate"
-              :forceReadOnly="readOnly"
             >
               <InputBoxAutocomplete
                 id="characterFilter"
-                name="characterFilter"
-                label="Characters"
-                attr="name"
                 :options="filteredCharacters"
                 :filter="characterFilter"
                 :disabled="disableCharacterInput"
+                name="characterFilter"
+                label="Characters"
+                attr="name"
+                disable-local-filter
                 @input="onSearch"
                 @on-select="onSelectCharacter"
-                disable-local-filter
               />
             </ViewBlockToggler>
           </div>
         </div>
         <div v-if="isCreate" class="template-available-character-count">
           <div>Available characters for current template:</div>
-          <div>{{availableCharacterCount}}</div>
+          <div>{{ availableCharacterCount }}</div>
         </div>
         <div :class="instanceContentClasses" :tabindex="0">
-          <SeedIcon v-if="isSeeded"/>
+          <SeedIcon v-if="isSeeded" />
           <HTRInstanceViewList
             v-if="isListType"
-            :items="editInstance.characters"
             v-bind="editInstance.settings"
+            :items="editInstance.characters"
             @moved="onMove"
             @remove="onRemoveCharacter"
           />
           <HTRInstanceViewBracket
             v-else
-            :bracketId="editInstance.id"
+            :bracket-id="editInstance.id"
             :items="editInstance.versus"
             :options="editInstance.settings"
           />
@@ -143,7 +145,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -232,15 +236,6 @@ export default {
       title: this.instance && this.instance.name,
       titleTemplate: `Hotaru - View ${type} Instance - %s`
     };
-  },
-  watch: {
-    $route: function(newRoute) {
-      const { type } = newRoute.params;
-      const url = Urls.build(Urls.htrInstanceCreate, { type });
-      if (type && newRoute.path === url) {
-        Object.assign(this.$data, getInitialState());
-      }
-    }
   },
   apollo: {
     instance: {
@@ -389,6 +384,15 @@ export default {
     isSeeded: function() {
       const { settings } = this.editInstance;
       return settings && settings.rules && settings.rules.isSeeded;
+    }
+  },
+  watch: {
+    $route: function(newRoute) {
+      const { type } = newRoute.params;
+      const url = Urls.build(Urls.htrInstanceCreate, { type });
+      if (type && newRoute.path === url) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
   },
   methods: {

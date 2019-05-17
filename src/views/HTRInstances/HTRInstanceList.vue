@@ -4,22 +4,22 @@
       <div :slot="typeSlotName">
         <RadioButtonGroup
           id="type"
-          name="type"
-          column
           :value="queryType"
           :options="mappedTypes"
+          name="type"
+          column
           @change="onInput"
         />
       </div>
     </ListFilterBar>
     <List
-      is-grid="standard"
       :items="htrInstancesPaged.nodes"
       :paged-total="htrInstancesPaged.total"
+      is-grid="standard"
       @intersect="showMore"
     >
       <template slot-scope="slotProps">
-        <LinkCard v-bind="slotProps.item" :url-source="cardUrl"/>
+        <LinkCard v-bind="slotProps.item" :url-source="cardUrl" />
       </template>
     </List>
   </div>
@@ -70,9 +70,14 @@ export default {
       searchTimer: null,
       filters: {
         search: ''
-        // type: GET FROM QUERY ARG
+        // type -> From query params
       },
-      htrInstancesPaged: defaultPagedResponse()
+      htrInstancesPaged: defaultPagedResponse(),
+      filterHandler: LP.updateFilterAndRefetch(
+        this,
+        'htrInstancesPaged',
+        queryFilterOptions
+      )
     };
   },
   metaInfo() {
@@ -80,15 +85,6 @@ export default {
       title: this.title,
       titleTemplate: 'Hotaru - %s Instance List'
     };
-  },
-  watch: {
-    $route: function() {
-      this.title = Routing.getQueryFromLocation(
-        'type',
-        queryFilterOptions.queryDefault
-      );
-      LP.refetchForFilter(this, 'htrInstancesPaged', queryFilterOptions);
-    }
   },
   apollo: {
     htrInstancesPaged() {
@@ -116,6 +112,16 @@ export default {
       );
     }
   },
+  watch: {
+    $route: function() {
+      this.title = Routing.getQueryFromLocation(
+        'type',
+        queryFilterOptions.queryDefault
+      );
+
+      LP.refetchForFilter(this, 'htrInstancesPaged', queryFilterOptions);
+    }
+  },
   methods: {
     onAdd: function() {
       const queryType = Routing.getQueryArg(
@@ -128,7 +134,7 @@ export default {
       );
     },
     onInput: function(value, name) {
-      LP.updateFilter(this, value, name, queryFilterOptions);
+      this.filterHandler(value, name);
     },
     showMore: function() {
       LP.showMore(

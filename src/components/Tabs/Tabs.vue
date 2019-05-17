@@ -3,10 +3,10 @@
     <ul class="tabs__controls" role="tablist">
       <li
         v-for="(tab, i) in tabs"
+        v-show="tab.isVisible"
         :key="i"
         :class="getTabClasses(tab)"
         role="presentation"
-        v-show="tab.isVisible"
       >
         <a
           :aria-controls="tab.tabHash"
@@ -15,7 +15,8 @@
           class="tab__option"
           role="tab"
           @click="selectTab(tab.tabHash, $event)"
-        >{{displayName(tab.text)}}</a>
+          >{{ displayName(tab.text) }}</a
+        >
       </li>
     </ul>
     <div class="tabs__container">

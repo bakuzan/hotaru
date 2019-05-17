@@ -1,21 +1,23 @@
 <template>
   <div class="page page-view gauntlet">
-    <LoadingBouncer v-show="isLoading"/>
+    <LoadingBouncer v-show="isLoading" />
     <section v-if="showView" class="gauntlet-view">
       <header class="gauntlet-view__header">
         <h4 class="gauntlet__title">Active Gauntlet</h4>
         <div class="gauntlet-view__actions">
           <Button
             v-if="activeGauntlet.canContinue"
-            theme="primary"
             :disabled="gauntletCreateDisabled"
-            @click="handleContinueGauntlet"
-          >Continue Gauntlet</Button>
-          <Button
             theme="primary"
+            @click="handleContinueGauntlet"
+            >Continue Gauntlet</Button
+          >
+          <Button
             :disabled="gauntletSelectionDisabled"
+            theme="primary"
             @click="handleReturnToSelection"
-          >Go to Gauntlet Selection</Button>
+            >Go to Gauntlet Selection</Button
+          >
         </div>
       </header>
       <div class="gauntlet-view__active-character">
@@ -25,22 +27,22 @@
           figure-direction="row"
         />
         <div class="gauntlet-view__count-summary">
-          <div>Total Versus: {{versusCounts.total}}</div>
-          <div>Remaining Versus: {{versusCounts.ongoing}}</div>
+          <div>Total Versus: {{ versusCounts.total }}</div>
+          <div>Remaining Versus: {{ versusCounts.ongoing }}</div>
         </div>
       </div>
       <List
-        :className="'gauntlet-versus-grid'"
-        itemClassName="gauntlet-versus-grid__item"
+        :class-name="'gauntlet-versus-grid'"
         :is-grid="true"
         :items="activeGauntlet.versus"
+        item-class-name="gauntlet-versus-grid__item"
       >
         <template slot-scope="slotProps">
           <VersusWidget
             v-bind="slotProps.item"
+            :figure-size="null"
             enable-compare
             grow
-            :figure-size="null"
             @vote="handleVote"
           />
         </template>
@@ -49,44 +51,50 @@
     <section v-else-if="showSelection" class="gauntlet-selection">
       <header>
         <h4 class="gauntlet__title">Gauntlet Characters</h4>
-        <div class="gauntlet__subtitle">Select a character to run the gauntlet.</div>
+        <div class="gauntlet__subtitle">
+          Select a character to run the gauntlet.
+        </div>
       </header>
-      <ListFilterBar v-bind="filters" :hideAdd="true" @input="onInput">
+      <ListFilterBar v-bind="filters" :hide-add="true" @input="onInput">
         <MultiSelect
-          :slot="typeSlotName"
           id="gender"
-          name="genders"
-          label="genders"
+          :slot="typeSlotName"
           :values="filters.genders"
           :options="mappedGenders"
+          name="genders"
+          label="genders"
           @update="onInput"
         />
         <MultiSelect
-          :slot="typeSlotName"
           id="source"
-          name="sources"
-          label="sources"
+          :slot="typeSlotName"
           :values="filters.sources"
           :options="mappedSources"
+          name="sources"
+          label="sources"
           @update="onInput"
         />
       </ListFilterBar>
       <List
-        is-grid="standard"
-        itemClassName="gauntlet-selection-item"
         :items="gauntletCharacters.nodes"
         :paged-total="gauntletCharacters.total"
+        is-grid="standard"
+        item-class-name="gauntlet-selection-item"
         @intersect="showMore"
       >
         <template slot-scope="slotProps">
           <ListFigureCard
-            class="gauntlet-selection-item__card"
             v-bind="slotProps.item"
-            figure-direction="row"
             :url-source="cardUrl"
+            class="gauntlet-selection-item__card"
+            figure-direction="row"
           />
           <div class="gauntlet-selection-item__actions">
-            <Button theme="primary" @click="handleCreateGauntlet(slotProps.item.id)">Start Gauntlet</Button>
+            <Button
+              theme="primary"
+              @click="handleCreateGauntlet(slotProps.item.id)"
+              >Start Gauntlet</Button
+            >
           </div>
         </template>
       </List>

@@ -1,12 +1,12 @@
 <template>
   <div class="link-card">
     <div class="link-card__icons">
-      <SeedIcon :visible="isSeeded"/>
-      <TrophyIcon :visible="hasWinner"/>
+      <SeedIcon :visible="isSeeded" />
+      <TrophyIcon :visible="hasWinner" />
     </div>
-    <NavLink :to="itemUrl" :target="linkTarget">{{name}}</NavLink>
-    <div>{{description}}</div>
-    <div v-if="createdAt" class="link-card__date">{{createdAt}}</div>
+    <NavLink :to="itemUrl" :target="linkTarget">{{ name }}</NavLink>
+    <div>{{ description }}</div>
+    <div v-if="createdAt" class="link-card__date">{{ createdAt }}</div>
   </div>
 </template>
 
@@ -34,10 +34,12 @@ export default {
       required: true
     },
     description: {
-      type: String
+      type: String,
+      default: ''
     },
     createdAt: {
-      type: String
+      type: String,
+      default: ''
     },
     htrTemplate: {
       type: Object,

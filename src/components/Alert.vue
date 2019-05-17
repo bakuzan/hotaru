@@ -1,32 +1,29 @@
 <template>
-    <div :class="alertClasses" v-show="hasAlert">
-        <div 
-            v-show="hasAlert"
-            :class="messageClasses"
-        >
-            <div class="alert__inner">
-                <div :class="iconClasses"></div>
-                <div class="alert__title">
-                    {{activeAlert.message}}
-                </div>
-                <div class="button-group button-group--shrink">
-                    <Button 
-                        size="small"
-                        :icon="expandIcon"
-                        @click="showDetail(activeAlert.id)"
-                    />
-                    <Button 
-                        size="small"
-                        :icon="closeIcon"
-                        @click="remove(activeAlert.id)"
-                    />
-                </div>
-            </div>
-            <div class="alert__detail" v-show="activeAlert.showDetail">
-                {{activeAlert.detail}}
-            </div>
+  <div v-show="hasAlert" :class="alertClasses">
+    <div v-show="hasAlert" :class="messageClasses">
+      <div class="alert__inner">
+        <div :class="iconClasses"></div>
+        <div class="alert__title">
+          {{ activeAlert.message }}
         </div>
+        <div class="button-group button-group--shrink">
+          <Button
+            :icon="expandIcon"
+            size="small"
+            @click="showDetail(activeAlert.id)"
+          />
+          <Button
+            :icon="closeIcon"
+            size="small"
+            @click="remove(activeAlert.id)"
+          />
+        </div>
+      </div>
+      <div v-show="activeAlert.showDetail" class="alert__detail">
+        {{ activeAlert.detail }}
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -74,22 +71,21 @@ export default {
       return classNames('alert__icon', [`alert__icon--type_${this.alertType}`]);
     }
   },
+  created() {
+    alertService.register(this);
+  },
   methods: {
     showDetail: function(alertId) {
-      this.alerts = this.alerts.map(
-        (x) => (x.id !== alertId ? x : { ...x, showDetail: !x.showDetail })
+      this.alerts = this.alerts.map((x) =>
+        x.id !== alertId ? x : { ...x, showDetail: !x.showDetail }
       );
     },
     remove: function(alertId) {
       this.alerts = this.alerts.filter((x) => x.id !== alertId);
     }
-  },
-  created() {
-    alertService.register(this);
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

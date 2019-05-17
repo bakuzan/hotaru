@@ -24,6 +24,7 @@ export const updateFilterAndRefetch = (ctrl, attr, options = {}) => (
 };
 
 export const updateFilter = (ctrl, value, name, options = {}) => {
+  console.log('UP', ctrl.filters);
   if (options.queryParam !== name) {
     ctrl.filters[name] = value;
   } else {

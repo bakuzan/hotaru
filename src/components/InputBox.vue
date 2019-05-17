@@ -3,27 +3,27 @@
     <input
       :type="type"
       :id="id"
-      class="input-box__input"
       :name="name"
       :value="value"
-      placeholder=" "
-      autocomplete="off"
       :maxLength="maxLength"
       :disabled="disabled"
+      class="input-box__input"
+      placeholder=" "
+      autocomplete="off"
       @input="handleChange"
       @focus="onFocus"
       @blur="onBlur"
       @keydown="onKeyDown"
-    >
-    <label :for="id">{{label}}</label>
+    />
+    <label :for="id">{{ label }}</label>
     <Button
       v-show="showClearButton"
-      :className="clearClasses"
-      size="small"
+      :class-name="clearClasses"
       :icon="icon"
+      size="small"
       @click="clearAndFocusInput"
     />
-    <span v-show="showCount" class="input-box__count">{{countText}}</span>
+    <span v-show="showCount" class="input-box__count">{{ countText }}</span>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
     Button
   },
   props: {
-    id: String,
+    id: { type: String, required: true },
     name: {
       type: String,
       default: 'search'
@@ -54,6 +54,7 @@ export default {
       default: 'search'
     },
     value: {
+      default: '',
       validator: function(value) {
         return typeof value === 'string' || typeof value === 'number';
       }
@@ -71,7 +72,8 @@ export default {
       default: ''
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -136,7 +138,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss">
 input {

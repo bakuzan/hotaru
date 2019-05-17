@@ -1,24 +1,24 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
-      <LoadingBouncer v-show="isLoading"/>
+      <LoadingBouncer v-show="isLoading" />
       <div class="page-view__left-column htr-column htr-column--image">
         <div class="htr-column__inner">
           <HTRImage
-            force-load
             :src="editSeries.displayImage"
             :alt="editSeries.name"
+            force-load
             suffix="m"
             class="page-view__image"
           />
           <ViewBlockToggler
             id="displayImage"
+            :lock-edit="isCreate"
+            :force-read-only="readOnly"
             class="span-column"
             value="Change image"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
           >
-            <ImageUploader name="displayImage" @on-upload="handleUserChanges"/>
+            <ImageUploader name="displayImage" @on-upload="handleUserChanges" />
           </ViewBlockToggler>
         </div>
       </div>
@@ -28,67 +28,69 @@
             <header class="view-info__header">
               <ViewBlockToggler
                 id="name"
-                label="Name"
                 :value="series.name"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Name"
               >
                 <InputBox
                   id="name"
+                  :value="editSeries.name"
                   name="name"
                   label="Name"
-                  :value="editSeries.name"
                   @input="handleUserChanges"
                 />
                 <div
                   v-if="checkSeriesAlreadyExists"
                   class="page-view__error-message"
-                >A series with this name was already exists.</div>
+                >
+                  A series with this name was already exists.
+                </div>
               </ViewBlockToggler>
             </header>
             <div class="view-info__content">
               <ViewBlockToggler
                 id="source"
-                label="Source"
                 :value="series.source"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Source"
               >
                 <SelectBox
                   id="source"
-                  name="source"
-                  text="Source"
                   :options="mappedSources"
                   :value="editSeries.source"
-                  @on-select="handleUserChanges"
+                  name="source"
+                  text="Source"
                   required
+                  @on-select="handleUserChanges"
                 />
               </ViewBlockToggler>
 
               <ViewBlockToggler
                 id="characters"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
                 value="Characters"
-                blockClass="characters-view-block"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                block-class="characters-view-block"
               >
                 <InputBoxAutocomplete
                   id="characterFilter"
+                  :options="characterSearchResults"
+                  :filter="characterFilter"
                   name="characterFilter"
                   label="Characters"
                   attr="name"
-                  :options="characterSearchResults"
-                  :filter="characterFilter"
+                  disable-local-filter
                   @input="onSearchCharacters"
                   @on-select="onSelectCharacter"
-                  disable-local-filter
                 />
               </ViewBlockToggler>
               <List
-                class="characters"
-                itemClassName="characters__item"
-                is-grid="standard"
                 :items="editSeries.characters"
+                class="characters"
+                item-class-name="characters__item"
+                is-grid="standard"
               >
                 <template slot-scope="slotProps">
                   <ListFigureCard
@@ -106,7 +108,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -195,13 +199,6 @@ export default {
       titleTemplate: 'Hotaru - View Series - %s'
     };
   },
-  watch: {
-    $route: function(newRoute) {
-      if (newRoute.path === Urls.seriesCreate) {
-        Object.assign(this.$data, getInitialState());
-      }
-    }
-  },
   apollo: {
     series: {
       query: Query.getSeriesById,
@@ -262,6 +259,13 @@ export default {
     },
     isLoading: function() {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
+    }
+  },
+  watch: {
+    $route: function(newRoute) {
+      if (newRoute.path === Urls.seriesCreate) {
+        Object.assign(this.$data, getInitialState());
+      }
     }
   },
   methods: {

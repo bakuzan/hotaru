@@ -6,7 +6,7 @@
       @mouseover.native="updateHovered"
       @mouseleave.native="updateHovered"
     >
-    {{text.on}}
+      {{ text.on }}
     </Button>
     <Button
       v-bind="offProps"
@@ -14,7 +14,7 @@
       @mouseover.native="updateHovered"
       @mouseleave.native="updateHovered"
     >
-    {{text.off}}
+      {{ text.off }}
     </Button>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     Button
   },
   props: {
-    id: String,
+    id: { type: String, required: true },
     name: {
       type: String,
       required: true
@@ -96,7 +96,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

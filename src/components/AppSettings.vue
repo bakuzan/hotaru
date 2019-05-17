@@ -1,30 +1,31 @@
 <template>
   <div>
     <DropdownMenu
-      ignore-position
       :id="id"
-      class="app-settings"
       :portal-target="target"
       :align="alignment"
       :title="title"
       :icon="icon"
+      ignore-position
+      class="app-settings"
     >
       <li class="app-settings__item">
         <SelectBox
           id="appTheme"
-          name="appTheme"
-          text="App Theme"
           :options="appThemes"
           :value="theme"
+          name="appTheme"
+          text="App Theme"
           @on-select="onChange"
         />
       </li>
       <li class="app-settings__item">
         <ButtonWithFeedback
-          theme="primary"
           :update-state="getFeedbackUpdater"
+          theme="primary"
           @click="updateRankings"
-        >Update Rankings</ButtonWithFeedback>
+          >Update Rankings</ButtonWithFeedback
+        >
       </li>
     </DropdownMenu>
     <portal :to="backPortalTarget">
@@ -35,7 +36,7 @@
         size="small"
         @click="goBack"
       >
-        <img :src="backIcon" alt="back arrow">
+        <img :src="backIcon" alt="back arrow" />
       </Button>
     </portal>
   </div>
@@ -82,11 +83,6 @@ export default {
       routeHistory: []
     };
   },
-  watch: {
-    $route: function(newRoute) {
-      this.routeHistory.push(newRoute);
-    }
-  },
   computed: {
     themeName: {
       get: function() {
@@ -96,6 +92,16 @@ export default {
         this.theme = value;
       }
     }
+  },
+  watch: {
+    $route: function(newRoute) {
+      this.routeHistory.push(newRoute);
+    }
+  },
+  created() {
+    this.themeName = htrLocal.getTheme();
+    this.setBackIcon();
+    document.body.classList.add(this.themeName);
   },
   methods: {
     goBack: function() {
@@ -139,15 +145,9 @@ export default {
     getFeedbackUpdater: function(fn) {
       this.setFeedbackButtonState = fn;
     }
-  },
-  created() {
-    this.themeName = htrLocal.getTheme();
-    this.setBackIcon();
-    document.body.classList.add(this.themeName);
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

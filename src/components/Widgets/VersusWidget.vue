@@ -1,6 +1,6 @@
 <template>
   <div :class="classes" :id="id">
-    <VersusCard 
+    <VersusCard
       v-for="item in versusCharacters"
       :class="versusClass"
       :key="item.id"
@@ -9,18 +9,18 @@
       :is-dummy="isDummy"
       :is-final="isFinal"
       :figure-size="figureSize"
-      grow
       :open-new-tab="openNewTab"
+      grow
       @vote="handleVote"
     />
     <div v-if="!enableCompare" class="versus__icon">
       VS
     </div>
-    <router-link 
+    <router-link
       v-if="enableCompare"
-      class="versus__icon"
       :to="compareLink"
-      :target="openNewTab ? '_blank': null"
+      :target="openNewTab ? '_blank' : null"
+      class="versus__icon"
     >
       VS
     </router-link>
@@ -116,7 +116,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../styles/_variables';

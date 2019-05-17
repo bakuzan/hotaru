@@ -7,7 +7,8 @@
       :to="link.to"
       :class="sideNavLinkClass"
       :title="link.title"
-    >{{link.text}}</NavLink>
+      >{{ link.text }}</NavLink
+    >
   </nav>
 </template>
 
@@ -68,7 +69,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

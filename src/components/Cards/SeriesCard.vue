@@ -1,7 +1,12 @@
 <template>
   <div class="series-card">
-    {{name}}
-    <Button class="series-card__remove" size="small" :icon="removeIcon" @click="onClick"/>
+    {{ name }}
+    <Button
+      :icon="removeIcon"
+      class="series-card__remove"
+      size="small"
+      @click="onClick"
+    />
   </div>
 </template>
 
@@ -17,10 +22,12 @@ export default {
   },
   props: {
     id: {
-      type: Number
+      type: Number,
+      required: true
     },
     name: {
-      type: String
+      type: String,
+      required: true
     }
   },
   data: function() {

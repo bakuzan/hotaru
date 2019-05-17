@@ -1,7 +1,15 @@
 <template>
   <div class="link-images">
-    <img class="link-images__dark" :src="darkLink" alt="Image signifying a link">
-    <img class="link-images__light" :src="lightLink" alt="Image signifying a link">
+    <img
+      :src="darkLink"
+      class="link-images__dark"
+      alt="Image signifying a link"
+    />
+    <img
+      :src="lightLink"
+      class="link-images__light"
+      alt="Image signifying a link"
+    />
   </div>
 </template>
 
@@ -12,7 +20,7 @@ import WhiteLinkSVG from '@/assets/link_white.svg';
 export default {
   name: 'LinkImages',
   props: {
-    to: String
+    to: { type: String, required: true }
   },
   data: function() {
     return {
@@ -22,7 +30,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

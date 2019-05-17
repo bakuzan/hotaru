@@ -1,5 +1,5 @@
 <template>
-  <BaseIcon v-bind="$props" :icon="icon" title="Has Winner"/>
+  <BaseIcon v-bind="$props" :icon="icon" title="Has Winner" />
 </template>
 
 <script>

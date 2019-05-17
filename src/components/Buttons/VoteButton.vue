@@ -1,11 +1,11 @@
 <template>
   <Button
     v-bind="$props"
-    theme="primary"
-    title="Vote"
-    :className="buttonClasses"
+    :class-name="buttonClasses"
     :icon="maybeIcon"
     :disabled="hasWinner || disabled"
+    theme="primary"
+    title="Vote"
     @click="handleClick"
   >
     <span class="vote-button__vote-text">
@@ -26,13 +26,13 @@ export default {
     Button
   },
   props: {
-    id: String,
-    className: String,
+    id: { type: String, default: '' },
+    className: { type: String, default: '' },
     type: {
       type: String,
       default: 'button'
     },
-    icon: String,
+    icon: { type: String, default: '' },
     theme: {
       type: String,
       default: 'default',
@@ -47,8 +47,14 @@ export default {
         return ['small'].includes(value);
       }
     },
-    rounded: Boolean,
-    depress: Boolean,
+    rounded: {
+      type: Boolean,
+      default: false
+    },
+    depress: {
+      type: Boolean,
+      default: false
+    },
     disabled: {
       type: Boolean,
       default: false

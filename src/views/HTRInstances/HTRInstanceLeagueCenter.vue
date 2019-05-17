@@ -1,8 +1,10 @@
 <template>
   <div class="page page-view page-view--column league-center">
     <div class="page-view__row page-view__row--right league-center__actions">
-      <LoadingBouncer v-show="isLoading" local/>
-      <Button theme="primary" :disabled="!canCreate" @click="onCreateNew">Create</Button>
+      <LoadingBouncer v-show="isLoading" local />
+      <Button :disabled="!canCreate" theme="primary" @click="onCreateNew"
+        >Create</Button
+      >
     </div>
     <div class="page-view__row league-center__content">
       <section class="league-center__section league-section">
@@ -10,42 +12,49 @@
         <div class="league-section__sub-header">
           <NavLink
             v-if="ongoingHTRInstanceLeagues"
-            class="league-section__season-link"
             :to="leagueLink(null)"
-          >{{ongoingHTRInstanceLeagues.name}}</NavLink>
+            class="league-section__season-link"
+            >{{ ongoingHTRInstanceLeagues.name }}</NavLink
+          >
           <div v-if="!ongoingHTRInstanceLeagues">No ongoing leagues.</div>
         </div>
-        <List align-left fixed-width columns="one" :items="ongoingInstances">
+        <List :items="ongoingInstances" align-left fixed-width columns="one">
           <template slot-scope="slotProps">
             <div class="league-card">
               <div
                 :class="iconClasses(slotProps.item)"
-                :title="`Is ${slotProps.item.settings.isComplete ? 'Complete' : 'Ongoing'}`"
+                :title="
+                  `Is ${
+                    slotProps.item.settings.isComplete ? 'Complete' : 'Ongoing'
+                  }`
+                "
               ></div>
               <NavLink
-                class="league-card__text"
                 :to="leagueLink(slotProps.item)"
-              >{{slotProps.item.name}}</NavLink>
+                class="league-card__text"
+                >{{ slotProps.item.name }}</NavLink
+              >
             </div>
           </template>
         </List>
       </section>
       <section class="league-center__section">
         <List
+          :items="pastHTRInstanceLeaguesPaged.nodes"
+          :paged-total="pastHTRInstanceLeaguesPaged.total"
           align-left
           fixed-width
           columns="one"
-          :items="pastHTRInstanceLeaguesPaged.nodes"
-          :paged-total="pastHTRInstanceLeaguesPaged.total"
           @intersect="showMore"
         >
           <template slot-scope="slotProps">
             <div>
               <NavLink
-                class="league-section__season-link"
                 :to="seasonLink(slotProps.item.id)"
-              >{{slotProps.item.name}}</NavLink>
-              <div>Finished: {{slotProps.item.updatedAt}}</div>
+                class="league-section__season-link"
+                >{{ slotProps.item.name }}</NavLink
+              >
+              <div>Finished: {{ slotProps.item.updatedAt }}</div>
             </div>
           </template>
         </List>
@@ -92,11 +101,7 @@ export default {
   metaInfo: {
     title: 'Hotaru - League Center'
   },
-  watch: {
-    $route: function() {
-      LP.refetchForFilter(this, 'pastHTRInstanceLeaguesPaged');
-    }
-  },
+
   apollo: {
     ongoingHTRInstanceLeagues: {
       query: Query.getOngoingHTRInstanceLeagues
@@ -121,6 +126,11 @@ export default {
           this.ongoingHTRInstanceLeagues.instances) ||
         []
       );
+    }
+  },
+  watch: {
+    $route: function() {
+      LP.refetchForFilter(this, 'pastHTRInstanceLeaguesPaged');
     }
   },
   methods: {

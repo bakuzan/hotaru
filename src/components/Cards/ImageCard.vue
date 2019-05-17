@@ -1,5 +1,10 @@
 <template>
-  <ListFigureCard v-bind="$props" :name="name" :display-image="url" hide-caption/>
+  <ListFigureCard
+    v-bind="$props"
+    :name="name"
+    :display-image="url"
+    hide-caption
+  />
 </template>
 
 <script>
@@ -15,10 +20,12 @@ export default {
       type: [String, Number]
     },
     name: {
-      type: String
+      type: String,
+      default: ''
     },
     url: {
-      type: String
+      type: String,
+      default: ''
     },
     figureSize: {
       type: String,

@@ -5,70 +5,70 @@
         <div class="versus-creator__group">
           <MultiSelect
             id="gender"
-            name="genders"
-            label="genders"
             :values="rules.genders"
             :options="mappedGenders"
             :disabled="rules.hasNoVersusOnly"
+            name="genders"
+            label="genders"
             @update="onInput"
           />
           <TickboxOnOff
             id="isIncludeOnlyGender"
-            name="isIncludeOnlyGender"
             :text="onOffTextOptions"
             :checked="rules.isIncludeOnlyGender"
             :disabled="rules.hasNoVersusOnly"
-            @change="onInput"
+            name="isIncludeOnlyGender"
             align-left
+            @change="onInput"
           />
         </div>
         <div class="versus-creator__group">
           <MultiSelect
             id="source"
-            name="sources"
-            label="sources"
             :values="rules.sources"
             :options="mappedSources"
             :disabled="rules.hasNoVersusOnly"
+            name="sources"
+            label="sources"
             @update="onInput"
           />
           <TickboxOnOff
             id="isIncludeOnlySource"
-            name="isIncludeOnlySource"
             :text="onOffTextOptions"
             :checked="rules.isIncludeOnlySource"
             :disabled="rules.hasNoVersusOnly"
-            @change="onInput"
+            name="isIncludeOnlySource"
             align-left
+            @change="onInput"
           />
         </div>
         <div class="versus-creator__group">
           <div>
             <InputBoxAutocomplete
               id="seriesFilter"
-              name="seriesFilter"
-              label="Series"
-              attr="name"
               :options="series"
               :filter="seriesFilter"
               :disabled="rules.hasNoVersusOnly"
+              name="seriesFilter"
+              label="Series"
+              attr="name"
+              disable-local-filter
               @input="onSearchSeries"
               @on-select="onSelectSeries"
-              disable-local-filter
             />
             <TickboxOnOff
               id="isIncludeOnlySeries"
-              name="isIncludeOnlySeries"
               :text="onOffTextOptions"
               :checked="rules.isIncludeOnlySeries"
               :disabled="rules.hasNoVersusOnly"
-              @change="onInput"
+              name="isIncludeOnlySeries"
               align-left
+              @change="onInput"
             />
           </div>
-          <List columns="one" :items="rules.series">
+          <List :items="rules.series" columns="one">
             <template slot-scope="slotProps">
-              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries"/>
+              <SeriesCard v-bind="slotProps.item" @remove="onRemoveSeries" />
             </template>
           </List>
         </div>
@@ -76,17 +76,17 @@
           <div class="versus-creator__label">No Versus Only</div>
           <TickboxOnOff
             id="hasNoVersusOnly"
-            name="hasNoVersusOnly"
             :checked="rules.hasNoVersusOnly"
-            @change="onInput"
+            name="hasNoVersusOnly"
             align-left
+            @change="onInput"
           />
         </div>
       </div>
 
       <div>
-        <LoadingBouncer v-show="mutationLoading"/>
-        <VersusWidget v-if="versus" v-bind="versus" @vote="handleVote"/>
+        <LoadingBouncer v-show="mutationLoading" />
+        <VersusWidget v-if="versus" v-bind="versus" @vote="handleVote" />
       </div>
 
       <template v-if="showButtons">

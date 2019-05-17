@@ -1,13 +1,13 @@
 <template>
   <div class="shared-opponent-card">
     <div class="shared-opponent-card__results">
-      <div>{{left.total}} matches</div>
-      <div>{{left.wins}} wins</div>
+      <div>{{ left.total }} matches</div>
+      <div>{{ left.wins }} wins</div>
     </div>
-    <ListFigureCard v-bind="opponent" :url-source="cardUrl"/>
+    <ListFigureCard v-bind="opponent" :url-source="cardUrl" />
     <div class="shared-opponent-card__results">
-      <div>{{right.total}} matches</div>
-      <div>{{right.wins}} wins</div>
+      <div>{{ right.total }} matches</div>
+      <div>{{ right.wins }} wins</div>
     </div>
   </div>
 </template>
@@ -24,13 +24,16 @@ export default {
   },
   props: {
     opponent: {
-      type: Object
+      type: Object,
+      default: () => ({})
     },
     left: {
-      type: Object
+      type: Object,
+      default: () => ({})
     },
     right: {
-      type: Object
+      type: Object,
+      default: () => ({})
     }
   },
   data: function() {

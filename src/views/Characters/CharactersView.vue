@@ -1,31 +1,31 @@
 <template>
   <form novalidate @submit.prevent="submit">
     <div class="page page-view">
-      <LoadingBouncer v-show="isLoading"/>
+      <LoadingBouncer v-show="isLoading" />
       <div class="page-view__left-column htr-column htr-column--image">
         <div class="htr-column__inner">
           <HTRImage
-            force-load
             :src="editCharacter.displayImage"
             :alt="editCharacter.name"
+            force-load
             suffix="m"
             class="page-view__image"
           />
           <ViewBlockToggler
             id="displayImage"
+            :lock-edit="isCreate"
+            :force-read-only="readOnly"
             class="span-column"
             value="Change image"
-            :lockEdit="isCreate"
-            :forceReadOnly="readOnly"
           >
-            <ImageUploader name="displayImage" @on-upload="handleUserChanges"/>
+            <ImageUploader name="displayImage" @on-upload="handleUserChanges" />
           </ViewBlockToggler>
           <TickboxHeart
-            class="span-column"
             id="isWaifu"
+            :checked="!!editCharacter.isWaifu"
+            class="span-column"
             name="isWaifu"
             text="Is Waifu"
-            :checked="!!editCharacter.isWaifu"
             @change="handleUserChanges"
           />
         </div>
@@ -36,76 +36,81 @@
             <header class="view-info__header">
               <ViewBlockToggler
                 id="name"
-                label="Name"
                 :value="character.name"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Name"
               >
                 <InputBox
                   id="name"
+                  :value="editCharacter.name"
                   name="name"
                   label="Name"
-                  :value="editCharacter.name"
                   @input="handleUserChanges"
                 />
                 <div
                   v-if="checkCharacterAlreadyExists"
                   class="page-view__error-message"
-                >A character with this name was already exists.</div>
+                >
+                  A character with this name was already exists.
+                </div>
               </ViewBlockToggler>
             </header>
             <div class="view-info__content">
               <ViewBlockToggler
                 id="gender"
-                label="Gender"
                 :value="character.gender"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Gender"
               >
                 <SelectBox
                   id="gender"
-                  name="gender"
-                  text="Gender"
                   :options="mappedGenders"
                   :value="editCharacter.gender"
-                  @on-select="handleUserChanges"
+                  name="gender"
+                  text="Gender"
                   required
+                  @on-select="handleUserChanges"
                 />
               </ViewBlockToggler>
               <div class="character-toggler-wrapper">
                 <ViewBlockToggler
                   id="series"
-                  label="Series"
                   :value="characterSeries"
-                  :noDataText="noSeries"
-                  :lockEdit="isCreate"
-                  :forceReadOnly="readOnly"
+                  :no-data-text="noSeries"
+                  :lock-edit="isCreate"
+                  :force-read-only="readOnly"
+                  label="Series"
                 >
                   <SelectBox
                     id="series"
-                    name="seriesId"
-                    text="Series"
                     :options="mappedSeries"
                     :value="editCharacter.seriesId"
+                    name="seriesId"
+                    text="Series"
+                    allow-nulls
                     @on-select="handleUserChanges"
-                    allowNulls
                   />
                 </ViewBlockToggler>
-                <div class="character-toggler-wrapper__icon" v-show="editCharacter.seriesId">
+                <div
+                  v-show="editCharacter.seriesId"
+                  class="character-toggler-wrapper__icon"
+                >
                   <NavLink :to="seriesUrl" name="Link to series">
-                    <LinkImages/>
+                    <LinkImages />
                   </NavLink>
                 </div>
               </div>
               <ViewBlockToggler
                 id="tags"
-                label="Tags"
                 :value="characterTags"
-                :noDataText="noTags"
-                :lockEdit="isCreate"
-                :forceReadOnly="readOnly"
+                :no-data-text="noTags"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Tags"
               >
-                <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
+                <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
                   <InputBoxChipListTag
                     v-for="tag in value"
                     :key="tag.id"
@@ -115,13 +120,13 @@
                 </div>
                 <InputBoxChipList
                   id="tags"
-                  name="tagIds"
-                  text="Tags"
                   :options="combinedTags"
                   :values="editCharacterTags"
+                  name="tagIds"
+                  text="Tags"
+                  allow-nulls
                   @update="onUpdate"
                   @create="onCreate"
-                  allowNulls
                 />
               </ViewBlockToggler>
             </div>
@@ -129,29 +134,39 @@
         </Tab>
         <Tab name="Gallery">
           <div class="page-view__content view-info">
-            <ImageUploader name="galleryImage" @on-upload="onGalleryImageUpload"/>
+            <ImageUploader
+              name="galleryImage"
+              @on-upload="onGalleryImageUpload"
+            />
             <List
-              class="gallery"
-              itemClassName="gallery__item"
-              is-grid="standard"
               :items="characterImages"
+              class="gallery"
+              item-class-name="gallery__item"
+              is-grid="standard"
             >
               <template slot-scope="slotProps">
-                <ImageCard v-bind="slotProps.item" :remove="onRemoveImage" hide-caption/>
+                <ImageCard
+                  v-bind="slotProps.item"
+                  :remove="onRemoveImage"
+                  hide-caption
+                />
               </template>
             </List>
           </div>
         </Tab>
-        <Tab name="Versus" :is-disabled="isCreate">
+        <Tab :is-disabled="isCreate" name="Versus">
           <div class="page-view__content view-info">
             <List
-              columns="one"
               :items="versusHistoryPaged.nodes"
               :paged-total="versusHistoryPaged.total"
+              columns="one"
               @intersect="showMore"
             >
               <template slot-scope="slotProps">
-                <VersusHistoryCard :characterId="editCharacter.id" :item="slotProps.item"/>
+                <VersusHistoryCard
+                  :character-id="editCharacter.id"
+                  :item="slotProps.item"
+                />
               </template>
             </List>
           </div>
@@ -162,7 +177,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{ isCreate ? "Create" : "Save" }}</Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -273,30 +290,6 @@ export default {
       title: this.character && this.character.name,
       titleTemplate: 'Hotaru - View Character - %s'
     };
-  },
-  watch: {
-    $route: function(newRoute, oldRoute) {
-      if (newRoute.path === Urls.characterCreate) {
-        Object.assign(this.$data, getInitialState());
-      }
-
-      const differentId = newRoute.params.id !== oldRoute.params.id;
-      const sameRoute =
-        newRoute.name === Strings.route.characterView &&
-        oldRoute.name === Strings.route.characterView;
-
-      if (sameRoute && differentId) {
-        const tabHash = newRoute.hash;
-        const id = Number(Routing.getParam(this.$router, 'id'));
-        this.$apollo.queries.character.refetch({ id });
-
-        if (tabHash === '#versus') {
-          this.$apollo.queries.versusHistoryPaged.refetch({ characterId: id });
-        } else if (tabHash === '#gallery') {
-          this.$apollo.queries.imagesForCharacter.refetch({ characterId: id });
-        }
-      }
-    }
   },
   apollo: {
     character: {
@@ -440,6 +433,30 @@ export default {
       const seriesId = this.editCharacter.seriesId || null;
       if (!seriesId) return Urls.seriesList;
       return Urls.build(Urls.seriesView, { id: seriesId });
+    }
+  },
+  watch: {
+    $route: function(newRoute, oldRoute) {
+      if (newRoute.path === Urls.characterCreate) {
+        Object.assign(this.$data, getInitialState());
+      }
+
+      const differentId = newRoute.params.id !== oldRoute.params.id;
+      const sameRoute =
+        newRoute.name === Strings.route.characterView &&
+        oldRoute.name === Strings.route.characterView;
+
+      if (sameRoute && differentId) {
+        const tabHash = newRoute.hash;
+        const id = Number(Routing.getParam(this.$router, 'id'));
+        this.$apollo.queries.character.refetch({ id });
+
+        if (tabHash === '#versus') {
+          this.$apollo.queries.versusHistoryPaged.refetch({ characterId: id });
+        } else if (tabHash === '#gallery') {
+          this.$apollo.queries.imagesForCharacter.refetch({ characterId: id });
+        }
+      }
     }
   },
   methods: {
