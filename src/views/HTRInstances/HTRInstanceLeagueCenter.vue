@@ -75,7 +75,7 @@ import { defaultPagedResponse } from '@/utils/models';
 import Urls from '@/constants/urls';
 import * as LP from '@/utils/list-pages';
 import * as CacheUpdate from '@/utils/cache';
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 
 const defaultPage = {
   page: 0,

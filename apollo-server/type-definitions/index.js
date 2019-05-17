@@ -8,9 +8,9 @@ const tag = require('./tag');
 const image = require('./image');
 const versus = require('./versus');
 const ranking = require('./ranking');
-const htrtemplate = require('./htr-template');
-const htrinstance = require('./htr-instance');
-const htrinstanceleague = require('./htr-instance-league');
+const htrtemplate = require('./htrTemplate');
+const htrinstance = require('./htrInstance');
+const htrinstanceleague = require('./htrInstanceLeague');
 const honours = require('./honours');
 const gauntlet = require('./gauntlet');
 

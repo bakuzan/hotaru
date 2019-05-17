@@ -5,8 +5,7 @@ const {
   HTRTemplate,
   HTRInstance,
   Versus,
-  Character,
-  Ranking
+  Character
 } = require('../../connectors');
 const Utils = require('../../utils');
 

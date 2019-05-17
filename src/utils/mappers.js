@@ -1,5 +1,5 @@
 import { isString, parseIfInt, getItemFromData, getKeyForData } from './index';
-import { Orders } from '@/constants/htr-instance-settings';
+import { Orders } from '@/constants/htrInstanceSettings';
 
 // eslint-disable-next-line
 const mapWithoutTypename = ({ __typename, ...o }) => ({ ...o });
@@ -47,8 +47,8 @@ export const mapCharacterToPost = (character, allTags) => {
     isWaifu,
     images: !images
       ? undefined
-      : images.map(
-          (x) => (isString(x.id) ? { url: x.url } : { id: x.id, url: x.url })
+      : images.map((x) =>
+          isString(x.id) ? { url: x.url } : { id: x.id, url: x.url }
         ),
     seriesId: removeSeries ? null : seriesIdInt,
     tags: [

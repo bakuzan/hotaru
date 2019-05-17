@@ -1,21 +1,27 @@
 const Op = require('sequelize').Op;
 
-const { db, Character, Series, Ranking } = require('../../connectors');
+const { db, Character, Series } = require('../../connectors');
 
 const Utils = require('../../utils');
 
 module.exports = {
-  rankingsTopTen() {
-    return Ranking.findAll({
-      order: [['rank', 'asc']],
-      limit: 10,
-      include: [Character]
+  async rankingsTopTen(_, __, context) {
+    return await context.Ranking.getRankings({
+      search: '',
+      genders: null,
+      sources: null,
+      seriesIds: null,
+      characterIds: null,
+      skipNum: 0,
+      takeNum: 10
     });
   },
-  rankingsPaged(
+  async rankingsPaged(
     _,
-    { search = '', genders, sources, series, paging = { page: 0, size: 10 } }
+    { search = '', genders, sources, series, paging = { page: 0, size: 10 } },
+    context
   ) {
+    const offset = paging.size * paging.page;
     const resolvedArgs = {
       ...Utils.ifArrayThenIn(genders, {
         gender: {
@@ -34,21 +40,29 @@ module.exports = {
       })
     };
 
-    return Character.findAndCountAll({
+    const nodes = await context.Ranking.getRankings({
+      search: '',
+      genders,
+      sources,
+      seriesIds: series,
+      skipNum: offset,
+      takeNum: paging.size
+    });
+
+    const total = await Character.count({
       where: {
         name: {
           [Op.like]: `%${search}%`
         },
         ...resolvedArgs
       },
-      order: [[Character.Ranking, 'rank', 'ASC']],
-      limit: paging.size,
-      offset: paging.size * paging.page,
-      include: [Series, Ranking]
-    }).then((result) => ({
-      nodes: result.rows,
-      total: result.count,
-      hasMore: Utils.setHasMoreFlag(result.count, paging)
-    }));
+      include: [Series]
+    });
+
+    return {
+      nodes,
+      total,
+      hasMore: Utils.setHasMoreFlag(total, paging)
+    };
   }
 };

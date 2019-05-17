@@ -170,8 +170,8 @@ import SeedIcon from '@/components/Icons/SeedIcon';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import { Limit, Order, Orders } from '@/constants/htr-instance-settings';
-import { HTRTemplateTypes } from '@/constants/htr-template-type';
+import { Limit, Order, Orders } from '@/constants/htrInstanceSettings';
+import { HTRTemplateTypes } from '@/constants/htrTemplateType';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData } from '@/utils';
 import {

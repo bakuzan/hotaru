@@ -1,7 +1,5 @@
 import gql from 'graphql-tag';
 
-import Fragments from './fragments';
-
 const populateRankings = gql`
   mutation populateRankings {
     populateRankings {
@@ -15,18 +13,21 @@ const getTopTen = gql`
   query getTopTen {
     rankingsTopTen {
       id
+      name
+      displayImage
       rank
       wins
       total
-      character {
-        id
-        name
-        displayImage
-      }
     }
   }
 `;
 
+/*
+        series {
+          id
+          name
+        }
+ */
 const getRankingsPaged = gql`
   query getRankingsPaged(
     $search: String
@@ -43,22 +44,17 @@ const getRankingsPaged = gql`
       paging: $paging
     ) {
       nodes {
-        ...CharacterBase
-        ranking {
-          rank
-          wins
-          total
-        }
-        series {
-          id
-          name
-        }
+        id
+        name
+        displayImage
+        rank
+        wins
+        total
       }
       total
       hasMore
     }
   }
-  ${Fragments.characterBase}
 `;
 
 export default {

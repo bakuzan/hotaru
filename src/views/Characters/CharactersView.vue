@@ -207,7 +207,7 @@ import LinkImages from '@/components/LinkImages';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import GenderType from '@/constants/gender-type';
+import GenderType from '@/constants/genderType';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData, generateUniqueId } from '@/utils';
 import {

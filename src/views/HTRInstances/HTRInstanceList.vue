@@ -34,9 +34,7 @@ import RadioButtonGroup from '@/components/RadioButtonGroup';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import HTRTemplateType, {
-  HTRTemplateTypes
-} from '@/constants/htr-template-type';
+import HTRTemplateType, { HTRTemplateTypes } from '@/constants/htrTemplateType';
 import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToRadioButtonGroup } from '@/utils/mappers';

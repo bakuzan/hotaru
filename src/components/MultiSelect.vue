@@ -2,31 +2,35 @@
   <div class="multi-select">
     <div class="multi-select__display display has-float-label">
       <input
-        type="text"
-        autocomplete="off"
-        class="display__input"
         :id="id"
         :name="name"
         :placeholder="placeholder"
         :value="displayValue"
+        type="text"
+        autocomplete="off"
+        class="display__input"
         tabindex="0"
         readonly
         @click="handleToggleOpen"
         @keydown="handleToggleOpen"
-      >
-      <label :for="id">{{label}}</label>
+      />
+      <label :for="id">{{ label }}</label>
     </div>
-    <div v-if="isOpen" :class="dropdownClasses" v-htr-outside-click="handleToggleClose">
+    <div
+      v-htr-outside-click="handleToggleClose"
+      v-if="isOpen"
+      :class="dropdownClasses"
+    >
       <ul class="multi-select__list">
         <li>
           <Tickbox
             :name="selectAllName"
-            text="Select All"
             :checked="hasAllSelected"
+            text="Select All"
             @change="handleSelectAll"
           />
         </li>
-        <li class="multi-select__separator"/>
+        <li class="multi-select__separator" />
         <li v-for="(op, i) in options" :key="op.value">
           <Tickbox
             :name="getName(i)"
@@ -47,7 +51,7 @@ import Tickbox from '@/components/Tickbox';
 
 import { OutsideClick } from '@/directives/OutsideClick';
 import Strings from '@/constants/strings';
-import { OPEN_KEYS } from '@/constants/key-codes';
+import { OPEN_KEYS } from '@/constants/keyCodes';
 
 const EXTRACT_OPTION_INDEX = /^.*-/g;
 const OPTION_PREFIX = 'option-';
@@ -67,7 +71,8 @@ export default {
       required: true
     },
     name: {
-      type: String
+      type: String,
+      default: ''
     },
     label: {
       type: String,
@@ -90,7 +95,8 @@ export default {
       default: false
     },
     listClassName: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   data: function() {
@@ -162,7 +168,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

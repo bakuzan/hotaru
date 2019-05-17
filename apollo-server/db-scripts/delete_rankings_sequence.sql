@@ -1,1 +1,0 @@
-delete from sqlite_sequence where name='rankings';

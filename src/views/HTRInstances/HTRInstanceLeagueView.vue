@@ -80,7 +80,7 @@ import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import * as CacheUpdate from '@/utils/cache';
 import * as Routing from '@/utils/routing';
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 import { defaultPagedResponse } from '@/utils/models';
 
 export default {

@@ -3,9 +3,9 @@ const Mutation = require('./mutation');
 const Series = require('./series');
 const Character = require('./character');
 const Versus = require('./versus');
-const Ranking = require('./ranking');
-const HTRTemplate = require('./htr-template');
-const HTRInstance = require('./htr-instance');
+const RankedCharacter = require('./rankedCharacter');
+const HTRTemplate = require('./htrTemplate');
+const HTRInstance = require('./htrInstance');
 
 module.exports = {
   Query,
@@ -13,7 +13,7 @@ module.exports = {
   Series,
   Character,
   Versus,
-  Ranking,
+  RankedCharacter,
   HTRTemplate,
   HTRInstance
 };

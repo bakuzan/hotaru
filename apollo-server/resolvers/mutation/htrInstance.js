@@ -13,107 +13,101 @@ const {
   BracketStatuses,
   Orders
 } = require('../../constants/enums');
-const createSeeding = require('../../utils/seeder');
+const createSeeding = require('../../utils/createSeeding');
 
 function typeProtection(instance) {
   if (
     instance.type !== HTRTemplateTypes.bracket &&
     instance.type !== HTRTemplateTypes.list
   ) {
-    throw Error('Invalid instance type.');
+    throw Error('Invalid HTR Instance type.');
   }
 }
 
 module.exports = {
-  htrInstanceCreate(_, { instance }, context) {
+  async htrInstanceCreate(_, { instance }, context) {
     typeProtection(instance);
 
-    return db.transaction((transaction) =>
-      HTRTemplate.findByPk(instance.htrTemplateId, { transaction }).then(
-        (template) => {
-          const { characterIds, versus, ...data } = instance;
+    return db.transaction(async (transaction) => {
+      const template = await HTRTemplate.findByPk(instance.htrTemplateId, {
+        transaction
+      });
 
-          return HTRInstance.create(
-            {
-              ...data,
-              settings: {
-                ...data.settings,
-                rules: template.rules,
-                customOrder:
-                  data.settings.order === Orders.Custom
-                    ? data.settings.customOrder
-                    : null
-              }
-            },
-            { transaction }
-          )
-            .then(async (newInstance) => {
-              if (template.type === HTRTemplateTypes.List) {
-                return await newInstance
-                  .setCharacters(characterIds, { transaction })
-                  .then(() => newInstance);
-              } else {
-                const isSeeded = template.rules.isSeeded;
-                return await context.Character.findFromRules(
-                  {
-                    rules: template.rules
-                  },
-                  {
-                    transaction,
-                    limit: data.settings.limit,
-                    order: db.literal('RANDOM()'),
-                    include: isSeeded ? [Ranking] : null
-                  }
-                ).then((queryCharacters) => {
-                  const preppedData = isSeeded
-                    ? createSeeding(queryCharacters, data.settings.limit)
-                    : { characters: queryCharacters };
+      const { characterIds, versus, ...data } = instance;
+      const newInstance = await HTRInstance.create(
+        {
+          ...data,
+          settings: {
+            ...data.settings,
+            rules: template.rules,
+            customOrder:
+              data.settings.order === Orders.Custom
+                ? data.settings.customOrder
+                : null
+          }
+        },
+        { transaction }
+      );
 
-                  return context.Versus.createForCharacters(
-                    VersusTypes.Bracket,
-                    preppedData.characters,
-                    {
-                      transaction,
-                      bracketLimit: data.settings.limit
-                    }
-                  ).then((firstRoundVersus) => {
-                    const firstRoundIds = firstRoundVersus.map((x) => x.id);
-                    return newInstance
-                      .setVersus(firstRoundIds, { transaction })
-                      .then(() =>
-                        HTRInstance.update(
-                          {
-                            settings: {
-                              ...newInstance.settings,
-                              layout: [firstRoundIds],
-                              seedOrder: preppedData.seedOrder,
-                              status: BracketStatuses.NotStarted
-                            }
-                          },
-                          { where: { id: newInstance.id }, transaction }
-                        )
-                      )
-                      .then(() => newInstance);
-                  });
-                });
-              }
-            })
-            .then((newInstance) => {
-              const includes = template.rules.isSeeded ? [Ranking] : [];
+      if (template.type === HTRTemplateTypes.List) {
+        return await newInstance
+          .setCharacters(characterIds, { transaction })
+          .then(() => newInstance);
+      }
 
-              return newInstance.reload({
-                transaction,
-                include: [
-                  {
-                    model: Versus,
-                    include: [{ model: Character, include: [...includes] }]
-                  }
-                ]
-              });
-            });
+      const isSeeded = template.rules.isSeeded;
+      const queryCharacters = await context.Character.findFromRules(
+        {
+          rules: template.rules
+        },
+        {
+          transaction,
+          limit: data.settings.limit,
+          order: db.literal('RANDOM()')
         }
-      )
-    );
+      );
+
+      const preppedData = isSeeded
+        ? await createSeeding(context, queryCharacters, {
+            transaction,
+            bracketLimit: data.settings.limit
+          })
+        : await Promise.resolve({ characters: queryCharacters });
+
+      const firstRoundVersus = await context.Versus.createForCharacters(
+        VersusTypes.Bracket,
+        preppedData.characters,
+        {
+          transaction,
+          bracketLimit: data.settings.limit
+        }
+      );
+
+      const firstRoundIds = firstRoundVersus.map((x) => x.id);
+      await newInstance.setVersus(firstRoundIds, { transaction });
+
+      await HTRInstance.update(
+        {
+          settings: {
+            ...newInstance.settings,
+            layout: [firstRoundIds],
+            seedOrder: preppedData.seedOrder,
+            status: BracketStatuses.NotStarted
+          }
+        },
+        { where: { id: newInstance.id }, transaction }
+      );
+
+      return await newInstance.reload({
+        transaction,
+        include: [
+          {
+            model: Versus,
+            include: [Character]
+          }
+        ]
+      });
+    });
   },
   htrInstanceUpdate(_, { instance }) {
     typeProtection(instance);

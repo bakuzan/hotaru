@@ -11,7 +11,6 @@ module.exports = gql`
     tags: [Tag]
     tagIds: [Int]
     images: [Image]
-    ranking: Ranking
     isWaifu: Boolean
   }
   type CharacterPage {

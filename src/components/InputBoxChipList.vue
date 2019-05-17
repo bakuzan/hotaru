@@ -1,7 +1,7 @@
 <template>
   <div :class="classes">
-    <InputBoxAutocomplete 
-      v-bind="$props" 
+    <InputBoxAutocomplete
+      v-bind="$props"
       :filter="filter"
       :input-props="clearableInputProps"
       allow-create
@@ -30,7 +30,7 @@ import classNames from 'classnames';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import InputBoxChipListTag from '@/components/InputBoxChipListTag';
 
-import KeyCodes from '@/constants/key-codes';
+import KeyCodes from '@/constants/keyCodes';
 import { generateUniqueId } from '@/utils';
 
 export default {

@@ -133,7 +133,7 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import SourceType from '@/constants/source-type';
+import SourceType from '@/constants/sourceType';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData } from '@/utils';
 import {

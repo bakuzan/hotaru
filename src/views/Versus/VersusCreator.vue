@@ -112,12 +112,12 @@ import { SeriesCard } from '@/components/Cards';
 
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
-import GenderType from '@/constants/gender-type';
-import SourceType from '@/constants/source-type';
+import GenderType from '@/constants/genderType';
+import SourceType from '@/constants/sourceType';
 import { Query, Mutation } from '@/graphql';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
 import { versusCreatorDefaultRules } from '@/utils/models';
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 
 export default {
   name: 'VersusCreator',

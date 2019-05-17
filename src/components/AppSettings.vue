@@ -53,9 +53,9 @@ import WhiteBackSvg from '@/assets/arrow_back_white.svg';
 import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
-import appThemes from '@/constants/app-themes';
-import GenderType from '@/constants/gender-type';
-import SourceType from '@/constants/source-type';
+import appThemes from '@/constants/appThemes';
+import GenderType from '@/constants/genderType';
+import SourceType from '@/constants/sourceType';
 import * as LP from '@/utils/list-pages';
 import * as htrLocal from '@/utils/storage';
 

@@ -66,11 +66,12 @@ import MultiSelect from '@/components/MultiSelect';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 
 import Strings from '@/constants/strings';
-import GenderType from '@/constants/gender-type';
-import SourceType from '@/constants/source-type';
+import GenderType from '@/constants/genderType';
+import SourceType from '@/constants/sourceType';
 import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';
+import formatForRankingCard from '@/utils/formatForRankingCard';
 import * as LP from '@/utils/list-pages';
 
 export default {
@@ -157,12 +158,7 @@ export default {
       LP.showMore(this, 'rankingsPaged', 'RankingPage');
     },
     formatForRankingCard: function(item) {
-      return {
-        ...item.ranking,
-        character: {
-          ...item
-        }
-      };
+      return formatForRankingCard(item);
     }
   }
 };

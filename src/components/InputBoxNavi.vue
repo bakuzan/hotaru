@@ -1,16 +1,16 @@
 <template>
-  <InputBoxAutocomplete 
+  <InputBoxAutocomplete
     :id="id"
+    :options="options"
+    :filter="filter"
     class="input-navi"
     name="navigationFilter"
     label="Go To"
     attr="name"
-    menuClass="input-navi__menu"
-    :options="options"
-    :filter="filter"
+    menu-class="input-navi__menu"
+    portal-menu
     @input="onInput"
     @on-select="onSelect"
-    portal-menu
   />
 </template>
 
@@ -18,8 +18,8 @@
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import KeyCodes from '@/constants/key-codes';
-import HTRTemplateType from '@/constants/htr-template-type';
+import KeyCodes from '@/constants/keyCodes';
+import HTRTemplateType from '@/constants/htrTemplateType';
 import { generateUniqueId, createListeners } from '@/utils';
 
 const excludes = ['pageNotFound'];

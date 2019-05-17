@@ -10,7 +10,7 @@ const {
 const SQL = require('../../db-scripts');
 const { HTRTemplateTypes, VersusTypes } = require('../../constants/enums');
 const Utils = require('../../utils');
-const generateLeagueMatches = require('../../utils/league-matches');
+const generateLeagueMatches = require('../../utils/leagueMatches');
 
 module.exports = {
   htrInstanceLeagueCreate(_, __, context) {

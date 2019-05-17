@@ -1,5 +1,3 @@
-const { chunk } = require('./index');
-
 module.exports = function leagueMatchPairs(characters) {
   const characterCount = characters.length;
   if (characterCount % 2 !== 0) {

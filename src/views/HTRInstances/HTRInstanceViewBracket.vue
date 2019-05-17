@@ -1,7 +1,16 @@
 <template>
-  <div class="bracket" :ref="bracketRef">
-    <canvas class="bracket__canvas" :ref="canvasRef" width="7600" height="16800"></canvas>
-    <div v-for="(round, i) in customBracketLayout" :key="i" class="bracket__round">
+  <div :ref="bracketRef" class="bracket">
+    <canvas
+      :ref="canvasRef"
+      class="bracket__canvas"
+      width="7600"
+      height="16800"
+    ></canvas>
+    <div
+      v-for="(round, i) in customBracketLayout"
+      :key="i"
+      class="bracket__round"
+    >
       <VersusWidget
         v-for="match in round"
         v-bind="match"
@@ -26,7 +35,7 @@ import Urls from '@/constants/urls';
 import { generateUniqueId, bracketProgression, orderBy } from '@/utils';
 import { Query, Mutation } from '@/graphql';
 import { mapHTRInstanceToStore } from '@/utils/mappers';
-import BracketLineDrawer from '@/utils/bracket-line-drawer';
+import BracketLineDrawer from '@/utils/bracketLineDrawer';
 
 export default {
   name: 'HTRInstanceViewBracket',
@@ -35,7 +44,8 @@ export default {
   },
   props: {
     bracketId: {
-      type: Number
+      type: Number,
+      required: true
     },
     items: {
       type: Array,
@@ -56,25 +66,6 @@ export default {
       resizeListeners: null,
       bracketService: null
     };
-  },
-  watch: {
-    customBracketLayout: function(newV, oldV) {
-      const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
-      if (dataUpdated) {
-        this.$nextTick(this.updateCanvas);
-      }
-    }
-  },
-  mounted() {
-    const canvas = this.$refs[this.canvasRef];
-    this.bracketService = new BracketLineDrawer(canvas, this.$el);
-    this.zoomController = panzoom(this.$refs[this.bracketRef], {
-      zoomSpeed: 0.1,
-      maxZoom: 2,
-      minZoom: 0.05,
-      smoothScroll: true,
-      zoomDoubleClickSpeed: 4
-    });
   },
   computed: {
     bracketRounds: function() {
@@ -151,6 +142,25 @@ export default {
 
       return customBracketLayout;
     }
+  },
+  watch: {
+    customBracketLayout: function(newV, oldV) {
+      const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
+      if (dataUpdated) {
+        this.$nextTick(this.updateCanvas);
+      }
+    }
+  },
+  mounted() {
+    const canvas = this.$refs[this.canvasRef];
+    this.bracketService = new BracketLineDrawer(canvas, this.$el);
+    this.zoomController = panzoom(this.$refs[this.bracketRef], {
+      zoomSpeed: 0.1,
+      maxZoom: 2,
+      minZoom: 0.05,
+      smoothScroll: true,
+      zoomDoubleClickSpeed: 4
+    });
   },
   methods: {
     isFinal: function(index) {

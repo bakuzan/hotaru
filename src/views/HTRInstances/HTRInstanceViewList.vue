@@ -1,19 +1,19 @@
 <template>
   <div class="instance-view">
-    <List 
-      columns="one"
+    <List
       :is-sortable="isCustomOrder"
       :items="sortedItems"
+      columns="one"
       @update="onSorting"
     >
       <template slot-scope="slotProps">
         <ListFigureCard
           v-show="isNotRankSorted"
-          v-bind="slotProps.item" 
+          v-bind="slotProps.item"
+          :url-source="cardUrl"
+          :remove="handleRemove"
           figure-size="small"
           figure-direction="row"
-          :url-source="cardUrl" 
-          :remove="handleRemove"
         />
         <RankingCard
           v-show="!isNotRankSorted"
@@ -31,7 +31,7 @@ import List from '@/components/List';
 import { ListFigureCard, RankingCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
-import { Orders } from '@/constants/htr-instance-settings';
+import { Orders } from '@/constants/htrInstanceSettings';
 import { orderBy } from '@/utils';
 
 export default {
@@ -51,7 +51,8 @@ export default {
       required: true
     },
     customOrder: {
-      type: Array
+      type: Array,
+      default: () => []
     }
   },
   data: function() {

@@ -12,7 +12,10 @@
           columns="one"
         >
           <template slot-scope="slotProps">
-            <RankingCard v-bind="slotProps.item" :figure-size="null" />
+            <RankingCard
+              v-bind="formatRankCharacter(slotProps.item)"
+              :figure-size="null"
+            />
           </template>
         </List>
       </section>
@@ -69,10 +72,11 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 import CharacterOfTheDayWidget from '@/components/Widgets/CharacterOfTheDayWidget';
 import HonoursWidget from '@/components/Widgets/HonoursWidget';
 
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 import Urls from '@/constants/urls';
 import { Query, Mutation } from '@/graphql';
 import { mapVersusToVotedVersus } from '@/utils/mappers';
+import formatForRankingCard from '@/utils/formatForRankingCard';
 import { createErrorStringFromGraphql } from '@/utils';
 
 export default {
@@ -128,6 +132,9 @@ export default {
     }
   },
   methods: {
+    formatRankCharacter: function(o) {
+      return formatForRankingCard(o);
+    },
     onRandom: function() {
       this.$apollo
         .query({

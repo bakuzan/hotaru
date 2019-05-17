@@ -1,5 +1,5 @@
-import Validator, { ValidatorResponse } from './validator-base';
-import { HTRTemplateTypes } from '@/constants/htr-template-type';
+import Validator, { ValidatorResponse } from './validatorBase';
+import { HTRTemplateTypes } from '@/constants/htrTemplateType';
 
 const instance = new Validator((obj) => {
   const response = new ValidatorResponse();

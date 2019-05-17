@@ -4,9 +4,9 @@ import tags from './tags';
 import image from './image';
 import versus from './versus';
 import ranking from './ranking';
-import htrTemplate from './htr-template';
-import htrInstance from './htr-instance';
-import htrInstanceLeague from './htr-instance-league';
+import htrTemplate from './htrTemplate';
+import htrInstance from './htrInstance';
+import htrInstanceLeague from './htrInstanceLeague';
 import honours from './honours';
 import gauntlet from './gauntlet';
 

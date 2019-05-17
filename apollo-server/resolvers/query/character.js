@@ -2,7 +2,7 @@ const Op = require('sequelize').Op;
 
 const { db, Character, Series } = require('../../connectors');
 const Utils = require('../../utils');
-const resolveCharacterInQueryParams = require('../../utils/resolve-character-in-query-params');
+const resolveCharacterInQueryParams = require('../../utils/resolveCharacterInQueryParams');
 
 module.exports = {
   charactersPaged(_, { search = '', genders, sources, paging = {} }) {

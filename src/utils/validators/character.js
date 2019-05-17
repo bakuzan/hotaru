@@ -1,4 +1,4 @@
-import Validator, { ValidatorResponse } from './validator-base';
+import Validator, { ValidatorResponse } from './validatorBase';
 
 const instance = new Validator((character) => {
   const response = new ValidatorResponse();

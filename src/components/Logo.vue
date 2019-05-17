@@ -12,11 +12,11 @@
         {{ item.text }}
       </text>
       <text
+        :text-length="sideLength"
         class="word diagonal"
         x="50%"
         y="50%"
         dy="0.3em"
-        :textLength="sideLength"
         lengthAdjust="spacingAndGlyphs"
       >
         {{ upperText }}
@@ -29,7 +29,7 @@
 export default {
   name: 'Logo',
   props: {
-    id: String
+    id: { type: String, default: '' }
   },
   data: function() {
     return {

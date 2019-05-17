@@ -1,7 +1,7 @@
 const { Character, Versus } = require('../../connectors');
 const { VersusTypes } = require('../../constants/enums');
 
-const canContinueGauntlet = require('../../utils/can-continue-gauntlet');
+const canContinueGauntlet = require('../../utils/canContinueGauntlet');
 
 module.exports = {
   async gauntletCharacters(

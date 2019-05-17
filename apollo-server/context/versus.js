@@ -2,7 +2,7 @@ const Op = require('sequelize').Op;
 
 const { Versus } = require('../connectors');
 const Utils = require('../utils');
-const bracktCorrector = require('../utils/bracket-corrector');
+const bracktCorrector = require('../utils/bracketCorrector');
 
 async function createForCharacters(versusType, characters, options = {}) {
   const { transaction, bracketLimit } = options;

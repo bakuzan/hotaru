@@ -2,18 +2,22 @@ const gql = require('graphql-tag');
 
 module.exports = gql`
   type RankingPage {
-    nodes: [Character]
+    nodes: [RankedCharacter]
     total: Int
     hasMore: Boolean
   }
-  type Ranking {
+  type RankedCharacter {
     id: Int!
+    name: String
+    displayImage: String
+    gender: GenderType
+    seriesId: Int
+    isWaifu: Boolean
     total: Int
     wins: Int
     rank: Int
     ratio: Float
     score: Float
-    character: Character
   }
   type RankingPopulateResponse {
     success: Boolean

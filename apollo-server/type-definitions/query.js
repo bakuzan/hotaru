@@ -40,7 +40,7 @@ const Query = gql`
     versusHistoryComparison(characterIds: [Int]): VersusComparison
     versusSinglesNotWon: [Versus]
 
-    rankingsTopTen: [Ranking]
+    rankingsTopTen: [RankedCharacter]
     rankingsPaged(
       search: String
       genders: [GenderType]

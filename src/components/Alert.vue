@@ -31,7 +31,7 @@ import classNames from 'classnames';
 
 import { Button } from '@/components/Buttons';
 import Icons from '@/constants/icons';
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 
 export default {
   name: 'Alert',

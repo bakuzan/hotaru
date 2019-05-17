@@ -110,12 +110,10 @@ import Tickbox from '@/components/Tickbox';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import SourceType from '@/constants/source-type';
-import GenderType from '@/constants/gender-type';
-import HTRTemplateType, {
-  HTRTemplateTypes
-} from '@/constants/htr-template-type';
-import { Limit } from '@/constants/htr-instance-settings';
+import SourceType from '@/constants/sourceType';
+import GenderType from '@/constants/genderType';
+import HTRTemplateType, { HTRTemplateTypes } from '@/constants/htrTemplateType';
+import { Limit } from '@/constants/htrInstanceSettings';
 import { Query, Mutation } from '@/graphql';
 import { objectsAreEqual, getItemFromData } from '@/utils';
 import {

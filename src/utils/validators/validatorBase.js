@@ -1,4 +1,4 @@
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 
 class FormValidator {
   constructor(

@@ -111,12 +111,12 @@ import { Button } from '@/components/Buttons';
 import ListFilterBar from '@/components/ListFilterBar';
 import MultiSelect from '@/components/MultiSelect';
 
-import alertService from '@/utils/alert-service';
+import alertService from '@/utils/alertService';
 import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import GenderType from '@/constants/gender-type';
-import SourceType from '@/constants/source-type';
+import GenderType from '@/constants/genderType';
+import SourceType from '@/constants/sourceType';
 import { createErrorStringFromGraphql } from '@/utils';
 import {
   mapEnumToSelectBoxOptions,

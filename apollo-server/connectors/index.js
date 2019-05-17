@@ -3,8 +3,7 @@ const Sequelize = require('sequelize');
 const Constants = require('../constants/index');
 const Utils = require('../utils');
 const migrate = require('../config');
-const TestData = require('../config/test-data');
-const SQL = require('../db-scripts');
+const TestData = require('../config/testData');
 
 const db = new Sequelize(Constants.appName, null, null, {
   dialect: 'sqlite',
@@ -19,10 +18,9 @@ const SeriesModel = db.import('./series');
 const TagModel = db.import('./tag');
 const ImageModel = db.import('./image');
 const VersusModel = db.import('./versus');
-const RankingModel = db.import('./ranking');
-const CharacterOfTheDayModel = db.import('./character-of-the-day');
-const HTRTemplateModel = db.import('./htr-template');
-const HTRInstanceModel = db.import('./htr-instance');
+const CharacterOfTheDayModel = db.import('./characterOfTheDay');
+const HTRTemplateModel = db.import('./htrTemplate');
+const HTRInstanceModel = db.import('./htrInstance');
 
 // Create relationships
 SeriesModel.Character = SeriesModel.hasMany(CharacterModel);
@@ -48,9 +46,6 @@ CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
 });
 
 VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
-
-CharacterModel.Ranking = CharacterModel.hasOne(RankingModel);
-RankingModel.Character = RankingModel.belongsTo(CharacterModel);
 
 CharacterModel.CotD = CharacterModel.hasMany(CharacterOfTheDayModel);
 CharacterOfTheDayModel.Character = CharacterOfTheDayModel.belongsTo(
@@ -90,17 +85,6 @@ db.sync({ force: FORCE_DB_REBUILD })
       await tag.bulkCreate(TestData.tags);
       await htrTemplate.bulkCreate(TestData.templates);
     }
-  })
-  .then(() => {
-    db.transaction((transaction) =>
-      db
-        .query(SQL['delete_from_rankings'], { transaction })
-        .then(() => db.query(SQL['delete_rankings_sequence'], { transaction }))
-        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
-        .then(() => db.query(SQL['generate_rankings'], { transaction }))
-        .then(() => db.query(SQL['populate_rankings'], { transaction }))
-        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
-    );
   });
 
 const Character = db.models.character;
@@ -108,7 +92,6 @@ const Series = db.models.series;
 const Tag = db.models.tag;
 const Image = db.models.image;
 const Versus = db.models.versus;
-const Ranking = db.models.ranking;
 const CharacterOfTheDay = db.models.characterOfTheDay;
 const HTRTemplate = db.models.htrTemplate;
 const HTRInstance = db.models.htrInstance;
@@ -120,7 +103,6 @@ module.exports = {
   Tag,
   Image,
   Versus,
-  Ranking,
   CharacterOfTheDay,
   HTRTemplate,
   HTRInstance

@@ -1,13 +1,12 @@
-const { db, Tag } = require('../../connectors');
-const SQL = require('../../db-scripts');
+const { Tag } = require('../../connectors');
 
 const character = require('./character');
 const series = require('./series');
 const versus = require('./versus');
 const image = require('./image');
-const htrtemplate = require('./htr-template');
-const htrinstance = require('./htr-instance');
-const htrinstanceleague = require('./htr-instance-league');
+const htrtemplate = require('./htrTemplate');
+const htrinstance = require('./htrInstance');
+const htrinstanceleague = require('./htrInstanceLeague');
 const gauntlet = require('./gauntlet');
 
 module.exports = {
@@ -21,18 +20,5 @@ module.exports = {
   ...gauntlet,
   tagCreate(_, { tag }) {
     return Tag.create({ ...tag }).then((tag) => tag);
-  },
-  populateRankings() {
-    return db.transaction((transaction) =>
-      db
-        .query(SQL['delete_from_rankings'], { transaction })
-        .then(() => db.query(SQL['delete_rankings_sequence'], { transaction }))
-        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
-        .then(() => db.query(SQL['generate_rankings'], { transaction }))
-        .then(() => db.query(SQL['populate_rankings'], { transaction }))
-        .then(() => db.query(SQL['drop_ranking_temp'], { transaction }))
-        .then(() => ({ success: true, message: '' }))
-        .catch((error) => ({ success: false, message: error.message }))
-    );
   }
 };

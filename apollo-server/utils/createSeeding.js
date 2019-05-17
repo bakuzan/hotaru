@@ -1,16 +1,28 @@
-const { orderBy } = require('./index');
-const bracketCorrector = require('./bracket-corrector');
+const bracketCorrector = require('./bracketCorrector');
 
 const generateSeed = (n) =>
   n === 1
     ? [0]
     : generateSeed(n >> 1).reduce((p, c) => [...p, c, n - c - 1], []);
 
-module.exports = function seeder(chara, bracketLimit) {
+module.exports = async function createSeeding(
+  ctx,
+  chara,
+  { bracketLimit, ...opts }
+) {
   const characters = bracketCorrector(chara, bracketLimit);
-  const orderedCharacters = orderBy(
-    characters.map((x) => x.get({ plain: true })),
-    ['ranking.rank']
+
+  const orderedCharacters = await ctx.Ranking.getRankings(
+    {
+      search: '',
+      genders: null,
+      sources: null,
+      seriesIds: null,
+      characterIds: characters.map((x) => x.id),
+      skipNum: 0,
+      takeNum: 10000
+    },
+    opts
   );
 
   const seedOrder = orderedCharacters.map((x) => x.id);

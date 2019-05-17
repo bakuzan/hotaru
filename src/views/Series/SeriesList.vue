@@ -34,7 +34,7 @@ import MultiSelect from '@/components/MultiSelect';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
-import SourceType from '@/constants/source-type';
+import SourceType from '@/constants/sourceType';
 import { Query } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import { mapEnumToSelectBoxOptions } from '@/utils/mappers';

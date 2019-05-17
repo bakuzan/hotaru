@@ -10,7 +10,7 @@
       @blur="onBlur"
       @keydown="onKeyDown"
     />
-    <portal :to="portalTarget" v-if="portalMenu">
+    <portal v-if="portalMenu" :to="portalTarget">
       <ul v-show="hasSuggestions" :class="menuClasses">
         <InputBoxAutocompleteSuggestion
           v-for="(item, index) in suggestions"
@@ -19,8 +19,8 @@
           :index="index"
           :attr="attr"
           :item="item"
-          @on-select="onSelectAutocompleteSuggestion"
           :highlight-match="highlightMatchingText"
+          @on-select="onSelectAutocompleteSuggestion"
         />
       </ul>
       <ul v-show="showNoSuggestionsText" :class="menuClasses">
@@ -37,8 +37,8 @@
         :index="index"
         :attr="attr"
         :item="item"
-        @on-select="onSelectAutocompleteSuggestion"
         :highlight-match="highlightMatchingText"
+        @on-select="onSelectAutocompleteSuggestion"
       />
     </ul>
     <ul v-if="!portalMenu" v-show="showNoSuggestionsText" :class="menuClasses">
@@ -55,7 +55,7 @@ import classNames from 'classnames';
 import InputBox from '@/components/InputBox';
 import InputBoxAutocompleteSuggestion from '@/components/InputBoxAutocompleteSuggestion';
 
-import KeyCodes from '@/constants/key-codes';
+import KeyCodes from '@/constants/keyCodes';
 import Strings from '@/constants/strings';
 
 export default {
@@ -66,10 +66,12 @@ export default {
   },
   props: {
     label: {
-      type: String
+      type: String,
+      required: true
     },
     name: {
-      type: String
+      type: String,
+      default: ''
     },
     attr: {
       type: String,
@@ -96,10 +98,12 @@ export default {
       default: () => ({ class: '' })
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     menuClass: {
-      type: String
+      type: String,
+      default: ''
     },
     portalMenu: {
       type: Boolean,
@@ -113,9 +117,6 @@ export default {
       timer: null,
       portalTarget: Strings.portal.naviMenu
     };
-  },
-  beforeDestroy() {
-    clearTimeout(this.timer);
   },
   computed: {
     classes: function() {
@@ -158,6 +159,9 @@ export default {
     hasSuggestions: function() {
       return !!this.suggestions.length && this.showMenu;
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer);
   },
   methods: {
     onInput: function(value, name) {

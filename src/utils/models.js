@@ -1,5 +1,5 @@
 import Urls from '@/constants/urls';
-import { HTRTemplateTypes } from '@/constants/htr-template-type';
+import { HTRTemplateTypes } from '@/constants/htrTemplateType';
 import { generateUniqueId } from '@/utils';
 
 export const defaultCharacterModel = () => ({

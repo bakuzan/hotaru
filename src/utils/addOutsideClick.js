@@ -1,4 +1,4 @@
-import keyCodes from '../constants/key-codes';
+import keyCodes from '../constants/keyCodes';
 import { createListeners } from './index';
 
 export default function addOutsideClick(element, onOutsideClick) {
