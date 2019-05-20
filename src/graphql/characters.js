@@ -85,9 +85,6 @@ const getCharactersForTemplateRules = gql`
       id
       name
       displayImage
-      ranking {
-        rank
-      }
     }
   }
 `;
@@ -119,9 +116,6 @@ const getCharactersByIds = gql`
       id
       name
       displayImage
-      ranking {
-        rank
-      }
     }
   }
 `;

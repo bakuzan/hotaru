@@ -20,7 +20,7 @@ import WhiteLinkSVG from '@/assets/link_white.svg';
 export default {
   name: 'LinkImages',
   props: {
-    to: { type: String, required: true }
+    to: { type: String, default: '' }
   },
   data: function() {
     return {

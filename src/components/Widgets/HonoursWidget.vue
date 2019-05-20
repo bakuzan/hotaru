@@ -66,7 +66,8 @@ export default {
   },
   apollo: {
     honours: {
-      query: Query.getHonours
+      query: Query.getHonours,
+      fetchPolicy: 'network-only'
     }
   },
   computed: {

@@ -59,14 +59,14 @@ function buildQueryRules({ rules, search = '' }, options = {}) {
   };
 }
 
-function findFromRules(filters, options) {
+async function findFromRules(filters, options) {
   const queryRules = buildQueryRules(filters, options);
-  return Character.findAll(queryRules);
+  return await Character.findAll(queryRules);
 }
 
-function countFromRules(filters, options) {
+async function countFromRules(filters, options) {
   const queryRules = buildQueryRules(filters, options);
-  return Character.count(queryRules);
+  return await Character.count(queryRules);
 }
 
 module.exports = {

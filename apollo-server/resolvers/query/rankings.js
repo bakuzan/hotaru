@@ -41,7 +41,7 @@ module.exports = {
     };
 
     const nodes = await context.Ranking.getRankings({
-      search: '',
+      search,
       genders,
       sources,
       seriesIds: series,

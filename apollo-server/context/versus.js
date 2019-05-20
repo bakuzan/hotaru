@@ -8,10 +8,8 @@ async function createForCharacters(versusType, characters, options = {}) {
   const { transaction, bracketLimit } = options;
   const createdAt = Date.now() - 1000;
 
-  const versusCharacters = Utils.chunk(
-    bracktCorrector(characters, bracketLimit),
-    2
-  ).filter((x) => x.length === 2);
+  const bc = bracktCorrector(characters, bracketLimit);
+  const versusCharacters = Utils.chunk(bc, 2).filter((x) => x.length === 2);
 
   const versusCount = versusCharacters.length;
   if (!versusCount) {
@@ -19,27 +17,26 @@ async function createForCharacters(versusType, characters, options = {}) {
   }
 
   const versusShells = versusCharacters.map(() => ({ type: versusType }));
-  return await Versus.bulkCreate(versusShells, {
+  await Versus.bulkCreate(versusShells, {
     transaction
-  }).then(async () => {
-    const promises = [];
-    const createdVersus = await Versus.findAll({
-      where: { createdAt: { [Op.gte]: createdAt } },
-      transaction
-    });
+  });
 
-    createdVersus.forEach((v, i) => {
+  const createdVersus = await Versus.findAll({
+    where: { createdAt: { [Op.gte]: createdAt } },
+    transaction
+  });
+
+  await Promise.all(
+    createdVersus.map((v, i) => {
       const pairing = versusCharacters[i];
-      promises.push(v.setCharacters(pairing, { transaction }));
-    });
+      return v.setCharacters(pairing, { transaction });
+    })
+  );
 
-    return Promise.all(promises).then(() => {
-      const versusIds = createdVersus.map((x) => x.id);
-      return Versus.findAll({
-        where: { id: { [Op.in]: versusIds } },
-        transaction
-      });
-    });
+  const versusIds = createdVersus.map((x) => x.id);
+  return await Versus.findAll({
+    where: { id: { [Op.in]: versusIds } },
+    transaction
   });
 }
 

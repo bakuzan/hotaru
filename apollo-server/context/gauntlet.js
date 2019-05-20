@@ -2,12 +2,10 @@ const { db, Character } = require('../connectors');
 const SQL = require('../db-scripts');
 const Utils = require('../utils');
 
+const processArray = require('./utils/processArray');
+
 const GET_CHARACTERS = 'get_valid_gauntlet_characters';
 const COUNT_CHARACTERS = 'get_valid_gauntlet_characters_count';
-
-function processArray(arr) {
-  return arr.join(',') || null;
-}
 
 async function countGauntletCharacters({
   characterId = null,

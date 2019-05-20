@@ -33,9 +33,6 @@ const instanceCharacterFields = gql`
     id
     name
     displayImage
-    ranking {
-      rank
-    }
   }
 `;
 

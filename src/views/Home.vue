@@ -113,7 +113,8 @@ export default {
       }
     },
     rankingsTopTen: {
-      query: Query.getTopTen
+      query: Query.getTopTen,
+      fetchPolicy: 'network-only'
     }
   },
   computed: {
