@@ -16,8 +16,8 @@ import classNames from 'classnames';
 export default {
   name: 'NavLink',
   props: {
-    to: String,
-    name: String
+    to: { type: String, default: '' },
+    name: { type: String, default: '' }
   },
   computed: {
     classes: function() {
@@ -26,7 +26,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

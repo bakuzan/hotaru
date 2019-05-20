@@ -2,14 +2,14 @@
   <div class="rank-card">
     <Button
       v-if="remove"
+      :icon="removeIcon"
       class="rank-card__remove"
       size="small"
       theme="secondary"
-      :icon="removeIcon"
       @click="handleRemove"
     />
     <div class="rank-card__rank rank">
-      <div class="rank__bubble">{{rank}}</div>
+      <div class="rank__bubble">{{ rank }}</div>
     </div>
     <ImageCard
       v-bind="$props"
@@ -20,11 +20,16 @@
     />
     <div class="rank-card__content">
       <div class="rank-card__text">
-        <NavLink class="rank-card__link" :to="cardUrl" :title="character.name">{{character.name}}</NavLink>
+        <NavLink
+          :to="cardUrl"
+          :title="character.name"
+          class="rank-card__link"
+          >{{ character.name }}</NavLink
+        >
       </div>
-      <div class="rank-card__text">{{winsText}}</div>
-      <div class="rank-card__text">{{totalText}}</div>
-      <div class="rank-card__text">{{scoreText}}</div>
+      <div class="rank-card__text">{{ winsText }}</div>
+      <div class="rank-card__text">{{ totalText }}</div>
+      <div class="rank-card__text">{{ scoreText }}</div>
     </div>
   </div>
 </template>
@@ -46,19 +51,24 @@ export default {
   },
   props: {
     id: {
-      type: Number
+      type: Number,
+      required: true
     },
     rank: {
-      type: Number
+      type: Number,
+      required: true
     },
     score: {
-      type: Number
+      type: Number,
+      default: 0
     },
     wins: {
-      type: Number
+      type: Number,
+      default: 0
     },
     total: {
-      type: Number
+      type: Number,
+      default: 0
     },
     character: {
       type: Object,

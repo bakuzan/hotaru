@@ -1,13 +1,13 @@
 <template>
   <div id="app" class="app">
-    <Header/>
-    <Sidebar/>
+    <Header />
+    <Sidebar />
     <main>
       <div class="padded">
-        <router-view/>
+        <router-view />
       </div>
     </main>
-    <Alert/>
+    <Alert />
     <portal-target :name="portalName"></portal-target>
     <portal-target :name="naviPortalName"></portal-target>
   </div>

@@ -2,27 +2,31 @@
   <div :class="selectClasses">
     <select
       v-if="options.length"
-      class="select-box__input"
       :id="id"
       :name="name"
       :value="value"
       :disabled="disabled"
+      class="select-box__input"
       @change="handleChange"
     >
-      <option v-if="allowNulls" :value="null" class="select-box__option">None</option>
+      <option v-if="allowNulls" :value="null" class="select-box__option"
+        >None</option
+      >
       <option
         v-if="isRequiredWithNoValue"
         :value="null"
         class="select-box__option"
-      >Please select a {{text}}</option>
+        >Please select a {{ text }}</option
+      >
       <option
         v-for="item in options"
         :key="item.value"
         :value="item.value"
         class="select-box__option"
-      >{{item.text}}</option>
+        >{{ item.text }}</option
+      >
     </select>
-    <label :for="id">{{text}}</label>
+    <label :for="id">{{ text }}</label>
   </div>
 </template>
 
@@ -32,11 +36,12 @@ import classNames from 'classnames';
 export default {
   name: 'SelectBox',
   props: {
-    id: String,
-    name: String,
-    text: String,
+    id: { type: String, default: '' },
+    name: { type: String, default: '' },
+    text: { type: String, default: '' },
     value: {
-      type: [String, Number]
+      type: [String, Number],
+      default: ''
     },
     options: {
       type: Array,
@@ -51,7 +56,8 @@ export default {
       default: false
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -69,7 +75,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_extensions';

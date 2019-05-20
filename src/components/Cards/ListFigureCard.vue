@@ -2,26 +2,27 @@
   <div :class="classes">
     <Button
       v-if="remove"
+      :icon="removeIcon"
       class="list-figure-card__remove"
       size="small"
       theme="secondary"
-      :icon="removeIcon"
       @click="handleRemove"
     />
     <figure :class="figureClasses">
       <div v-if="isWaifu" class="heart" title="Waifu"></div>
       <div class="list-figure-card__image-wrapper">
-        <HTRImage :src="displayImage" :class="imageClasses" :alt="name"/>
+        <HTRImage :src="displayImage" :class="imageClasses" :alt="name" />
       </div>
       <figcaption v-if="!hideCaption" class="list-figure-card__caption">
         <NavLink
           v-if="itemUrl && name"
-          class="list-figure-card__link"
           :to="itemUrl"
           :target="linkTarget"
           :title="name"
-        >{{name}}</NavLink>
-        <div v-if="!itemUrl">{{name}}</div>
+          class="list-figure-card__link"
+          >{{ name }}</NavLink
+        >
+        <div v-if="!itemUrl">{{ name }}</div>
       </figcaption>
     </figure>
   </div>
@@ -46,10 +47,11 @@ export default {
   },
   props: {
     id: {
-      type: [String, Number]
+      type: [String, Number],
+      default: ''
     },
-    name: String,
-    displayImage: String,
+    name: { type: String, default: '' },
+    displayImage: { type: String, default: '' },
     isWaifu: {
       type: Boolean,
       default: false

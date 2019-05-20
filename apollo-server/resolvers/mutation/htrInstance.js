@@ -73,7 +73,6 @@ module.exports = {
         const preppedData = await Promise.resolve().then(async () => {
           if (isSeeded) {
             return await createSeeding(context, queryCharacters, {
-              transaction,
               bracketLimit
             });
           }

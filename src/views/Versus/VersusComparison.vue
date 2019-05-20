@@ -3,61 +3,80 @@
     <div class="versus-comparison__actions">
       <InputBoxAutocomplete
         id="characterFilter"
+        :options="characterSearchResults"
+        :filter="characterFilter"
         name="characterFilter"
         label="search characters"
         attr="name"
-        :options="characterSearchResults"
-        :filter="characterFilter"
+        disable-local-filter
         @input="onSearchCharacters"
         @on-select="onSelectCharacter"
-        disable-local-filter
       />
-      <Button theme="primary" :disabled="!hasTwoCharacters" @click="onTriggerQuery">Compare</Button>
+      <Button
+        :disabled="!hasTwoCharacters"
+        theme="primary"
+        @click="onTriggerQuery"
+        >Compare</Button
+      >
     </div>
     <div class="versus-comparison__content">
-      <div class="versus-comparison__item" v-for="c in activeCharacters" :key="c.id">
+      <div
+        v-for="c in activeCharacters"
+        :key="c.id"
+        class="versus-comparison__item"
+      >
         <Button
           v-show="c.isActive"
-          class="versus-comparison__remove"
           :icon="removeIcon"
+          class="versus-comparison__remove"
           @click="handleRemoveCharacter(c.id)"
         />
         <ListFigureCard
-          class="comparison-card"
-          figureClass="comparison-card__figure"
           v-bind="c"
           :url-source="cardUrl"
+          class="comparison-card"
+          figure-class="comparison-card__figure"
         />
       </div>
       <div class="comparison-summary">
-        <div class="comparison-summary__text">{{comparisonSummaryTotal}}</div>
-        <div class="comparison-summary__text">{{comparisonSummaryWinSplit}}</div>
+        <div class="comparison-summary__text">{{ comparisonSummaryTotal }}</div>
+        <div class="comparison-summary__text">
+          {{ comparisonSummaryWinSplit }}
+        </div>
       </div>
       <Tabs>
         <Tab name="HeadToHead">
-          <List class="comparison-list" columns="one" :items="versusHistoryComparison.headToHead">
+          <List
+            :items="versusHistoryComparison.headToHead"
+            class="comparison-list"
+            columns="one"
+          >
             <template slot-scope="slotProps">
               <VoteButton
-                class="versus-comparison__button"
                 :has-winner="!!slotProps.item.winnerId"
                 :is-winner="isWinner(slotProps.item, 0)"
+                class="versus-comparison__button"
               />
               <div class="versus-comparison__text">
-                <div>{{formatDate(slotProps.item.updatedAt)}}</div>
-                <div>{{slotProps.item.type}}</div>
+                <div>{{ formatDate(slotProps.item.updatedAt) }}</div>
+                <div>{{ slotProps.item.type }}</div>
               </div>
               <VoteButton
-                class="versus-comparison__button"
                 :has-winner="!!slotProps.item.winnerId"
                 :is-winner="isWinner(slotProps.item, 1)"
+                class="versus-comparison__button"
               />
             </template>
           </List>
         </Tab>
         <Tab name="OpponentsInCommon">
-          <List class="comparison-list" columns="one" :items="opponentsInCommon">
+          <List
+            :items="opponentsInCommon"
+            class="comparison-list"
+            columns="one"
+          >
             <template slot-scope="slotProps">
-              <VersusSharedOpponentCard v-bind="slotProps.item"/>
+              <VersusSharedOpponentCard v-bind="slotProps.item" />
             </template>
           </List>
         </Tab>
@@ -132,26 +151,6 @@ export default {
       }
     }
   },
-  created() {
-    if (
-      this.characterIds.every((x) => x === null) ||
-      this.characterIds.every(
-        (x) => !x || this.compareCharacters.some((c) => c.id === x)
-      )
-    )
-      return;
-
-    this.$apollo
-      .query({
-        query: Query.getCharactersByIds,
-        variables: { characterIds: this.characterIds }
-      })
-      .then(({ data, loading }) => {
-        if (!loading) {
-          this.compareCharacters.push(...data.charactersByIds);
-        }
-      });
-  },
   computed: {
     characterSearchResults: function() {
       const characters = this.characters || [];
@@ -206,6 +205,26 @@ export default {
         };
       });
     }
+  },
+  created() {
+    if (
+      this.characterIds.every((x) => x === null) ||
+      this.characterIds.every(
+        (x) => !x || this.compareCharacters.some((c) => c.id === x)
+      )
+    )
+      return;
+
+    this.$apollo
+      .query({
+        query: Query.getCharactersByIds,
+        variables: { characterIds: this.characterIds }
+      })
+      .then(({ data, loading }) => {
+        if (!loading) {
+          this.compareCharacters.push(...data.charactersByIds);
+        }
+      });
   },
   methods: {
     formatDate: function(date) {

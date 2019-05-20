@@ -1,16 +1,16 @@
 <template>
-  <label class="radio" :for="id" :aria-checked="checked">
+  <label :for="id" :aria-checked="checked" class="radio">
     <input
-      type="radio"
-      class="radio__input"
       :id="id"
       :name="name"
       :value="value"
       :checked="checked"
       :disabled="disabled"
+      type="radio"
+      class="radio__input"
       @change="onChange"
     />
-    <span>{{text}}</span>
+    <span>{{ text }}</span>
   </label>
 </template>
 
@@ -27,7 +27,8 @@ export default {
       required: true
     },
     text: {
-      type: String
+      type: String,
+      default: ''
     },
     value: {
       type: [String, Number, Boolean],
@@ -38,7 +39,8 @@ export default {
       required: true
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -49,7 +51,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 .radio {

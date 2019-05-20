@@ -1,11 +1,11 @@
 <template>
   <div :class="classes">
     <InputBox
-      class="list-filter__search"
       id="search"
+      :value="search"
+      class="list-filter__search"
       name="search"
       label="search"
-      :value="search"
       @input="onInput"
     />
     <slot :name="typeSlotName"></slot>
@@ -15,7 +15,8 @@
       theme="primary"
       size="small"
       @click="onClick"
-    >Add</Button>
+      >Add</Button
+    >
   </div>
 </template>
 

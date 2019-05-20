@@ -2,12 +2,12 @@
   <div class="image-selector">
     <LoadingBouncer v-show="isLoading" local />
     <InputBox
-      class="image-selector__input-box"
-      clearButtonClass="image-selector__clear"
       :id="inputBoxId"
       :name="inputBoxId"
-      label="Image Url"
       :value="imageUrl"
+      label="Image Url"
+      class="image-selector__input-box"
+      clear-button-class="image-selector__clear"
       @input="onInput"
     />
     <Button

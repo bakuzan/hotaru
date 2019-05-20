@@ -1,15 +1,15 @@
 <template>
-    <section class="character-of-the-day">
-      <header class="character-of-the-day__header">
-        <h4 class="character-of-the-day__title">Character of the Day</h4>
-      </header>
-      <LoadingBouncer v-show="isLoading" local />
-      <ListFigureCard
-        v-show="!isLoading"
-        v-bind="characterOfTheDay"
-        :url-source="cardUrl"
-      />
-    </section>
+  <section class="character-of-the-day">
+    <header class="character-of-the-day__header">
+      <h4 class="character-of-the-day__title">Character of the Day</h4>
+    </header>
+    <LoadingBouncer v-show="isLoading" local />
+    <ListFigureCard
+      v-show="!isLoading"
+      v-bind="characterOfTheDay"
+      :url-source="cardUrl"
+    />
+  </section>
 </template>
 
 <script>

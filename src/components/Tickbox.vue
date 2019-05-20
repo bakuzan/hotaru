@@ -2,15 +2,15 @@
   <div class="input-container">
     <label :class="tickboxClasses" :for="name">
       <input
-        type="checkbox"
-        class="tickbox__input"
         :id="name"
         :name="name"
         :checked="checked"
         :disabled="disabled"
+        type="checkbox"
+        class="tickbox__input"
         @change="onChange"
       />
-      {{text}}
+      {{ text }}
     </label>
   </div>
 </template>
@@ -22,24 +22,28 @@ export default {
   name: 'Tickbox',
   props: {
     id: {
-      type: [String, Number]
+      type: [String, Number],
+      default: ''
     },
     name: {
       type: String,
       required: true
     },
     text: {
-      type: String
+      type: String,
+      default: ''
     },
     checked: {
       type: Boolean,
       required: true
     },
     disabled: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     customTickbox: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -54,7 +58,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

@@ -36,7 +36,8 @@ export default {
       required: true
     },
     options: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     column: {
       type: Boolean,
@@ -60,7 +61,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

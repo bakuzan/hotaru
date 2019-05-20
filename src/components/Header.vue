@@ -1,26 +1,24 @@
 <template>
-    <div :class="headerClass">
-      <div :class="headerInnerClass">
-        <Logo :id="logoId" />
-      </div>
-      <div :class="headerInnerClass">
-        <InputBoxNavi />
-      </div>
-      <div :class="headerInnerClass">
-        <portal-target :name="backPortalName">
-        </portal-target>
-      </div>
-      <div class="flex-spacer"></div>
-      <h1 :class="titleClass">Hotaru</h1>
-      <div class="flex-spacer"></div>
-      <div :class="headerInnerClass">
-        <portal-target :name="portalName">
-        </portal-target>
-      </div>
-      <div :class="headerInnerClass">
-        <AppSettings />
-      </div>
+  <div :class="headerClass">
+    <div :class="headerInnerClass">
+      <Logo :id="logoId" />
     </div>
+    <div :class="headerInnerClass">
+      <InputBoxNavi />
+    </div>
+    <div :class="headerInnerClass">
+      <portal-target :name="backPortalName"> </portal-target>
+    </div>
+    <div class="flex-spacer"></div>
+    <h1 :class="titleClass">Hotaru</h1>
+    <div class="flex-spacer"></div>
+    <div :class="headerInnerClass">
+      <portal-target :name="portalName"> </portal-target>
+    </div>
+    <div :class="headerInnerClass">
+      <AppSettings />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,7 +76,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import '../styles/_variables';

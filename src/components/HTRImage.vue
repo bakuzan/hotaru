@@ -1,5 +1,5 @@
 <template>
-  <img class="image" :alt="alt" @error="onError">
+  <img :alt="alt" class="image" @error="onError" />
 </template>
 
 <script>
@@ -9,10 +9,12 @@ export default {
   name: 'HTRImage',
   props: {
     src: {
-      type: String
+      type: String,
+      default: ''
     },
     alt: {
-      type: String
+      type: String,
+      default: ''
     },
     forceLoad: {
       type: Boolean,
