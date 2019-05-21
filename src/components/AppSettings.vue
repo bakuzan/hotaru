@@ -19,14 +19,6 @@
           @on-select="onChange"
         />
       </li>
-      <li class="app-settings__item">
-        <ButtonWithFeedback
-          :update-state="getFeedbackUpdater"
-          theme="primary"
-          @click="updateRankings"
-          >Update Rankings</ButtonWithFeedback
-        >
-      </li>
     </DropdownMenu>
     <portal :to="backPortalTarget">
       <Button
@@ -45,18 +37,13 @@
 <script>
 import DropdownMenu from '@/components/DropdownMenu';
 import SelectBox from '@/components/SelectBox';
-import { ButtonWithFeedback } from '@/components/Buttons';
 import { Button } from '@/components/Buttons';
 
 import BlackBackSvg from '@/assets/arrow_back_black.svg';
 import WhiteBackSvg from '@/assets/arrow_back_white.svg';
-import { Query, Mutation } from '@/graphql';
 import Strings from '@/constants/strings';
 import Icons from '@/constants/icons';
 import appThemes from '@/constants/appThemes';
-import GenderType from '@/constants/genderType';
-import SourceType from '@/constants/sourceType';
-import * as LP from '@/utils/list-pages';
 import * as htrLocal from '@/utils/storage';
 
 export default {
@@ -64,7 +51,6 @@ export default {
   components: {
     DropdownMenu,
     SelectBox,
-    ButtonWithFeedback,
     Button
   },
   data: function() {
@@ -76,7 +62,6 @@ export default {
       icon: Icons.settings,
       appThemes,
       theme: '',
-      setFeedbackButtonState: null,
       lightThemes: ['theme--one'],
       backIcon: null,
       backPortalTarget: Strings.portal.backButton,
@@ -116,34 +101,6 @@ export default {
       this.themeName = htrLocal.saveTheme(value);
       this.setBackIcon();
       document.body.classList.add(this.themeName);
-    },
-    updateRankings: function() {
-      this.setFeedbackButtonState({ isLoading: true });
-      this.$apollo
-        .mutate({
-          mutation: Mutation.populateRankings,
-          refetchQueries: [
-            { query: Query.getTopTen },
-            {
-              query: Query.getRankingsPaged,
-              variables: {
-                search: '',
-                genders: [...GenderType],
-                sources: [...SourceType],
-                series: [],
-                paging: {
-                  page: 0,
-                  size: LP.size
-                }
-              }
-            }
-          ]
-        })
-        .then(() => this.setFeedbackButtonState({ isSuccess: true }))
-        .catch(() => this.setFeedbackButtonState({ isFailure: true }));
-    },
-    getFeedbackUpdater: function(fn) {
-      this.setFeedbackButtonState = fn;
     }
   }
 };

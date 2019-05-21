@@ -73,6 +73,14 @@ main {
 // App helpers
 .flex {
   display: flex;
+
+  &--column {
+    flex-direction: column;
+  }
+
+  &--grow {
+    flex: 1;
+  }
 }
 .center-contents {
   display: flex;

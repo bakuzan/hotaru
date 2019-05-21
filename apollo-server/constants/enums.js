@@ -27,7 +27,7 @@ const BracketStatus = Object.freeze(['NotStarted', 'InProgress', 'Complete']);
 const Order = Object.freeze([
   { id: 1, name: 'None' },
   { id: 2, name: 'Name' },
-  { id: 3, name: 'Rank' },
+
   { id: 4, name: 'Custom' }
 ]);
 

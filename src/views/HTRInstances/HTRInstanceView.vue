@@ -3,125 +3,127 @@
     <div class="page">
       <LoadingBouncer v-show="isLoading" />
       <div :class="instanceViewClasses">
-        <div class="page-view__row page-view__row--grow">
-          <div class="page-view__left-column">
-            <ViewBlockToggler
-              id="name"
-              :value="editInstance.name"
-              :lock-edit="isCreate"
-              :force-read-only="readOnly"
-              label="Name"
-            >
-              <InputBox
+        <div class="flex flex--column flex--grow">
+          <div class="page-view__row page-view__row--grow">
+            <div class="page-view__left-column">
+              <ViewBlockToggler
                 id="name"
                 :value="editInstance.name"
-                name="name"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
                 label="Name"
-                @input="onInput"
-              />
-            </ViewBlockToggler>
-            <ViewBlockToggler
-              id="limit"
-              :value="editInstance.settings.limit"
-              :lock-edit="isCreate"
-              :force-read-only="lockedReadOnlyBracket"
-              label="Limit"
-            >
-              <SelectBox
+              >
+                <InputBox
+                  id="name"
+                  :value="editInstance.name"
+                  name="name"
+                  label="Name"
+                  @input="onInput"
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
                 id="limit"
-                :options="mappedLimits"
                 :value="editInstance.settings.limit"
-                :disabled="!editInstance.htrTemplate"
-                name="limit"
-                text="Limit"
-                required
-                @on-select="onSettingsInput"
-              />
-            </ViewBlockToggler>
-            <ViewBlockToggler
-              v-if="isListType"
-              id="order"
-              :value="instanceOrder"
-              :lock-edit="isCreate"
-              :force-read-only="readOnly"
-              label="Order"
-            >
-              <SelectBox
+                :lock-edit="isCreate"
+                :force-read-only="lockedReadOnlyBracket"
+                label="Limit"
+              >
+                <SelectBox
+                  id="limit"
+                  :options="mappedLimits"
+                  :value="editInstance.settings.limit"
+                  :disabled="!editInstance.htrTemplate"
+                  name="limit"
+                  text="Limit"
+                  required
+                  @on-select="onSettingsInput"
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
+                v-if="isListType"
                 id="order"
-                :options="mappedOrders"
-                :value="editInstance.settings.order"
-                name="order"
-                text="Order"
-                required
-                @on-select="onSettingsInput"
-              />
-            </ViewBlockToggler>
-          </div>
-          <div class="page-view__content padded padded--standard">
-            <ViewBlockToggler
-              id="description"
-              :value="editInstance.description"
-              :lock-edit="isCreate"
-              :force-read-only="readOnly"
-              label="Description"
-            >
-              <InputBox
+                :value="instanceOrder"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
+                label="Order"
+              >
+                <SelectBox
+                  id="order"
+                  :options="mappedOrders"
+                  :value="editInstance.settings.order"
+                  name="order"
+                  text="Order"
+                  required
+                  @on-select="onSettingsInput"
+                />
+              </ViewBlockToggler>
+            </div>
+            <div class="page-view__content padded padded--standard">
+              <ViewBlockToggler
                 id="description"
                 :value="editInstance.description"
-                name="description"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
                 label="Description"
-                @input="onInput"
-              />
-            </ViewBlockToggler>
-            <ViewBlockToggler
-              id="htrTemplate"
-              :value="editInstance.htrTemplate"
-              :lock-edit="!editInstance.htrTemplate"
-              :force-read-only="lockedReadOnly"
-              label="Template"
-              @toggle="onRemoveTemplate"
-            >
-              <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
-                {{ value && value.name }}
-              </div>
-              <InputBoxAutocomplete
-                id="templateFilter"
-                :options="htrTemplates"
-                :filter="templateFilter"
-                name="templateFilter"
+              >
+                <InputBox
+                  id="description"
+                  :value="editInstance.description"
+                  name="description"
+                  label="Description"
+                  @input="onInput"
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
+                id="htrTemplate"
+                :value="editInstance.htrTemplate"
+                :lock-edit="!editInstance.htrTemplate"
+                :force-read-only="lockedReadOnly"
                 label="Template"
-                attr="name"
-                disable-local-filter
-                @input="onSearch"
-                @on-select="onSelectTemplate"
-              />
-            </ViewBlockToggler>
-            <ViewBlockToggler
-              v-if="isListType"
-              id="characters"
-              :lock-edit="isCreate"
-              :force-read-only="readOnly"
-              label="Characters"
-              value="Change selection?"
-            >
-              <InputBoxAutocomplete
-                id="characterFilter"
-                :options="filteredCharacters"
-                :filter="characterFilter"
-                :disabled="disableCharacterInput"
-                name="characterFilter"
+                @toggle="onRemoveTemplate"
+              >
+                <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
+                  {{ value && value.name }}
+                </div>
+                <InputBoxAutocomplete
+                  id="templateFilter"
+                  :options="htrTemplates"
+                  :filter="templateFilter"
+                  name="templateFilter"
+                  label="Template"
+                  attr="name"
+                  disable-local-filter
+                  @input="onSearch"
+                  @on-select="onSelectTemplate"
+                />
+              </ViewBlockToggler>
+              <ViewBlockToggler
+                v-if="isListType"
+                id="characters"
+                :lock-edit="isCreate"
+                :force-read-only="readOnly"
                 label="Characters"
-                attr="name"
-                disable-local-filter
-                @input="onSearch"
-                @on-select="onSelectCharacter"
-              />
-            </ViewBlockToggler>
+                value="Change selection?"
+              >
+                <InputBoxAutocomplete
+                  id="characterFilter"
+                  :options="filteredCharacters"
+                  :filter="characterFilter"
+                  :disabled="disableCharacterInput"
+                  name="characterFilter"
+                  label="Characters"
+                  attr="name"
+                  disable-local-filter
+                  @input="onSearch"
+                  @on-select="onSelectCharacter"
+                />
+              </ViewBlockToggler>
+            </div>
           </div>
-        </div>
-        <div v-if="isCreate" class="template-available-character-count">
-          <div>Available characters for current template:</div>
-          <div>{{ availableCharacterCount }}</div>
+          <div v-if="isCreate" class="template-available-character-count">
+            <div>Available characters for current template:</div>
+            <div>{{ availableCharacterCount }}</div>
+          </div>
         </div>
         <div :class="instanceContentClasses" :tabindex="0">
           <SeedIcon v-if="isSeeded" />
@@ -563,7 +565,7 @@ export default {
   border: 1px dashed transparent;
 
   &--wider {
-    flex-basis: 33%;
+    flex-basis: 40%;
   }
 }
 

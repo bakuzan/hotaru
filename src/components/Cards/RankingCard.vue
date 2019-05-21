@@ -50,17 +50,13 @@ export default {
     Button
   },
   props: {
-    id: {
-      type: Number,
-      required: true
-    },
     rank: {
       type: Number,
       required: true
     },
     score: {
       type: Number,
-      default: 0
+      default: null
     },
     wins: {
       type: Number,

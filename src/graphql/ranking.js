@@ -1,14 +1,5 @@
 import gql from 'graphql-tag';
 
-const populateRankings = gql`
-  mutation populateRankings {
-    populateRankings {
-      success
-      message
-    }
-  }
-`;
-
 const getTopTen = gql`
   query getTopTen {
     rankingsTopTen {
@@ -22,12 +13,6 @@ const getTopTen = gql`
   }
 `;
 
-/*
-        series {
-          id
-          name
-        }
- */
 const getRankingsPaged = gql`
   query getRankingsPaged(
     $search: String
@@ -61,8 +46,5 @@ export default {
   query: {
     getTopTen,
     getRankingsPaged
-  },
-  mutation: {
-    populateRankings
   }
 };

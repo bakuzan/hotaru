@@ -29,28 +29,16 @@ module.exports = {
   async htrInstanceCreate(_, { instance }, context) {
     typeProtection(instance);
 
-    let response = null;
-
-    const result = await db
+    return await db
       .transaction({
         autocommit: false,
         type: 'IMMEDIATE',
         retry: { max: 0 }
       })
-      .then(async (transaction) => {
-        let r = null;
-        return await htrInstanceCreateHandler(
-          instance,
-          context,
-          transaction,
-          (data) => {
-            console.log('CALLBACK');
-            response = data;
-          }
-        ).then(() => r);
-      });
-    console.log('done, return', response, result);
-    return response;
+      .then(
+        async (transaction) =>
+          await htrInstanceCreateHandler(instance, context, transaction)
+      );
   },
   htrInstanceUpdate(_, { instance }) {
     typeProtection(instance);

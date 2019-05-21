@@ -19,8 +19,4 @@ module.exports = gql`
     ratio: Float
     score: Float
   }
-  type RankingPopulateResponse {
-    success: Boolean
-    message: String
-  }
 `;

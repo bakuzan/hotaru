@@ -99,8 +99,6 @@ const Mutation = gql`
     versusVote(versusId: Int!, winnerId: Int!): Versus
     versusFromRules(rules: VersusRules): Versus
 
-    populateRankings: RankingPopulateResponse
-
     htrTemplateCreate(template: HTRTemplateInput): HTRTemplate
     htrTemplateUpdate(template: HTRTemplateUpdateInput): HTRTemplate
 
