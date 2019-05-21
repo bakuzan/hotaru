@@ -1,4 +1,3 @@
-const asyncSeries = require('async/series');
 const {
   db,
   HTRTemplate,
@@ -13,7 +12,7 @@ const {
   BracketStatuses,
   Orders
 } = require('../../constants/enums');
-const createSeeding = require('../../utils/createSeeding');
+const htrInstanceCreateHandler = require('./htrInstanceCreate');
 
 function typeProtection(instance) {
   const invalidType = ![
@@ -30,98 +29,28 @@ module.exports = {
   async htrInstanceCreate(_, { instance }, context) {
     typeProtection(instance);
 
-    return await db.transaction(async (transaction) => {
-      const { characterIds, versus, ...data } = instance;
+    let response = null;
 
-      return await HTRTemplate.findByPk(instance.htrTemplateId, {
-        transaction
+    const result = await db
+      .transaction({
+        autocommit: false,
+        type: 'IMMEDIATE',
+        retry: { max: 0 }
       })
-        .then(async (template) => {
-          const newInstance = await HTRInstance.create(
-            {
-              ...data,
-              settings: {
-                ...data.settings,
-                rules: template.rules,
-                customOrder:
-                  data.settings.order === Orders.Custom
-                    ? data.settings.customOrder
-                    : null
-              }
-            },
-            { transaction }
-          );
-
-          return { template, newInstance };
-        })
-        .then(async ({ template, newInstance }) => {
-          if (template.type === HTRTemplateTypes.List) {
-            return await newInstance
-              .setCharacters(characterIds, { transaction })
-              .then(() => newInstance);
+      .then(async (transaction) => {
+        let r = null;
+        return await htrInstanceCreateHandler(
+          instance,
+          context,
+          transaction,
+          (data) => {
+            console.log('CALLBACK');
+            response = data;
           }
-
-          const isSeeded = template.rules.isSeeded;
-          const bracketLimit = data.settings.limit;
-          const queryCharacters = await context.Character.findFromRules(
-            {
-              rules: template.rules
-            },
-            {
-              transaction,
-              limit: bracketLimit,
-              order: db.literal('RANDOM()')
-            }
-          );
-
-          const preppedData = await Promise.resolve().then(async () => {
-            if (isSeeded) {
-              return await createSeeding(context, queryCharacters, {
-                transaction,
-                bracketLimit
-              });
-            }
-
-            return await Promise.resolve({ characters: queryCharacters });
-          });
-
-          const firstRoundVersus = await context.Versus.createForCharacters(
-            VersusTypes.Bracket,
-            preppedData.characters,
-            {
-              transaction,
-              bracketLimit
-            }
-          );
-
-          const newInstanceId = newInstance.id;
-          const firstRoundIds = firstRoundVersus.map((x) => x.id);
-          await newInstance.setVersus(firstRoundIds, { transaction });
-
-          await HTRInstance.update(
-            {
-              settings: {
-                ...newInstance.settings,
-                layout: [firstRoundIds],
-                seedOrder: preppedData.seedOrder,
-                status: BracketStatuses.NotStarted
-              }
-            },
-            { where: { id: newInstanceId }, transaction }
-          ).then(async () => {
-            console.log('reloaded', newInstanceId);
-            return await HTRInstance.findByPk(newInstanceId, {
-              transaction,
-              include: [
-                {
-                  model: Versus,
-                  include: [{ model: Character }]
-                }
-              ]
-            });
-          });
-        });
-    });
+        ).then(() => r);
+      });
+    console.log('done, return', response, result);
+    return response;
   },
   htrInstanceUpdate(_, { instance }) {
     typeProtection(instance);
