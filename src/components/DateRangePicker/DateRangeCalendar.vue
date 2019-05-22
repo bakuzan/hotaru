@@ -173,8 +173,13 @@ $button-padding: 8px;
 .htr-calendar {
   display: flex;
   flex-direction: column;
+  max-width: 50%;
   padding: 5px;
   box-sizing: border-box;
+
+  @include respond-to-all((sm, xs)) {
+    max-width: 100%;
+  }
 
   &__controls {
     display: flex;
@@ -184,6 +189,7 @@ $button-padding: 8px;
   }
 
   &__shift-button {
+    min-width: 25px;
     padding: 3px 15px;
   }
 

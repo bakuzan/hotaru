@@ -51,6 +51,7 @@ export default {
 .date-range-picker {
   display: flex;
   flex: 1;
+  max-width: 100%;
 
   @include respond-to-all((xs, sm)) {
     flex-wrap: wrap;

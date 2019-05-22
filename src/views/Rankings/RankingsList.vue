@@ -183,7 +183,7 @@ export default {
 
   &__column {
     flex: 1;
-    max-width: 66%;
+    max-width: 60%;
     margin: 0 8px;
   }
 
@@ -195,5 +195,9 @@ export default {
       margin: 0;
     }
   }
+}
+
+.ranked-characters {
+  min-width: 400px;
 }
 </style>
