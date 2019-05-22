@@ -18,7 +18,15 @@ module.exports = {
   },
   async rankingsPaged(
     _,
-    { search = '', genders, sources, series, paging = { page: 0, size: 10 } },
+    {
+      search = '',
+      genders,
+      sources,
+      series,
+      fromDate,
+      toDate,
+      paging = { page: 0, size: 10 }
+    },
     context
   ) {
     const offset = paging.size * paging.page;
@@ -40,23 +48,15 @@ module.exports = {
       })
     };
 
-    const nodes = await context.Ranking.getRankings({
+    const { nodes, total } = await context.Ranking.getRankingsAndCount({
       search,
       genders,
       sources,
       seriesIds: series,
       skipNum: offset,
-      takeNum: paging.size
-    });
-
-    const total = await Character.count({
-      where: {
-        name: {
-          [Op.like]: `%${search}%`
-        },
-        ...resolvedArgs
-      },
-      include: [Series]
+      takeNum: paging.size,
+      fromDate,
+      toDate
     });
 
     return {

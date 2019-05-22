@@ -4,12 +4,14 @@ m_cte as (
 	select c.*, count(vc.characterId) as total
 	from characters as c
 	left join VersusCharacter as vc on c.id = vc.characterId
+	where vc.updatedAt >= :fromDate and vc.updatedAt < :toDate
 	group by c.id
 ),
 w_cte as (
 	select c.id, c.name, count(v.winnerId) as wins
 	from characters as c
 	left join versus as v on c.id = v.winnerId
+	where v.updatedAt >= :fromDate and v.updatedAt < :toDate
 	group by c.id
 ),
 ratio_cte as (

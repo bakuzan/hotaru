@@ -47,6 +47,8 @@ const Query = gql`
       sources: [SourceType]
       series: [Int]
       paging: Paging
+      fromDate: String
+      toDate: String
     ): RankingPage
 
     htrTemplatesPaged(
