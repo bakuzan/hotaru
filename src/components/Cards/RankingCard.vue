@@ -56,15 +56,15 @@ export default {
     },
     score: {
       type: Number,
-      default: null
+      default: undefined
     },
     wins: {
       type: Number,
-      default: 0
+      default: undefined
     },
     total: {
       type: Number,
-      default: 0
+      default: undefined
     },
     character: {
       type: Object,

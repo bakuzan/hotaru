@@ -90,6 +90,15 @@
     }
 
     // Buttons
+    .htr-calendar__shift-button {
+      background-color: $base-background;
+      color: $base-colour;
+
+      &:focus,
+      &:hover {
+        @include lighten-or-darken('background-color', $base-background, 10%);
+      }
+    }
     .button.themed-background {
       &:focus,
       &:hover {
@@ -123,6 +132,23 @@
       border: {
         color: $primary-background;
         bottom-color: $base-background;
+      }
+    }
+
+    // Calendar
+    .htr-calendar__view-button {
+      &:focus,
+      &:hover {
+        background-color: $active-background;
+        color: $active-colour;
+      }
+    }
+    .htr-calendar__view-button--selected {
+      &,
+      &:focus,
+      &:hover {
+        background-color: $active-background;
+        color: $active-colour;
       }
     }
 

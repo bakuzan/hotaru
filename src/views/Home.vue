@@ -212,10 +212,12 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/_variables';
 @import '../styles/_extensions';
+@import '../styles/_mixins';
 
 .home-content-column {
   flex-basis: unset;
   width: 30%;
+
   &:nth-child(2) {
     width: 40%;
   }
@@ -245,6 +247,26 @@ export default {
 .random-container {
   @extend %center-contents;
   margin-bottom: $app--margin-large;
+}
+
+@include respond-to(sm) {
+  .page-view {
+    flex-wrap: wrap;
+
+    .home-content-column {
+      width: 45%;
+      margin: 0 auto;
+    }
+  }
+}
+@include respond-to(xs) {
+  .page-view {
+    flex-direction: column;
+
+    .home-content-column {
+      width: 100%;
+    }
+  }
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

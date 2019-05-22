@@ -44,6 +44,14 @@
   }
 }
 
+@mixin respond-to-all($sizes) {
+  @each $size in $sizes {
+    @include respond-to($size) {
+      @content;
+    }
+  }
+}
+
 @mixin lighten-or-darken($key, $colour, $percentage) {
   @if lightness($colour) < 50% {
     #{$key}: lighten($colour, $percentage);

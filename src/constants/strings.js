@@ -63,5 +63,6 @@ export default Object.freeze({
     'Oct',
     'Nov',
     'Dec'
-  ]
+  ],
+  dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 });

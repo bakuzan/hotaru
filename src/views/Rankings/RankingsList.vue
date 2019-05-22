@@ -39,6 +39,12 @@
             </template>
           </List>
         </div>
+        <DateRangePicker
+          :slot="typeSlotName"
+          :from-date="filters.fromDate"
+          :to-date="filters.toDate"
+          @change="onInput"
+        />
       </ListFilterBar>
     </div>
     <List
@@ -64,6 +70,7 @@ import ListFilterBar from '@/components/ListFilterBar';
 import { RankingCard, SeriesCard } from '@/components/Cards';
 import MultiSelect from '@/components/MultiSelect';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
+import DateRangePicker from '@/components/DateRangePicker/DateRangePicker';
 
 import Strings from '@/constants/strings';
 import GenderType from '@/constants/genderType';
@@ -82,7 +89,8 @@ export default {
     RankingCard,
     SeriesCard,
     MultiSelect,
-    InputBoxAutocomplete
+    InputBoxAutocomplete,
+    DateRangePicker
   },
   data: function() {
     return {
@@ -95,7 +103,9 @@ export default {
         search: '',
         genders: [...GenderType],
         sources: [...SourceType],
-        series: []
+        series: [],
+        fromDate: new Date('2018-09-25'),
+        toDate: new Date()
       },
       seriesFilter: '',
       rankingsPaged: defaultPagedResponse(),
@@ -165,12 +175,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/_variables';
+@import '../../styles/_mixins';
+
 .page-rankings {
   display: flex;
 
   &__column {
     flex: 1;
-    margin: 0 10px;
+    max-width: 66%;
+    margin: 0 8px;
+  }
+
+  @include respond-to(xs) {
+    flex-direction: column;
+
+    &__column {
+      max-width: 100%;
+      margin: 0;
+    }
   }
 }
 </style>

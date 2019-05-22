@@ -20,6 +20,8 @@ const getRankingsPaged = gql`
     $sources: [SourceType]
     $series: [Int]
     $paging: Paging
+    $fromDate: String
+    $toDate: String
   ) {
     rankingsPaged(
       search: $search
@@ -27,6 +29,8 @@ const getRankingsPaged = gql`
       sources: $sources
       series: $series
       paging: $paging
+      fromDate: $fromDate
+      toDate: $toDate
     ) {
       nodes {
         id
