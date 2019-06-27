@@ -2,6 +2,7 @@
   <div :class="cardClasses" :id="versusId">
     <ListFigureCard
       v-bind="item"
+      class="versus-card__figure-card"
       :url-source="isDummy ? null : characterCardUrl"
       :figure-size="figureSize"
       :open-new-tab="openNewTab"
@@ -101,7 +102,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import '../../styles/_variables.scss';
 @import '../../styles/_extensions.scss';
@@ -127,5 +127,10 @@ export default {
     margin-top: -$seed-size;
     font-size: $seed-size * 0.5;
   }
+}
+</style>
+<style lang="scss">
+.list-figure-card.versus-card__figure-card {
+  height: auto;
 }
 </style>
