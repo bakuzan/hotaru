@@ -459,6 +459,12 @@ export default {
       }
     }
   },
+  mounted() {
+    const params = this.$route.query;
+    if (params && params.seriesId) {
+      this.editCharacter.seriesId = Number(params.seriesId);
+    }
+  },
   methods: {
     updateData: function(data) {
       const resolvedImages = data.images ? { images: [...data.images] } : {};

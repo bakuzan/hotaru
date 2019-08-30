@@ -67,38 +67,31 @@
                 />
               </ViewBlockToggler>
 
-              <ViewBlockToggler
-                id="characters"
-                :lock-edit="isCreate"
-                :force-read-only="readOnly"
-                value="Characters"
-                block-class="characters-view-block"
-              >
-                <InputBoxAutocomplete
-                  id="characterFilter"
-                  :options="characterSearchResults"
-                  :filter="characterFilter"
-                  name="characterFilter"
-                  label="Characters"
-                  attr="name"
-                  disable-local-filter
-                  @input="onSearchCharacters"
-                  @on-select="onSelectCharacter"
-                />
-              </ViewBlockToggler>
-              <List
-                :items="editSeries.characters"
-                class="characters"
-                item-class-name="characters__item"
-                is-grid="standard"
-              >
-                <template slot-scope="slotProps">
-                  <ListFigureCard
-                    v-bind="slotProps.item"
-                    :url-source="characterCardUrl"
-                  />
-                </template>
-              </List>
+              <div v-if="!isCreate" class="series-characters">
+                <div class="series-characters__header">
+                  <div class="series-characters__title">Characters</div>
+                  <div>
+                    <NavLink
+                      :to="characterCreateUrl + '?seriesId=' + editSeries.id"
+                      class="add-character-link"
+                      >Add character</NavLink
+                    >
+                  </div>
+                </div>
+                <List
+                  :items="editSeries.characters"
+                  class="characters"
+                  item-class-name="characters__item"
+                  is-grid="standard"
+                >
+                  <template slot-scope="slotProps">
+                    <ListFigureCard
+                      v-bind="slotProps.item"
+                      :url-source="characterCardUrl"
+                    />
+                  </template>
+                </List>
+              </div>
             </div>
           </div>
         </Tab>
@@ -130,6 +123,7 @@ import List from '@/components/List';
 import { ListFigureCard } from '@/components/Cards';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import LoadingBouncer from '@/components/LoadingBouncer';
+import NavLink from '@/components/NavLink';
 
 import Strings from '@/constants/strings';
 import Urls from '@/constants/urls';
@@ -153,12 +147,11 @@ function getInitialState() {
     viewBlockReadOnlySlot: Strings.slot.viewBlock,
     portalTarget: Strings.portal.actions,
     characterCardUrl: Urls.characterView,
+    characterCreateUrl: Urls.characterCreate,
     mutationLoading: false,
     readOnly: false,
     series: {},
     editSeries: defaultSeriesModel(),
-    characters: [],
-    characterFilter: '',
     mappedSources: mapEnumToSelectBoxOptions(SourceType),
     checkSeriesAlreadyExists: false
   };
@@ -178,7 +171,8 @@ export default {
     List,
     ListFigureCard,
     InputBoxAutocomplete,
-    LoadingBouncer
+    LoadingBouncer,
+    NavLink
   },
   props: {
     isCreate: {
@@ -230,27 +224,9 @@ export default {
         const { id, name } = this.editSeries;
         return { id, name };
       }
-    },
-    characters: {
-      query: Query.getCharactersWithoutSeries,
-      skip() {
-        return !this.characterFilter;
-      },
-      debounce: 1000,
-      variables() {
-        return { search: this.characterFilter };
-      },
-      update(data) {
-        return data.charactersWithoutSeries;
-      }
     }
   },
   computed: {
-    characterSearchResults: function() {
-      return this.characters.filter(
-        (x) => !this.editSeries.characters.some((y) => y.id === x.id)
-      );
-    },
     hasEdits: function() {
       return !objectsAreEqual(this.series, this.editSeries);
     },
@@ -276,18 +252,8 @@ export default {
     handleUserChanges: function(value, name) {
       this.editSeries[name] = value;
     },
-    onSearchCharacters: function(value) {
-      this.characterFilter = value;
-    },
-    onSelectCharacter: function(characterId) {
-      const character = this.characters.find((x) => x.id === characterId);
-      this.editSeries.characters = [...this.editSeries.characters, character];
-      this.characterFilter = '';
-    },
     cancel: function() {
       this.readOnly = true;
-      this.characters = [];
-      this.characterFilter = '';
       this.editSeries = { ...this.series };
       this.$nextTick(function() {
         this.readOnly = false;
@@ -367,13 +333,20 @@ export default {
 };
 </script>
 
-<style lang="scss">
-// try not to do this, but I'll give this case a pass
-.characters-view-block > .button {
-  font-weight: bold;
-  margin-left: -5px;
-}
+<style lang="scss" scoped>
+.series-characters {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
 
+  &__title {
+    font-weight: bold;
+  }
+}
+</style>
+
+<style lang="scss">
 .characters__item {
   flex: 0 0 24%;
 }

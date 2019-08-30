@@ -2,10 +2,10 @@
   <div :class="cardClasses" :id="versusId">
     <ListFigureCard
       v-bind="item"
-      class="versus-card__figure-card"
       :url-source="isDummy ? null : characterCardUrl"
       :figure-size="figureSize"
       :open-new-tab="openNewTab"
+      class="versus-card__figure-card"
     />
     <div
       v-if="item.seed"
