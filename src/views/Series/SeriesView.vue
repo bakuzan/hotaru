@@ -18,7 +18,29 @@
             class="span-column"
             value="Change image"
           >
-            <ImageUploader name="displayImage" @on-upload="handleUserChanges" />
+            <InputBox
+              v-if="showImageInput"
+              :value="editSeries.displayImage"
+              id="displayImageInput"
+              name="displayImage"
+              label="Display Image Url"
+              class
+              clear-button-class
+              @input="handleUserChanges"
+            />
+            <ImageUploader
+              v-else
+              name="displayImage"
+              @on-upload="handleUserChanges"
+            />
+
+            <Button
+              :icon="toggleImageIcon"
+              class="toggle-button"
+              id="toggleImageInput"
+              theme="primary"
+              @click="toggleImageInput"
+            />
           </ViewBlockToggler>
         </div>
       </div>
@@ -101,9 +123,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -126,6 +148,7 @@ import LoadingBouncer from '@/components/LoadingBouncer';
 import NavLink from '@/components/NavLink';
 
 import Strings from '@/constants/strings';
+import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
 import SourceType from '@/constants/sourceType';
 import { Query, Mutation } from '@/graphql';
@@ -148,6 +171,8 @@ function getInitialState() {
     portalTarget: Strings.portal.actions,
     characterCardUrl: Urls.characterView,
     characterCreateUrl: Urls.characterCreate,
+    toggleImageIcon: Icons.upDown,
+    showImageInput: true,
     mutationLoading: false,
     readOnly: false,
     series: {},
@@ -249,8 +274,15 @@ export default {
       this.series = { ...data };
       this.editSeries = { ...data };
     },
+    toggleImageInput: function() {
+      this.showImageInput = !this.showImageInput;
+    },
     handleUserChanges: function(value, name) {
       this.editSeries[name] = value;
+
+      if (name === 'displayImage') {
+        this.showImageInput = true;
+      }
     },
     cancel: function() {
       this.readOnly = true;

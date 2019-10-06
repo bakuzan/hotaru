@@ -16,5 +16,6 @@ export default Object.freeze({
   trophy: '\uD83C\uDFC6',
   seed: '\uD83C\uDF42',
   emptyBox: '\u2610',
-  tickbox: '\u2611'
+  tickbox: '\u2611',
+  upDown: '\u21F3\uFE0E'
 });

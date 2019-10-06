@@ -18,7 +18,29 @@
             class="span-column"
             value="Change image"
           >
-            <ImageUploader name="displayImage" @on-upload="handleUserChanges" />
+            <InputBox
+              v-if="showImageInput"
+              :value="editCharacter.displayImage"
+              id="displayImageInput"
+              name="displayImage"
+              label="Display Image Url"
+              class
+              clear-button-class
+              @input="handleUserChanges"
+            />
+            <ImageUploader
+              v-else
+              name="displayImage"
+              @on-upload="handleUserChanges"
+            />
+
+            <Button
+              :icon="toggleImageIcon"
+              class="toggle-button"
+              id="toggleImageInput"
+              theme="primary"
+              @click="toggleImageInput"
+            />
           </ViewBlockToggler>
           <TickboxHeart
             id="isWaifu"
@@ -89,7 +111,7 @@
                     :value="editCharacter.seriesId"
                     name="seriesId"
                     text="Series"
-                    allow-nulls
+                    required
                     @on-select="handleUserChanges"
                   />
                 </ViewBlockToggler>
@@ -134,10 +156,42 @@
         </Tab>
         <Tab name="Gallery">
           <div class="page-view__content view-info">
-            <ImageUploader
-              name="galleryImage"
-              @on-upload="onGalleryImageUpload"
-            />
+            <div class="gallery-controls">
+              <div v-if="showGalleryImageInput" class="gallery-controls__input">
+                <InputBox
+                  :value="galleryImage"
+                  id="galleryImageInput"
+                  name="galleryImage"
+                  label="Gallery Image Url"
+                  class
+                  clear-button-class
+                  @input="galleryImage = $event"
+                />
+                <Button
+                  :icon="addImageIcon"
+                  class="add-to-gallery-button"
+                  id="addGalleryImage"
+                  theme="primary"
+                  title="Add url to gallery"
+                  aria-label="Add url to gallery"
+                  @click="onGalleryImageUpload(galleryImage)"
+                />
+              </div>
+              <ImageUploader
+                v-else
+                name="galleryImage"
+                @on-upload="onGalleryImageUpload"
+              />
+
+              <Button
+                :icon="toggleImageIcon"
+                class="toggle-button"
+                id="toggleGalleryImageInput"
+                theme="primary"
+                @click="toggleGalleryImageInput"
+              />
+            </div>
+
             <List
               :items="characterImages"
               class="gallery"
@@ -177,9 +231,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -206,6 +260,7 @@ import NavLink from '@/components/NavLink';
 import LinkImages from '@/components/LinkImages';
 
 import Strings from '@/constants/strings';
+import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/genderType';
 import { Query, Mutation } from '@/graphql';
@@ -232,6 +287,10 @@ function getInitialState() {
     portalTarget: Strings.portal.actions,
     lightThemes: ['one'],
     mappedGenders: mapEnumToSelectBoxOptions(GenderType),
+    toggleImageIcon: Icons.upDown,
+    addImageIcon: '+',
+    showImageInput: true,
+    showGalleryImageInput: true,
     mutationLoading: false,
     readOnly: false,
     editCharacter: defaultCharacterModel(),
@@ -242,7 +301,8 @@ function getInitialState() {
       ...defaultPagedResponse(),
       hasMore: false
     },
-    checkCharacterAlreadyExists: false
+    checkCharacterAlreadyExists: false,
+    galleryImage: ''
   };
 }
 
@@ -321,7 +381,7 @@ export default {
       },
       variables() {
         const { id, name, seriesId } = this.editCharacter;
-        return { id, name, seriesId };
+        return { id, name, seriesId: Number(seriesId) };
       }
     },
     series: {
@@ -437,6 +497,8 @@ export default {
   },
   watch: {
     $route: function(newRoute, oldRoute) {
+      // TODO
+      // Check if only tab changed!
       if (newRoute.path === Urls.characterCreate) {
         Object.assign(this.$data, getInitialState());
       }
@@ -449,11 +511,14 @@ export default {
       if (sameRoute && differentId) {
         const tabHash = newRoute.hash;
         const id = Number(Routing.getParam(this.$router, 'id'));
-        this.$apollo.queries.character.refetch({ id });
 
-        if (tabHash === '#versus') {
+        if (id) {
+          this.$apollo.queries.character.refetch({ id });
+        }
+
+        if (tabHash === '#versus' && id) {
           this.$apollo.queries.versusHistoryPaged.refetch({ characterId: id });
-        } else if (tabHash === '#gallery') {
+        } else if (tabHash === '#gallery' && id) {
           this.$apollo.queries.imagesForCharacter.refetch({ characterId: id });
         }
       }
@@ -473,15 +538,30 @@ export default {
       this.character = { ...data, ...resolvedImages };
       this.editCharacter = { ...data, ...resolvedImages };
     },
+    toggleImageInput: function() {
+      this.showImageInput = !this.showImageInput;
+    },
+    toggleGalleryImageInput: function() {
+      this.showGalleryImageInput = !this.showGalleryImageInput;
+    },
     handleUserChanges: function(value, name) {
       this.editCharacter[name] = value;
+
+      if (name === 'displayImage') {
+        this.showImageInput = true;
+      }
     },
     onGalleryImageUpload: function(value) {
+      if (!value) {
+        return;
+      }
+
       const newImage = { id: generateUniqueId(), url: value };
       const currentImages = this.editCharacter.images || [];
       const index = currentImages.length;
 
       this.$set(this.editCharacter.images, index, newImage);
+      this.galleryImage = '';
     },
     onRemoveImage: function(imageId) {
       this.editCharacter.images = [
@@ -599,11 +679,13 @@ export default {
         });
     },
     handleTabChange: function(tabHash) {
-      if (tabHash === '#versus') {
-        this.$apollo.queries.versusHistoryPaged.skip = false;
-      } else if (tabHash === '#gallery') {
-        this.$apollo.queries.imagesForCharacter.skip = false;
-      }
+      const id = Number(Routing.getParam(this.$router, 'id'));
+      const hasId = !!id;
+      const isVersusTab = tabHash === '#versus';
+      const isImagesTab = tabHash === '#gallery';
+
+      this.$apollo.queries.versusHistoryPaged.skip = !hasId || !isVersusTab;
+      this.$apollo.queries.imagesForCharacter.skip = !hasId || !isImagesTab;
     },
     showMore: function() {
       LP.showMore(this, 'versusHistoryPaged', 'VersusPage');
@@ -621,6 +703,27 @@ export default {
     display: flex;
     flex: 1;
   }
+}
+
+.gallery-controls {
+  display: flex;
+  width: 100%;
+
+  > div {
+    flex: 1;
+  }
+
+  &__input {
+    display: flex;
+    flex: 1;
+  }
+}
+
+.add-to-gallery-button {
+  min-width: 20px;
+  max-height: 40px;
+  padding: 2px;
+  margin: 2px;
 }
 </style>
 <style lang="scss" src="../../styles/_page-view.scss" />

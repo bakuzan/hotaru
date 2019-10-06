@@ -1,8 +1,9 @@
 <template>
-  <img :alt="alt" class="image" @error="onError" />
+  <img :alt="alt" :class="classes" @error="onError" />
 </template>
 
 <script>
+import classNames from 'classnames';
 import Urls from '@/constants/urls';
 
 export default {
@@ -40,6 +41,11 @@ export default {
       }
     }
   },
+  computed: {
+    classes: function() {
+      return classNames('image', { 'image--empty': !this.src });
+    }
+  },
   mounted() {
     this.$nextTick(function() {
       if (!this.forceLoad) {
@@ -60,6 +66,10 @@ export default {
   },
   methods: {
     getImageWithSuffix: function(url) {
+      if (!url.includes('imgur')) {
+        return url;
+      }
+
       const parts = url.split('.');
       const img = parts.slice(0, -1).join('.');
       const ext = parts.slice(-1).pop();
@@ -85,5 +95,9 @@ export default {
   width: auto;
   max-width: 100%;
   margin: auto;
+
+  &--empty {
+    border: 1px dashed;
+  }
 }
 </style>

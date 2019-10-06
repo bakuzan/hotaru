@@ -19,6 +19,12 @@
       left: 0;
       top: 0;
     }
+
+    &.image--empty {
+      height: 300px;
+      width: calc(100% - 10px);
+      margin: 0 auto;
+    }
   }
 
   &__row {
@@ -72,6 +78,7 @@
   &--image {
     flex-basis: 25%;
   }
+
   &__inner {
     display: flex;
     align-items: center;
@@ -80,5 +87,17 @@
 }
 
 .span-column {
+  display: flex;
   width: 100%;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.toggle-button.toggle-button {
+  min-width: 20px;
+  max-height: 40px;
+  padding: 2px;
+  margin: 2px;
 }

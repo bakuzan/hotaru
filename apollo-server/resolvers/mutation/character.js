@@ -10,18 +10,21 @@ const {
 const Utils = require('../../utils');
 
 module.exports = {
-  characterCreate(_, { character }) {
+  async characterCreate(_, { character }, context) {
     const { seriesId = null, tags = [], images = [], ...args } = character;
     const {
       newItems: newTags,
       existingItemIds: existingTagIds
     } = Utils.separateArrIntoNewAndExisting(tags);
 
+    args.displayImage = await context.Images.uploadImage(args.displayImage);
+    const newImages = await context.Images.uploadImages(images);
+
     return Character.create(
       {
         ...args,
         tags: newTags,
-        images
+        images: newImages
       },
       {
         include: [Character.Tag, Character.Image]
@@ -32,7 +35,7 @@ module.exports = {
       return character.reload();
     });
   },
-  characterUpdate(_, { character }) {
+  async characterUpdate(_, { character }, context) {
     const { id, seriesId, tags = [], images, ...args } = character;
     const createdAt = Date.now();
     const {
@@ -49,6 +52,7 @@ module.exports = {
         .transaction(async (transaction) => {
           await character.setSeries(seriesId, { transaction });
           await character.setTags(existingTagIds, { transaction });
+
           if (images) {
             await character.setImages(existingImageIds, { transaction });
           }
@@ -64,8 +68,10 @@ module.exports = {
             );
           }
 
-          if (newImages.length) {
-            await Image.bulkCreate(newImages, { transaction }).then(() =>
+          const newImgurImages = await context.Images.uploadImages(newImages);
+
+          if (newImgurImages.length) {
+            await Image.bulkCreate(newImgurImages, { transaction }).then(() =>
               Image.findAll({
                 where: { createdAt: { [Op.gte]: createdAt } },
                 transaction

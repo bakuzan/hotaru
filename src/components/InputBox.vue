@@ -15,7 +15,7 @@
       @blur="onBlur"
       @keydown="onKeyDown"
     />
-    <label :for="id">{{ label }}</label>
+    <label :for="id" class="input-box__label">{{ label }}</label>
     <Button
       v-show="showClearButton"
       :class-name="clearClasses"
@@ -171,10 +171,18 @@ input {
 @import '../styles/_variables';
 
 .input-box {
+  &__label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: calc(100% - 15px);
+  }
+
   > input {
     display: flex;
     flex: 1 0 100%;
   }
+
   &:not(.input-box--not-clearable) > input {
     padding-right: 1.5em !important;
   }
