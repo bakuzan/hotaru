@@ -20,11 +20,10 @@
           >
             <InputBox
               v-if="showImageInput"
-              :value="editSeries.displayImage"
               id="displayImageInput"
+              :value="editSeries.displayImage"
               name="displayImage"
               label="Display Image Url"
-              class
               clear-button-class
               @input="handleUserChanges"
             />
@@ -35,9 +34,9 @@
             />
 
             <Button
+              id="toggleImageInput"
               :icon="toggleImageIcon"
               class="toggle-button"
-              id="toggleImageInput"
               theme="primary"
               @click="toggleImageInput"
             />
@@ -91,7 +90,9 @@
 
               <div v-if="!isCreate" class="series-characters">
                 <div class="series-characters__header">
-                  <div class="series-characters__title">Characters</div>
+                  <div class="series-characters__title">
+                    <div>Characters ({{ editSeries.characters.length }})</div>
+                  </div>
                   <div>
                     <NavLink
                       :to="characterCreateUrl + '?seriesId=' + editSeries.id"
@@ -123,9 +124,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">
-              {{ isCreate ? 'Create' : 'Save' }}
-            </Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -370,6 +371,7 @@ export default {
   &__header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
   &__title {

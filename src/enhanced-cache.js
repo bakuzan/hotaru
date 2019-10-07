@@ -11,6 +11,11 @@ function readQuerySafe(options) {
 function deleteQuery(name) {
   const names = name instanceof Array ? name : [name];
   let rootQuery = this.data.data.ROOT_QUERY;
+
+  if (!rootQuery) {
+    return;
+  }
+
   Object.keys(rootQuery)
     .filter((query) => names.some((name) => query.indexOf(name) === 0))
     .forEach((query) => {

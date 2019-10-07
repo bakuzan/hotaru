@@ -33,17 +33,17 @@ export default {
       observer: null
     };
   },
+  computed: {
+    classes: function() {
+      return classNames('image', { 'image--empty': !this.src });
+    }
+  },
   watch: {
     src: function(nv, ov) {
       if (nv !== ov) {
         const image = this.getImageWithSuffix(nv || this.placeholder);
         this.$el.setAttribute('src', image);
       }
-    }
-  },
-  computed: {
-    classes: function() {
-      return classNames('image', { 'image--empty': !this.src });
     }
   },
   mounted() {
@@ -78,7 +78,6 @@ export default {
     onError: function(event) {
       event.target.onerror = null;
       event.target.src = this.getImageWithSuffix(this.fallback);
-      console.error('Image Load Error', this);
     }
   }
 };

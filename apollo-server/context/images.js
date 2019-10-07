@@ -14,14 +14,14 @@ module.exports = {
 
     return result.url;
   },
-  async uploadImages(imageUrls) {
+  async uploadImages(imageEntities) {
     const images = [];
-    const len = imageUrls.length;
+    const len = imageEntities.length;
 
     for (let i = 0; i < len; i++) {
-      const imageUrl = imageUrls[i];
-      const imgurUrl = await this.uploadImage(imageUrl);
-      images.push(imgurUrl);
+      const imageUrl = imageEntities[i].url;
+      const url = await this.uploadImage(imageUrl);
+      images.push({ url });
     }
 
     return images;

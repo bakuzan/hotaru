@@ -231,9 +231,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">
-              {{ isCreate ? 'Create' : 'Save' }}
-            </Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -264,7 +264,13 @@ import Icons from '@/constants/icons';
 import Urls from '@/constants/urls';
 import GenderType from '@/constants/genderType';
 import { Query, Mutation } from '@/graphql';
-import { objectsAreEqual, getItemFromData, generateUniqueId } from '@/utils';
+import {
+  objectsAreEqual,
+  getItemFromData,
+  generateUniqueId,
+  createErrorStringFromGraphql
+} from '@/utils';
+import alertService from '@/utils/alertService';
 import {
   mapEnumToSelectBoxOptions,
   mapToSelectBoxOptions,
@@ -363,8 +369,15 @@ export default {
         return { id };
       },
       update(data) {
+        const oldCharacter = this.editCharacter;
         const character = data.characterById || defaultCharacterModel();
+        const currentValues =
+          !oldCharacter.id || oldCharacter.id === character.id
+            ? oldCharacter
+            : defaultCharacterModel();
+
         this.editCharacter = {
+          ...currentValues,
           ...character,
           tagIds: [...character.tagIds]
         };
@@ -497,18 +510,15 @@ export default {
   },
   watch: {
     $route: function(newRoute, oldRoute) {
-      // TODO
-      // Check if only tab changed!
       if (newRoute.path === Urls.characterCreate) {
-        Object.assign(this.$data, getInitialState());
+        if (oldRoute && oldRoute.path !== Urls.characterCreate) {
+          Object.assign(this.$data, getInitialState());
+        }
       }
 
       const differentId = newRoute.params.id !== oldRoute.params.id;
-      const sameRoute =
-        newRoute.name === Strings.route.characterView &&
-        oldRoute.name === Strings.route.characterView;
 
-      if (sameRoute && differentId) {
+      if (differentId) {
         const tabHash = newRoute.hash;
         const id = Number(Routing.getParam(this.$router, 'id'));
 
@@ -638,6 +648,15 @@ export default {
 
           const redirectToUrl = Urls.build(Urls.characterView, { id: item.id });
           this.$router.push(redirectToUrl);
+        })
+        .catch((error) => {
+          this.readOnly = false;
+          this.mutationLoading = false;
+
+          alertService.sendError({
+            message: 'Failed to create character',
+            detail: createErrorStringFromGraphql(error)
+          });
         });
     },
     handleUpdate: function() {
@@ -676,6 +695,15 @@ export default {
           this.updateData(item);
           this.readOnly = false; // allow edits again
           this.mutationLoading = false;
+        })
+        .catch((error) => {
+          this.readOnly = false;
+          this.mutationLoading = false;
+
+          alertService.sendError({
+            message: 'Failed to update character',
+            detail: createErrorStringFromGraphql(error)
+          });
         });
     },
     handleTabChange: function(tabHash) {
