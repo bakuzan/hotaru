@@ -7,9 +7,9 @@
         class="htr-calendar__shift-button"
         @click="handleViewShift(-1)"
       />
-      <Button class="htr-calendar__shift-button" @click="toggleViewMode">
-        {{ controlText }}
-      </Button>
+      <Button class="htr-calendar__shift-button" @click="toggleViewMode">{{
+        controlText
+      }}</Button>
       <Button
         :aria-label="nextLabel"
         :icon="nextIcon"
@@ -46,9 +46,8 @@
           :aria-label="option.ariaLabel"
           :disabled="option.disabled"
           @click="handleViewOptionSelect(option)"
+          >{{ option.text }}</Button
         >
-          {{ option.text }}
-        </Button>
       </div>
     </div>
   </div>
@@ -101,10 +100,10 @@ export default {
   },
   computed: {
     prevLabel: function() {
-      return `Move to previous ${this.isMonthView ? 'year' : 'month'}`;
+      return `Move to previous ${this.isMonthView ? 'month' : 'year'}`;
     },
     nextLabel: function() {
-      return `Move to next ${this.isMonthView ? 'year' : 'month'}`;
+      return `Move to next ${this.isMonthView ? 'month' : 'year'}`;
     },
     controlText: function() {
       return this.isMonthView
@@ -175,15 +174,17 @@ $button-padding: 8px;
   flex-direction: column;
   max-width: 50%;
   padding: 5px;
+  border: 1px solid transparent;
+  margin: 1px;
   box-sizing: border-box;
 
   @include respond-to-all((sm, xs)) {
+    width: 100%;
     max-width: 100%;
   }
 
   &__controls {
     display: flex;
-    flex: 1;
     justify-content: space-between;
     align-items: center;
   }

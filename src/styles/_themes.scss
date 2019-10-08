@@ -75,6 +75,7 @@
     .nav-link {
       color: $base-colour;
 
+      &:focus,
       &:hover,
       &--active_exact {
         color: $active-colour;
@@ -85,6 +86,7 @@
     .sidebar__link {
       color: $primary-colour;
 
+      &:focus,
       &:hover,
       &.nav-link--active_exact {
         background-color: $active-background;
@@ -139,6 +141,10 @@
     }
 
     // Calendar
+    .date-range-picker,
+    .htr-calendar {
+      border-color: $primary-background;
+    }
     .htr-calendar__view-button {
       &:focus,
       &:hover {
@@ -169,6 +175,7 @@
     // Link image
     .link-images {
       $link-image-class: map-get($values, link-image-class);
+
       &__#{$link-image-class} {
         display: block !important;
       }

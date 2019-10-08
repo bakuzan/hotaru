@@ -52,6 +52,7 @@ export default {
   display: flex;
   flex: 1;
   max-width: 100%;
+  border: 1px solid transparent;
 
   @include respond-to-all((xs, sm)) {
     flex-wrap: wrap;

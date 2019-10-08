@@ -18,12 +18,20 @@
     </div>
     <div
       v-htr-outside-click="handleToggleClose"
-      v-if="isOpen"
+      :aria-hidden="!isOpen"
       :class="dropdownClasses"
     >
-      <ul class="multi-select__list">
+      <TabTrap
+        :is-active="isOpen"
+        :first-id="selectAllName"
+        :last-id="lastElementId"
+        element="ul"
+        class="multi-select__list"
+        @deactivate="onTabTrapDeactivate"
+      >
         <li>
           <Tickbox
+            :id="selectAllName"
             :name="selectAllName"
             :checked="hasAllSelected"
             text="Select All"
@@ -33,13 +41,14 @@
         <li class="multi-select__separator" />
         <li v-for="(op, i) in options" :key="op.value">
           <Tickbox
+            :id="getName(i)"
             :name="getName(i)"
             :text="op.text"
             :checked="values.includes(op.value)"
             @change="handleOptionChange"
           />
         </li>
-      </ul>
+      </TabTrap>
     </div>
   </div>
 </template>
@@ -48,6 +57,7 @@
 import classNames from 'classnames';
 
 import Tickbox from '@/components/Tickbox';
+import TabTrap from '@/components/TabTrap';
 
 import { OutsideClick } from '@/directives/OutsideClick';
 import Strings from '@/constants/strings';
@@ -60,7 +70,8 @@ const ALL_SELECTED_TEXT = 'All Selected';
 export default {
   name: 'MultiSelect',
   components: {
-    Tickbox
+    Tickbox,
+    TabTrap
   },
   directives: {
     OutsideClick
@@ -107,6 +118,10 @@ export default {
     };
   },
   computed: {
+    lastElementId: function() {
+      const lastIndex = this.options.length - 1;
+      return this.getName(lastIndex);
+    },
     dropdownClasses: function() {
       return classNames(
         'multi-select__dropdown-container',
@@ -116,9 +131,12 @@ export default {
     },
     displayValue: function() {
       const length = this.values.length;
-      if (!length) return '';
-      if (length === this.options.length) return ALL_SELECTED_TEXT;
-      if (length === 1) {
+
+      if (!length) {
+        return '';
+      } else if (length === this.options.length) {
+        return ALL_SELECTED_TEXT;
+      } else if (length === 1) {
         return this.options.find((x) => this.values.includes(x.value)).text;
       }
 
@@ -133,10 +151,13 @@ export default {
       return `${this.id}--${OPTION_PREFIX}${i}`;
     },
     handleToggleOpen: function(e) {
-      if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.keyCode))
+      if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.keyCode)) {
         return;
+      }
 
-      if (this.disabled) return;
+      if (this.disabled) {
+        return;
+      }
 
       e.stopPropagation();
       this.isOpen = true;
@@ -164,6 +185,13 @@ export default {
       const hasAllSelected = values.size === options.size;
       const newValues = hasAllSelected ? [] : [...options.values()];
       this.$emit('update', newValues, this.name);
+    },
+    onTabTrapDeactivate: function() {
+      const input = document.getElementById(this.id);
+
+      if (input) {
+        requestAnimationFrame(() => input.focus());
+      }
     }
   }
 };
