@@ -11,9 +11,9 @@
         class="htr-calendar__shift-button"
         @click="handleViewShift(-1)"
       />
-      <Button class="htr-calendar__shift-button" @click="toggleViewMode">{{
-        controlText
-      }}</Button>
+      <Button class="htr-calendar__shift-button" @click="toggleViewMode">
+        {{ controlText }}
+      </Button>
       <Button
         :aria-label="nextLabel"
         :icon="nextIcon"
@@ -205,6 +205,7 @@ export default {
         );
 
         this.viewDate = viewDate;
+        this.focusDate = new Date(viewDate);
         this.$emit('change', formatDateForInput(viewDate), this.name);
       } else if (option.optionType === ViewOptionEnum.MONTH) {
         const monthIndex = Strings.monthNames.findIndex(
@@ -219,8 +220,9 @@ export default {
         );
         this.viewDate = getFirstDateOfMonth(newDate);
         this.isMonthView = true;
-        this.setFocus();
       }
+
+      this.setFocus();
     },
     handleCalendarNavigation: function(event) {
       const { key } = event;
@@ -260,9 +262,7 @@ export default {
         return;
       }
 
-      this.viewDate = this.isMonthView
-        ? getFirstDateOfMonth(newDate)
-        : this.viewDate;
+      this.viewDate = getFirstDateOfMonth(newDate);
       this.focusDate = new Date(newDate);
       this.setFocus();
     },
