@@ -109,8 +109,8 @@ export default {
       this.$nextTick(() => this.updateList(item));
     },
     onKeyDown: function(event) {
-      const { keyCode } = event;
-      if (keyCode === KeyCodes.backspace && !this.filter) {
+      const { key } = event;
+      if (key === KeyCodes.Backspace && !this.filter) {
         event.preventDefault();
         if (!this.readyRemoval) return this.setStateRemoval(true);
         if (this.readyRemoval) return this.removeLastInputItem();

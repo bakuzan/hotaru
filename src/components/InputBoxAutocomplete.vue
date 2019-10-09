@@ -169,13 +169,13 @@ export default {
       this.activeSuggestion = 0;
     },
     onKeyDown: function(event) {
-      const { keyCode } = event;
-      if (keyCode === KeyCodes.enter && this.filter) {
+      const { key } = event;
+      if (key === KeyCodes.Enter && this.filter) {
         event.preventDefault();
         this.selectActiveSuggestion();
-      } else if (keyCode === KeyCodes.down) {
+      } else if (key === KeyCodes.ArrowDown) {
         this.updateActiveSuggestion(1);
-      } else if (keyCode === KeyCodes.up) {
+      } else if (key === KeyCodes.ArrowUp) {
         this.updateActiveSuggestion(-1);
       } else {
         this.$emit('keydown', event);

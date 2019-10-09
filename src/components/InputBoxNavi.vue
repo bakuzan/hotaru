@@ -66,7 +66,7 @@ export default {
   },
   mounted() {
     this.shortcutController = createListeners('keydown', (e) => {
-      if (e.ctrlKey && e.keyCode === KeyCodes.q) {
+      if (e.ctrlKey && e.key === KeyCodes.KeyQ) {
         this.$el.querySelector('input').focus();
       }
     })();

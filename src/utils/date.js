@@ -91,7 +91,7 @@ const setTimeForDate = (h, m, s) => (date) => {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m, s);
 };
 
-const startOfDay = setTimeForDate(0, 0, 0);
+export const startOfDay = setTimeForDate(0, 0, 0);
 
 const getDatesAsMsAtMidnight = (...dates) => {
   return dates.map((d) => startOfDay(new Date(d)).getTime());

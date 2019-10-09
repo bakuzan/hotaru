@@ -151,7 +151,7 @@ export default {
       return `${this.id}--${OPTION_PREFIX}${i}`;
     },
     handleToggleOpen: function(e) {
-      if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.keyCode)) {
+      if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.key)) {
         return;
       }
 

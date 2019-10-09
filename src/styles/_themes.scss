@@ -141,18 +141,18 @@
     }
 
     // Calendar
-    .date-range-picker,
-    .htr-calendar {
+    .date-range-picker.date-range-picker,
+    .htr-calendar.htr-calendar {
       border-color: $primary-background;
     }
-    .htr-calendar__view-button {
+    .htr-calendar__view-option {
       &:focus,
       &:hover {
         background-color: $active-background;
         color: $active-colour;
       }
     }
-    .htr-calendar__view-button--selected {
+    .htr-calendar__view-option--selected {
       &,
       &:focus,
       &:hover {

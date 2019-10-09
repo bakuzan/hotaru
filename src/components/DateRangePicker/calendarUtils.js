@@ -12,6 +12,11 @@ import {
   isBeforeOrEqual
 } from '@/utils/date';
 
+export function adjustDateDay(date, adjustment) {
+  const d = new Date(date);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + adjustment);
+}
+
 export function adjustDateMonth(date, adjustment) {
   const d = new Date(date);
   return new Date(d.getFullYear(), d.getMonth() + adjustment, d.getDate());

@@ -11,7 +11,7 @@ export default function addOutsideClick(element, onOutsideClick) {
   }
 
   function handleKeyDown(event) {
-    if (keyCodes.escape === event.keyCode) {
+    if (keyCodes.Escape === event.key) {
       onOutsideClick(event);
     }
   }

@@ -1,5 +1,9 @@
 <template>
-  <div class="htr-calendar">
+  <div
+    :ref="calendarRef"
+    class="htr-calendar"
+    @keydown="handleCalendarNavigation"
+  >
     <div class="htr-calendar__controls">
       <Button
         :aria-label="prevLabel"
@@ -34,20 +38,19 @@
           'htr-calendar__view-option': true,
           'htr-calendar__view-option--day': isMonthView,
           'htr-calendar__view-option--month': !isMonthView,
-          'htr-calendar__view-option--dummy-day': option.isDummyDay
+          'htr-calendar__view-option--disabled': option.disabled,
+          'htr-calendar__view-option--dummy-day': option.isDummyDay,
+          'htr-calendar__view-option--selected': isSelected(option)
         }"
+        :data-date="option.text"
+        :tabindex="getTabIndex(option)"
+        :title="option.title"
+        :aria-label="option.ariaLabel"
+        @click="handleViewOptionSelect(option)"
+        @keydown.enter="handleViewOptionSelect(option)"
+        @keydown.space.prevent="handleViewOptionSelect(option)"
       >
-        <Button
-          :class="{
-            'htr-calendar__view-button': true,
-            'htr-calendar__view-button--selected': isSelected(option)
-          }"
-          :title="option.title"
-          :aria-label="option.ariaLabel"
-          :disabled="option.disabled"
-          @click="handleViewOptionSelect(option)"
-          >{{ option.text }}</Button
-        >
+        {{ option.text }}
       </div>
     </div>
   </div>
@@ -55,15 +58,24 @@
 
 <script>
 import { Button } from '@/components/Buttons';
+
 import Icons from '@/constants/icons';
 import Strings from '@/constants/strings';
+import KeyCodes, { ARROW_KEYS } from '@/constants/keyCodes';
 import ViewOptionEnum from '@/constants/calendarViewOption';
-import { formatDateForInput } from '@/utils/date';
+import { generateUniqueId } from '@/utils';
+import {
+  formatDateForInput,
+  startOfDay,
+  checkIfDatePartsMatch,
+  getFirstDateOfMonth
+} from '@/utils/date';
 import {
   displayMonthAndYear,
   displayYearOnly,
   getDaysForDate,
   getMonthsForDate,
+  adjustDateDay,
   adjustDateMonth,
   adjustDateYear,
   checkIfSelectedForView
@@ -91,9 +103,13 @@ export default {
     }
   },
   data: function() {
+    const initDate = startOfDay(this.value);
+
     return {
+      calendarRef: generateUniqueId(),
       isMonthView: true,
-      viewDate: new Date(this.value),
+      viewDate: initDate,
+      focusDate: initDate,
       prevIcon: Icons.left,
       nextIcon: Icons.right
     };
@@ -125,12 +141,20 @@ export default {
   },
   methods: {
     toggleViewMode: function() {
+      const matches = checkIfDatePartsMatch(this.viewDate, this.value);
+
       this.isMonthView = !this.isMonthView;
+      this.focusDate = new Date(
+        matches.year && matches.month ? this.value : this.viewDate
+      );
     },
     handleViewShift: function(direction) {
-      this.viewDate = this.isMonthView
+      const newDate = this.isMonthView
         ? adjustDateMonth(this.viewDate, direction)
         : adjustDateYear(this.viewDate, direction);
+
+      this.viewDate = getFirstDateOfMonth(newDate);
+      this.focusDate = new Date(newDate);
     },
     isSelected: function(option) {
       return checkIfSelectedForView(
@@ -138,7 +162,39 @@ export default {
         option
       );
     },
+    getTabIndex: function(option) {
+      const viewDate = new Date(this.viewDate);
+      let optionDate = null;
+
+      if (option.optionType === ViewOptionEnum.DAY) {
+        optionDate = new Date(
+          viewDate.getFullYear(),
+          viewDate.getMonth(),
+          option.text
+        );
+      } else if (option.optionType === ViewOptionEnum.MONTH) {
+        const monthIndex = Strings.monthNames.findIndex(
+          (x) => x === option.text
+        );
+
+        optionDate = new Date(viewDate.getFullYear(), monthIndex, 1);
+      }
+
+      if (this.focusDate === null || optionDate === null) {
+        return -1;
+      }
+
+      if (this.isMonthView) {
+        return this.focusDate.getTime() === optionDate.getTime() ? 0 : -1;
+      } else {
+        return this.focusDate.getMonth() === optionDate.getMonth() ? 0 : -1;
+      }
+    },
     handleViewOptionSelect: function(option) {
+      if (option.disabled) {
+        return;
+      }
+
       const oldViewDate = new Date(this.viewDate);
 
       if (option.optionType === ViewOptionEnum.DAY) {
@@ -155,9 +211,74 @@ export default {
           (x) => x === option.text
         );
 
-        this.viewDate = new Date(oldViewDate.getFullYear(), monthIndex, 1);
+        const newDate = new Date(oldViewDate.getFullYear(), monthIndex, 1);
+        const matches = checkIfDatePartsMatch(newDate, this.value);
+
+        this.focusDate = new Date(
+          matches.year && matches.month ? this.value : newDate
+        );
+        this.viewDate = getFirstDateOfMonth(newDate);
         this.isMonthView = true;
+        this.setFocus();
       }
+    },
+    handleCalendarNavigation: function(event) {
+      const { key } = event;
+      const currFocusDate = new Date(this.focusDate);
+      let newDate = null;
+
+      if (ARROW_KEYS.includes(key)) {
+        event.preventDefault();
+      }
+
+      switch (key) {
+        case KeyCodes.ArrowUp:
+          newDate = this.isMonthView
+            ? adjustDateDay(currFocusDate, -7)
+            : adjustDateMonth(currFocusDate, -3);
+          break;
+        case KeyCodes.ArrowDown:
+          newDate = this.isMonthView
+            ? adjustDateDay(currFocusDate, 7)
+            : adjustDateMonth(currFocusDate, 3);
+          break;
+        case KeyCodes.ArrowLeft:
+          newDate = this.isMonthView
+            ? adjustDateDay(currFocusDate, -1)
+            : adjustDateMonth(currFocusDate, -1);
+          break;
+        case KeyCodes.ArrowRight:
+          newDate = this.isMonthView
+            ? adjustDateDay(currFocusDate, 1)
+            : adjustDateMonth(currFocusDate, 1);
+          break;
+        default:
+          break;
+      }
+
+      if (!newDate) {
+        return;
+      }
+
+      this.viewDate = this.isMonthView
+        ? getFirstDateOfMonth(newDate)
+        : this.viewDate;
+      this.focusDate = new Date(newDate);
+      this.setFocus();
+    },
+    setFocus: function() {
+      requestAnimationFrame(() => {
+        const container = this.$refs[this.calendarRef];
+        const dx = this.isMonthView
+          ? this.focusDate.getDate()
+          : Strings.monthNames[this.focusDate.getMonth()];
+
+        const target = container.querySelector(`[data-date='${dx}']`);
+
+        if (target) {
+          target.focus();
+        }
+      });
     }
   }
 };
@@ -199,9 +320,23 @@ $button-padding: 8px;
     flex-flow: wrap;
 
     &-option {
+      padding: {
+        top: $button-padding;
+        bottom: $button-padding;
+      }
       text-align: center;
       border: 1px solid transparent;
       box-sizing: border-box;
+      cursor: pointer;
+
+      @include respond-to-all((sm, xs)) {
+        $button-padding-half: $button-padding / 2;
+
+        padding: {
+          top: $button-padding-half;
+          bottom: $button-padding-half;
+        }
+      }
 
       &:not(.htr-calendar__view-option--dummy-day):not(.htr-calendar__view-option--header) {
         border-color: #efefef;
@@ -217,30 +352,18 @@ $button-padding: 8px;
 
       &--header {
         padding: 5px 0;
+        cursor: default;
+      }
+
+      &--disabled {
+        background-color: $grey80 !important;
+        color: $grey40 !important;
+        cursor: default;
       }
 
       &--dummy-day {
         z-index: -1;
-        > button {
-          background-color: inherit !important;
-        }
-      }
-    }
-
-    &-button {
-      height: 100%;
-      min-width: 100%;
-      padding: {
-        top: $button-padding;
-        bottom: $button-padding;
-      }
-
-      @include respond-to-all((sm, xs)) {
-        $button-padding-half: $button-padding / 2;
-        padding: {
-          top: $button-padding-half;
-          bottom: $button-padding-half;
-        }
+        background-color: inherit !important;
       }
     }
   }
