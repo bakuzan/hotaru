@@ -137,7 +137,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Versus Comparison'
+    title: 'Versus Comparison | Hotaru'
   },
   apollo: {
     characters: {

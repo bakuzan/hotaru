@@ -87,9 +87,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -164,13 +164,13 @@ export default {
   },
   metaInfo() {
     if (this.isCreate) {
-      return { title: `Hotaru - Create Template` };
+      return { title: `Create Template | Hotaru` };
     }
 
     const type = this.template && this.template.type;
     return {
       title: this.template && this.template.name,
-      titleTemplate: `Hotaru - View ${type} Template - %s`
+      titleTemplate: `View ${type} Template - %s | Hotaru`
     };
   },
   apollo: {

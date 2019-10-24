@@ -63,7 +63,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Series List'
+    title: 'Series List | Hotaru'
   },
   apollo: {
     seriesPaged: {

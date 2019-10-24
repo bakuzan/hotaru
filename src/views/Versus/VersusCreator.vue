@@ -149,7 +149,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Versus Creator'
+    title: 'Versus Creator | Hotaru'
   },
   apollo: {
     series: {

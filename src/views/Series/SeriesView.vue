@@ -124,9 +124,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -211,12 +211,12 @@ export default {
   },
   metaInfo() {
     if (this.isCreate) {
-      return { title: 'Hotaru - Create Series' };
+      return { title: 'Create Series | Hotaru' };
     }
 
     return {
       title: this.series && this.series.name,
-      titleTemplate: 'Hotaru - View Series - %s'
+      titleTemplate: 'View Series - %s | Hotaru'
     };
   },
   apollo: {

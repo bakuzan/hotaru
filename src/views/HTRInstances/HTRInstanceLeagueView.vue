@@ -4,9 +4,9 @@
       <LoadingBouncer v-show="isLoading" local />
       <h4 class="league-view__title">
         {{ htrTemplateSeasonById && htrTemplateSeasonById.name }}
-        <span class="status-badge themed-background">{{
-          isSeasonComplete ? 'Complete' : 'Ongoing'
-        }}</span>
+        <span class="status-badge themed-background">
+          {{ isSeasonComplete ? 'Complete' : 'Ongoing' }}
+        </span>
       </h4>
       <Button :disabled="!canCreate" theme="primary" @click="onMatchCreate"
         >Create Matches</Button
@@ -106,7 +106,7 @@ export default {
     this.updateTitle();
     return {
       title: this.title,
-      titleTemplate: `Hotaru - View League - %s`
+      titleTemplate: `View League - %s | Hotaru`
     };
   },
 

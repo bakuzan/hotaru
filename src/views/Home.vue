@@ -103,7 +103,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Dashboard'
+    title: 'Dashboard | Hotaru'
   },
   apollo: {
     versusDailyActive: {

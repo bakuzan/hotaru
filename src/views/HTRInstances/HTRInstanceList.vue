@@ -81,7 +81,7 @@ export default {
   metaInfo() {
     return {
       title: this.title,
-      titleTemplate: 'Hotaru - %s Instance List'
+      titleTemplate: '%s Instance List | Hotaru'
     };
   },
   apollo: {

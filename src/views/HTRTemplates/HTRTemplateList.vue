@@ -77,7 +77,7 @@ export default {
   metaInfo() {
     return {
       title: this.title,
-      titleTemplate: 'Hotaru - %s Template List'
+      titleTemplate: '%s Template List | Hotaru'
     };
   },
 

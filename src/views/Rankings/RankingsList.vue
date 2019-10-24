@@ -114,7 +114,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Ranking List'
+    title: 'Ranking List | Hotaru'
   },
   apollo: {
     rankingsPaged: {

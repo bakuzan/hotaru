@@ -99,7 +99,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - League Center'
+    title: 'League Center | Hotaru'
   },
 
   apollo: {

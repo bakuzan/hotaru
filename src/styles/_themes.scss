@@ -145,7 +145,7 @@
     .htr-calendar.htr-calendar {
       border-color: $primary-background;
     }
-    .htr-calendar__view-option {
+    .htr-calendar__view-option:not(.htr-calendar__view-option--header) {
       &:focus,
       &:hover {
         background-color: $active-background;

@@ -154,7 +154,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Gauntlet'
+    title: 'Gauntlet | Hotaru'
   },
   apollo: {
     activeGauntlet: {

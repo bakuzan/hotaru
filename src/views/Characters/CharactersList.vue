@@ -76,7 +76,7 @@ export default {
     };
   },
   metaInfo: {
-    title: 'Hotaru - Character List'
+    title: 'Character List | Hotaru'
   },
   apollo: {
     charactersPaged: {

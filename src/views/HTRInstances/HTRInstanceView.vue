@@ -147,9 +147,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -231,12 +231,12 @@ export default {
   metaInfo() {
     const type = Routing.getParam(this.$router, 'type');
     if (this.isCreate) {
-      return { title: `Hotaru - Create ${type} Instance` };
+      return { title: `Create ${type} Instance | Hotaru` };
     }
 
     return {
       title: this.instance && this.instance.name,
-      titleTemplate: `Hotaru - View ${type} Instance - %s`
+      titleTemplate: `View ${type} Instance - %s | Hotaru`
     };
   },
   apollo: {
