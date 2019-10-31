@@ -62,7 +62,7 @@ module.exports = {
 
         return {
           name: `League ${leagueNumber}`,
-          description: `The ${leagueNumber}${leagueOrdinal} league of the ${seasonNumber}${seasonOrdinal} season.`,
+          description: `The ${leagueOrdinal} league of the ${seasonOrdinal} season.`,
           settings: {
             isComplete: false,
             limit: n,
