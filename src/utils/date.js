@@ -12,7 +12,10 @@ const formatTime = (date) =>
     : '';
 
 export const formatDateForDisplay = (date) => {
-  if (!date) return '';
+  if (!date) {
+    return '';
+  }
+
   const d = new Date(date);
   return `${padNumber(d.getDate(), 2)} ${
     Strings.monthNames[d.getMonth()]

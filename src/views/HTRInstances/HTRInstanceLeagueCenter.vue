@@ -54,7 +54,10 @@
                 class="league-section__season-link"
                 >{{ slotProps.item.name }}</NavLink
               >
-              <div>Finished: {{ slotProps.item.updatedAt }}</div>
+              <div>
+                <span>{{ formatDate(slotProps.item.updatedAt) }}</span> -
+                <span>{{ formatDate(slotProps.item.updatedAt) }}</span>
+              </div>
             </div>
           </template>
         </List>
@@ -73,6 +76,7 @@ import NavLink from '@/components/NavLink';
 import { Query, Mutation } from '@/graphql';
 import { defaultPagedResponse } from '@/utils/models';
 import Urls from '@/constants/urls';
+import { formatDateForDisplay } from '@/utils/date';
 import * as LP from '@/utils/list-pages';
 import * as CacheUpdate from '@/utils/cache';
 import alertService from '@/utils/alertService';
@@ -101,7 +105,6 @@ export default {
   metaInfo: {
     title: 'League Center | Hotaru'
   },
-
   apollo: {
     ongoingHTRInstanceLeagues: {
       query: Query.getOngoingHTRInstanceLeagues
@@ -154,6 +157,9 @@ export default {
     },
     showMore: function() {
       LP.showMore(this, 'pastHTRInstanceLeaguesPaged', 'HTRInstanceLeaguePage');
+    },
+    formatDate: function(date) {
+      return formatDateForDisplay(date);
     },
     onCreateNew: function() {
       this.mutationLoading = true;

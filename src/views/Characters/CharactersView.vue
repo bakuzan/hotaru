@@ -20,11 +20,10 @@
           >
             <InputBox
               v-if="showImageInput"
-              :value="editCharacter.displayImage"
               id="displayImageInput"
               name="displayImage"
               label="Display Image Url"
-              class
+              :value="editCharacter.displayImage"
               clear-button-class
               @input="handleUserChanges"
             />
@@ -36,8 +35,8 @@
 
             <Button
               :icon="toggleImageIcon"
-              class="toggle-button"
               id="toggleImageInput"
+              class="toggle-button"
               theme="primary"
               @click="toggleImageInput"
             />
@@ -169,8 +168,8 @@
                 />
                 <Button
                   :icon="addImageIcon"
-                  class="add-to-gallery-button"
                   id="addGalleryImage"
+                  class="add-to-gallery-button"
                   theme="primary"
                   title="Add url to gallery"
                   aria-label="Add url to gallery"
@@ -184,9 +183,9 @@
               />
 
               <Button
+                id="toggleGalleryImageInput"
                 :icon="toggleImageIcon"
                 class="toggle-button"
-                id="toggleGalleryImageInput"
                 theme="primary"
                 @click="toggleGalleryImageInput"
               />
@@ -231,9 +230,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">
-              {{ isCreate ? 'Create' : 'Save' }}
-            </Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
