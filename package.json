@@ -3,11 +3,11 @@
   "version": "1.0.2",
   "private": true,
   "scripts": {
-    "start": "npm-run-all -p serve server",
-    "server": "nodemon apollo-server --harmony",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ./tools/move_index_template.js",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "server": "nodemon apollo-server --harmony",
+    "start": "npm-run-all -p serve server"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.3",
@@ -17,6 +17,7 @@
     "apollo-server": "^2.9.7",
     "async": "^3.0.0",
     "classnames": "^2.2.6",
+    "core-js": "^3.3.2",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "graphql": "^14.5.4",
@@ -39,20 +40,25 @@
     "vuedraggable": "^2.23.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-pwa": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-plugin-babel": "^4.0.5",
+    "@vue/cli-plugin-eslint": "^4.0.5",
+    "@vue/cli-plugin-pwa": "^4.0.5",
+    "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-prettier": "^5.0.0",
+    "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^3.0.3",
     "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^5.2.3",
     "lint-staged": "^9.4.2",
     "node-sass": "^4.13.0",
+    "prettier": "^1.18.2",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.10"
   },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
   "homepage": "http://localhost:9006/hotaru/",
-  "proxy": "http://localhost:9006/",
   "lint-staged": {
     "{,src,apollo-server}/**/*.{js,jsx,json,scss,vue}": [
       "echo 'Precommit tasks starting...'",
@@ -60,7 +66,5 @@
       "git add"
     ]
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  }
+  "proxy": "http://localhost:9006/"
 }
