@@ -17,6 +17,10 @@ module.exports = {
       existingItemIds: existingTagIds
     } = Utils.separateArrIntoNewAndExisting(tags);
 
+    if (!seriesId) {
+      throw new Error('Character requires a series.');
+    }
+
     args.displayImage = await context.Images.uploadImage(args.displayImage);
     const newImages = await context.Images.uploadImages(images);
 
@@ -46,6 +50,10 @@ module.exports = {
       newItems: newImages,
       existingItemIds: existingImageIds
     } = Utils.separateArrIntoNewAndExisting(images);
+
+    if (!seriesId) {
+      throw new Error('Character requires a series.');
+    }
 
     return Character.findByPk(id).then(async (character) => {
       return db

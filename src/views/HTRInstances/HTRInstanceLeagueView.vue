@@ -4,9 +4,9 @@
       <LoadingBouncer v-show="isLoading" local />
       <h4 class="league-view__title">
         {{ htrTemplateSeasonById && htrTemplateSeasonById.name }}
-        <span class="status-badge themed-background">
-          {{ isSeasonComplete ? 'Complete' : 'Ongoing' }}
-        </span>
+        <span class="status-badge themed-background">{{
+          isSeasonComplete ? 'Complete' : 'Ongoing'
+        }}</span>
       </h4>
       <Button :disabled="!canCreate" theme="primary" @click="onMatchCreate"
         >Create Matches</Button
@@ -297,6 +297,16 @@ export default {
               variables: { id: currentLeagueId, page: 0 },
               data: { htrInstanceLeagueById: data }
             });
+
+            const res = htrInstanceLeagueVersusVote;
+            const isComplete = res.settings && res.settings.isComplete;
+
+            if (isComplete) {
+              store.deleteQueryHTR([
+                'ongoingHTRInstanceLeagues',
+                'pastHTRInstanceLeaguesPaged'
+              ]);
+            }
           }
         })
         .then(() => {

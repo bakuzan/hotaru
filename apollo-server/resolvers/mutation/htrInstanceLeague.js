@@ -54,6 +54,7 @@ module.exports = {
       });
 
       const chunkedCharacters = Utils.chunk(allCharacters, 20);
+
       const newInstances = chunkedCharacters.map((cArr, i) => {
         const n = cArr.length;
         const leagueNumber = i + 1;
@@ -166,6 +167,18 @@ module.exports = {
         await HTRInstance.update(
           { settings },
           { where: { id: htrInstanceId }, transaction }
+        );
+
+        await db.query(
+          'UPDATE htrTemplates SET updatedAt = :updatedAt WHERE id = :id',
+          {
+            type: db.QueryTypes.UPDATE,
+            replacements: {
+              id: leagueData.htrTemplateId,
+              updatedAt: new Date()
+            },
+            transaction
+          }
         );
       }
 

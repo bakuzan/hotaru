@@ -1,7 +1,9 @@
 module.exports = function leagueMatchPairs(characters) {
   const characterCount = characters.length;
   if (characterCount % 2 !== 0) {
-    throw Error('Odd count of characters not handled yet.');
+    throw Error(
+      `Odd count of characters not handled yet. (Character count: ${characterCount})`
+    );
   }
 
   const characterIds = characters.map((x) => x.id);
