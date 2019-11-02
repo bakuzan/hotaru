@@ -8,6 +8,7 @@ module.exports = gql`
     rules: HTRTemplateRules
     rulesSeries: [Series]
     instances: [HTRInstance]
+    createdAt: String
     updatedAt: String
   }
   type HTRTemplateRules {

@@ -55,7 +55,7 @@
                 >{{ slotProps.item.name }}</NavLink
               >
               <div>
-                <span>{{ formatDate(slotProps.item.updatedAt) }}</span> -
+                <span>{{ formatDate(slotProps.item.createdAt) }}</span> -
                 <span>{{ formatDate(slotProps.item.updatedAt) }}</span>
               </div>
             </div>

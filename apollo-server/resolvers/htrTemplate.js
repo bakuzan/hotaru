@@ -19,6 +19,15 @@ module.exports = {
 
     return template.getHtrInstances();
   },
+  createdAt(instance) {
+    const datetime = Utils.formatDateDisplay(instance.createdAt);
+    const index = datetime.indexOf(' @');
+    if (index !== -1) {
+      return datetime.slice(0, index);
+    } else {
+      return datetime;
+    }
+  },
   updatedAt(instance) {
     const datetime = Utils.formatDateDisplay(instance.updatedAt);
     const index = datetime.indexOf(' @');
