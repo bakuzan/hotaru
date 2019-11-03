@@ -9,7 +9,6 @@
       @click="handleRemove"
     />
     <figure :class="figureClasses">
-      <div v-if="isWaifu" class="heart" title="Waifu"></div>
       <div class="list-figure-card__image-wrapper">
         <HTRImage :src="displayImage" :class="imageClasses" :alt="name" />
       </div>
@@ -23,6 +22,12 @@
           >{{ name }}</NavLink
         >
         <div v-if="!itemUrl">{{ name }}</div>
+        <div
+          v-if="isWaifu"
+          class="heart"
+          title="Is Waifu"
+          aria-label="Is Waifu"
+        ></div>
       </figcaption>
     </figure>
   </div>
@@ -223,15 +228,9 @@ $preferred-image-height--small: $image-width--small / 0.64;
   }
 }
 
-.heart {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  &::before {
-    content: '\2665';
-    font-size: 1.5em;
-    color: #f0f;
-  }
+.heart::before {
+  content: '\2665';
+  font-size: 1.5em;
+  color: #f0f;
 }
 </style>
