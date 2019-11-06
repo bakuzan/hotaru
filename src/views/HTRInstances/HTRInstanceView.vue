@@ -147,9 +147,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">
-              {{ isCreate ? 'Create' : 'Save' }}
-            </Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -331,7 +331,8 @@ export default {
     },
     instanceViewClasses: function() {
       return classNames('page-view', {
-        'page-view--column': !this.isListType
+        'page-view--column': !this.isListType,
+        'page-view--responsive': this.isListType
       });
     },
     instanceContentClasses: function() {

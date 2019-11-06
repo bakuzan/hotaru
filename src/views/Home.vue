@@ -249,7 +249,7 @@ export default {
   margin-bottom: $app--margin-large;
 }
 
-@include respond-to(sm) {
+@include respondTo(sm) {
   .page-view {
     flex-wrap: wrap;
 
@@ -259,7 +259,7 @@ export default {
     }
   }
 }
-@include respond-to(xs) {
+@include respondTo(xs) {
   .page-view {
     flex-direction: column;
 

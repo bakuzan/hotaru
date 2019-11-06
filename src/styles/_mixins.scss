@@ -10,21 +10,21 @@
   $md-grid: map-get($grid-values, md);
   $lg-grid: map-get($grid-values, lg);
 
-  @include respond-to(xs) {
+  @include respondTo(xs) {
     @include gridColumnsForPercentage($xs-grid);
   }
-  @include respond-to(sm) {
+  @include respondTo(sm) {
     @include gridColumnsForPercentage($sm-grid);
   }
-  @include respond-to(md) {
+  @include respondTo(md) {
     @include gridColumnsForPercentage($md-grid);
   }
-  @include respond-to(lg) {
+  @include respondTo(lg) {
     @include gridColumnsForPercentage($lg-grid);
   }
 }
 
-@mixin respond-to($media) {
+@mixin respondTo($media) {
   @if $media == xs {
     @media (max-width: $screen-xs-max) {
       @content;
@@ -44,15 +44,15 @@
   }
 }
 
-@mixin respond-to-all($sizes) {
+@mixin respondToAll($sizes) {
   @each $size in $sizes {
-    @include respond-to($size) {
+    @include respondTo($size) {
       @content;
     }
   }
 }
 
-@mixin lighten-or-darken($key, $colour, $percentage) {
+@mixin lightenOrDarken($key, $colour, $percentage) {
   @if lightness($colour) < 50% {
     #{$key}: lighten($colour, $percentage);
   } @else {

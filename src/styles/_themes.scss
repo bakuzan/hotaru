@@ -101,7 +101,7 @@
 
       &:focus,
       &:hover {
-        @include lighten-or-darken('background-color', $base-background, 10%);
+        @include lightenOrDarken('background-color', $base-background, 10%);
       }
     }
     .button.themed-background {
@@ -113,13 +113,13 @@
     .button.themed-background--reversed {
       &:focus,
       &:hover {
-        @include lighten-or-darken('background-color', $primary-colour, 10%);
+        @include lightenOrDarken('background-color', $primary-colour, 10%);
       }
     }
     .dropdown__toggler {
       &:focus,
       &:hover {
-        @include lighten-or-darken('color', $primary-colour, 10%);
+        @include lightenOrDarken('color', $primary-colour, 10%);
       }
     }
 

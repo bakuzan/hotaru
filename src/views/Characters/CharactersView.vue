@@ -230,9 +230,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">{{
-              isCreate ? 'Create' : 'Save'
-            }}</Button>
+            <Button theme="secondary" @click="submit">
+              {{ isCreate ? 'Create' : 'Save' }}
+            </Button>
           </div>
         </portal>
       </template>
@@ -241,7 +241,6 @@
 </template>
 
 <script>
-import { ApolloQuery } from 'vue-apollo';
 import HTRImage from '@/components/HTRImage';
 import ViewBlockToggler from '@/components/ViewBlockToggler';
 import SelectBox from '@/components/SelectBox';
@@ -314,7 +313,6 @@ function getInitialState() {
 export default {
   name: 'CharactersView',
   components: {
-    ApolloQuery,
     HTRImage,
     ViewBlockToggler,
     SelectBox,

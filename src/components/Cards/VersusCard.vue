@@ -30,7 +30,7 @@
 import classNames from 'classnames';
 
 import ListFigureCard from './ListFigureCard';
-import { Button, VoteButton } from '@/components/Buttons';
+import { VoteButton } from '@/components/Buttons';
 
 import Urls from '@/constants/urls';
 import { generateUniqueId } from '@/utils';
@@ -39,7 +39,6 @@ export default {
   name: 'VersusCard',
   components: {
     ListFigureCard,
-    Button,
     VoteButton
   },
   props: {

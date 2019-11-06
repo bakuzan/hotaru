@@ -187,7 +187,7 @@ export default {
     margin: 0 8px;
   }
 
-  @include respond-to(xs) {
+  @include respondTo(xs) {
     flex-direction: column;
 
     &__column {

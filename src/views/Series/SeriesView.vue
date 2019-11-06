@@ -124,9 +124,9 @@
         <portal :to="portalTarget">
           <div class="button-group">
             <Button theme="primary" @click="cancel">Cancel</Button>
-            <Button theme="secondary" @click="submit">
-              {{ isCreate ? 'Create' : 'Save' }}
-            </Button>
+            <Button theme="secondary" @click="submit">{{
+              isCreate ? 'Create' : 'Save'
+            }}</Button>
           </div>
         </portal>
       </template>
@@ -144,7 +144,6 @@ import HTRTabs from '@/components/Tabs';
 import ImageUploader from '@/components/ImageUploader';
 import List from '@/components/List';
 import { ListFigureCard } from '@/components/Cards';
-import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import LoadingBouncer from '@/components/LoadingBouncer';
 import NavLink from '@/components/NavLink';
 
@@ -196,7 +195,6 @@ export default {
     ImageUploader,
     List,
     ListFigureCard,
-    InputBoxAutocomplete,
     LoadingBouncer,
     NavLink
   },

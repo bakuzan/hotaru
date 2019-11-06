@@ -54,7 +54,7 @@ export default {
   max-width: 100%;
   border: 1px solid transparent;
 
-  @include respond-to-all((xs, sm)) {
+  @include respondToAll((xs, sm)) {
     flex-wrap: wrap;
   }
 }

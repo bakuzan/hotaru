@@ -4,15 +4,15 @@
       <LoadingBouncer v-show="isLoading" local />
       <h4 class="league-view__title">
         {{ htrTemplateSeasonById && htrTemplateSeasonById.name }}
-        <span class="status-badge themed-background">{{
-          isSeasonComplete ? 'Complete' : 'Ongoing'
-        }}</span>
+        <span class="status-badge themed-background">
+          {{ isSeasonComplete ? 'Complete' : 'Ongoing' }}
+        </span>
       </h4>
       <Button :disabled="!canCreate" theme="primary" @click="onMatchCreate"
         >Create Matches</Button
       >
     </div>
-    <div class="page-view__row">
+    <div class="page-view__row page-view__row--responsive">
       <section class="league-view-section">
         <SelectBox
           id="league"
@@ -359,6 +359,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../styles/_variables';
+@import '../../styles/_mixins';
 
 .status-badge {
   padding: $app--padding-standard;
@@ -381,6 +382,10 @@ export default {
   display: flex;
   flex-direction: column;
   width: 50%;
+
+  @include respondTo(xs) {
+    width: 100%;
+  }
 }
 
 .name-column {

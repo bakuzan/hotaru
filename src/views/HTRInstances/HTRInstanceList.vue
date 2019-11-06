@@ -29,7 +29,6 @@
 import List from '@/components/List';
 import ListFilterBar from '@/components/ListFilterBar';
 import { LinkCard } from '@/components/Cards';
-import MultiSelect from '@/components/MultiSelect';
 import RadioButtonGroup from '@/components/RadioButtonGroup';
 
 import Strings from '@/constants/strings';
@@ -56,7 +55,6 @@ export default {
     List,
     ListFilterBar,
     LinkCard,
-    MultiSelect,
     RadioButtonGroup
   },
   data: function() {

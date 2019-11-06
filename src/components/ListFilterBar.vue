@@ -1,14 +1,16 @@
 <template>
   <div :class="classes">
-    <InputBox
-      id="search"
-      :value="search"
-      class="list-filter__search"
-      name="search"
-      label="search"
-      @input="onInput"
-    />
-    <slot :name="typeSlotName"></slot>
+    <div :class="innerClasses">
+      <InputBox
+        id="search"
+        :value="search"
+        class="list-filter__search"
+        name="search"
+        label="search"
+        @input="onInput"
+      />
+      <slot :name="typeSlotName"></slot>
+    </div>
     <Button
       v-if="!hideAdd"
       class-name="list-filter__add-button"
@@ -57,6 +59,11 @@ export default {
       return classNames('list-filter', {
         'list-filter--column': this.column
       });
+    },
+    innerClasses: function() {
+      return classNames('list-filter__inner', {
+        'list-filter__inner--column': this.column
+      });
     }
   },
   methods: {
@@ -70,19 +77,29 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import '../styles/_variables.scss';
 @import '../styles/_extensions.scss';
+@import '../styles/_mixins.scss';
 
 .list-filter {
   display: flex;
+  flex: 1;
 
-  &--column {
-    flex-direction: column;
+  &__inner {
+    display: flex;
+    flex: 1;
 
-    > * {
-      margin: 5px 0;
+    @include respondTo(xs) {
+      flex-wrap: wrap;
+    }
+
+    &--column {
+      flex-direction: column;
+
+      > * {
+        margin: 5px 0;
+      }
     }
   }
 
@@ -90,8 +107,10 @@ export default {
     margin: $app--margin-standard;
     box-sizing: content-box;
   }
+
   &__search {
     max-height: 45px;
+    min-width: 200px;
   }
 }
 </style>

@@ -11,9 +11,9 @@
         class="htr-calendar__shift-button"
         @click="handleViewShift(-1)"
       />
-      <Button class="htr-calendar__shift-button" @click="toggleViewMode">
-        {{ controlText }}
-      </Button>
+      <Button class="htr-calendar__shift-button" @click="toggleViewMode">{{
+        controlText
+      }}</Button>
       <Button
         :aria-label="nextLabel"
         :icon="nextIcon"
@@ -299,7 +299,7 @@ $button-padding: 8px;
   margin: 1px;
   box-sizing: border-box;
 
-  @include respond-to-all((sm, xs)) {
+  @include respondToAll((sm, xs)) {
     width: 100%;
     max-width: 100%;
   }
@@ -329,7 +329,7 @@ $button-padding: 8px;
       box-sizing: border-box;
       cursor: pointer;
 
-      @include respond-to-all((sm, xs)) {
+      @include respondToAll((sm, xs)) {
         $button-padding-half: $button-padding / 2;
 
         padding: {

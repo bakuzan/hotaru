@@ -21,7 +21,7 @@
 
 <script>
 import List from '@/components/List';
-import { ListFigureCard, RankingCard } from '@/components/Cards';
+import { ListFigureCard } from '@/components/Cards';
 
 import Urls from '@/constants/urls';
 import { Orders } from '@/constants/htrInstanceSettings';
@@ -31,8 +31,7 @@ export default {
   name: 'HTRInstanceViewList',
   components: {
     List,
-    ListFigureCard,
-    RankingCard
+    ListFigureCard
   },
   props: {
     items: {
