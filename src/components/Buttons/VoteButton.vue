@@ -26,8 +26,8 @@ export default {
     Button
   },
   props: {
-    id: { type: String, default: '' },
-    className: { type: String, default: '' },
+    id: { type: String, default: null },
+    className: { type: String, default: null },
     type: {
       type: String,
       default: 'button'
