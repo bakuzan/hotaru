@@ -8,5 +8,8 @@ module.exports = {
   score(ranking) {
     const score = (ranking.wins / ranking.total) * ranking.wins;
     return Utils.roundFloat(score, 2);
+  },
+  wins(ranking) {
+    return ranking.wins || 0;
   }
 };
