@@ -77,33 +77,33 @@ export default {
     figureSize: {
       type: String,
       default: 'small',
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     }
   },
-  data: function() {
+  data: function () {
     return { removeIcon: Icons.cross };
   },
   computed: {
-    winsText: function() {
+    winsText: function () {
       if (this.wins === undefined) return null;
       return this.wins === 1 ? `${this.wins} win` : `${this.wins} wins`;
     },
-    totalText: function() {
+    totalText: function () {
       if (this.total === undefined) return null;
       return this.total === 1 ? `${this.total} match` : `${this.total} matches`;
     },
-    scoreText: function() {
+    scoreText: function () {
       if (this.score === undefined) return null;
       return this.score === null ? 'No rating' : `${this.score} rating`;
     },
-    cardUrl: function() {
+    cardUrl: function () {
       return Urls.build(Urls.characterView, { id: this.character.id });
     }
   },
   methods: {
-    handleRemove: function() {
+    handleRemove: function () {
       const id = this.id || this.character.id;
       this.remove(id);
     }
@@ -137,7 +137,7 @@ export default {
   }
 
   &__link {
-    display: inline-block;
+    // display: contents;
     width: auto;
     height: auto;
     padding: $app--padding-small 0;

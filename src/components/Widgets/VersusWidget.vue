@@ -1,10 +1,8 @@
 <template>
   <div :class="classes" :id="id">
     <VersusCard
-      v-for="item in versusCharacters"
       :class="versusClass"
-      :key="item.id"
-      :item="item"
+      :item="versusCharacters[0]"
       :winner-id="winnerId"
       :is-dummy="isDummy"
       :is-final="isFinal"
@@ -24,6 +22,17 @@
     >
       VS
     </router-link>
+    <VersusCard
+      :class="versusClass"
+      :item="versusCharacters[1]"
+      :winner-id="winnerId"
+      :is-dummy="isDummy"
+      :is-final="isFinal"
+      :figure-size="figureSize"
+      :open-new-tab="openNewTab"
+      grow
+      @vote="handleVote"
+    />
   </div>
 </template>
 
@@ -70,7 +79,7 @@ export default {
     figureSize: {
       type: String,
       default: 'small',
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },
@@ -84,32 +93,32 @@ export default {
     }
   },
   computed: {
-    shouldStack: function() {
+    shouldStack: function () {
       return this.column && !this.isFinal;
     },
-    classes: function() {
+    classes: function () {
       return classNames('versus', {
         'versus--is-dummy': this.isDummy,
         'versus--grow': this.grow,
         'versus--column': this.shouldStack
       });
     },
-    versusClass: function() {
+    versusClass: function () {
       return classNames('versus__versus-card', {
         'versus__versus-card--stacked': this.shouldStack
       });
     },
-    compareLink: function() {
+    compareLink: function () {
       const ids = this.characters.map((x) => x.id).join(',');
       return `${Urls.versusComparison}?characterIds=${ids}`;
     },
-    versusCharacters: function() {
+    versusCharacters: function () {
       const [c1, c2] = this.characters;
       return c1.order > c2.order ? [c2, c1] : [c1, c2];
     }
   },
   methods: {
-    handleVote: function(characterId) {
+    handleVote: function (characterId) {
       if (this.isDummy) return;
       this.$emit('vote', this.id, characterId);
     }
@@ -132,32 +141,35 @@ export default {
   }
 
   &__icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 50px;
-    height: auto;
+    min-width: 50px;
+    height: 20px;
     padding: 0;
     border-width: 1px;
-    transform: translateY(-50%) translateX(-50%);
     border-radius: 50px;
     text-align: center;
+    margin: auto 0;
   }
 
   &--column {
     flex-direction: column;
+
+    .versus__icon {
+      height: auto;
+      margin: 0 auto;
+    }
   }
 }
 
 $versus-stacked-spacing: 15px;
 
-.versus {
-  &__versus-card--stacked {
-    width: 100%;
-    margin-bottom: $versus-stacked-spacing;
-    & + & {
-      margin-top: $versus-stacked-spacing;
-    }
+.versus__versus-card--stacked {
+  height: 50%;
+  width: 100%;
+  margin-bottom: $versus-stacked-spacing;
+
+  & ~ & {
+    margin-top: $versus-stacked-spacing;
+    margin-bottom: 0;
   }
 }
 </style>

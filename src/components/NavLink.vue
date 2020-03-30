@@ -20,7 +20,7 @@ export default {
     name: { type: String, default: '' }
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('nav-link', 'center-contents');
     }
   }
@@ -31,6 +31,7 @@ export default {
 @import '../styles/_variables';
 
 .nav-link {
+  display: contents;
   width: 100%;
   height: $nav-link--height;
   padding: $app--padding-standard;

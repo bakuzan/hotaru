@@ -35,8 +35,8 @@ export default {
 
 .htr-icon {
   @extend %center-contents;
-  width: 1.1em;
-  height: 1.1em;
+  width: 1.25em;
+  height: 1.25em;
   z-index: map-get($z-index, above-siblings);
 
   &__display::before {

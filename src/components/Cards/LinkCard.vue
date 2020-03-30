@@ -63,7 +63,7 @@ export default {
     }
   },
   computed: {
-    itemUrl: function() {
+    itemUrl: function () {
       const resolveType = this.htrTemplate
         ? { type: this.htrTemplate.type }
         : {};
@@ -73,13 +73,13 @@ export default {
         ...resolveType
       });
     },
-    linkTarget: function() {
+    linkTarget: function () {
       return this.openNewTab ? '_blank' : '';
     },
-    hasWinner: function() {
+    hasWinner: function () {
       return !!(this.settings && this.settings.winnerId);
     },
-    isSeeded: function() {
+    isSeeded: function () {
       const rules = this.rules || (this.settings && this.settings.rules);
       return rules && rules.isSeeded;
     }
@@ -100,6 +100,7 @@ export default {
   &__icons {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 5px;
   }
 
   &__date {
@@ -108,13 +109,10 @@ export default {
 
   // don't do styling like this!!
   .nav-link {
-    display: inline-block;
     width: auto;
     height: auto;
-    margin-right: auto;
     padding-left: 0;
     border-left: 0;
-    margin-left: 0;
   }
 }
 </style>
