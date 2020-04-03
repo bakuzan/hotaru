@@ -34,8 +34,8 @@
             />
 
             <Button
-              :icon="toggleImageIcon"
               id="toggleImageInput"
+              :icon="toggleImageIcon"
               class="toggle-button"
               theme="primary"
               @click="toggleImageInput"
@@ -131,7 +131,7 @@
                 :force-read-only="readOnly"
                 label="Tags"
               >
-                <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
+                <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
                   <InputBoxChipListTag
                     v-for="tag in value"
                     :key="tag.id"
@@ -158,8 +158,8 @@
             <div class="gallery-controls">
               <div v-if="showGalleryImageInput" class="gallery-controls__input">
                 <InputBox
-                  :value="galleryImage"
                   id="galleryImageInput"
+                  :value="galleryImage"
                   name="galleryImage"
                   label="Gallery Image Url"
                   class
@@ -167,8 +167,8 @@
                   @input="galleryImage = $event"
                 />
                 <Button
-                  :icon="addImageIcon"
                   id="addGalleryImage"
+                  :icon="addImageIcon"
                   class="add-to-gallery-button"
                   theme="primary"
                   title="Add url to gallery"
@@ -337,7 +337,7 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return {
       series: [],
       tags: [],
@@ -438,35 +438,35 @@ export default {
     }
   },
   computed: {
-    characterId: function() {
+    characterId: function () {
       return +Routing.getParam(this.$router, 'id');
     },
-    mappedSeries: function() {
+    mappedSeries: function () {
       return mapToSelectBoxOptions(this.series);
     },
-    combinedTags: function() {
+    combinedTags: function () {
       const tags = [...this.tags, ...this.newTags];
       const ids = new Set(tags.map((x) => x.id));
       return Array.from(ids).map((id) => tags.find((x) => x.id === id));
     },
-    characterSeries: function() {
+    characterSeries: function () {
       const { seriesId } = this.character;
       const series = this.series.find((x) => x.id === seriesId) || {};
       return series.name;
     },
-    characterTags: function() {
+    characterTags: function () {
       let tagIds = this.character.tagIds || this.character.tags;
       tagIds = (tagIds || []).map((x) => (typeof x === 'object' ? x.id : x));
       const tags = this.tags.filter((x) => tagIds.includes(x.id));
       return tags;
     },
-    editCharacterTags: function() {
+    editCharacterTags: function () {
       let tagIds = this.editCharacter.tagIds || this.editCharacter.tags;
       tagIds = (tagIds || []).map((x) => (typeof x === 'object' ? x.id : x));
       const tags = this.combinedTags.filter((x) => tagIds.includes(x.id));
       return tags;
     },
-    hasEdits: function() {
+    hasEdits: function () {
       const resolvedImages = this.editCharacter.images
         ? { images: [...this.editCharacter.images] }
         : {};
@@ -488,25 +488,25 @@ export default {
 
       return notEqual || imageChange;
     },
-    showButtons: function() {
+    showButtons: function () {
       const canShow = (!this.isCreate && this.hasEdits) || this.isCreate;
       return canShow && !this.checkCharacterAlreadyExists;
     },
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
-    characterImages: function() {
+    characterImages: function () {
       const images = this.editCharacter.images || [];
       return [...images];
     },
-    seriesUrl: function() {
+    seriesUrl: function () {
       const seriesId = this.editCharacter.seriesId || null;
       if (!seriesId) return Urls.seriesList;
       return Urls.build(Urls.seriesView, { id: seriesId });
     }
   },
   watch: {
-    $route: function(newRoute, oldRoute) {
+    $route: function (newRoute, oldRoute) {
       if (newRoute.path === Urls.characterCreate) {
         if (oldRoute && oldRoute.path !== Urls.characterCreate) {
           Object.assign(this.$data, getInitialState());
@@ -538,27 +538,27 @@ export default {
     }
   },
   methods: {
-    updateData: function(data) {
+    updateData: function (data) {
       const resolvedImages = data.images ? { images: [...data.images] } : {};
 
       this.originalImages = [...(data.images || [])];
       this.character = { ...data, ...resolvedImages };
       this.editCharacter = { ...data, ...resolvedImages };
     },
-    toggleImageInput: function() {
+    toggleImageInput: function () {
       this.showImageInput = !this.showImageInput;
     },
-    toggleGalleryImageInput: function() {
+    toggleGalleryImageInput: function () {
       this.showGalleryImageInput = !this.showGalleryImageInput;
     },
-    handleUserChanges: function(value, name) {
+    handleUserChanges: function (value, name) {
       this.editCharacter[name] = value;
 
       if (name === 'displayImage') {
         this.showImageInput = true;
       }
     },
-    onGalleryImageUpload: function(value) {
+    onGalleryImageUpload: function (value) {
       if (!value) {
         return;
       }
@@ -570,29 +570,29 @@ export default {
       this.$set(this.editCharacter.images, index, newImage);
       this.galleryImage = '';
     },
-    onRemoveImage: function(imageId) {
+    onRemoveImage: function (imageId) {
       this.editCharacter.images = [
         ...this.editCharacter.images.filter((x) => x.id !== imageId)
       ];
     },
-    onCreate: function(newTag) {
+    onCreate: function (newTag) {
       this.newTags.push(newTag);
 
       const oldTagIds = [...this.editCharacter.tagIds];
       this.editCharacter.tagIds = [...oldTagIds, newTag.id];
     },
-    onUpdate: function(value, name) {
+    onUpdate: function (value, name) {
       this.editCharacter[name] = value.map((x) => x.id);
     },
-    cancel: function() {
+    cancel: function () {
       this.readOnly = true;
       this.newTags = [];
       this.editCharacter = { ...this.character };
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.readOnly = false;
       });
     },
-    submit: function() {
+    submit: function () {
       this.readOnly = true; // set back to read only.
 
       if (this.isCreate && CharacterValidator.isValidNew(this.editCharacter)) {
@@ -606,7 +606,7 @@ export default {
         this.readOnly = false;
       }
     },
-    handleCreate: function() {
+    handleCreate: function () {
       this.mutationLoading = true;
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
@@ -656,7 +656,7 @@ export default {
           });
         });
     },
-    handleUpdate: function() {
+    handleUpdate: function () {
       this.mutationLoading = true;
       const postCharacter = mapCharacterToPost(
         this.editCharacter,
@@ -703,7 +703,7 @@ export default {
           });
         });
     },
-    handleTabChange: function(tabHash) {
+    handleTabChange: function (tabHash) {
       const id = Number(Routing.getParam(this.$router, 'id'));
       const hasId = !!id;
       const isVersusTab = tabHash === '#versus';
@@ -712,7 +712,7 @@ export default {
       this.$apollo.queries.versusHistoryPaged.skip = !hasId || !isVersusTab;
       this.$apollo.queries.imagesForCharacter.skip = !hasId || !isImagesTab;
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'versusHistoryPaged', 'VersusPage');
     }
   }

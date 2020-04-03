@@ -136,7 +136,7 @@ export default {
     ListFilterBar,
     MultiSelect
   },
-  data: function() {
+  data: function () {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.characterView,
@@ -182,19 +182,19 @@ export default {
     }
   },
   computed: {
-    isLoading: function() {
+    isLoading: function () {
       return (
         this.$apollo.queries.activeGauntlet.loading || this.isLoadingMutation
       );
     },
-    showView: function() {
+    showView: function () {
       return (
         this.activeGauntlet &&
         this.activeGauntlet.versus &&
         this.activeGauntlet.versus.length
       );
     },
-    showSelection: function() {
+    showSelection: function () {
       return (
         !this.isLoading &&
         this.activeGauntlet &&
@@ -202,7 +202,7 @@ export default {
         this.activeGauntlet.versus.length === 0
       );
     },
-    gauntletCreateDisabled: function() {
+    gauntletCreateDisabled: function () {
       if (!this.activeGauntlet.canContinue) {
         return false;
       }
@@ -213,13 +213,13 @@ export default {
           this.activeGauntlet.versus.some((x) => !x.winnerId))
       );
     },
-    gauntletSelectionDisabled: function() {
+    gauntletSelectionDisabled: function () {
       return (
         this.activeGauntlet.versus &&
         this.activeGauntlet.versus.some((x) => !x.winnerId)
       );
     },
-    versusCounts: function() {
+    versusCounts: function () {
       if (!this.activeGauntlet.versus) {
         return {
           ongoing: 0,
@@ -238,13 +238,13 @@ export default {
     }
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.filterHandler(value, name);
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'gauntletCharacters', 'CharacterPage');
     },
-    handleReturnToSelection: function() {
+    handleReturnToSelection: function () {
       this.$apollo.queries.activeGauntlet.refetch();
       this.$apollo.queries.gauntletCharacters.refetch({
         paging: {
@@ -253,7 +253,7 @@ export default {
         }
       });
     },
-    handleContinueGauntlet: function() {
+    handleContinueGauntlet: function () {
       const character = this.activeGauntlet.character;
       if (!character) {
         console.error(
@@ -264,7 +264,7 @@ export default {
 
       this.handleCreateGauntlet(character.id);
     },
-    handleCreateGauntlet: function(characterId) {
+    handleCreateGauntlet: function (characterId) {
       if (this.isLoadingMutation) {
         return;
       }
@@ -291,7 +291,7 @@ export default {
           })
         );
     },
-    handleVote: function(versusId, winnerId) {
+    handleVote: function (versusId, winnerId) {
       const versus = this.activeGauntlet.versus.find((x) => x.id === versusId);
       const versusResult = { ...versus, winnerId };
 
@@ -385,35 +385,25 @@ export default {
 @import '../styles/_variables';
 @import '../styles/_mixins';
 
-.gauntlet-view__active-character {
-  .list-figure-card__link {
-    height: min-content;
-  }
+.gauntlet-view__active-character .list-figure-card__link {
+  height: min-content;
 }
+
 .gauntlet-versus-grid {
-  justify-content: space-between;
-  grid-gap: 1px;
+  gap: 5px;
   grid-auto-rows: auto !important;
-  $grid-values: (
-    xs: 100,
-    sm: 49,
-    md: 32,
-    lg: 24
-  );
-  @include gridColumnGenerator($grid-values);
-  &__item {
-    min-width: 200px;
-    .versus {
-      height: 100%;
-    }
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  padding: 0;
+
+  &__item .versus {
+    height: 100%;
   }
 }
-.gauntlet-selection-item__card {
-  // Dont do this
-  .list-figure-card__caption {
-    justify-content: flex-start;
-    text-align: left;
-  }
+
+// Dont do this
+.gauntlet-selection-item__card .list-figure-card__caption {
+  justify-content: flex-start;
+  text-align: left;
 }
 </style>
 <style lang="scss" src="../styles/_page-view.scss" />

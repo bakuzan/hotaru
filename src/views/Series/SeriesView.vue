@@ -204,7 +204,7 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return getInitialState();
   },
   metaInfo() {
@@ -251,46 +251,46 @@ export default {
     }
   },
   computed: {
-    hasEdits: function() {
+    hasEdits: function () {
       return !objectsAreEqual(this.series, this.editSeries);
     },
-    showButtons: function() {
+    showButtons: function () {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
     },
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     }
   },
   watch: {
-    $route: function(newRoute) {
+    $route: function (newRoute) {
       if (newRoute.path === Urls.seriesCreate) {
         Object.assign(this.$data, getInitialState());
       }
     }
   },
   methods: {
-    updateData: function(data) {
+    updateData: function (data) {
       this.series = { ...data };
       this.editSeries = { ...data };
     },
-    toggleImageInput: function() {
+    toggleImageInput: function () {
       this.showImageInput = !this.showImageInput;
     },
-    handleUserChanges: function(value, name) {
+    handleUserChanges: function (value, name) {
       this.editSeries[name] = value;
 
       if (name === 'displayImage') {
         this.showImageInput = true;
       }
     },
-    cancel: function() {
+    cancel: function () {
       this.readOnly = true;
       this.editSeries = { ...this.series };
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.readOnly = false;
       });
     },
-    submit: function() {
+    submit: function () {
       this.readOnly = true; // set back to read only.
 
       if (this.isCreate && SeriesValidator.isValidNew(this.editSeries)) {
@@ -304,7 +304,7 @@ export default {
         this.readOnly = false;
       }
     },
-    handleCreate: function() {
+    handleCreate: function () {
       this.mutationLoading = true;
       const postSeries = mapSeriesToPost(this.editSeries);
 
@@ -334,7 +334,7 @@ export default {
           this.$router.push(redirectToUrl);
         });
     },
-    handleUpdate: function() {
+    handleUpdate: function () {
       this.mutationLoading = true;
       const postSeries = mapSeriesToPost(this.editSeries);
 

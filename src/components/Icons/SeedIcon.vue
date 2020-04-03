@@ -17,7 +17,7 @@ export default {
       default: true
     }
   },
-  data: function() {
+  data: function () {
     return { seedIcon: Icons.seed };
   }
 };

@@ -64,7 +64,7 @@ export default {
       default: 'displayImage'
     }
   },
-  data: function() {
+  data: function () {
     return {
       baseId: generateUniqueId(),
       uploadIcon: UploadSvg,
@@ -74,32 +74,32 @@ export default {
     };
   },
   computed: {
-    imageFileName: function() {
+    imageFileName: function () {
       const filename = this.imageFile && this.imageFile.name;
       return filename || 'No file selected';
     },
-    fileInputId: function() {
+    fileInputId: function () {
       return `file-input-${this.baseId}`;
     },
-    inputBoxId: function() {
+    inputBoxId: function () {
       return `input-box-${this.baseId}`;
     },
-    isLoading: function() {
+    isLoading: function () {
       return this.mutationUploading;
     }
   },
   methods: {
-    onInput: function(value) {
+    onInput: function (value) {
       this.imageUrl = value;
     },
-    onUploadClick: function() {
+    onUploadClick: function () {
       this.uploadUrl();
     },
-    onFileClick: function() {
+    onFileClick: function () {
       const fileinput = document.getElementById(this.fileInputId);
       fileinput.click();
     },
-    onFileChange: function(event) {
+    onFileChange: function (event) {
       const { files } = event.target;
       const hasFiles = !!files && files.length;
 
@@ -108,7 +108,7 @@ export default {
         convertToBase64(this.imageFile, this.uploadBase64);
       }
     },
-    uploadUrl: function() {
+    uploadUrl: function () {
       this.mutationUploading = true;
       this.$apollo
         .mutate({
@@ -123,7 +123,7 @@ export default {
           }
         });
     },
-    uploadBase64: function(event) {
+    uploadBase64: function (event) {
       const base64 = event.target.result;
 
       this.mutationUploading = true;

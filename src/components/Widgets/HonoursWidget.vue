@@ -58,7 +58,7 @@ export default {
     List,
     VersusWidget
   },
-  data: function() {
+  data: function () {
     return {
       cardUrl: Urls.characterView,
       honours: {}
@@ -71,13 +71,13 @@ export default {
     }
   },
   computed: {
-    isLoading: function() {
+    isLoading: function () {
       return this.$apollo.queries.honours.loading;
     },
-    honoursList: function() {
+    honoursList: function () {
       return [...this.mostWinsList, ...this.versusList];
     },
-    mostWinsList: function() {
+    mostWinsList: function () {
       const list = ['mostWinsInLast7Days', 'mostWinsInLast30Days']
         .map((key) => {
           const data = this.honours[key];
@@ -101,7 +101,7 @@ export default {
 
       return list;
     },
-    versusList: function() {
+    versusList: function () {
       const results = [];
       const { mostCommonVersus, longestVersus, closestRivalry } = this.honours;
 
@@ -109,9 +109,7 @@ export default {
         results.push({
           id: generateUniqueId(),
           title: 'Most Common Versus',
-          contextLabel: `${mostCommonVersus.fights} fights\n(${
-            mostCommonVersus.c1Wins
-          } - ${mostCommonVersus.c2Wins})`,
+          contextLabel: `${mostCommonVersus.fights} fights\n(${mostCommonVersus.c1Wins} - ${mostCommonVersus.c2Wins})`,
           characters: this.setVersusOrder(mostCommonVersus),
           winnerId: -1
         });
@@ -121,9 +119,7 @@ export default {
         results.push({
           id: generateUniqueId(),
           title: 'Closest Rivalry',
-          contextLabel: `${closestRivalry.fights} fights\n(${
-            closestRivalry.c1Wins
-          } - ${closestRivalry.c2Wins})`,
+          contextLabel: `${closestRivalry.fights} fights\n(${closestRivalry.c1Wins} - ${closestRivalry.c2Wins})`,
           characters: this.setVersusOrder(closestRivalry),
           winnerId: -1
         });
@@ -143,7 +139,7 @@ export default {
     }
   },
   methods: {
-    setVersusOrder: function(versus) {
+    setVersusOrder: function (versus) {
       return (versus.characters || []).map((c) => ({
         ...c,
         order: c.id === versus.cId1 ? 1 : 2

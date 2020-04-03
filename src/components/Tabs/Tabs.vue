@@ -38,17 +38,17 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       tabs: [],
       activeTab: ''
     };
   },
   computed: {
-    hasTabOptions: function() {
+    hasTabOptions: function () {
       return !!this.tabs.length;
     },
-    tabsClasses: function() {
+    tabsClasses: function () {
       return classNames('tabs', {
         'tabs--is-locked': this.isLocked
       });
@@ -73,7 +73,7 @@ export default {
     }
   },
   methods: {
-    getTabClasses: function(tab) {
+    getTabClasses: function (tab) {
       return classNames('tabs__tab tab', {
         'tab--active': tab.isActive,
         'tab--disabled': tab.isDisabled
@@ -96,7 +96,7 @@ export default {
       this.$emit('updated', tab.tabHash);
       this.activeTab = tab.tabHash;
     },
-    displayName: function(text) {
+    displayName: function (text) {
       return separateAndCapitalise(text);
     }
   }

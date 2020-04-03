@@ -123,7 +123,10 @@ class BracketLineDrawer {
             const endY =
               vIndex % 2 === 0 ? nextNodeRect.top : nextNodeRect.bottom;
 
-            lines = [[endX, startY], [endX, endY]];
+            lines = [
+              [endX, startY],
+              [endX, endY]
+            ];
           }
 
           const strokeStyle = versus.winnerId
@@ -158,7 +161,10 @@ class BracketLineDrawer {
       );
 
       const moveTo = [startX, startY];
-      const lines = [[endX, startY], [endX, endY]];
+      const lines = [
+        [endX, startY],
+        [endX, endY]
+      ];
       const strokeStyle =
         winnerIndex !== index ? NORMAL_LINE_COLOUR : WINNER_LINE_COLOUR;
 

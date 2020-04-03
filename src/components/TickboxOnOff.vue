@@ -41,7 +41,7 @@ export default {
         on: 'On',
         off: 'Off'
       }),
-      validator: function(value) {
+      validator: function (value) {
         const keys = Object.keys(value);
         return ['on', 'off'].every((x) => keys.includes(x));
       }
@@ -59,24 +59,24 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return { hoveredId: null };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('tickbox-on-off', {
         'tickbox-on-off--align-left': this.alignLeft
       });
     },
-    onProps: function() {
+    onProps: function () {
       return this.sharedProps({ idSuffix: 'on', isActive: this.checked });
     },
-    offProps: function() {
+    offProps: function () {
       return this.sharedProps({ idSuffix: 'off', isActive: !this.checked });
     }
   },
   methods: {
-    sharedProps: function({ idSuffix, isActive }) {
+    sharedProps: function ({ idSuffix, isActive }) {
       const id = this.id ? `${this.id}-${idSuffix}` : idSuffix;
       return {
         id,
@@ -85,11 +85,11 @@ export default {
         disabled: this.disabled
       };
     },
-    updateHovered: function(event) {
+    updateHovered: function (event) {
       const { target, type } = event;
       this.hoveredId = type === 'mouseover' ? target.id : null;
     },
-    toggleTo: function(value) {
+    toggleTo: function (value) {
       if (value === this.checked) return;
       this.$emit('change', value, this.name);
     }

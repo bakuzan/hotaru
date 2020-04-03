@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    onChange: function(...values) {
+    onChange: function (...values) {
       this.$emit('change', ...values);
     }
   }

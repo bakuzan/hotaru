@@ -13,10 +13,10 @@
     >
       <VersusWidget
         v-for="match in round"
-        v-bind="match"
         :key="match.id"
         :class="bracketVersusClass(i)"
         :is-final="isFinal(i)"
+        v-bind="match"
         enable-compare
         open-new-tab
         column
@@ -56,7 +56,7 @@ export default {
       default: () => {}
     }
   },
-  data: function() {
+  data: function () {
     const id = generateUniqueId();
     return {
       mutationLoading: false,
@@ -68,13 +68,13 @@ export default {
     };
   },
   computed: {
-    bracketRounds: function() {
+    bracketRounds: function () {
       const { layout } = this.options;
       const round = (layout && layout[0]) || [];
       const firstRoundMatchCount = round.length;
       return bracketProgression(firstRoundMatchCount);
     },
-    matches: function() {
+    matches: function () {
       const { rules = {}, seedOrder } = this.options;
       const { isSeeded } = rules;
       let result = this.items;
@@ -107,7 +107,7 @@ export default {
 
       return result;
     },
-    bracket: function() {
+    bracket: function () {
       if (!this.items.length) return [];
 
       const { layout = [] } = this.options;
@@ -126,7 +126,7 @@ export default {
 
       return fullBracket;
     },
-    customBracketLayout: function() {
+    customBracketLayout: function () {
       const columCount = this.bracket.length * 2 - 2;
       const customBracketLayout = this.bracket.reduce((p, r, i) => {
         const roundCount = r.length;
@@ -144,7 +144,7 @@ export default {
     }
   },
   watch: {
-    customBracketLayout: function(newV, oldV) {
+    customBracketLayout: function (newV, oldV) {
       const dataUpdated = newV && (!oldV || newV.length !== oldV.length);
       if (dataUpdated) {
         this.$nextTick(this.updateCanvas);
@@ -163,26 +163,26 @@ export default {
     });
   },
   methods: {
-    isFinal: function(index) {
+    isFinal: function (index) {
       return Math.floor(this.customBracketLayout.length / 2) === index;
     },
-    bracketVersusClass: function(index) {
+    bracketVersusClass: function (index) {
       return classNames('bracket__versus', {
         'bracket__versus--is-final': this.isFinal(index)
       });
     },
-    updateCanvas: function() {
+    updateCanvas: function () {
       const layout = this.customBracketLayout;
       this.bracketService.draw(layout);
     },
-    getDummyCharacter: function() {
+    getDummyCharacter: function () {
       return {
         id: generateUniqueId(),
         name: 'TBC',
         displayImage: Urls.images.characterPlaceholder
       };
     },
-    getDummyVersus: function(winners) {
+    getDummyVersus: function (winners) {
       return {
         isDummy: true,
         enableCompare: winners.every((w) => !!w),
@@ -190,7 +190,7 @@ export default {
         characters: winners.map((x) => (x ? x : this.getDummyCharacter()))
       };
     },
-    getDummyRound: function(count, prev) {
+    getDummyRound: function (count, prev) {
       return Array(count)
         .fill(null)
         .map((_, pos) => {
@@ -213,7 +213,7 @@ export default {
           return this.getDummyVersus(winningCharacters);
         });
     },
-    handleVote: function(versusId, winnerId) {
+    handleVote: function (versusId, winnerId) {
       this.mutationLoading = true;
 
       this.$apollo

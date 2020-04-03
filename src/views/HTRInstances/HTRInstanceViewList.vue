@@ -47,16 +47,16 @@ export default {
       default: () => []
     }
   },
-  data: function() {
+  data: function () {
     return {
       cardUrl: Urls.characterView
     };
   },
   computed: {
-    isCustomOrder: function() {
+    isCustomOrder: function () {
       return this.order === Orders.custom;
     },
-    sortedItems: function() {
+    sortedItems: function () {
       const sortType = this.order;
 
       if (sortType === Orders.name) {
@@ -71,10 +71,10 @@ export default {
     }
   },
   methods: {
-    handleRemove: function(characterId) {
+    handleRemove: function (characterId) {
       this.$emit('remove', characterId);
     },
-    onSorting: function(event) {
+    onSorting: function (event) {
       const from = event.oldIndex;
       const to = event.newIndex;
       this.$emit('moved', from, to);

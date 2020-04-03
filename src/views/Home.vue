@@ -90,7 +90,7 @@ export default {
     LoadingBouncer,
     HonoursWidget
   },
-  data: function() {
+  data: function () {
     return {
       cardUrl: Urls.characterView,
       columnClasses: classNames(
@@ -118,14 +118,14 @@ export default {
     }
   },
   computed: {
-    allowCreateCall: function() {
+    allowCreateCall: function () {
       return (
         !this.blockCreateVersus &&
         (!this.versusDailyActive.length ||
           this.versusDailyActive.every((x) => x.winnerId))
       );
     },
-    dailyVersus: function() {
+    dailyVersus: function () {
       return [
         ...this.versusDailyActive.filter((x) => !x.winnerId),
         ...this.versusDailyActive.filter((x) => x.winnerId)
@@ -133,10 +133,10 @@ export default {
     }
   },
   methods: {
-    formatRankCharacter: function(o) {
+    formatRankCharacter: function (o) {
       return formatForRankingCard(o);
     },
-    onRandom: function() {
+    onRandom: function () {
       this.$apollo
         .query({
           query: Query.getRandomCharacterId,
@@ -154,7 +154,7 @@ export default {
           })
         );
     },
-    handleCreateDaily: function() {
+    handleCreateDaily: function () {
       if (!this.allowCreateCall) return;
       this.blockCreateVersus = true;
 
@@ -175,7 +175,7 @@ export default {
           })
         );
     },
-    handleVote: function(versusId, winnerId) {
+    handleVote: function (versusId, winnerId) {
       const versus = this.versusDailyActive.find((x) => x.id === versusId);
       const versusResult = { ...versus, winnerId };
 

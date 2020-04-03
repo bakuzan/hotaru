@@ -49,28 +49,28 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       typeSlotName: Strings.slot.listFilterType
     };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('list-filter', {
         'list-filter--column': this.column
       });
     },
-    innerClasses: function() {
+    innerClasses: function () {
       return classNames('list-filter__inner', {
         'list-filter__inner--column': this.column
       });
     }
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.$emit('input', value, name);
     },
-    onClick: function() {
+    onClick: function () {
       this.$emit('add');
     }
   }

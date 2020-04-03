@@ -1,9 +1,9 @@
 <template>
   <div :class="classes">
     <InputBox
+      :id="name"
       v-bind="$props"
       :class="inputProps.class"
-      :id="name"
       :value="filter"
       @input="onInput"
       @focus="onFocus"
@@ -110,7 +110,7 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       isFocussed: false,
       activeSuggestion: 0,
@@ -119,33 +119,33 @@ export default {
     };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('autocomplete', {
         'autocomplete--no-suggestions': this.showNoSuggestionsText
       });
     },
-    menuClasses: function() {
+    menuClasses: function () {
       return classNames(
         'autocomplete__menu',
         'list column one',
         this.menuClass
       );
     },
-    showMenu: function() {
+    showMenu: function () {
       const focussedWithFilter = this.isFocussed && this.filter;
       return focussedWithFilter;
     },
-    hasOptions: function() {
+    hasOptions: function () {
       return !!this.options.length;
     },
-    showNoSuggestionsText: function() {
+    showNoSuggestionsText: function () {
       return (
         this.showMenu &&
         !this.hasSuggestions &&
         (this.hasOptions || this.disableLocalFilter)
       );
     },
-    suggestions: function() {
+    suggestions: function () {
       const { options, attr, filter, disableLocalFilter } = this;
 
       if (!(options && filter)) return [];
@@ -156,7 +156,7 @@ export default {
         (x) => x[attr].toLowerCase().indexOf(filterLowerCase) > -1
       );
     },
-    hasSuggestions: function() {
+    hasSuggestions: function () {
       return !!this.suggestions.length && this.showMenu;
     }
   },
@@ -164,11 +164,11 @@ export default {
     clearTimeout(this.timer);
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.$emit('input', value, name);
       this.activeSuggestion = 0;
     },
-    onKeyDown: function(event) {
+    onKeyDown: function (event) {
       const { key } = event;
       if (key === KeyCodes.Enter && this.filter) {
         event.preventDefault();
@@ -181,34 +181,34 @@ export default {
         this.$emit('keydown', event);
       }
     },
-    onFocus: function() {
+    onFocus: function () {
       clearTimeout(this.timer);
       this.isFocussed = true;
     },
-    onBlur: function() {
+    onBlur: function () {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         if (!this.timer) return;
         this.isFocussed = false;
       }, 1000);
     },
-    onSelectAutocompleteSuggestion: function(id) {
+    onSelectAutocompleteSuggestion: function (id) {
       if (!id && id !== 0 && !this.allowCreate) return;
       this.$emit('on-select', id);
     },
-    selectActiveSuggestion: function() {
+    selectActiveSuggestion: function () {
       const item = this.suggestions[this.activeSuggestion];
       const id = item ? item.id : null;
       this.onSelectAutocompleteSuggestion(id);
     },
-    updateActiveSuggestion: function(value) {
+    updateActiveSuggestion: function (value) {
       const maxIndex = this.suggestions.length - 1;
       let newValue = this.activeSuggestion + value;
       if (newValue > maxIndex) newValue = 0;
       if (newValue < 0) newValue = maxIndex;
       this.activeSuggestion = newValue;
     },
-    highlightMatchingText: function(value = '') {
+    highlightMatchingText: function (value = '') {
       const match = value.match(new RegExp(this.filter, 'i'));
       if (!match) {
         return { pre: value };

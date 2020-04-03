@@ -159,7 +159,7 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return getInitialState();
   },
   metaInfo() {
@@ -231,42 +231,42 @@ export default {
     }
   },
   computed: {
-    hasEdits: function() {
+    hasEdits: function () {
       return !objectsAreEqual(this.template, this.editTemplate);
     },
-    showButtons: function() {
+    showButtons: function () {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
     },
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
-    mappedLimits: function() {
+    mappedLimits: function () {
       const type = this.editTemplate.type;
       if (!type) return [];
       return mapEnumToSelectBoxOptions(Limit[type] || []);
     },
-    isBracket: function() {
+    isBracket: function () {
       return this.editTemplate.type === HTRTemplateTypes.bracket;
     }
   },
   watch: {
-    $route: function(newRoute) {
+    $route: function (newRoute) {
       if (newRoute.path === Urls.htrTemplateCreator) {
         Object.assign(this.$data, getInitialState());
       }
     }
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.editTemplate[name] = value;
     },
-    onRulesInput: function(value, name) {
+    onRulesInput: function (value, name) {
       this.editTemplate.rules[name] = value;
     },
-    onSearchSeries: function(value) {
+    onSearchSeries: function (value) {
       this.seriesFilter = value;
     },
-    onSelectSeries: function(seriesId) {
+    onSelectSeries: function (seriesId) {
       const series = this.series.find((x) => x.id === seriesId);
       this.editTemplate.rules.series = [
         ...this.editTemplate.rules.series,
@@ -274,21 +274,21 @@ export default {
       ];
       this.seriesFilter = '';
     },
-    onRemoveSeries: function(seriesId) {
+    onRemoveSeries: function (seriesId) {
       this.editTemplate.rules.series = [
         ...this.editTemplate.rules.series.filter((x) => x.id !== seriesId)
       ];
     },
-    cancel: function() {
+    cancel: function () {
       this.series = [];
       this.seriesFilter = '';
       this.editTemplate = { ...this.template };
     },
-    updateData: function(data) {
+    updateData: function (data) {
       this.template = { ...data };
       this.editTemplate = { ...data };
     },
-    submit: function() {
+    submit: function () {
       this.mutationLoading = true;
       const template = mapHTRTemplateToPost(this.editTemplate, this.isCreate);
 
@@ -303,7 +303,7 @@ export default {
         this.mutationLoading = false;
       }
     },
-    handleCreate: function(template) {
+    handleCreate: function (template) {
       this.$apollo
         .mutate({
           mutation: Mutation.createHTRTemplate,
@@ -323,7 +323,7 @@ export default {
           this.$router.push(redirectToUrl);
         });
     },
-    handleUpdate: function(template) {
+    handleUpdate: function (template) {
       this.$apollo
         .mutate({
           mutation: Mutation.updateHTRTemplate,

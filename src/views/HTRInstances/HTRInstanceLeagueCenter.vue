@@ -23,11 +23,9 @@
             <div class="league-card">
               <div
                 :class="iconClasses(slotProps.item)"
-                :title="
-                  `Is ${
-                    slotProps.item.settings.isComplete ? 'Complete' : 'Ongoing'
-                  }`
-                "
+                :title="`Is ${
+                  slotProps.item.settings.isComplete ? 'Complete' : 'Ongoing'
+                }`"
               ></div>
               <NavLink
                 :to="leagueLink(slotProps.item)"
@@ -94,7 +92,7 @@ export default {
     Button,
     NavLink
   },
-  data: function() {
+  data: function () {
     return {
       mutationLoading: false,
       searchTimer: null,
@@ -117,13 +115,13 @@ export default {
     }
   },
   computed: {
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
-    canCreate: function() {
+    canCreate: function () {
       return !this.ongoingHTRInstanceLeagues;
     },
-    ongoingInstances: function() {
+    ongoingInstances: function () {
       return (
         (this.ongoingHTRInstanceLeagues &&
           this.ongoingHTRInstanceLeagues.instances) ||
@@ -132,20 +130,20 @@ export default {
     }
   },
   watch: {
-    $route: function() {
+    $route: function () {
       LP.refetchForFilter(this, 'pastHTRInstanceLeaguesPaged');
     }
   },
   methods: {
-    iconClasses: function(item) {
+    iconClasses: function (item) {
       return classNames('league-card__icon', {
         'league-card__icon--complete': item.settings.isComplete
       });
     },
-    seasonLink: function(seasonId) {
+    seasonLink: function (seasonId) {
       return Urls.build(Urls.htrInstanceLeagueView, { seasonId });
     },
-    leagueLink: function(item) {
+    leagueLink: function (item) {
       const seasonId =
         this.ongoingHTRInstanceLeagues && this.ongoingHTRInstanceLeagues.id;
       if (!seasonId) {
@@ -155,13 +153,13 @@ export default {
       const url = this.seasonLink(seasonId);
       return item ? `${url}?leagueId=${item.id}` : url;
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'pastHTRInstanceLeaguesPaged', 'HTRInstanceLeaguePage');
     },
-    formatDate: function(date) {
+    formatDate: function (date) {
       return formatDateForDisplay(date);
     },
-    onCreateNew: function() {
+    onCreateNew: function () {
       this.mutationLoading = true;
 
       this.$apollo

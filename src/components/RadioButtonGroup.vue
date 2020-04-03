@@ -2,8 +2,8 @@
   <div :class="classes">
     <RadioButton
       v-for="(item, i) in options"
-      :key="item.value"
       :id="getKey(i)"
+      :key="item.value"
       :name="name"
       v-bind="item"
       :checked="item.value === value"
@@ -45,17 +45,17 @@ export default {
     }
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('radio-button-group', {
         'radio-button-group--column': this.column
       });
     }
   },
   methods: {
-    getKey: function(i) {
+    getKey: function (i) {
       return `${this.id}-${i}`;
     },
-    onChange: function(value, name) {
+    onChange: function (value, name) {
       this.$emit('change', value, name);
     }
   }

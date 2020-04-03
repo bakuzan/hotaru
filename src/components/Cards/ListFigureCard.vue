@@ -80,14 +80,14 @@ export default {
     figureSize: {
       type: String,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },
     figureDirection: {
       type: String,
       default: 'column',
-      validator: function(value) {
+      validator: function (value) {
         return ['column', 'row'].includes(value);
       }
     },
@@ -96,39 +96,39 @@ export default {
       default: ''
     }
   },
-  data: function() {
+  data: function () {
     return { removeIcon: Icons.cross };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('list-figure-card', {
         [`list-figure-card--${this.figureSize}`]: this.figureSize
       });
     },
-    figureClasses: function() {
+    figureClasses: function () {
       return classNames('list-figure-card__figure', this.figureClass, {
         [`list-figure-card__figure--size_${this.figureSize}`]: this.figureSize,
         [`list-figure-card__figure--direction_${this.figureDirection}`]: this
           .figureDirection
       });
     },
-    imageClasses: function() {
+    imageClasses: function () {
       const isPlaceholder =
         this.displayImage === Urls.images.characterPlaceholder;
       return classNames('list-figure-card__image', {
         'list-figure-card__image--placeholder': isPlaceholder
       });
     },
-    itemUrl: function() {
+    itemUrl: function () {
       if (!this.urlSource) return null;
       return Urls.build(this.urlSource, { id: this.id });
     },
-    linkTarget: function() {
+    linkTarget: function () {
       return this.openNewTab ? '_blank' : '';
     }
   },
   methods: {
-    handleRemove: function() {
+    handleRemove: function () {
       this.remove(this.id);
     }
   }

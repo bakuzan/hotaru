@@ -110,7 +110,7 @@ export default {
       default: ''
     }
   },
-  data: function() {
+  data: function () {
     return {
       removeOutsideClick: null,
       selectAllName: `${this.id}--selectAll`,
@@ -118,18 +118,18 @@ export default {
     };
   },
   computed: {
-    lastElementId: function() {
+    lastElementId: function () {
       const lastIndex = this.options.length - 1;
       return this.getName(lastIndex);
     },
-    dropdownClasses: function() {
+    dropdownClasses: function () {
       return classNames(
         'multi-select__dropdown-container',
         { 'multi-select__dropdown-container--is-open': this.isOpen },
         this.listClassName
       );
     },
-    displayValue: function() {
+    displayValue: function () {
       const length = this.values.length;
 
       if (!length) {
@@ -142,15 +142,15 @@ export default {
 
       return `${length} selected`;
     },
-    hasAllSelected: function() {
+    hasAllSelected: function () {
       return this.values.length === this.options.length;
     }
   },
   methods: {
-    getName: function(i) {
+    getName: function (i) {
       return `${this.id}--${OPTION_PREFIX}${i}`;
     },
-    handleToggleOpen: function(e) {
+    handleToggleOpen: function (e) {
       if (e.type !== Strings.events.click && !OPEN_KEYS.includes(e.key)) {
         return;
       }
@@ -162,10 +162,10 @@ export default {
       e.stopPropagation();
       this.isOpen = true;
     },
-    handleToggleClose: function() {
+    handleToggleClose: function () {
       this.isOpen = false;
     },
-    handleOptionChange: function(_, name) {
+    handleOptionChange: function (_, name) {
       const index = Number(name.replace(EXTRACT_OPTION_INDEX, ''));
       const option = this.options.find((x, i) => i === index);
       const valuesSet = new Set([...this.values]);
@@ -179,14 +179,14 @@ export default {
         this.$emit('update', [...valuesSet.values()], this.name);
       }
     },
-    handleSelectAll: function() {
+    handleSelectAll: function () {
       const values = new Set([...this.values]);
       const options = new Set([...this.options.map((op) => op.value)]);
       const hasAllSelected = values.size === options.size;
       const newValues = hasAllSelected ? [] : [...options.values()];
       this.$emit('update', newValues, this.name);
     },
-    onTabTrapDeactivate: function() {
+    onTabTrapDeactivate: function () {
       const input = document.getElementById(this.id);
 
       if (input) {

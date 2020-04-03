@@ -121,7 +121,7 @@ export default {
     Tabs: HTRTabs.Tabs,
     Tab: HTRTabs.Tab
   },
-  data: function() {
+  data: function () {
     return {
       removeIcon: Icons.cross,
       cardUrl: Urls.characterView,
@@ -152,38 +152,38 @@ export default {
     }
   },
   computed: {
-    characterSearchResults: function() {
+    characterSearchResults: function () {
       const characters = this.characters || [];
       return characters.filter((x) => !this.characterIds.includes(x.id));
     },
-    characterIds: function() {
+    characterIds: function () {
       const { characterIds } = this.$route.query;
       const str = characterIds || ',';
       return str.split(',').map((x) => (x ? Number(x) : null));
     },
-    activeCharacters: function() {
+    activeCharacters: function () {
       return this.characterIds.map((id, i) => {
         const c = this.compareCharacters.find((c) => c.id === id);
         if (!id || !c) return this.placeholders[i];
         return { ...c, isActive: true };
       });
     },
-    hasTwoCharacters: function() {
+    hasTwoCharacters: function () {
       return (
         this.characterIds.every((x) => !!x) && this.characterIds.length === 2
       );
     },
-    comparisonSummaryTotal: function() {
+    comparisonSummaryTotal: function () {
       if (!this.comparisonSummary) return;
       const value = this.comparisonSummary.total;
       return value === 1 ? `${value} match` : `${value} matches`;
     },
-    comparisonSummaryWinSplit: function() {
+    comparisonSummaryWinSplit: function () {
       if (!this.comparisonSummary) return;
       const { leftWinner, rightWinner } = this.comparisonSummary;
       return `${leftWinner} - ${rightWinner}`;
     },
-    opponentsInCommon: function() {
+    opponentsInCommon: function () {
       const [c1, c2] = this.characterIds;
       const { sharedOpponents = [] } = this.versusHistoryComparison;
       const groups = groupBy(sharedOpponents, 'characterId');
@@ -227,13 +227,13 @@ export default {
       });
   },
   methods: {
-    formatDate: function(date) {
+    formatDate: function (date) {
       return formatDateTimeForDisplay(date);
     },
-    onSearchCharacters: function(value) {
+    onSearchCharacters: function (value) {
       this.characterFilter = value;
     },
-    onSelectCharacter: function(characterId) {
+    onSelectCharacter: function (characterId) {
       const character = this.characters.find((x) => x.id === characterId);
       this.compareCharacters.push(character);
 
@@ -245,7 +245,7 @@ export default {
       this.updateRoute(newQueryParam);
       this.characterFilter = '';
     },
-    onTriggerQuery: function() {
+    onTriggerQuery: function () {
       this.$apollo
         .query({
           query: Query.getVersusHistoryComparison,
@@ -266,7 +266,7 @@ export default {
           }
         });
     },
-    handleRemoveCharacter: function(characterId) {
+    handleRemoveCharacter: function (characterId) {
       const newQueryParam = [...this.characterIds]
         .map((x) => (x === characterId ? '' : x || ''))
         .join(',');
@@ -278,13 +278,13 @@ export default {
       this.versusHistoryComparison = [];
       this.comparisonSummary = null;
     },
-    updateRoute: function(characterIds) {
+    updateRoute: function (characterIds) {
       this.$router.replace({
         name: Strings.route.versusComparison,
         query: { characterIds }
       });
     },
-    isWinner: function(item, index) {
+    isWinner: function (item, index) {
       return item.winnerId === this.characterIds[index];
     }
   }

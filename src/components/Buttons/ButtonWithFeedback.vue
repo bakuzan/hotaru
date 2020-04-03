@@ -37,14 +37,14 @@ export default {
     theme: {
       type: String,
       default: 'default',
-      validator: function(value) {
+      validator: function (value) {
         return ['default', 'primary', 'secondary'].includes(value);
       }
     },
     size: {
       type: String,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return ['small'].includes(value);
       }
     },
@@ -55,11 +55,11 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return { isLoading: false, isSuccess: false, isFailure: false };
   },
   computed: {
-    buttonClasses: function() {
+    buttonClasses: function () {
       return classNames('feedback', {
         'feedback--state_loading': this.isLoading,
         'feedback--state_success': this.isSuccess,
@@ -71,10 +71,10 @@ export default {
     this.updateState(this.handleState);
   },
   methods: {
-    handleClick: function(...things) {
+    handleClick: function (...things) {
       this.$emit('click', ...things);
     },
-    handleState: function({
+    handleState: function ({
       isLoading = false,
       isSuccess = false,
       isFailure = false

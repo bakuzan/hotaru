@@ -56,17 +56,17 @@ export default {
       default: ''
     }
   },
-  data: function() {
+  data: function () {
     return {
       childSlotName: Strings.slot.viewBlock,
       isEditing: false
     };
   },
   computed: {
-    readOnly: function() {
+    readOnly: function () {
       return !this.lockEdit && !this.isEditing;
     },
-    classes: function() {
+    classes: function () {
       return classNames('view-block-toggler', {
         'view-block-toggler--read-only': this.readOnly,
         'view-block-toggler--read-only_forced': this.forceReadOnly
@@ -74,19 +74,19 @@ export default {
     }
   },
   watch: {
-    forceReadOnly: function(newV, oldV) {
+    forceReadOnly: function (newV, oldV) {
       if (newV && newV !== oldV) {
         this.isEditing = false;
       }
     },
-    lockEdit: function(newV, oldV) {
+    lockEdit: function (newV, oldV) {
       if (newV !== oldV) {
         this.isEditing = newV;
       }
     }
   },
   methods: {
-    onToggle: function() {
+    onToggle: function () {
       if (this.forceReadOnly) return;
 
       this.isEditing = !this.isEditing;

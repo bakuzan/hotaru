@@ -131,7 +131,7 @@ export default {
     VersusWidget,
     SeriesCard
   },
-  data: function() {
+  data: function () {
     return {
       mutationLoading: false,
       removeIcon: Icons.cross,
@@ -164,7 +164,7 @@ export default {
     }
   },
   computed: {
-    showButtons: function() {
+    showButtons: function () {
       return !this.versus || this.versus.winnerId;
     }
   },
@@ -183,23 +183,23 @@ export default {
       });
   },
   methods: {
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.rules[name] = value;
     },
-    onSearchSeries: function(value) {
+    onSearchSeries: function (value) {
       this.seriesFilter = value;
     },
-    onSelectSeries: function(seriesId) {
+    onSelectSeries: function (seriesId) {
       const series = this.series.find((x) => x.id === seriesId);
       this.rules.series = [...this.rules.series, series];
       this.seriesFilter = '';
     },
-    onRemoveSeries: function(seriesId) {
+    onRemoveSeries: function (seriesId) {
       this.rules.series = [
         ...this.rules.series.filter((x) => x.id !== seriesId)
       ];
     },
-    submit: function() {
+    submit: function () {
       this.versus = null;
       this.mutationLoading = true;
       const { series, genders, sources, ...passing } = this.rules;
@@ -229,7 +229,7 @@ export default {
           this.mutationLoading = false;
         });
     },
-    handleVote: function(versusId, winnerId) {
+    handleVote: function (versusId, winnerId) {
       this.mutationLoading = true;
 
       this.$apollo

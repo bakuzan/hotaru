@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    onChange: function(event) {
+    onChange: function (event) {
       const { value } = event.target;
       this.$emit('change', value, this.name);
     }

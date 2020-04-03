@@ -57,7 +57,7 @@ export default {
     LinkCard,
     RadioButtonGroup
   },
-  data: function() {
+  data: function () {
     return {
       title: queryFilterOptions.queryDefault,
       typeSlotName: Strings.slot.listFilterType,
@@ -100,7 +100,7 @@ export default {
     }
   },
   computed: {
-    queryType: function() {
+    queryType: function () {
       return Routing.getQueryArg(
         this.$router,
         'type',
@@ -109,7 +109,7 @@ export default {
     }
   },
   watch: {
-    $route: function() {
+    $route: function () {
       this.title = Routing.getQueryFromLocation(
         'type',
         queryFilterOptions.queryDefault
@@ -119,7 +119,7 @@ export default {
     }
   },
   methods: {
-    onAdd: function() {
+    onAdd: function () {
       const queryType = Routing.getQueryArg(
         this.$router,
         'type',
@@ -129,10 +129,10 @@ export default {
         Urls.build(Urls.htrInstanceCreate, { type: queryType })
       );
     },
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.filterHandler(value, name);
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(
         this,
         'htrInstancesPaged',

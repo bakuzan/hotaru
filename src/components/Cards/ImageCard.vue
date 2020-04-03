@@ -31,7 +31,7 @@ export default {
     figureSize: {
       type: String,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },

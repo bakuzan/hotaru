@@ -14,7 +14,7 @@ export default {
   props: {
     to: { type: String, default: '' }
   },
-  data: function() {
+  data: function () {
     return {
       darkLink: BlackLinkSVG,
       lightLink: WhiteLinkSVG

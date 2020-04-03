@@ -1,8 +1,8 @@
 <template>
   <section
     v-show="isActive"
-    :aria-hidden="!isActive"
     :id="tabHash"
+    :aria-hidden="!isActive"
     :class="panelClasses"
     role="tabpanel"
   >
@@ -22,7 +22,7 @@ export default {
     name: { type: String, required: true },
     isDisabled: { type: Boolean, default: false }
   },
-  data: function() {
+  data: function () {
     return {
       isActive: false,
       isVisible: true,
@@ -30,7 +30,7 @@ export default {
     };
   },
   computed: {
-    panelClasses: function() {
+    panelClasses: function () {
       return classNames('tab-panel', { 'tab-panel--active': this.isActive });
     },
     text() {

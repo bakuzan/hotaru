@@ -30,11 +30,11 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return { removeIcon: Icons.cross };
   },
   methods: {
-    onClick: function() {
+    onClick: function () {
       this.$emit('remove', this.id);
     }
   }

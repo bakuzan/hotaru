@@ -63,7 +63,7 @@ export default {
     figureSize: {
       type: String,
       default: 'small',
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },
@@ -73,17 +73,17 @@ export default {
     }
   },
   computed: {
-    characterCardUrl: function() {
+    characterCardUrl: function () {
       const hash = this.$router.history.current.hash || '';
       return `${Urls.characterView}${hash}`;
     },
-    cardClasses: function() {
+    cardClasses: function () {
       return classNames('versus-history-card');
     },
-    opponent: function() {
+    opponent: function () {
       return this.item.characters.find((x) => x.id !== this.characterId) || {};
     },
-    isWinner: function() {
+    isWinner: function () {
       return this.item.winnerId === this.characterId;
     }
   }

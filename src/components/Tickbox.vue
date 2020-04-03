@@ -47,12 +47,12 @@ export default {
     }
   },
   computed: {
-    tickboxClasses: function() {
+    tickboxClasses: function () {
       return classNames('tickbox', this.customTickbox);
     }
   },
   methods: {
-    onChange: function(event) {
+    onChange: function (event) {
       this.$emit('change', event.target.checked, this.name);
     }
   }

@@ -33,11 +33,11 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return { whenRecordsBegan: new Date('2018-09-25'), today: new Date() };
   },
   methods: {
-    handleDateChange: function(value, name) {
+    handleDateChange: function (value, name) {
       this.$emit('change', value, name);
     }
   }

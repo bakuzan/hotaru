@@ -26,14 +26,14 @@ export default {
     theme: {
       type: String,
       default: 'default',
-      validator: function(value) {
+      validator: function (value) {
         return ['default', 'primary', 'secondary'].includes(value);
       }
     },
     size: {
       type: String,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return ['small'].includes(value);
       }
     },
@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    buttonClasses: function() {
+    buttonClasses: function () {
       return classNames(
         'button',
         {
@@ -63,7 +63,7 @@ export default {
     }
   },
   methods: {
-    onClick: function(event) {
+    onClick: function (event) {
       this.$emit('click', event);
     }
   }

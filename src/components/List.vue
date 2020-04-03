@@ -9,7 +9,7 @@
       tag="ul"
       @update="onUpdate"
     >
-      <li v-for="item in items" :class="listItemClasses" :key="item.id">
+      <li v-for="item in items" :key="item.id" :class="listItemClasses">
         <div v-if="isSortable" class="sort-handle">+</div>
         <slot :item="item">
           <!-- Fallback content -->
@@ -41,7 +41,7 @@ export default {
     columns: {
       type: String,
       default: '',
-      validator: function(value) {
+      validator: function (value) {
         return ['', 'one', 'two', 'three', 'four', 'five'].includes(value);
       }
     },
@@ -71,12 +71,12 @@ export default {
     },
     isGrid: {
       default: false,
-      validator: function(value) {
+      validator: function (value) {
         return value === 'standard' || value === true || value === false;
       }
     }
   },
-  data: function() {
+  data: function () {
     return {
       observer: null,
       listObserver: null
@@ -84,7 +84,7 @@ export default {
   },
 
   computed: {
-    listClasses: function() {
+    listClasses: function () {
       return classNames(
         !this.isGrid && {
           list: true,
@@ -99,7 +99,7 @@ export default {
         this.className
       );
     },
-    listItemClasses: function() {
+    listItemClasses: function () {
       return classNames(
         this.itemClassName,
         !this.isGrid && {
@@ -110,16 +110,16 @@ export default {
         this.isGrid && { grid__item: true }
       );
     },
-    sortableOptions: function() {
+    sortableOptions: function () {
       return {
         disabled: !this.isSortable,
         handle: '.sort-handle'
       };
     },
-    hasPaging: function() {
+    hasPaging: function () {
       return !(this.pagedTotal === null || isNaN(this.pagedTotal));
     },
-    totalText: function() {
+    totalText: function () {
       return `Displaying ${this.items.length} of ${this.pagedTotal}`;
     }
   },
@@ -142,10 +142,10 @@ export default {
     }
   },
   methods: {
-    getListRef: function() {
+    getListRef: function () {
       return this.$refs.listContainer.$el;
     },
-    setMutationOberver: function() {
+    setMutationOberver: function () {
       if (this.listObserver) {
         this.listObserver.disconnect();
       }
@@ -165,7 +165,7 @@ export default {
         subtree: false
       });
     },
-    setIntersectionObserver: function(targetNode) {
+    setIntersectionObserver: function (targetNode) {
       if (this.observer) {
         this.observer.disconnect();
       }
@@ -181,7 +181,7 @@ export default {
 
       this.observer.observe(targetNode);
     },
-    onUpdate: function(...stuff) {
+    onUpdate: function (...stuff) {
       this.$emit('update', ...stuff);
     }
   }

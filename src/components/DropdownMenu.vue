@@ -1,5 +1,5 @@
 <template>
-  <div v-htr-outside-click="closeDropdown" :id="id" class="dropdown">
+  <div :id="id" v-htr-outside-click="closeDropdown" class="dropdown">
     <Button
       :id="togglerId"
       :icon="icon"
@@ -46,7 +46,7 @@ export default {
     align: {
       type: String,
       default: Strings.center,
-      validator: function(value) {
+      validator: function (value) {
         return [Strings.left, Strings.right, Strings.center].includes(value);
       }
     },
@@ -57,7 +57,7 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       removeOutsideClick: null,
       position: {},
@@ -65,13 +65,13 @@ export default {
     };
   },
   computed: {
-    togglerId: function() {
+    togglerId: function () {
       return `${this.id}__toggler`;
     },
-    menuId: function() {
+    menuId: function () {
       return `${this.id}__menu`;
     },
-    menuStyle: function() {
+    menuStyle: function () {
       if (this.ignorePosition) return {};
 
       const { top, left, right } = this.position;
@@ -83,7 +83,7 @@ export default {
         return { top: `${top}px` };
       }
     },
-    dropdownMenuClasses: function() {
+    dropdownMenuClasses: function () {
       return classNames(
         'dropdown__menu',
         `dropdown__menu--align_${this.align}`,
@@ -92,13 +92,13 @@ export default {
     }
   },
   methods: {
-    toggleDropdown: function(event) {
+    toggleDropdown: function (event) {
       const position = getElementCoordinates(event.target);
 
       this.position = position;
       this.isDropdownOpen = !this.isDropdownOpen;
     },
-    closeDropdown: function() {
+    closeDropdown: function () {
       if (this.isDropdownOpen) {
         this.isDropdownOpen = false;
       }

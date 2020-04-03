@@ -22,7 +22,7 @@ export default {
   components: {
     NavLink
   },
-  data: function() {
+  data: function () {
     return {
       links: [
         { id: 1, to: Urls.base, title: 'Home', text: 'H' },
@@ -63,7 +63,7 @@ export default {
     };
   },
   computed: {
-    sideNavLinkClass: function() {
+    sideNavLinkClass: function () {
       return 'sidebar__link';
     }
   }

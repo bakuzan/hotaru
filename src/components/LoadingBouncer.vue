@@ -19,17 +19,17 @@ export default {
       default: undefined
     }
   },
-  data: function() {
+  data: function () {
     return { range: [1, 2, 3] };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('loading-bouncer', {
         'loading-bouncer--local': this.local,
         'loading-bouncer--fixed': !this.local
       });
     },
-    bouncerClasses: function() {
+    bouncerClasses: function () {
       return classNames(
         'loading-bouncer__circle',
         'themed-background',

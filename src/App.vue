@@ -27,7 +27,7 @@ export default {
     Sidebar,
     Alert
   },
-  data: function() {
+  data: function () {
     return {
       portalName: Strings.portal.modal,
       naviPortalName: Strings.portal.naviMenu

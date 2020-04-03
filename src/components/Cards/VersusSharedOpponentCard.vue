@@ -36,7 +36,7 @@ export default {
       default: () => ({})
     }
   },
-  data: function() {
+  data: function () {
     return {
       cardUrl: Urls.characterView
     };

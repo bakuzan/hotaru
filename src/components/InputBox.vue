@@ -1,8 +1,8 @@
 <template>
   <div :class="classes">
     <input
-      :type="type"
       :id="id"
+      :type="type"
       :name="name"
       :value="value"
       :maxLength="maxLength"
@@ -55,7 +55,7 @@ export default {
     },
     value: {
       default: '',
-      validator: function(value) {
+      validator: function (value) {
         return typeof value === 'string' || typeof value === 'number';
       }
     },
@@ -76,17 +76,17 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return { icon: Icons.cross, clearTimer: null };
   },
   computed: {
-    showClearButton: function() {
+    showClearButton: function () {
       return !!this.value && this.isTextInput;
     },
-    isTextInput: function() {
+    isTextInput: function () {
       return this.type === 'text';
     },
-    classes: function() {
+    classes: function () {
       const notClearable = !!this.isTextInput;
 
       return classNames(
@@ -99,40 +99,40 @@ export default {
         this.class
       );
     },
-    clearClasses: function() {
+    clearClasses: function () {
       return classNames('input-box__clear', this.clearButtonClass);
     },
-    hasMaxNumber: function() {
+    hasMaxNumber: function () {
       return this.type === 'number' && !isNaN(this.max);
     },
-    showCount: function() {
+    showCount: function () {
       return !!this.maxLength || this.hasMaxNumber;
     },
-    countText: function() {
+    countText: function () {
       if (this.maxLength) return `${this.value.length}/${this.maxLength}`;
       if (this.hasMaxNumber) return `out of ${this.max || '?'}`;
       return '';
     }
   },
   methods: {
-    clearAndFocusInput: function() {
+    clearAndFocusInput: function () {
       this.$emit('input', '', this.name);
 
       clearTimeout(this.clearTimer);
       this.clearTimer = setTimeout(() => this.$el.firstChild.focus(), 100);
     },
-    handleChange: function(event) {
+    handleChange: function (event) {
       const { name } = event.target;
       const value = getEventValue(event.target);
       this.$emit('input', value, name);
     },
-    onFocus: function(event) {
+    onFocus: function (event) {
       this.$emit('focus', event);
     },
-    onBlur: function(event) {
+    onBlur: function (event) {
       this.$emit('blur', event);
     },
-    onKeyDown: function(event) {
+    onKeyDown: function (event) {
       this.$emit('keydown', event);
     }
   }

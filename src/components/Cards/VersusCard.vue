@@ -1,5 +1,5 @@
 <template>
-  <div :class="cardClasses" :id="versusId">
+  <div :id="versusId" :class="cardClasses">
     <ListFigureCard
       v-bind="item"
       :url-source="isDummy ? null : characterCardUrl"
@@ -20,6 +20,7 @@
       :is-winner="isWinner"
       :is-champion="isWinner && isFinal"
       :disabled="isDummy"
+      :name="item.name"
       @click="handleVote"
       >Vote {{ item.name }}</VoteButton
     >
@@ -65,7 +66,7 @@ export default {
     figureSize: {
       type: String,
       default: 'small',
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },
@@ -74,26 +75,26 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       versusId: generateUniqueId(),
       characterCardUrl: Urls.characterView
     };
   },
   computed: {
-    cardClasses: function() {
+    cardClasses: function () {
       return classNames('versus-card', {
         'versus-card--grow': this.grow,
         'versus-card--is-dummy': this.isDummy,
         'versus-card--is-champion': this.isWinner && this.isFinal
       });
     },
-    isWinner: function() {
+    isWinner: function () {
       return this.item.id === this.winnerId;
     }
   },
   methods: {
-    handleVote: function() {
+    handleVote: function () {
       if (this.isDummy || this.winnerId) return;
       this.$emit('vote', this.item.id);
     }
@@ -108,7 +109,7 @@ export default {
 .versus-card {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: calc(50% - #{$versus-icon-min-width});
   padding: $app--padding-small;
 
   &--grow {

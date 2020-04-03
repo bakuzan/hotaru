@@ -42,27 +42,27 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     return {};
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('suggestion', {
         'suggestion--active': this.isActiveSuggestion
       });
     },
-    isActiveSuggestion: function() {
+    isActiveSuggestion: function () {
       return this.activeSuggestion === this.index;
     },
-    itemText: function() {
+    itemText: function () {
       return this.item[this.attr];
     },
-    textPart: function() {
+    textPart: function () {
       return this.highlightMatch(this.itemText);
     }
   },
   methods: {
-    onClick: function() {
+    onClick: function () {
       this.$emit('on-select', this.item.id);
     }
   }

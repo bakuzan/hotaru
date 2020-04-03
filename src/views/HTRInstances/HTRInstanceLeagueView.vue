@@ -93,7 +93,7 @@ export default {
     RankingCard,
     VersusWidget
   },
-  data: function() {
+  data: function () {
     return {
       title: '',
       mutationLoading: false,
@@ -131,10 +131,10 @@ export default {
     }
   },
   computed: {
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
-    canCreate: function() {
+    canCreate: function () {
       return (
         !this.isSeasonComplete &&
         this.htrInstanceLeagueById &&
@@ -144,10 +144,10 @@ export default {
           this.leagueMatches.nodes.every((x) => x.winnerId))
       );
     },
-    seasonId: function() {
+    seasonId: function () {
       return Number(Routing.getParam(this.$router, 'seasonId'));
     },
-    leagues: function() {
+    leagues: function () {
       const leagues =
         this.htrTemplateSeasonById && this.htrTemplateSeasonById.instances;
       if (!leagues) {
@@ -155,25 +155,25 @@ export default {
       }
       return leagues;
     },
-    leagueOptions: function() {
+    leagueOptions: function () {
       return this.leagues.map((x) => ({
         value: x.id,
         text: `${x.name} (${x.settings.isComplete ? 'Complete' : 'Ongoing'})`
       }));
     },
-    isSeasonComplete: function() {
+    isSeasonComplete: function () {
       return (
         this.leagues.length && this.leagues.every((x) => x.settings.isComplete)
       );
     },
-    leagueTable: function() {
+    leagueTable: function () {
       return (
         (this.htrInstanceLeagueById &&
           this.htrInstanceLeagueById.leagueTable) ||
         []
       );
     },
-    leagueMatches: function() {
+    leagueMatches: function () {
       return (
         (this.htrInstanceLeagueById &&
           this.htrInstanceLeagueById.matches &&
@@ -183,7 +183,7 @@ export default {
     }
   },
   watch: {
-    $route: function() {
+    $route: function () {
       const id = Routing.getQueryArg(this.$router, 'leagueId');
       this.updateTitle();
       if (!id) {
@@ -198,10 +198,10 @@ export default {
     }
   },
   methods: {
-    currentLeagueId: function() {
+    currentLeagueId: function () {
       return Number(Routing.getQueryArg(this.$router, 'leagueId', 0));
     },
-    updateTitle: function() {
+    updateTitle: function () {
       const id = this.currentLeagueId();
       const league = this.leagues.find((x) => x.id === id);
       const seasonName =
@@ -209,7 +209,7 @@ export default {
       const leagueName = league && league.name;
       this.title = seasonName + (leagueName ? `, ${leagueName}` : '');
     },
-    onMatchCreate: function() {
+    onMatchCreate: function () {
       this.mutationLoading = true;
 
       const currentLeagueId = Number(
@@ -253,14 +253,14 @@ export default {
           this.mutationLoading = false;
         });
     },
-    onLeagueChange: function(value) {
+    onLeagueChange: function (value) {
       const leagueId = Number(value);
       this.$router.replace({
         name: Strings.route.htrInstanceLeagueView,
         query: { leagueId }
       });
     },
-    handleVote: function(versusId, winnerId) {
+    handleVote: function (versusId, winnerId) {
       this.mutationLoading = true;
 
       const currentLeagueId = Number(
@@ -320,7 +320,7 @@ export default {
           this.mutationLoading = false;
         });
     },
-    showMoreMatches: function() {
+    showMoreMatches: function () {
       const { matches } = this.htrInstanceLeagueById;
       const query = this.$apollo.queries.htrInstanceLeagueById;
       if (!matches || !matches.hasMore || query.loading) {

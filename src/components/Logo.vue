@@ -31,7 +31,7 @@ export default {
   props: {
     id: { type: String, default: '' }
   },
-  data: function() {
+  data: function () {
     return {
       animateClass: 'hideshow',
       letterClass: 'letter',
@@ -42,7 +42,7 @@ export default {
     };
   },
   computed: {
-    upperText: function() {
+    upperText: function () {
       return this.text.toUpperCase();
     }
   },
@@ -59,7 +59,7 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    cycleCharacters: function() {
+    cycleCharacters: function () {
       clearInterval(this.interval);
       this.interval = setInterval(() => {
         const letterIndex = this.letters.findIndex(

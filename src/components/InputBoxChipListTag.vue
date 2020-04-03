@@ -42,18 +42,18 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return { removeIcon: Icons.cross };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('chip-tag', this.class, {
         'chip-tag--clickable': this.hasClick,
         'chip-tag--deletable': this.hasRemove,
         'chip-tag--active': this.isActive
       });
     },
-    tagAccessiblityIfClickable: function() {
+    tagAccessiblityIfClickable: function () {
       if (!this.hasClick) return {};
       return {
         role: 'button',
@@ -62,10 +62,10 @@ export default {
     }
   },
   methods: {
-    onClick: function() {
+    onClick: function () {
       this.$emit('click', this.data);
     },
-    onRemove: function() {
+    onRemove: function () {
       this.$emit('remove', this.data);
     }
   }

@@ -20,7 +20,7 @@ export default {
     name: { type: String, default: '' }
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('nav-link', 'center-contents');
     }
   }

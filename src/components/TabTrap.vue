@@ -39,7 +39,7 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     const containerRef = generateUniqueId();
 
     return {
@@ -47,7 +47,7 @@ export default {
     };
   },
   watch: {
-    isActive: function(currActive, prevActive) {
+    isActive: function (currActive, prevActive) {
       const nowActive = !prevActive && currActive;
       const wasActive = !currActive && prevActive;
 
@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    focusCycler: function(e) {
+    focusCycler: function (e) {
       const prev = e.relatedTarget;
       const isPrevATrap = prev && prev.className.includes('tab-trap');
       const isCurrTopTrap = e.target.className.includes('tab-trap--top');

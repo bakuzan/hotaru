@@ -26,7 +26,7 @@ export default {
       default: 't'
     }
   },
-  data: function() {
+  data: function () {
     return {
       fallback: Urls.images.deadImage,
       placeholder: Urls.images.characterPlaceholder,
@@ -34,12 +34,12 @@ export default {
     };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('image', { 'image--empty': !this.src });
     }
   },
   watch: {
-    src: function(nv, ov) {
+    src: function (nv, ov) {
       if (nv !== ov) {
         const image = this.getImageWithSuffix(nv || this.placeholder);
         this.$el.setAttribute('src', image);
@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       if (!this.forceLoad) {
         this.observer = new IntersectionObserver(
           ([entry]) => {
@@ -65,7 +65,7 @@ export default {
     });
   },
   methods: {
-    getImageWithSuffix: function(url) {
+    getImageWithSuffix: function (url) {
       if (!url.includes('imgur')) {
         return url;
       }
@@ -75,7 +75,7 @@ export default {
       const ext = parts.slice(-1).pop();
       return `${img}${this.suffix}.${ext}`;
     },
-    onError: function(event) {
+    onError: function (event) {
       event.target.onerror = null;
       event.target.src = this.getImageWithSuffix(this.fallback);
     }

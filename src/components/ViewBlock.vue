@@ -32,12 +32,12 @@ export default {
     }
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('view-block', { 'view-block--no-data': !this.value });
     }
   },
   methods: {
-    onNoData: function() {
+    onNoData: function () {
       if (this.value) return;
       this.$emit('toggle');
     }

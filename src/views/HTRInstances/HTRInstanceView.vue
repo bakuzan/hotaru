@@ -82,7 +82,7 @@
                 label="Template"
                 @toggle="onRemoveTemplate"
               >
-                <div slot-scope="{ value }" :slot="viewBlockReadOnlySlot">
+                <div :slot="viewBlockReadOnlySlot" slot-scope="{ value }">
                   {{ value && value.name }}
                 </div>
                 <InputBoxAutocomplete
@@ -224,7 +224,7 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data: function () {
     const type = Routing.getParam(this.$router, 'type');
     return getInitialState(type);
   },
@@ -320,22 +320,22 @@ export default {
     }
   },
   computed: {
-    type: function() {
+    type: function () {
       return (
         Routing.getParam(this.$router, 'type') ||
         (this.editInstance.htrTemplate && this.editInstance.htrTemplate.type)
       );
     },
-    isListType: function() {
+    isListType: function () {
       return this.type === HTRTemplateTypes.list;
     },
-    instanceViewClasses: function() {
+    instanceViewClasses: function () {
       return classNames('page-view', {
         'page-view--column': !this.isListType,
         'page-view--responsive': this.isListType
       });
     },
-    instanceContentClasses: function() {
+    instanceContentClasses: function () {
       return classNames('htr-instance-content', {
         'htr-instance-content--bracket': !this.isListType,
         'htr-instance-content--wider': this.isListType,
@@ -343,35 +343,35 @@ export default {
         'page-view__content': !this.isListType
       });
     },
-    mappedLimits: function() {
+    mappedLimits: function () {
       return mapEnumToSelectBoxOptions(Limit[this.type] || []);
     },
-    hasEdits: function() {
+    hasEdits: function () {
       return (
         !objectsAreEqual(this.instance, this.editInstance) ||
         !objectsAreEqual(this.instance.settings, this.editInstance.settings)
       );
     },
-    showButtons: function() {
+    showButtons: function () {
       return (!this.isCreate && this.hasEdits) || this.isCreate;
     },
-    isLoading: function() {
+    isLoading: function () {
       return CacheUpdate.isLoading(this.$apollo) || this.mutationLoading;
     },
-    lockedReadOnly: function() {
+    lockedReadOnly: function () {
       return !this.isCreate || this.readOnly;
     },
-    lockedReadOnlyBracket: function() {
+    lockedReadOnlyBracket: function () {
       return (!this.isCreate && !this.isListType) || this.readOnly;
     },
-    filteredCharacters: function() {
+    filteredCharacters: function () {
       return this.characters.filter(
         (x) =>
           !this.editInstance.characters ||
           this.editInstance.characters.every((y) => y.id !== x.id)
       );
     },
-    disableCharacterInput: function() {
+    disableCharacterInput: function () {
       const { characters = [], settings } = this.editInstance;
       return (
         !this.editInstance.htrTemplate ||
@@ -379,18 +379,18 @@ export default {
         characters.length >= settings.limit
       );
     },
-    instanceOrder: function() {
+    instanceOrder: function () {
       const order =
         Order.find((x) => x.id === this.editInstance.settings.order) || {};
       return order.name;
     },
-    isSeeded: function() {
+    isSeeded: function () {
       const { settings } = this.editInstance;
       return settings && settings.rules && settings.rules.isSeeded;
     }
   },
   watch: {
-    $route: function(newRoute) {
+    $route: function (newRoute) {
       const { type } = newRoute.params;
       const url = Urls.build(Urls.htrInstanceCreate, { type });
       if (type && newRoute.path === url) {
@@ -399,14 +399,14 @@ export default {
     }
   },
   methods: {
-    updateData: function(data) {
+    updateData: function (data) {
       this.instance = { ...data };
       this.editInstance = { ...data };
     },
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.editInstance[name] = value;
     },
-    onSettingsInput: function(value, name) {
+    onSettingsInput: function (value, name) {
       const intValue = Number(value);
       this.editInstance.settings[name] = intValue;
       if (name === 'order') {
@@ -416,10 +416,10 @@ export default {
             : null;
       }
     },
-    onSearch: function(value, name) {
+    onSearch: function (value, name) {
       this[name] = value;
     },
-    onSelectTemplate: function(templateId) {
+    onSelectTemplate: function (templateId) {
       const template = this.htrTemplates.find((x) => x.id === templateId);
       this.editInstance.htrTemplate = { ...template };
       this.editInstance.settings.rules = { ...template.rules };
@@ -428,13 +428,13 @@ export default {
       }
       this.templateFilter = '';
     },
-    onRemoveTemplate: function() {
+    onRemoveTemplate: function () {
       this.editInstance.htrTemplate = null;
       this.editInstance.characters = [];
       this.characterFilter = '';
       this.characters = [];
     },
-    onSelectCharacter: function(characterId) {
+    onSelectCharacter: function (characterId) {
       const character = this.characters.find((x) => x.id === characterId);
       this.editInstance.characters = [
         ...this.editInstance.characters,
@@ -451,7 +451,7 @@ export default {
 
       this.characterFilter = '';
     },
-    onRemoveCharacter: function(characterId) {
+    onRemoveCharacter: function (characterId) {
       this.editInstance.characters = this.editInstance.characters.filter(
         (x) => x.id !== characterId
       );
@@ -465,7 +465,7 @@ export default {
         });
       }
     },
-    onMove: function(from, to) {
+    onMove: function (from, to) {
       const order = [...(this.editInstance.settings.customOrder || [])];
       order.splice(to, 0, order.splice(from, 1)[0]);
 
@@ -474,16 +474,16 @@ export default {
         customOrder: [...order]
       });
     },
-    cancel: function() {
+    cancel: function () {
       this.readOnly = true;
       this.htrTemplates = [];
       this.templateFilter = '';
       this.editInstance = { ...this.instance };
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.readOnly = false;
       });
     },
-    submit: function() {
+    submit: function () {
       this.readOnly = true; // set back to read only.
 
       if (this.isCreate && InstanceValidator.isValidNew(this.editInstance)) {
@@ -497,7 +497,7 @@ export default {
         this.readOnly = false;
       }
     },
-    handleCreate: function() {
+    handleCreate: function () {
       this.mutationLoading = true;
       const instance = mapHTRInstanceToPost(this.editInstance, this.isCreate);
 
@@ -522,7 +522,7 @@ export default {
           this.$router.push(redirectToUrl);
         });
     },
-    handleUpdate: function() {
+    handleUpdate: function () {
       this.mutationLoading = true;
       const instance = mapHTRInstanceToPost(this.editInstance, this.isCreate);
 

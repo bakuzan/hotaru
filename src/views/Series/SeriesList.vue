@@ -48,7 +48,7 @@ export default {
     ListFigureCard,
     MultiSelect
   },
-  data: function() {
+  data: function () {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.seriesView,
@@ -79,13 +79,13 @@ export default {
     }
   },
   methods: {
-    onAdd: function() {
+    onAdd: function () {
       this.$router.push(Urls.seriesCreate);
     },
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.filterHandler(value, name);
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'seriesPaged', 'SeriesPage');
     }
   }

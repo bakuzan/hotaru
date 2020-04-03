@@ -5,7 +5,7 @@
     :icon="maybeIcon"
     :disabled="hasWinner || disabled"
     theme="primary"
-    title="Vote"
+    :title="'Vote ' + name"
     @click="handleClick"
   >
     <span class="vote-button__vote-text">
@@ -36,14 +36,14 @@ export default {
     theme: {
       type: String,
       default: 'default',
-      validator: function(value) {
+      validator: function (value) {
         return ['default', 'primary', 'secondary'].includes(value);
       }
     },
     size: {
       type: String,
       default: null,
-      validator: function(value) {
+      validator: function (value) {
         return ['small'].includes(value);
       }
     },
@@ -74,10 +74,13 @@ export default {
     showLostColour: {
       type: Boolean,
       default: false
+    },
+    name: {
+      type: String
     }
   },
   computed: {
-    buttonClasses: function() {
+    buttonClasses: function () {
       return classNames(
         'vote-button',
         {
@@ -91,7 +94,7 @@ export default {
         this.className
       );
     },
-    maybeIcon: function() {
+    maybeIcon: function () {
       if (this.isChampion) {
         return Icons.trophy;
       } else if (this.isWinner) {
@@ -104,7 +107,7 @@ export default {
     }
   },
   methods: {
-    handleClick: function(...things) {
+    handleClick: function (...things) {
       if (this.hasWinner) return;
 
       this.$emit('click', ...things);

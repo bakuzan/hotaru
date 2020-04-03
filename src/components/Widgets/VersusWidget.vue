@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" :id="id">
+  <div :id="id" :class="classes">
     <VersusCard
       :class="versusClass"
       :item="versusCharacters[0]"
@@ -11,17 +11,14 @@
       grow
       @vote="handleVote"
     />
-    <div v-if="!enableCompare" class="versus__icon">
-      VS
-    </div>
+    <div v-if="!enableCompare" class="versus__icon">VS</div>
     <router-link
       v-if="enableCompare"
       :to="compareLink"
       :target="openNewTab ? '_blank' : null"
       class="versus__icon"
+      >VS</router-link
     >
-      VS
-    </router-link>
     <VersusCard
       :class="versusClass"
       :item="versusCharacters[1]"
@@ -79,7 +76,7 @@ export default {
     figureSize: {
       type: String,
       default: 'small',
-      validator: function(value) {
+      validator: function (value) {
         return value === null || ['small'].includes(value);
       }
     },
@@ -93,32 +90,32 @@ export default {
     }
   },
   computed: {
-    shouldStack: function() {
+    shouldStack: function () {
       return this.column && !this.isFinal;
     },
-    classes: function() {
+    classes: function () {
       return classNames('versus', {
         'versus--is-dummy': this.isDummy,
         'versus--grow': this.grow,
         'versus--column': this.shouldStack
       });
     },
-    versusClass: function() {
+    versusClass: function () {
       return classNames('versus__versus-card', {
         'versus__versus-card--stacked': this.shouldStack
       });
     },
-    compareLink: function() {
+    compareLink: function () {
       const ids = this.characters.map((x) => x.id).join(',');
       return `${Urls.versusComparison}?characterIds=${ids}`;
     },
-    versusCharacters: function() {
+    versusCharacters: function () {
       const [c1, c2] = this.characters;
       return c1.order > c2.order ? [c2, c1] : [c1, c2];
     }
   },
   methods: {
-    handleVote: function(characterId) {
+    handleVote: function (characterId) {
       if (this.isDummy) return;
       this.$emit('vote', this.id, characterId);
     }
@@ -141,7 +138,7 @@ export default {
   }
 
   &__icon {
-    min-width: 50px;
+    min-width: $versus-icon-min-width;
     height: 20px;
     padding: 0;
     border-width: 1px;

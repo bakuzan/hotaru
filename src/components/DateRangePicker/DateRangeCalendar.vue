@@ -102,7 +102,7 @@ export default {
       default: null
     }
   },
-  data: function() {
+  data: function () {
     const initDate = startOfDay(this.value);
 
     return {
@@ -115,21 +115,21 @@ export default {
     };
   },
   computed: {
-    prevLabel: function() {
+    prevLabel: function () {
       return `Move to previous ${this.isMonthView ? 'month' : 'year'}`;
     },
-    nextLabel: function() {
+    nextLabel: function () {
       return `Move to next ${this.isMonthView ? 'month' : 'year'}`;
     },
-    controlText: function() {
+    controlText: function () {
       return this.isMonthView
         ? displayMonthAndYear(this.viewDate)
         : displayYearOnly(this.viewDate);
     },
-    headers: function() {
+    headers: function () {
       return this.isMonthView ? Strings.dayNames : [];
     },
-    options: function() {
+    options: function () {
       const state = {
         viewDate: this.viewDate,
         afterDate: this.afterDate,
@@ -140,7 +140,7 @@ export default {
     }
   },
   methods: {
-    toggleViewMode: function() {
+    toggleViewMode: function () {
       const matches = checkIfDatePartsMatch(this.viewDate, this.value);
 
       this.isMonthView = !this.isMonthView;
@@ -148,7 +148,7 @@ export default {
         matches.year && matches.month ? this.value : this.viewDate
       );
     },
-    handleViewShift: function(direction) {
+    handleViewShift: function (direction) {
       const newDate = this.isMonthView
         ? adjustDateMonth(this.viewDate, direction)
         : adjustDateYear(this.viewDate, direction);
@@ -156,13 +156,13 @@ export default {
       this.viewDate = getFirstDateOfMonth(newDate);
       this.focusDate = new Date(newDate);
     },
-    isSelected: function(option) {
+    isSelected: function (option) {
       return checkIfSelectedForView(
         { selectedDate: this.value, viewDate: this.viewDate },
         option
       );
     },
-    getTabIndex: function(option) {
+    getTabIndex: function (option) {
       const viewDate = new Date(this.viewDate);
       let optionDate = null;
 
@@ -190,7 +190,7 @@ export default {
         return this.focusDate.getMonth() === optionDate.getMonth() ? 0 : -1;
       }
     },
-    handleViewOptionSelect: function(option) {
+    handleViewOptionSelect: function (option) {
       if (option.disabled) {
         return;
       }
@@ -224,7 +224,7 @@ export default {
 
       this.setFocus();
     },
-    handleCalendarNavigation: function(event) {
+    handleCalendarNavigation: function (event) {
       const { key } = event;
       const currFocusDate = new Date(this.focusDate);
       let newDate = null;
@@ -266,7 +266,7 @@ export default {
       this.focusDate = new Date(newDate);
       this.setFocus();
     },
-    setFocus: function() {
+    setFocus: function () {
       requestAnimationFrame(() => {
         const container = this.$refs[this.calendarRef];
         const dx = this.isMonthView

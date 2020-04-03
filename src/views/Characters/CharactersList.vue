@@ -59,7 +59,7 @@ export default {
     ListFigureCard,
     MultiSelect
   },
-  data: function() {
+  data: function () {
     return {
       typeSlotName: Strings.slot.listFilterType,
       cardUrl: Urls.characterView,
@@ -93,13 +93,13 @@ export default {
     }
   },
   methods: {
-    onAdd: function() {
+    onAdd: function () {
       this.$router.push(Urls.characterCreate);
     },
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.filterHandler(value, name);
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'charactersPaged', 'CharacterPage');
     }
   }

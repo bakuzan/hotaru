@@ -61,15 +61,15 @@ export default {
     }
   },
   computed: {
-    selectClasses: function() {
+    selectClasses: function () {
       return classNames('select-box', 'has-float-label');
     },
-    isRequiredWithNoValue: function() {
+    isRequiredWithNoValue: function () {
       return this.required && !this.value;
     }
   },
   methods: {
-    handleChange: function(event) {
+    handleChange: function (event) {
       this.$emit('on-select', event.target.value, this.name);
     }
   }

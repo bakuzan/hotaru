@@ -65,34 +65,34 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data: function () {
     return {
       filter: '',
       readyRemoval: false
     };
   },
   computed: {
-    classes: function() {
+    classes: function () {
       return classNames('chip-list', {});
     },
-    hasChips: function() {
+    hasChips: function () {
       return !!this.values.length;
     },
-    clearableInputProps: function() {
+    clearableInputProps: function () {
       return {
         class: 'chip-list__clearable-input'
       };
     }
   },
   methods: {
-    isActiveTag: function(index) {
+    isActiveTag: function (index) {
       return this.readyRemoval && index === this.values.length - 1;
     },
-    onInput: function(value) {
+    onInput: function (value) {
       this.filter = value;
       this.readyRemoval = false;
     },
-    onSelect: function(id) {
+    onSelect: function (id) {
       const item = this.options.find((x) => x.id === id);
 
       if (!item) {
@@ -108,7 +108,7 @@ export default {
       this.filter = '';
       this.$nextTick(() => this.updateList(item));
     },
-    onKeyDown: function(event) {
+    onKeyDown: function (event) {
       const { key } = event;
       if (key === KeyCodes.Backspace && !this.filter) {
         event.preventDefault();
@@ -116,24 +116,24 @@ export default {
         if (this.readyRemoval) return this.removeLastInputItem();
       }
     },
-    persistListState: function(list) {
+    persistListState: function (list) {
       this.$emit('update', list, this.name);
       this.setStateRemoval(false);
     },
-    updateList: function(item) {
+    updateList: function (item) {
       const list = [...this.values, item];
       this.persistListState(list);
     },
-    removeInputItem: function(data) {
+    removeInputItem: function (data) {
       const { id } = data;
       const list = this.values.filter((x) => x.id !== id);
       this.persistListState(list);
     },
-    removeLastInputItem: function() {
+    removeLastInputItem: function () {
       const list = this.values.slice(0, this.values.length - 1);
       this.persistListState(list);
     },
-    setStateRemoval: function(value) {
+    setStateRemoval: function (value) {
       this.readyRemoval = value;
     }
   }

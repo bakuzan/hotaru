@@ -25,7 +25,7 @@ export default {
     ListFigureCard,
     LoadingBouncer
   },
-  data: function() {
+  data: function () {
     return {
       cardUrl: Urls.characterView,
       isLoading: true,

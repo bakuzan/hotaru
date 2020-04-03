@@ -53,7 +53,7 @@ export default {
     SelectBox,
     Button
   },
-  data: function() {
+  data: function () {
     return {
       id: 'app-settings',
       target: Strings.portal.modal,
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     themeName: {
-      get: function() {
+      get: function () {
         return `theme--${this.theme}`;
       },
       set(value) {
@@ -79,7 +79,7 @@ export default {
     }
   },
   watch: {
-    $route: function(newRoute) {
+    $route: function (newRoute) {
       this.routeHistory.push(newRoute);
     }
   },
@@ -89,14 +89,14 @@ export default {
     document.body.classList.add(this.themeName);
   },
   methods: {
-    goBack: function() {
+    goBack: function () {
       this.$router.go(-1);
     },
-    setBackIcon: function() {
+    setBackIcon: function () {
       const isLightTheme = this.lightThemes.includes(this.themeName);
       this.backIcon = isLightTheme ? BlackBackSvg : WhiteBackSvg;
     },
-    onChange: function(value) {
+    onChange: function (value) {
       document.body.classList.remove(this.themeName);
       this.themeName = htrLocal.saveTheme(value);
       this.setBackIcon();

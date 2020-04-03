@@ -92,7 +92,7 @@ export default {
     InputBoxAutocomplete,
     DateRangePicker
   },
-  data: function() {
+  data: function () {
     return {
       typeSlotName: Strings.slot.listFilterType,
       mappedGenders: mapEnumToSelectBoxOptions(GenderType),
@@ -142,32 +142,32 @@ export default {
     }
   },
   methods: {
-    onSearchSeries: function(value) {
+    onSearchSeries: function (value) {
       this.seriesFilter = value;
     },
-    onSelectSeries: function(seriesId) {
+    onSelectSeries: function (seriesId) {
       const series = this.series.find((x) => x.id === seriesId);
       this.selectedSeries = [...this.selectedSeries, series];
       this.seriesFilter = '';
       this.onSeriesInput();
     },
-    onRemoveSeries: function(seriesId) {
+    onRemoveSeries: function (seriesId) {
       this.selectedSeries = [
         ...this.selectedSeries.filter((x) => x.id !== seriesId)
       ];
       this.onSeriesInput();
     },
-    onSeriesInput: function() {
+    onSeriesInput: function () {
       const seriesIds = this.selectedSeries.map((x) => x.id);
       this.onInput(seriesIds, 'series');
     },
-    onInput: function(value, name) {
+    onInput: function (value, name) {
       this.filterHandler(value, name);
     },
-    showMore: function() {
+    showMore: function () {
       LP.showMore(this, 'rankingsPaged', 'RankingPage');
     },
-    formatForRankingCard: function(item) {
+    formatForRankingCard: function (item) {
       return formatForRankingCard(item);
     }
   }

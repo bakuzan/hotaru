@@ -56,7 +56,7 @@ export default {
   components: {
     InputBoxAutocomplete
   },
-  data: function() {
+  data: function () {
     return {
       id: 'navigation-Filter',
       filter: '',
@@ -76,10 +76,10 @@ export default {
     this.shortcutController.remove();
   },
   methods: {
-    onInput: function(value) {
+    onInput: function (value) {
       this.filter = value;
     },
-    onSelect: function(id) {
+    onSelect: function (id) {
       this.filter = '';
       const navTo = this.options.find((x) => x.id === id);
       this.$router.push(navTo.url);

@@ -38,36 +38,36 @@ export default {
   components: {
     Button
   },
-  data: function() {
+  data: function () {
     return {
       closeIcon: Icons.cross,
       alerts: []
     };
   },
   computed: {
-    expandIcon: function() {
+    expandIcon: function () {
       return this.alerts.some((x) => x.showDetail) ? Icons.up : Icons.down;
     },
-    hasAlert: function() {
+    hasAlert: function () {
       return !!this.alerts.length;
     },
-    activeAlert: function() {
+    activeAlert: function () {
       return this.hasAlert ? this.alerts[0] : {};
     },
-    alertType: function() {
+    alertType: function () {
       return this.activeAlert.type || 'default';
     },
-    alertClasses: function() {
+    alertClasses: function () {
       return classNames('alert', {
         'alert--is-expanded': this.activeAlert.showDetail
       });
     },
-    messageClasses: function() {
+    messageClasses: function () {
       return classNames('alert__message', [
         `alert__message--type_${this.alertType}`
       ]);
     },
-    iconClasses: function() {
+    iconClasses: function () {
       return classNames('alert__icon', [`alert__icon--type_${this.alertType}`]);
     }
   },
@@ -75,12 +75,12 @@ export default {
     alertService.register(this);
   },
   methods: {
-    showDetail: function(alertId) {
+    showDetail: function (alertId) {
       this.alerts = this.alerts.map((x) =>
         x.id !== alertId ? x : { ...x, showDetail: !x.showDetail }
       );
     },
-    remove: function(alertId) {
+    remove: function (alertId) {
       this.alerts = this.alerts.filter((x) => x.id !== alertId);
     }
   }

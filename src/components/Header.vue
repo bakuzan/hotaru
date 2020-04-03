@@ -38,7 +38,7 @@ export default {
     AppSettings,
     InputBoxNavi
   },
-  data: function() {
+  data: function () {
     return {
       logoId: `${appPrefix}-logo`,
       scrollListeners: null,
@@ -47,18 +47,18 @@ export default {
     };
   },
   computed: {
-    headerClass: function() {
+    headerClass: function () {
       return classNames('header', 'themed-background', {
         'header--page-scrolled': !!this.windowScrollPosition
       });
     },
-    headerInnerClass: function() {
+    headerInnerClass: function () {
       return 'header__inner';
     },
-    titleClass: function() {
+    titleClass: function () {
       return classNames(this.headerInnerClass, 'header__title');
     },
-    portalName: function() {
+    portalName: function () {
       return Strings.portal.actions;
     }
   },
