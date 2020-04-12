@@ -390,7 +390,7 @@ export default {
 }
 
 .gauntlet-versus-grid {
-  gap: 5px;
+  gap: 5px 30px;
   grid-auto-rows: auto !important;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   padding: 0;
