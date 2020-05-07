@@ -4,7 +4,9 @@ import { mapPagedResponseToUpdate } from '@/utils/mappers';
 export const size = 10;
 
 function getResolvedQueryParam(ctrl, options) {
-  if (!options.queryParam) return {};
+  if (!options.queryParam) {
+    return {};
+  }
 
   return {
     [options.queryParam]: Routing.getQueryArg(
@@ -55,7 +57,9 @@ export const showMore = (ctrl, attr, typename, options = {}) => {
   const loading = query && query.loading;
   const noMore = !ctrl[attr].hasMore;
 
-  if (noMore || loading) return;
+  if (noMore || loading) {
+    return;
+  }
 
   const resolvedQueryParam = getResolvedQueryParam(ctrl, options);
   const items = ctrl.$apolloData.data[attr].nodes;

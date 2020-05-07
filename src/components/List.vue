@@ -78,11 +78,9 @@ export default {
   },
   data: function () {
     return {
-      observer: null,
-      listObserver: null
+      observer: null
     };
   },
-
   computed: {
     listClasses: function () {
       return classNames(
@@ -124,19 +122,14 @@ export default {
     }
   },
   mounted() {
-    this.setMutationOberver();
-    if (this.items.length) {
-      // When Items loaded from cache
-      const listNode = this.getListRef();
-      const lastItem = Array.from(listNode.children).pop();
-      this.setIntersectionObserver(lastItem);
-    }
+    this.initProgressiveLoading();
+  },
+  updated() {
+    this.$nextTick(function () {
+      this.initProgressiveLoading();
+    });
   },
   destroyed() {
-    if (this.listObserver) {
-      this.listObserver.disconnect();
-    }
-
     if (this.observer) {
       this.observer.disconnect();
     }
@@ -145,25 +138,11 @@ export default {
     getListRef: function () {
       return this.$refs.listContainer.$el;
     },
-    setMutationOberver: function () {
-      if (this.listObserver) {
-        this.listObserver.disconnect();
-      }
+    initProgressiveLoading: function () {
+      const listNode = this.getListRef();
+      const lastItem = Array.from(listNode.children).pop();
 
-      const targetNode = this.getListRef();
-      this.listObserver = new MutationObserver((mutations) => {
-        const record = mutations.filter((x) => x.addedNodes.length).pop();
-        if (record) {
-          const element = Array.from(record.addedNodes).pop();
-          this.setIntersectionObserver(element);
-        }
-      });
-
-      this.listObserver.observe(targetNode, {
-        attributes: false,
-        childList: true,
-        subtree: false
-      });
+      this.setIntersectionObserver(lastItem);
     },
     setIntersectionObserver: function (targetNode) {
       if (this.observer) {
@@ -173,11 +152,16 @@ export default {
         return;
       }
 
-      this.observer = new IntersectionObserver(([entry]) => {
-        if (entry && entry.isIntersecting) {
-          this.$emit('intersect');
+      this.observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry && entry.isIntersecting) {
+            this.$emit('intersect');
+          }
+        },
+        {
+          rootMargin: '50px'
         }
-      });
+      );
 
       this.observer.observe(targetNode);
     },
@@ -209,15 +193,19 @@ $columns: (
   padding: 5px;
   margin: 5px 0;
   list-style-type: none;
+
   .formatting-container {
     display: flex;
     width: 100%;
   }
+
   &--column {
     flex-direction: column;
+
     &:not(.list--column_one) {
       flex-flow: wrap;
     }
+
     @each $number, $percentage in $columns {
       &_#{$number} .list__item {
         flex: 1 1 $percentage;
@@ -227,10 +215,12 @@ $columns: (
       }
     }
   }
+
   &--wrap {
     flex-wrap: wrap;
   }
 }
+
 .list__item {
   position: relative;
   display: flex;
@@ -238,10 +228,12 @@ $columns: (
   padding: $app--padding-standard;
   @extend %standard-border;
   box-sizing: border-box;
+
   &--align_left {
     justify-content: flex-start;
   }
 }
+
 .sort-handle {
   position: absolute;
   display: flex;
@@ -254,6 +246,7 @@ $columns: (
   border: 1px dashed;
   z-index: map-get($z-index, above-siblings);
 }
+
 .paged-total {
   display: flex;
   justify-content: flex-start;
@@ -261,12 +254,14 @@ $columns: (
   padding: 0.33rem;
   font-size: 0.6em;
 }
+
 // Grid styles
 .grid {
   display: grid;
   padding: 5px;
   margin: 5px 0;
   list-style-type: none;
+
   &--standard {
     $grid-values: (
       xs: 50,
