@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node ./tools/move_index_template.js",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "server": "nodemon apollo-server --harmony",
     "start": "npm-run-all -p serve server"

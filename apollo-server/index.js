@@ -11,6 +11,8 @@ const resolvers = require('./resolvers');
 const context = require('./context');
 
 const app = express();
+app.get('/', (req, res) => res.redirect(`/${Constants.appName}`));
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -33,11 +35,15 @@ const server = new ApolloServer({
 });
 
 // Overide origin if it doesn't exist
-app.use(function(req, _, next) {
+app.use(function (req, _, next) {
   req.headers.origin = req.headers.origin || req.headers.host;
   next();
 });
-app.use(express.static(path.resolve(__dirname, '..', 'dist')));
+
+app.use(
+  `/${Constants.appName}`,
+  express.static(path.resolve(__dirname, '..', 'dist'))
+);
 
 // Always return the main index.html, so react-router render the route in the client
 if (process.env.NODE_ENV === Constants.environment.production) {
@@ -59,7 +65,7 @@ const PORT =
 server.applyMiddleware({
   app,
   cors: {
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
       if (Constants.whitelist.test(origin)) {
         callback(null, true);
       } else {

@@ -13,10 +13,6 @@ const htrRouter = new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: Strings.route.base }
-    },
-    {
-      path: Urls.base,
       name: Strings.route.base,
       component: Home
     },

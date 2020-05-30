@@ -1,5 +1,6 @@
 module.exports = {
-  publicPath: '/',
+  publicPath:
+    process.env.NODE_ENV === 'development' ? '/' : process.env.BASE_URL,
   assetsDir: 'static',
   productionSourceMap: false,
   chainWebpack: (config) => {

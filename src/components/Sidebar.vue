@@ -25,7 +25,7 @@ export default {
   data: function () {
     return {
       links: [
-        { id: 1, to: Urls.base, title: 'Home', text: 'H' },
+        { id: 1, to: '/', title: 'Home', text: 'H' },
         { id: 2, to: Urls.characterList, title: 'Characters', text: 'C' },
         { id: 3, to: Urls.seriesList, title: 'Series', text: 'S' },
         {

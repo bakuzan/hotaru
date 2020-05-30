@@ -11,9 +11,8 @@ const Urls = {
     deadImage: 'https://i.imgur.com/gKr1YhF.png',
     characterPlaceholder: 'https://i.imgur.com/VYw06nf.jpg'
   },
-  base: '/hotaru',
   get characterList() {
-    return `${this.base}/characters`;
+    return `/characters`;
   },
   get characterView() {
     return `${this.characterList}/view/:id`;
@@ -22,7 +21,7 @@ const Urls = {
     return `${this.characterList}/create`;
   },
   get seriesList() {
-    return `${this.base}/series`;
+    return `/series`;
   },
   get seriesView() {
     return `${this.seriesList}/view/:id`;
@@ -31,13 +30,13 @@ const Urls = {
     return `${this.seriesList}/create`;
   },
   get versusComparison() {
-    return `${this.base}/versus/compare`;
+    return `/versus/compare`;
   },
   get versusCreator() {
-    return `${this.base}/versus/creator`;
+    return `/versus/creator`;
   },
   get htrTemplateList() {
-    return `${this.base}/templates`;
+    return `/templates`;
   },
   get htrTemplateCreator() {
     return `${this.htrTemplateList}/creator`;
@@ -46,7 +45,7 @@ const Urls = {
     return `${this.htrTemplateCreator}/:id`;
   },
   get htrInstanceList() {
-    return `${this.base}/instances`;
+    return `/instances`;
   },
   get htrInstanceView() {
     return `${this.htrInstanceList}/view/:type/:id`;
@@ -55,16 +54,16 @@ const Urls = {
     return `${this.htrInstanceList}/create/:type`;
   },
   get htrInstanceLeagueCenter() {
-    return `${this.base}/leagues`;
+    return `/leagues`;
   },
   get htrInstanceLeagueView() {
     return `${this.htrInstanceLeagueCenter}/:seasonId`;
   },
   get rankingList() {
-    return `${this.base}/rankings`;
+    return `/rankings`;
   },
   get gauntlet() {
-    return `${this.base}/gauntlet`;
+    return `/gauntlet`;
   }
 };
 
