@@ -11,9 +11,9 @@
         class="htr-calendar__shift-button"
         @click="handleViewShift(-1)"
       />
-      <Button class="htr-calendar__shift-button" @click="toggleViewMode">{{
-        controlText
-      }}</Button>
+      <Button class="htr-calendar__shift-button" @click="toggleViewMode">
+        {{ controlText }}
+      </Button>
       <Button
         :aria-label="nextLabel"
         :icon="nextIcon"
@@ -81,6 +81,8 @@ import {
   checkIfSelectedForView
 } from './calendarUtils';
 
+const dayNames = [...Strings.dayNames.slice(1), Strings.dayNames[0]];
+
 export default {
   name: 'DateRangeCalendar',
   components: { Button },
@@ -127,7 +129,7 @@ export default {
         : displayYearOnly(this.viewDate);
     },
     headers: function () {
-      return this.isMonthView ? Strings.dayNames : [];
+      return this.isMonthView ? dayNames : [];
     },
     options: function () {
       const state = {
