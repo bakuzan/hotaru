@@ -1,5 +1,11 @@
 <template>
   <div class="page page-rankings">
+    <Help id="rankingCalc">
+      <strong>Ranking order calculation:</strong>
+      <div>
+        ((wins + 10 * (average win/total of all characters)) / (total + 10))
+      </div>
+    </Help>
     <div class="page-rankings__column">
       <ListFilterBar v-bind="filters" column hide-add @input="onInput">
         <MultiSelect
@@ -71,6 +77,7 @@ import { RankingCard, SeriesCard } from '@/components/Cards';
 import MultiSelect from '@/components/MultiSelect';
 import InputBoxAutocomplete from '@/components/InputBoxAutocomplete';
 import DateRangePicker from '@/components/DateRangePicker/DateRangePicker';
+import Help from '@/components/Help';
 
 import Strings from '@/constants/strings';
 import GenderType from '@/constants/genderType';
@@ -90,7 +97,8 @@ export default {
     SeriesCard,
     MultiSelect,
     InputBoxAutocomplete,
-    DateRangePicker
+    DateRangePicker,
+    Help
   },
   data: function () {
     return {
@@ -179,6 +187,7 @@ export default {
 @import '../../styles/_mixins';
 
 .page-rankings {
+  position: relative;
   display: flex;
 
   &__column {

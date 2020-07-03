@@ -186,5 +186,18 @@
       background-color: $primary-background;
       color: $primary-colour;
     }
+
+    // Help
+    .help {
+      &__button {
+        border: 2px solid $primary-background;
+      }
+
+      &__content {
+        background-color: $base-background;
+        color: $base-colour;
+        box-shadow: 0 0 4px 2px $primary-background;
+      }
+    }
   }
 }

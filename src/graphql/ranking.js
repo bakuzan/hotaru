@@ -9,6 +9,7 @@ const getTopTen = gql`
       rank
       wins
       total
+      score
     }
   }
 `;
@@ -39,6 +40,7 @@ const getRankingsPaged = gql`
         rank
         wins
         total
+        score
       }
       total
       hasMore

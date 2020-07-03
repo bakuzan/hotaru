@@ -3,13 +3,12 @@ export default function formatForRankingCard(item) {
     return item;
   }
 
-  const { total, wins, rank, ratio, score, ...character } = item;
+  const { total, wins, rank, score, ...character } = item;
 
   return {
     total,
     wins,
     rank,
-    ratio,
     score,
     character
   };

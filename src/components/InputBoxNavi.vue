@@ -39,7 +39,9 @@ function buildOptions() {
       const name = Strings.route[k];
       const url = Urls[k];
 
-      if (url.includes(':id')) return p;
+      if (!url || url.includes(':id')) {
+        return p;
+      }
 
       const newOptions = !url.includes(':type')
         ? [mapToNaviOption(name, url)]

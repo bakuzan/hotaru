@@ -27,9 +27,8 @@
           >{{ character.name }}</NavLink
         >
       </div>
-      <div class="rank-card__text">{{ winsText }}</div>
-      <div class="rank-card__text">{{ totalText }}</div>
-      <div class="rank-card__text">{{ scoreText }}</div>
+      <div class="rank-card__text" :title="scoreText">{{ winsText }}</div>
+      <div class="rank-card__text" :title="scoreText">{{ totalText }}</div>
     </div>
   </div>
 </template>
@@ -96,7 +95,7 @@ export default {
     },
     scoreText: function () {
       if (this.score === undefined) return null;
-      return this.score === null ? 'No rating' : `${this.score} rating`;
+      return this.score === null ? 'No rank order' : `${this.score} rank order`;
     },
     cardUrl: function () {
       return Urls.build(Urls.characterView, { id: this.character.id });
