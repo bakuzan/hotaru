@@ -4,70 +4,32 @@ const Constants = require('../constants/index');
 const Utils = require('../utils');
 const migrate = require('../config');
 const TestData = require('../config/testData');
+const extraSetup = require('./extraSetup');
 
 const db = new Sequelize(Constants.appName, null, null, {
   dialect: 'sqlite',
-  storage: `${process.env.DB_STORAGE_PATH}${Constants.appName}.${
-    process.env.NODE_ENV
-  }.sqlite`,
+  storage: `${process.env.DB_STORAGE_PATH}${Constants.appName}.${process.env.NODE_ENV}.sqlite`,
   operatorsAliases: false
 });
 
-const CharacterModel = db.import('./character');
-const SeriesModel = db.import('./series');
-const TagModel = db.import('./tag');
-const ImageModel = db.import('./image');
-const VersusModel = db.import('./versus');
-const CharacterOfTheDayModel = db.import('./characterOfTheDay');
-const HTRTemplateModel = db.import('./htrTemplate');
-const HTRInstanceModel = db.import('./htrInstance');
+const modelDefiners = [
+  require('./character'),
+  require('./series'),
+  require('./tag'),
+  require('./image'),
+  require('./versus'),
+  require('./characterOfTheDay'),
+  require('./htrTemplate'),
+  require('./htrInstance')
+];
 
-// Create relationships
-SeriesModel.Character = SeriesModel.hasMany(CharacterModel);
-CharacterModel.Series = CharacterModel.belongsTo(SeriesModel);
+// We define all models according to their files.
+for (const modelDefiner of modelDefiners) {
+  modelDefiner(db);
+}
 
-CharacterModel.Image = CharacterModel.hasMany(ImageModel);
-ImageModel.Character = ImageModel.belongsTo(CharacterModel);
-
-CharacterModel.Tag = CharacterModel.belongsToMany(TagModel, {
-  through: 'CharacterTag'
-});
-TagModel.Character = TagModel.belongsToMany(CharacterModel, {
-  through: 'CharacterTag'
-});
-
-VersusModel.Character = VersusModel.belongsToMany(CharacterModel, {
-  through: 'VersusCharacter',
-  foreignKey: 'versusId'
-});
-CharacterModel.Character = CharacterModel.belongsToMany(VersusModel, {
-  through: 'VersusCharacter',
-  foreignKey: 'characterId'
-});
-
-VersusModel.Winner = VersusModel.belongsTo(CharacterModel, { as: 'winner' });
-
-CharacterModel.CotD = CharacterModel.hasMany(CharacterOfTheDayModel);
-CharacterOfTheDayModel.Character = CharacterOfTheDayModel.belongsTo(
-  CharacterModel
-);
-
-HTRTemplateModel.Instance = HTRTemplateModel.hasMany(HTRInstanceModel);
-HTRInstanceModel.Template = HTRInstanceModel.belongsTo(HTRTemplateModel, {
-  foreignKey: 'htrTemplateId'
-});
-
-HTRInstanceModel.Character = HTRInstanceModel.belongsToMany(CharacterModel, {
-  through: 'HTRInstanceCharacter',
-  foreignKey: 'htrInstanceId'
-});
-CharacterModel.HTRInstance = CharacterModel.belongsToMany(HTRInstanceModel, {
-  through: 'HTRInstanceCharacter',
-  foreignKey: 'characterId'
-});
-
-HTRInstanceModel.Versus = HTRInstanceModel.hasMany(VersusModel);
-VersusModel.HTRInstance = VersusModel.belongsTo(HTRInstanceModel);
+// Other db setup...
+extraSetup(db);
 
 // Sync and Migrate db
 // Only add test data if sync is forced
